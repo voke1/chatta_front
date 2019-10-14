@@ -320,7 +320,7 @@ export default class Convo extends Component {
      * 
      */
     updateScrollbar = () => {
-        const scrollBar = document.getElementById('g');
+        const scrollBar = document.getElementById('chat_bottom');
         if (scrollBar) {
             scrollBar.scrollIntoView({ behavior: 'smooth' });
         }
