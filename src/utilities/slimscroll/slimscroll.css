@@ -1,0 +1,9 @@
+
+  .scrollable {
+    width: 24rem;
+    background: #eee;
+    margin: 0 auto;
+    padding: 2.4rem;
+    border: 1px solid #ccc;
+    overflow: hidden;
+  }

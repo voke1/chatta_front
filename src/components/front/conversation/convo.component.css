@@ -1,0 +1,56 @@
+.ith_chat-button {
+    cursor: pointer;
+    color: black !important;
+    border: solid 2px rgb(148, 194, 237);
+    margin-top: 5px !important;
+    margin-right: 5px;
+    /* background: #a7a5a2; */
+    background-color: #fff;
+    font-size: 10px;
+    text-transform: uppercase;
+    line-height: 1;
+    /* padding: 6px 10px; */
+    padding-top:15px;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 10px;
+    outline: none !important;
+    transition: background .2s ease;
+}
+
+.button_container{
+    margin-top: -25px !important;
+}
+.thinker{
+    z-index:10000;
+    position:absolute;
+    margin-top:50%
+}
+.loader{
+    height:50px;
+    width:50px;
+}
+.user_message{
+    background-color: red
+}
+
+.other{
+    background-color: darkblue;
+}
+
+.response-div{
+    margin-top:40px !important;
+   margin-left: -15% !important;
+}
+.bot-div{
+    margin-right: -2em !important;
+}
+
+.user-online{
+  color:  rgb(148, 194, 237);
+}
+
+.user-choice{
+    left: 0px !important;
+}
