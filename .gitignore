@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/src/components/admin/admin_template/
+/src/components/admin/admin_template.zip/
