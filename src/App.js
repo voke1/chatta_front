@@ -2,7 +2,7 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import Chat from "./components/front/chat/chat.component";
-import Bot from "./components/admin/admin_template/fonik/purple/assets/adminDashboard/admin-bots";
+import Bot from "./components/admin/adminDashboard/admin-bots";
 import Error from "./pages/error";
 import Dashboard from "./pages/dashboard";
 import { Route, Switch } from "react-router-dom";
