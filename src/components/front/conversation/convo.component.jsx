@@ -92,7 +92,7 @@ export default class Convo extends Component {
     /**\
      * This method get a company's conversation tree by company Id
      */
-    getConversationTree = (companyId = null) => {
+      getConversationTree = (companyId = null) => {
         /**
          * The companyId is gotten from the domain name. But for now it is not passed
          */

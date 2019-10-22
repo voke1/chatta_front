@@ -1,0 +1,27 @@
+#overlay {
+  position: fixed;
+  z-index: 2;
+  display: block;
+  background-color: #ffffff;
+  top: 0%;
+  bottom: 0%;
+  left: 0%;
+  right: 0%;
+}
+
+.color {
+  background-color: #aa66cc;
+}
+
+.container-holder {
+  margin: 5%;
+  border: #aa66cc;
+  margin-right: 10%;
+  margin-left: 10%;
+}
+
+#close {
+  position: fixed;
+  right: 7%;
+  top: 5%;
+}
