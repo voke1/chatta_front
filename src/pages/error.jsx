@@ -1,44 +1,15 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 
-// import "../js/jquery.min.js";
-// import"../js/popper.min.js";
-// import "../js/bootstrap.min.js";
-// // import "../js/modernizr.min.js";
-// import "../js/waves.js";
-// import "../js/jquery.slimscroll.js";
-// import "../js/jquery.nicescroll.js";
-// import "../js/jquery.scrollTo.min.js";
-
-// // import "../plugins/datatables/jquery.dataTables.min.js";
-// import "../plugins/datatables/dataTables.bootstrap4.min.js";
-
-// import "../plugins/datatables/dataTables.buttons.min.js";
-// import "../plugins/datatables/buttons.bootstrap4.min.js";
-// // import "../plugins/datatables/jszip.min.js";
-// // import "../plugins/datatables/pdfmake.min.js";
-// // import "../plugins/datatables/vfs_fonts.js";
-// // import "../plugins/datatables/buttons.html5.min.js";
-// // import "../plugins/datatables/buttons.print.min.js";
-// // import "../plugins/datatables/buttons.colVis.min.js";
-// // // {/* <!-- Responsive examples --> */}
-// import "../plugins/datatables/dataTables.responsive.min.js";
-// import "../plugins/datatables/responsive.bootstrap4.min.js";
-
-// // import "../pages/datatables.init.js";
-
-// import "../js/app";
-
-import "../components/admin/admin_template/fonik/purple/assets/plugins/datatables/dataTables.bootstrap4.min.css";
+import "../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
 // import '../plugins/datatables/buttons.bootstrap4.min.css'
-import "../components/admin/admin_template/fonik/purple/assets/plugins/datatables/responsive.bootstrap4.min.css";
+import "../components/admin/plugins/datatables/responsive.bootstrap4.min.css";
 
-import "../components/admin/admin_template/fonik/purple/assets/css/style.css";
-import "../components/admin/admin_template/fonik/purple/assets/css/icons.css";
-import "../components/admin/admin_template/fonik/purple/assets/css/bootstrap.min.css";
+import "../components/admin/css/style.css";
+import "../components/admin/css/icons.css";
+import "../components/admin/css/bootstrap.min.css";
 // import '../plugins/nestable/jquery.nestable.css';
 
-import "../components/admin/admin_template/fonik/purple/assets/images/favicon.ico";
+import "../components/admin/images/favicon.ico";
 
 // <link href="assets/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 // <link href="assets/plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
