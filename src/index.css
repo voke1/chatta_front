@@ -1,4 +1,5 @@
-@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "./assets/js/plugins/animate/animate.min.css";
 
 body {
   margin: 0;
@@ -13,5 +14,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
-
