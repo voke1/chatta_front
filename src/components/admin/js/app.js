@@ -4,7 +4,6 @@
  File: Main js
  */
 import $ from "jquery";
-
 window.$ = window.jQuery = require("jquery");
 
 !(function($) {
@@ -145,3 +144,5 @@ $(document).keydown(function(event) {
     return false;
   }
 });
+
+export default App;
