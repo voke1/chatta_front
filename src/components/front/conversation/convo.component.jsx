@@ -271,7 +271,6 @@ export default class Convo extends Component {
                                 <span className="b-triangle"></span>
                                 <span className="user-choice">
                                     {convo.selection}
-
                                 </span>
 
                             </div>
