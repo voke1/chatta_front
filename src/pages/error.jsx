@@ -17,7 +17,9 @@ import "../components/admin/images/favicon.ico";
 // <link href="assets/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
 export default class Error extends Component {
+
   render() {
+    
     return (
       <div>
         {/* //     <div id="preloader">
