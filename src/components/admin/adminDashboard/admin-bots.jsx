@@ -9,11 +9,26 @@ import "../css/bootstrap.min.css";
 import "../images/favicon.ico";
 
 import { Button, ButtonToolbar } from "react-bootstrap";
-import { createUser } from "./createUser";
+import { CreateUser } from "./createUser";
 import { ModalComponent } from "../adminDashboard/botSettings";
 
 export default class Bot extends Component {
-  Apps() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      setting: []
+    };
+  }
+  componentDidMount() {
+    fetch("http://localhost:9000/setting")
+      .then(res => res.json())
+      .then(data => {
+        this.setState({ setting: data });
+      })
+      .catch(console.log);
+  }
+
+  Apps = () => {
     const [modalShow, setModalShow] = useState(false);
 
     return (
@@ -274,173 +289,49 @@ export default class Bot extends Component {
                     <div className="table-responsive">
                       <table className="table m-t-20 mb-0 table-vertical">
                         <tbody>
-                          <tr>
-                            <td>
-                              <img
-                                src="assets/images/users/avatar-2.jpg"
-                                alt="bot-image"
-                                className="thumb-sm rounded-circle mr-2"
-                              />
-                              Herbert C. Patton
-                            </td>
-                            <td>
-                              <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
-                              Confirm
-                            </td>
-                            <td>
-                              $14,584
-                              <p className="m-0 text-muted font-14">Amount</p>
-                            </td>
-                            <td>
-                              5/12/2016
-                              <p className="m-0 text-muted font-14">Date</p>
-                            </td>
-                            <td>
-                              <ButtonToolbar>
-                                <Button
-                                  className="btn btn-secondary btn-sm waves-effect"
-                                  variant="primary"
-                                  onClick={() => setModalShow(true)}
-                                >
-                                  Manage
-                                </Button>
-                                <createUser
-                                  show={modalShow}
-                                  onHide={() => setModalShow(false)}
+                          {this.state.setting.map(setting => (
+                            <tr>
+                              <td>
+                                <img
+                                  src="assets/images/users/avatar-2.jpg"
+                                  alt="bot-image"
+                                  className="thumb-sm rounded-circle mr-2"
                                 />
-                              </ButtonToolbar>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <img
-                                src="assets/images/users/avatar-3.jpg"
-                                alt="bot-image"
-                                className="thumb-sm rounded-circle mr-2"
-                              />
-                              Mathias N. Klausen
-                            </td>
-                            <td>
-                              <i className="mdi mdi-checkbox-blank-circle text-warning"></i>{" "}
-                              Waiting payment
-                            </td>
-                            <td>
-                              $8,541
-                              <p className="m-0 text-muted font-14">Amount</p>
-                            </td>
-                            <td>
-                              10/11/2016
-                              <p className="m-0 text-muted font-14">Date</p>
-                            </td>
-                            <td>
-                              <ButtonToolbar>
-                                <Button
-                                  className="btn btn-secondary btn-sm waves-effect"
-                                  variant="primary"
-                                  onClick={() => setModalShow(true)}
-                                >
-                                  Manage
-                                </Button>
-                                <createUser
-                                  show={modalShow}
-                                  onHide={() => setModalShow(false)}
-                                />
-                              </ButtonToolbar>
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td>
-                              <img
-                                src="assets/images/users/avatar-4.jpg"
-                                alt="bot-image"
-                                className="thumb-sm rounded-circle mr-2"
-                              />
-                              Nikolaj S. Henriksen
-                            </td>
-                            <td>
-                              <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
-                              Confirm
-                            </td>
-                            <td>
-                              $954
-                              <p className="m-0 text-muted font-14">Amount</p>
-                            </td>
-                            <td>
-                              8/11/2016
-                              <p className="m-0 text-muted font-14">Date</p>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                className="btn btn-secondary btn-sm waves-effect"
-                              >
-                                Manage
-                              </button>
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td>
-                              <img
-                                src="assets/images/users/avatar-5.jpg"
-                                alt="bot-image"
-                                className="thumb-sm rounded-circle mr-2"
-                              />
-                              Lasse C. Overgaard
-                            </td>
-                            <td>
-                              <i className="mdi mdi-checkbox-blank-circle text-danger"></i>{" "}
-                              Payment expired
-                            </td>
-                            <td>
-                              $44,584
-                              <p className="m-0 text-muted font-14">Amount</p>
-                            </td>
-                            <td>
-                              7/11/2016
-                              <p className="m-0 text-muted font-14">Date</p>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                className="btn btn-secondary btn-sm waves-effect"
-                              >
-                                Manage
-                              </button>
-                            </td>
-                          </tr>
-
-                          <tr>
-                            <td>
-                              <img
-                                src="assets/images/users/avatar-6.jpg"
-                                alt="bot-image"
-                                className="thumb-sm rounded-circle mr-2"
-                              />
-                              Kasper S. Jessen
-                            </td>
-                            <td>
-                              <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
-                              Confirm
-                            </td>
-                            <td>
-                              $8,844
-                              <p className="m-0 text-muted font-14">Amount</p>
-                            </td>
-                            <td>
-                              1/11/2016
-                              <p className="m-0 text-muted font-14">Date</p>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                className="btn btn-secondary btn-sm waves-effect"
-                              >
-                                Manage
-                              </button>
-                            </td>
-                          </tr>
+                                {setting.chatbotName}
+                              </td>
+                              <td>
+                                <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
+                                {setting.welcomeMessage}
+                              </td>
+                              <td>
+                                {setting.fallbackMessage}
+                                <p className="m-0 text-muted font-14">
+                                  Fallback Message
+                                </p>
+                              </td>
+                              <td>
+                                {setting.delayPrompt}
+                                <p className="m-0 text-muted font-14">
+                                  Delay Prompt
+                                </p>
+                              </td>
+                              <td>
+                                <ButtonToolbar>
+                                  <Button
+                                    className="btn btn-secondary btn-sm waves-effect"
+                                    variant="primary"
+                                    onClick={() => setModalShow(true)}
+                                  >
+                                    Manage
+                                  </Button>
+                                  <CreateUser
+                                    show={modalShow}
+                                    onHide={() => setModalShow(false)}
+                                  />
+                                </ButtonToolbar>
+                              </td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>
@@ -470,9 +361,9 @@ export default class Bot extends Component {
         {/* <!-- End Footer --> */}
       </div>
     );
-  }
+  };
 
   render() {
-    return <this.Apps />;
+    return <div>{<this.Apps />}</div>;
   }
 }

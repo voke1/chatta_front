@@ -11,7 +11,7 @@ import "../css/overlay.css";
 import closeImage from "../images/close.jpg";
 import axios from "axios";
 
-export class ModalComponent extends Component {
+export class ModalComponents extends Component {
   constructor(props) {
     super(props);
     this.state = {
