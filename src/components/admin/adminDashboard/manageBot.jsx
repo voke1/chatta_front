@@ -13,7 +13,7 @@ import closeImage from "../images/close.jpg";
 import axios from "axios";
 import avatar from "../images/users/avatar-1.jpg";
 
-export class ModalComponents extends Component {
+export class ManageBot extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,19 +49,11 @@ export class ModalComponents extends Component {
   render() {
     return (
       <div>
-        <Button
-          type="button"
-          className="btn btn-secondary btn-sm waves-effect"
-          onClick={() => this.overlayShow()}
-        >
-          Edit &nbsp;
-        </Button>
-
         {this.state.show ? (
           <section id="overlay" show={this.state.show}>
             <div>
               <body>
-                <div className="wrappedfr">
+                <div className="wrapper">
                   <div className="main-panel">
                     {/* <!-- Navbar --> */}
                     <div className="header-bg">
@@ -326,7 +318,7 @@ export class ModalComponents extends Component {
                           <div className="col-md-8">
                             <div className="card">
                               <div className="card-header">
-                                <h4 className="card-title">Edit Profile</h4>
+                                <h4 className="card-title">Edit Settings</h4>
                               </div>
                               <div className="card-body">
                                 <form>
@@ -442,7 +434,7 @@ export class ModalComponents extends Component {
                                     type="submit"
                                     className="btn btn-info btn-fill pull-right"
                                   >
-                                    Update Profile
+                                    Update Settings
                                   </button>
                                   <div className="clearfix"></div>
                                 </form>
