@@ -176,7 +176,14 @@
     ($.AdvancedForm.Constructor = AdvancedForm);
 })(window.jQuery);
 //initializing
+<<<<<<< HEAD
 (function($) {
   "use strict";
   $.AdvancedForm.init();
 })(window.jQuery);
+=======
+(function ($) {
+  "use strict";
+  $.AdvancedForm.init();
+})(window.jQuery);
+>>>>>>> christian

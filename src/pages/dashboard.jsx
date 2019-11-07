@@ -1,8 +1,8 @@
 import React, { Component, useState } from "react";
 import { Link } from "react-router-dom";
 import avatar from "../components/admin/images/users/avatar-1.jpg";
-import avatar2 from "../components/admin/images/users/avatar-1.jpg";
-import avatar3 from "../components/admin/images/users/avatar-1.jpg";
+// import avatar2 from "../components/admin/images/users/avatar-1.jpg";
+// import avatar3 from "../components/admin/images/users/avatar-1.jpg";
 import "../components/admin/css/bootstrap.min.css";
 import "../components/admin/images/favicon.ico";
 import "../components/admin/css/switch.css";
