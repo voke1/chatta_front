@@ -29,11 +29,9 @@ export class ModalComponent extends Component {
     });
   };
   overlayShow() {
-    const { show } = this.state;
     this.setState({ show: true });
   }
   overlayClose() {
-    const { show } = this.state;
     this.setState({ show: false });
   }
   render() {
@@ -107,6 +105,44 @@ export class ModalComponent extends Component {
                             />
                           </Col>
                         </Form.Group>
+                      </Form>{" "}
+                    </Tab>
+                    <Tab eventKey="profile" title="Add Intent">
+                      <Form>
+                        &nbsp;
+                        <Form.Group as={Row} controlId="formHorizontalEmail">
+                          <Form.Label column sm={2}>
+                            Bot Name
+                          </Form.Label>
+                          <Col sm={10}>
+                            <Form.Control
+                              type="Name of Bot"
+                              placeholder="Name of Bot"
+                            />
+                          </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} controlId="formHorizontalEmail">
+                          <Form.Label column sm={2}>
+                            Welcome Message
+                          </Form.Label>
+                          <Col sm={10}>
+                            <Form.Control
+                              type="Welcome Message"
+                              placeholder="Welcome Message"
+                            />
+                          </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} controlId="formHorizontalEmail">
+                          <Form.Label column sm={2}>
+                            Fallback Message
+                          </Form.Label>
+                          <Col sm={10}>
+                            <Form.Control
+                              type="Welcome Message"
+                              placeholder="Fallback"
+                            />
+                          </Col>
+                        </Form.Group>
                         <Form.Group as={Row} controlId="formHorizontalEmail">
                           <Form.Label column sm={2}>
                             Delay Prompt
@@ -140,9 +176,8 @@ export class ModalComponent extends Component {
                             <Button type="submit">NEXT STEP</Button>
                           </Col>
                         </Form.Group>
-                      </Form>{" "}
+                      </Form>
                     </Tab>
-                    <Tab eventKey="profile" title="Add Intent"></Tab>
                   </Tabs>
                 </div>
                 {/* <!-- Footer --> */}

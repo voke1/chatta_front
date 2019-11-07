@@ -49,10 +49,6 @@ export default class dashboard extends Component {
         });
     }
   }
-<<<<<<< HEAD
-
-  render() {
-=======
   toggleSwitchf = () => {
     this.setState(prevState => {
       return {
@@ -63,7 +59,6 @@ export default class dashboard extends Component {
 
   App = () => {
     const [modalShow, setModalShow] = useState(false);
->>>>>>> fadc463b1c836939be06c9124fcc5bf552580cae
     return (
       <div>
         {/* <!-- Loader --> */}
@@ -84,15 +79,9 @@ export default class dashboard extends Component {
                   <a href="index.html" className="logo">
                     <i className="dripicons-broadcast"></i>&nbsp; CHATTA
                   </a>
-<<<<<<< HEAD
-                  {/* <a href="index.html" class="logo">
-                                <img src="assets/images/logo-sm.png" alt="" height="22" class="logo-small"></img>
-                                <img src="assets/images/logo.png" alt="" height="24" class="logo-large"></img>
-=======
                   {/* <a href="index.html" className="logo">
                                 <img src="assets/images/logo-sm.png" alt="" height="22" className="logo-small"></img>
                                 <img src="assets/images/logo.png" alt="" height="24" className="logo-large"></img>
->>>>>>> fadc463b1c836939be06c9124fcc5bf552580cae
                             </a>  */}
                 </div>
                 {/* <!-- End Logo container--> */}
@@ -367,11 +356,7 @@ export default class dashboard extends Component {
                             <td>
                               <button
                                 type="button"
-<<<<<<< HEAD
-                                class="btn btn-secondary btn-sm waves-effect"
-=======
                                 className="btn btn-secondary btn-sm waves-effect"
->>>>>>> fadc463b1c836939be06c9124fcc5bf552580cae
                                 onClick={() => {
                                   this.deleteClient(client._id);
                                 }}

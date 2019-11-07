@@ -8,6 +8,9 @@ import { Route, Switch } from "react-router-dom";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import EmailVerification from "./components/emailVerification";
+import Intent from './components/admin/adminDashboard/bot-intent';
+import OptionBox from './components/admin/adminDashboard/option-box'
+import Accordion from './components/admin/adminDashboard/accordion'
 function App() {
   return (
     <div>
@@ -18,6 +21,9 @@ function App() {
         <Route exact path="/dashboard/user" component={Chat}></Route>
         <Route exact path="/auth/register" component={Register}></Route>
         <Route exact path="/auth/login" component={Login}></Route>
+        <Route exact path="/intent" component={Intent}></Route>
+        <Route exact path="/option" component={OptionBox}></Route>
+        <Route exact path="/accordion" component={Accordion}></Route>
         <Route
           exact
           path="/auth/verify_email"
