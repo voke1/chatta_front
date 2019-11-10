@@ -11,13 +11,11 @@ export default class Card extends Component {
     options: "none"
   };
   onClick = () => {
-    console.log("this is the height", this.state.height);
     this.props.syncHeight(this.state.height);
     this.setState({
       openDialogue: true,
       toggleButton: this.state.toggleButton === "close" ? "open" : "close"
     });
-    console.log("open dialog", this.state.openDialogue);
   };
   handleToggle = () => {
     this.props.syncHeight(this.state.height);

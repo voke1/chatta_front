@@ -4,12 +4,12 @@
  File: Form Advanced Components Init
  */
 
-!(function ($) {
+!(function($) {
   "use strict";
 
-  var AdvancedForm = function () { };
+  var AdvancedForm = function() {};
 
-  (AdvancedForm.prototype.init = function () {
+  (AdvancedForm.prototype.init = function() {
     //creating various controls
 
     //colorpicker start
@@ -176,7 +176,14 @@
     ($.AdvancedForm.Constructor = AdvancedForm);
 })(window.jQuery);
 //initializing
+<<<<<<< HEAD
+(function($) {
+  "use strict";
+  $.AdvancedForm.init();
+})(window.jQuery);
+=======
 (function ($) {
   "use strict";
   $.AdvancedForm.init();
 })(window.jQuery);
+>>>>>>> christian

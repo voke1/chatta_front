@@ -13,7 +13,6 @@ class CreateIntent extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
   onClick = info => {
-    console.log("clicked");
     const initialResponse = [...this.state.responses];
     initialResponse.push(info.response);
     this.setState({
@@ -23,8 +22,6 @@ class CreateIntent extends Component {
   };
 
   render() {
-    console.log(this.state.responses);
-    const newResponse = <Response />;
     return (
       <div className="container" style={{ background: "white", width: "75%" }}>
         

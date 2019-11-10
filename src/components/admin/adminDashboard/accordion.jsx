@@ -1,7 +1,5 @@
 import React, { useState, useRef, Component } from "react";
-import Chevron from "./chevron";
 import "./accordion.css";
-import Response from "./response";
 import CardView from "./card-view";
 import OptionBox from "./option-box";
 
@@ -13,7 +11,6 @@ class Accordion2 extends Component {
     newHeight: "0px"
   };
   syncHeight = height => {
-    console.log("this is just the height", height);
     this.setState({
       init: this.state.init + height,
       height: this.state.init + height + this.divElement.clientHeight * 2 + "px"
@@ -34,7 +31,7 @@ class Accordion2 extends Component {
     return (
       <div
         ref={divElement => (this.divElement = divElement)}
-        className="accordion_section"
+        className="accordion-section"
         style={{
           marginLeft: "50px",
           marginBottom: "10px",
@@ -46,13 +43,19 @@ class Accordion2 extends Component {
           className={`accordion ${this.setActive}`}
           onClick={this.toggleAccordion}
           syncHeight={this.syncHeight}
+          syncTree={this.props.syncTree}
           res={this.props.res}
         />
         <div
           style={{ maxHeight: `${this.state.height}` }}
           className="accordion_content"
         >
-          <OptionBox syncHeight={this.syncHeight} />
+          <OptionBox
+            res={this.props.res}
+            syncTree={this.props.syncTree}
+            syncHeight={this.syncHeight}
+            identity={this.props.identity}
+          />
         </div>
       </div>
     );
