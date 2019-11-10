@@ -1,15 +1,52 @@
 import React, { Component, useState } from "react";
 import Accordion from "./accordion";
+import uuid from "uuid/v1";
 const initialResponses = [];
-const OptionBox = () => {
+const identities = [];
+let initialTree;
+const syncTree = tree => {
+  const isFound = identities.filter(
+    botTree => tree.identity === botTree.identity
+  );
+  if (isFound.length > 0) {
+    const index = identities.indexOf(isFound[0]);
+    identities[index].response.buttons.push(
+      tree.response.buttons[tree.response.buttons.length - 1]
+    );
+  } else {
+    identities.push(tree);
+  }
+  const newTreeArray = [initialTree, ...identities];
+  console.log("this is tree", newTreeArray);
+};
+const OptionBox = props => {
   const [responses, setResponses] = useState([]);
   const [response, setResponse] = useState("");
   const [inputVal, setInputVal] = useState("");
+  const [trees, setTree] = useState([]);
+  const key = uuid();
   const handleClick = async res => {
-    initialResponses.push(response);
+    const botKeys = uuid();
+    initialResponses.push({ key, val: response, identity: botKeys });
     setResponses(initialResponses);
     setInputVal("");
+    const botTree = {
+      identity: botKeys,
+      prompt: props.prompt,
+      response: {
+        buttons: [{ key: botKeys, val: response }],
+        text: ""
+      }
+    };
+    if (initialTree) {
+      initialTree.response.buttons.push({ key, val: response });
+    } else {
+      initialTree = botTree;
+    }
+
+    props.tree(initialTree);
   };
+
   return (
     <div
       style={{
@@ -19,9 +56,15 @@ const OptionBox = () => {
       className="form-group"
     >
       {responses.map(res => (
-        <Accordion res={res} key={res} />
+        <Accordion
+          res={res.val}
+          key={res.key}
+          syncTree={syncTree}
+          identity={res.identity}
+        />
       ))}
-      <div className="form-inline">
+
+      <div className="form-inline md-form mt-3">
         <input
           className="form-control"
           placeholder="Enter response"
@@ -31,20 +74,14 @@ const OptionBox = () => {
             setInputVal(e.target.value);
           }}
           value={inputVal}
-          style={{ width: "72%" }}
+          style={{ width: "40%" }}
         ></input>
-        <div style={{ width: "10%", marginLeft: "3px" }}>
+        <div style={{ marginLeft: "3px" }}>
           <button
-            className="add-response"
+            className="btn btn-sm"
             type="button"
             onClick={handleClick}
-            style={{
-              width: "67px",
-              height: "37px",
-              color: "#141473",
-              backgroundColor: "#f0f0f5",
-              borderRadius: 5
-            }}
+            style={{ backgroundColor: "#d0e4f2", color: "#3c3e40" }}
           >
             Add
           </button>

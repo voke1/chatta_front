@@ -19,7 +19,6 @@ class DialogBox extends Component {
   };
 
   render() {
-    console.log("rendered", this.props.open);
 
     return this.state.openDialog ? (
       <div>

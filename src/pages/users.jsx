@@ -1,36 +1,82 @@
 import React, { Component, useState } from "react";
 import { Link } from "react-router-dom";
-import avatar from "../images/users/avatar-1.jpg";
-import "../plugins/datatables/dataTables.bootstrap4.min.css";
-import "../plugins/datatables/responsive.bootstrap4.min.css";
-import "../css/style.css";
-import "../css/icons.css";
-import "../css/bootstrap.min.css";
-import "../images/favicon.ico";
+import avatar from "../components/admin/images/users/avatar-1.jpg";
+import "../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
+import "../components/admin/plugins/datatables/responsive.bootstrap4.min.css";
+import "../components/admin/css/style.css";
+import "../components/admin/css/icons.css";
+import "../components/admin/css/bootstrap.min.css";
+import "../components/admin/images/favicon.ico";
+import "../components/admin/css/switch.css";
+import Switch from "react-toggle-switch";
+import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
+import { Button, ButtonToolbar } from "react-bootstrap";
+import { CreateUser } from "../components/admin/adminDashboard/createUser";
 
-import { ButtonToolbar } from "react-bootstrap";
-import { ManageBot } from "../adminDashboard/manageBot";
-import { ModalComponent } from "../adminDashboard/botSettings";
-
-export class Bot extends Component {
+export class UserList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      setting: []
+      clients: [],
+      switched: false
     };
   }
+
   componentDidMount() {
-    fetch("http://localhost:9000/setting")
+    fetch("http://localhost:9000/client")
       .then(res => res.json())
       .then(data => {
-        this.setState({ setting: data });
+        const result = data.map(item => ({
+          ...item,
+          switched: false
+        }));
+        this.setState({ clients: result });
+        console.log("resuttam:", result);
       })
       .catch(console.log);
   }
 
-  render() {
+  deleteClient = clientId => {
+    if (window.confirm("Are you sure?")) {
+      fetch(`http://localhost:9000/client/` + clientId, {
+        method: "DELETE",
+        header: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          this.setState({
+            clients: [
+              ...this.state.clients.filter(client => client._id !== clientId)
+            ]
+          });
+        });
+    }
+  };
+  toggleSwitchf = id => {
+    this.setState({
+      clients: this.state.clients.map(client => {
+        if (client._id === id) {
+          client.switched = !client.switched;
+        }
+        return client;
+      })
+    });
+  };
+
+  App = () => {
+    const [modalShow, setModalShow] = useState(false);
     return (
       <div>
+        {/* <!-- Loader --> */}
+        <div className="preloader">
+          <div id="status">
+            <div className="spinner"></div>
+          </div>
+        </div>
+
         <div className="header-bg">
           {/* <!-- Navigation Bar--> */}
           <header id="topnav">
@@ -42,21 +88,10 @@ export class Bot extends Component {
                   <a href="index.html" className="logo">
                     <i className="dripicons-broadcast"></i>&nbsp; CHATTA
                   </a>
-
-                  <a href="index.html" className="logo">
-                    <img
-                      src="assets/images/logo-sm.png"
-                      alt=""
-                      height="22"
-                      className="logo-small"
-                    ></img>
-                    <img
-                      src="assets/images/logo.png"
-                      alt=""
-                      height="24"
-                      className="logo-large"
-                    ></img>
-                  </a>
+                  {/* <a href="index.html" className="logo">
+                                <img src="assets/images/logo-sm.png" alt="" height="22" className="logo-small"></img>
+                                <img src="assets/images/logo.png" alt="" height="24" className="logo-large"></img>
+                            </a>  */}
                 </div>
                 {/* <!-- End Logo container--> */}
 
@@ -276,7 +311,20 @@ export class Bot extends Component {
                       <i className="fa fa-search"></i>
                     </button>
                   </form>
-                  <ModalComponent />
+
+                  <ButtonToolbar>
+                    <Button
+                      className="btn btn-outline-light ml-1 waves-effect waves-light"
+                      variant="primary"
+                      onClick={() => setModalShow(true)}
+                    >
+                      Create User +
+                    </Button>
+                    <CreateUser
+                      show={modalShow}
+                      onHide={() => setModalShow(false)}
+                    />
+                  </ButtonToolbar>
                 </div>
               </div>
             </div>
@@ -287,65 +335,84 @@ export class Bot extends Component {
         <div className="wrapper">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-xl-8">
-                <div className="card m-b-30">
+              <div className="col-12">
+                <div className="card m-b-20">
                   <div className="card-body">
-                    <h4 className="mt-0 m-b-30 header-title">CHAT BOTS</h4>
+                    <h4 className="mt-0 header-title">Active Users</h4>
+                    <p className="text-muted m-b-30 font-14">
+                      DataTables has most features enabled by default, so all
+                      you need to do to use it with your own tables is to call
+                      the construction function: <code>$().DataTable();</code>.
+                    </p>
 
-                    <div className="table-responsive">
-                      <table className="table m-t-20 mb-0 table-vertical">
-                        <tbody>
-                          {this.state.setting.map(setting => (
-                            <tr>
-                              <td>
-                                <img
-                                  src="assets/images/users/avatar-2.jpg"
-                                  alt="bot-image"
-                                  className="thumb-sm rounded-circle mr-2"
-                                />
-                                {setting.chatbotName}
-                              </td>
-                              <td>
-                                <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
-                                {setting.welcomeMessage}
-                              </td>
-                              <td>
-                                {setting.fallbackMessage}
-                                <p className="m-0 text-muted font-14">
-                                  Fallback Message
-                                </p>
-                              </td>
-                              <td>
-                                {setting.delayPrompt}
-                                <p className="m-0 text-muted font-14">
-                                  Delay Prompt
-                                </p>
-                              </td>
-                              <td>
-                                <Link to="/dashboard/admin/bot/update">
-                                  <ButtonToolbar>
-                                    <ManageBot />
-                                  </ButtonToolbar>
+                    <table id="datatable" className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Phone</th>
+                          <th>Active</th>
+                          <th>Date created</th>
+                          <th>Option</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {this.state.clients.map((client, index) => (
+                          <tr>
+                            <td>{client.full_name}</td>
+                            <td>{client.email}</td>
+                            <td>{client.phone}</td>
+                            <td>
+                              <Switch
+                                key={client._id}
+                                onClick={this.toggleSwitchf.bind(
+                                  this,
+                                  client._id
+                                )}
+                                on={this.state.clients[index].switched}
+                              />
+                            </td>
+                            <td>2008/12/19</td>
+                            <td>
+                              <div className="button-items">
+                                <Link to="/dashboard/admin/user/profile">
+                                  <Button
+                                    type="button"
+                                    className="btn btn-secondary btn-sm waves-effect"
+                                  >
+                                    Edit &nbsp;
+                                  </Button>
                                 </Link>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+
+                                <button
+                                  type="button"
+                                  className="btn btn-secondary btn-sm waves-effect"
+                                  onClick={() => {
+                                    this.deleteClient(client._id);
+                                  }}
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
-              </div>
+              </div>{" "}
               {/* <!-- end col --> */}
-            </div>
+            </div>{" "}
             {/*  <!-- end row --> */}
-          </div>
-          {/*  <!-- end container -->        */}
+          </div>{" "}
+          {/*<!-- end container --> */}
         </div>
         {/* <!-- end wrapper --> */}
 
         {/* <!-- Footer --> */}
-        <footer className="footer" id="check_jq">
+        <footer className="footer">
           <div className="container-fluid">
             <div className="row">
               <div className="col-12">
@@ -359,5 +426,9 @@ export class Bot extends Component {
         {/* <!-- End Footer --> */}
       </div>
     );
+  };
+
+  render() {
+    return <div>{<this.App />}</div>;
   }
 }

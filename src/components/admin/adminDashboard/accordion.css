@@ -1,6 +1,5 @@
-@import url("https://fonts.google.com/css?family=Open-Sans:400_600&display=swap");
 
-.accordion_section {
+.accordion-section {
   display: flex;
   flex-direction: column;
 }
@@ -17,7 +16,6 @@
 }
 .accordion:hover,
 .active {
-  background-color: #ccc;
 }
 .accordion_title {
   font-family: "Open Sans", sans-serif;

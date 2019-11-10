@@ -3,22 +3,16 @@ import Dialogue from "./response-dialog";
 class Response extends Component {
   state = {
     openDialogue: false,
-    height: "0px",
-    openAccordion: false,
-    toggleButton: "close"
+    height: "0px"
   };
   onClick = () => {
     this.props.syncHeight(this.state.height);
-    this.setState({
-      openDialogue: true,
-    });
-    console.log("open dialog", this.state.openDialogue);
-  };
-  handleToggle = () => {
-    this.props.onClick();
-    this.setState({
-      toggleButton: this.state.toggleButton === "close" ? "open" : "close"
-    });
+    setTimeout(() => {
+      this.setState({
+        openDialogue: true
+      });
+      console.log("open dialog", this.state.openDialogue);
+    }, 10);
   };
   render() {
     return (
@@ -28,7 +22,7 @@ class Response extends Component {
         ) : (
           ""
         )}
-        <div className="form-inline" style={{margin: "10px"}}></div>
+        <div className="form-inline"></div>
         <input
           className="form m-2"
           style={{
@@ -45,20 +39,13 @@ class Response extends Component {
           disabled
         />
         <i
-          className="fas fa-pen fa-lg info-text ml-2"
+          className="fas fa-pen fa-lg cyan-text ml-2"
           onClick={this.onClick}
         ></i>
-        <label
-          className="ml-2"
-          style={{ color: "red", fontWeight: "bold", fontSize: "20px" }}
-        >
-          X
-        </label>
+        <i className="fas fa-minus-circle red-text ml-2"></i>
         <i
-          className={`fas fa-${
-            this.state.toggleButton === "close" ? "plus" : "minus"
-          }-circle primary-color-text ml-2`}
-          onClick={this.handleToggle}
+          className="fas fa-plus-circle green-text ml-2"
+          onClick={this.props.onClick}
         ></i>
       </div>
     );

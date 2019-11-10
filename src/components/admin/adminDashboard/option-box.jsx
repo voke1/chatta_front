@@ -2,16 +2,26 @@ import React, { Component } from "react";
 import Response from "./response";
 import "./card.css";
 import Accordion from "./accordion";
+import uuid from "uuid/v1";
+const identity = uuid();
 class OptionBox extends Component {
   state = {
     responses: [],
     response: "",
     height: "0px"
   };
+  initialResponses = [];
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
+  key = uuid();
   onClick = info => {
+    const botKeys = uuid();
+    this.initialResponses.push({
+      key: this.key,
+      val: this.state.response,
+      identity: botKeys
+    });
     this.props.syncHeight(this.state.height);
     const initialResponse = [...this.state.responses];
     initialResponse.push(info.response);
@@ -20,14 +30,33 @@ class OptionBox extends Component {
       response: "",
       height: this.divElement.clientHeight
     });
+    const botTree = {
+      identity: this.props.identity,
+      prompt: this.props.res,
+      response: {
+        buttons: [...this.initialResponses],
+        text: ""
+      }
+    };
+    console.log(botTree);
+    console.log(this.props);
+    this.props.syncTree(botTree);
   };
+  response;
+
   render() {
     return (
       <div ref={divElement => (this.divElement = divElement)}>
         <div className="option-box">
           {this.state.responses.map(res => {
-            console.log("tjis is res", res);
-            return <Accordion key={res} res={res} />;
+            return (
+              <Accordion
+                key={res}
+                res={res}
+                identity={res.identity}
+                syncTree={this.props.syncTree}
+              />
+            );
           })}
           <div
             style={{
@@ -37,7 +66,7 @@ class OptionBox extends Component {
             }}
             className="form-group"
           >
-            <div className="form-inline" >
+            <div className="form-inline">
               <input
                 className="form-control border-top-0 border-right-0 border-left-0"
                 placeholder="Add option"
@@ -53,8 +82,7 @@ class OptionBox extends Component {
                   onClick={() =>
                     this.onClick({ response: this.state.response })
                   }
-                  style={{backgroundColor: "#ededed", color:"#5b616b"}}
-                  
+                  style={{ backgroundColor: "#ededed", color: "#5b616b" }}
                 >
                   Add
                 </button>
