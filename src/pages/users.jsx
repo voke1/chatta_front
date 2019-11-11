@@ -56,6 +56,13 @@ export class UserList extends Component {
     }
   };
   toggleSwitchf = id => {
+    fetch(`http://localhost:9000/client/` + id, {
+      method: "PATCH",
+      header: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    });
     this.setState({
       clients: this.state.clients.map(client => {
         if (client._id === id) {

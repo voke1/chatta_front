@@ -1,4 +1,5 @@
 import jwt_decode from "jwt-decode";
+
 class DecodeToken {
   static async shuffleToken(token) {
     return token

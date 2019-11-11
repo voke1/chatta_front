@@ -33,57 +33,10 @@ export class Dashboard extends Component {
     };
   }
 
-  componentDidMount() {
-    fetch("http://localhost:9000/client")
-      .then(res => res.json())
-      .then(data => {
-        const result = data.map(item => ({
-          ...item,
-          toggled: false
-        }));
-        this.setState({ clients: result });
-        console.log("resuttam:", result);
-      })
-      .catch(console.log);
-  }
-
-  deleteClient(clientId) {
-    if (window.confirm("Are you sure?")) {
-      fetch(`http://localhost:9000/client/` + clientId, {
-        method: "DELETE",
-        header: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
-          const array = [...this.state.clients];
-          array.splice(array.map(result => result.id).indexOf(data._id), 1);
-          this.setState({ clients: array });
-        });
-    }
-  }
-  toggleSwitchf(index, e) {
-    // this.setState(prevState => {
-    //   return {
-    //     switched: !prevState.switched
-    //   };
-    // });
-
-    const clientsa = [...this.state.clients].map(item => ({
-      ...item,
-      toggled: false
-    }));
-    clientsa[index].toggled = !clientsa[index].toggled;
-
-    console.log("result:", clientsa);
-
-    this.setState({ clientsa });
-  }
+ 
 
   App = () => {
-    const [modalShow, setModalShow] = useState(false);
+   
     return <div>
 
 <body>
