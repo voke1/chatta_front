@@ -16,11 +16,11 @@ import "../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
 import "../components/admin/plugins/datatables/responsive.bootstrap4.min.css";
 import "../components/admin/admin_template (1)/fonik/purple/assets/plugins/datatables/dataTables.bootstrap4.min.css"
 import "../components/admin/admin_template (1)/fonik/purple/assets/plugins/datatables/responsive.bootstrap4.min.css";
-import "../components/admin/css/style.css";
-import "../components/admin/css/icons.css";
+// import "../components/admin/css/style.css";
+// import "../components/admin/css/icons.css";
 import "../components/admin/admin_template (1)/fonik/purple/assets/css/bootstrap.min.css";
 import "../components/admin/admin_template (1)/fonik/purple/assets/css/icons.css";
-import "../components/admin/admin_template (1)/fonik/purple/assets/css/style.css";
+import "../components/admin/admin_template (1)/fonik/purple/assets/css/styles.css";
 
 // assets/images/users/avatar-1.jpg
 // "assets/images/users/avatar-2.jpg"
@@ -48,7 +48,7 @@ export class Dashboard extends Component {
             {/* <!-- Navigation Bar--> */}
             <header id="topnav">
                 <div className="topbar-main">
-                    <div className="container-fluid">
+                    <div className="container-fluid-edited">
 
                         {/* <!-- Logo container--> */}
                         <div className="logo">

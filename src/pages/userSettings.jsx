@@ -16,19 +16,19 @@ export class UserSettings extends Component {
     super(props);
     this.state = {
       clients: [],
-      full_name: null,
+      fullName: null,
       password: null,
       email: null,
       phone: null
     };
   }
   componentDidMount() {
-    fetch("http://localhost:9000/client")
+    fetch(`http://localhost:9000/client/` + this.props.id)
       .then(res => res.json())
       .then(data => {
         this.setState({ clients: data });
       })
-      .catch(console.log);
+      .catch(this.props.id);
   }
 
   deleteClient(clientId) {
@@ -65,7 +65,7 @@ export class UserSettings extends Component {
     event.preventDefault();
 
     const user = {
-      full_name: this.state.full_name,
+      fullName: this.state.fullName,
       password: this.state.password,
       email: this.state.email,
       phone: this.state.phone
@@ -85,6 +85,7 @@ export class UserSettings extends Component {
 
   App = () => {
     const [modalShow, setModalShow] = useState(false);
+
     return (
       <div>
         {/* <!-- Loader --> */}
@@ -440,7 +441,8 @@ export class UserSettings extends Component {
                       </div>
                       <button
                         type="submit"
-                        className="btn btn-info btn-fill pull-right"
+                        // className="btn btn-info btn-fill pull-right"
+                        className="btn btn-secondary btn-fill waves-effect pull-right"
                         onClick={this.handleSubmit}
                       >
                         Update Profile
