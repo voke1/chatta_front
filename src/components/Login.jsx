@@ -43,7 +43,7 @@ class Login extends Component {
       if (res.data.success) {
         if (!res.data.userDetails.isAdmin) {
           this.setState({
-            redirect: "/dashboard/user"
+            redirect: "/dashboard/admin"
           });
         } else {
           this.setState({

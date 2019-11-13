@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Dialogue from "./response-dialog";
-import "./card.css";
+import "./css/card.css";
 
 export default class Card extends Component {
   state = {

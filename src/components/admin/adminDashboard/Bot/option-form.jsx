@@ -1,30 +1,38 @@
 import React, { Component, useState } from "react";
 import Accordion from "./accordion";
 import uuid from "uuid/v1";
+
 const initialResponses = [];
-const identities = [];
+let identities = [];
 let initialTree;
-const syncTree = tree => {
-  const isFound = identities.filter(
-    botTree => tree.identity === botTree.identity
-  );
-  if (isFound.length > 0) {
-    const index = identities.indexOf(isFound[0]);
-    identities[index].response.buttons.push(
-      tree.response.buttons[tree.response.buttons.length - 1]
-    );
-  } else {
-    identities.push(tree);
-  }
-  const newTreeArray = [initialTree, ...identities];
-  console.log("this is tree", newTreeArray);
-};
+let newTreeArray;
+
 const OptionBox = props => {
   const [responses, setResponses] = useState([]);
   const [response, setResponse] = useState("");
   const [inputVal, setInputVal] = useState("");
-  const [trees, setTree] = useState([]);
   const key = uuid();
+  const syncTree = (tree, initial) => {
+    if (initial) {
+      initialTree = initial;
+      newTreeArray = [initialTree, ...identities];
+      props.tree([newTreeArray]);
+    } else {
+      const isFound = identities.filter(
+        botTree => tree.identity === botTree.identity
+      );
+      if (isFound.length > 0) {
+        const index = identities.indexOf(isFound[0]);
+        identities[index].response.buttons.push(
+          tree.response.buttons[tree.response.buttons.length - 1]
+        );
+      } else {
+        identities.push(tree);
+      }
+      newTreeArray = [initialTree, ...identities];
+      props.tree([newTreeArray]);
+    }
+  };
   const handleClick = async res => {
     const botKeys = uuid();
     initialResponses.push({ key, val: response, identity: botKeys });
@@ -43,8 +51,7 @@ const OptionBox = props => {
     } else {
       initialTree = botTree;
     }
-
-    props.tree(initialTree);
+    syncTree(null, initialTree);
   };
 
   return (
@@ -59,6 +66,7 @@ const OptionBox = props => {
         <Accordion
           res={res.val}
           key={res.key}
+          botKey={res.key}
           syncTree={syncTree}
           identity={res.identity}
         />
