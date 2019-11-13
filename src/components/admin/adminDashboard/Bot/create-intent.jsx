@@ -1,23 +1,24 @@
 import React, { Component } from "react";
-import "../css/intent.css";
+import "../../css/intent.css";
 import Response from "./response";
 import OptionForm from "./option-form";
 import uuid from "uuid/v1";
-
+import * as apiService from "../../../../services/apiservice";
 class CreateIntent extends Component {
   state = {
     responses: [],
     response: "",
-    
+    chatBody: []
   };
   getTree = tree => {
-    console.log(tree);
+    console.log(tree instanceof Object);
+    this.setState({ chatBody: tree });
   };
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  identity = uuid()
+  identity = uuid();
   onClick = info => {
     const initialResponse = [...this.state.responses];
     initialResponse.push(info.response);
@@ -26,11 +27,22 @@ class CreateIntent extends Component {
       response: ""
     });
   };
-
+  handleSubmit = event => {
+    console.log(typeof this.state.chatBody);
+    event.preventDefault();
+    apiService
+      .post("tree", { chat_body: this.state.chatBody[0]})
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
   render() {
     return (
       <div className="container" style={{ background: "none", width: "60%" }}>
-        <form className="text-center">
+        <form className="text-center" onSubmit={this.handleSubmit}>
           <div className="row">
             <div className="md-col-8"></div>
           </div>
@@ -47,10 +59,7 @@ class CreateIntent extends Component {
           </div>
 
           <hr className="mt-3"></hr>
-          <OptionForm
-            tree={this.getTree}
-            prompt={this.state.prompt}
-          />
+          <OptionForm tree={this.getTree} prompt={this.state.prompt} />
           <hr></hr>
           <div>
             <button

@@ -12,6 +12,7 @@ import Switch from "react-toggle-switch";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import { Button, ButtonToolbar } from "react-bootstrap";
 import { CreateUser } from "../components/admin/adminDashboard/createUser";
+import { UserSettings } from "./userSettings";
 
 export class UserList extends Component {
   constructor(props) {
@@ -56,6 +57,13 @@ export class UserList extends Component {
     }
   };
   toggleSwitchf = id => {
+    fetch(`http://localhost:9000/client/` + id, {
+      method: "PATCH",
+      header: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    });
     this.setState({
       clients: this.state.clients.map(client => {
         if (client._id === id) {
@@ -351,7 +359,7 @@ export class UserList extends Component {
                           <th>Name</th>
                           <th>Email</th>
                           <th>Phone</th>
-                          <th>Active</th>
+                          <th>Status</th>
                           <th>Date created</th>
                           <th>Option</th>
                         </tr>
@@ -360,7 +368,7 @@ export class UserList extends Component {
                       <tbody>
                         {this.state.clients.map((client, index) => (
                           <tr>
-                            <td>{client.full_name}</td>
+                            <td>{client.fullName}</td>
                             <td>{client.email}</td>
                             <td>{client.phone}</td>
                             <td>

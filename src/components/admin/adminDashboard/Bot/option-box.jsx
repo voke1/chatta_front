@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Response from "./response";
-import "./card.css";
+import "./css/card.css";
 import Accordion from "./accordion";
 import uuid from "uuid/v1";
 const identity = uuid();
@@ -8,38 +8,33 @@ class OptionBox extends Component {
   state = {
     responses: [],
     response: "",
-    height: "0px"
+    height: "0px",
+    identity: ""
   };
   initialResponses = [];
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  key = uuid();
+
   onClick = info => {
-    const botKeys = uuid();
     this.initialResponses.push({
-      key: this.key,
-      val: this.state.response,
-      identity: botKeys
+      key: uuid(),
+      val: this.state.response
     });
     this.props.syncHeight(this.state.height);
-    const initialResponse = [...this.state.responses];
-    initialResponse.push(info.response);
     this.setState({
-      responses: initialResponse,
+      responses: this.initialResponses,
       response: "",
       height: this.divElement.clientHeight
     });
     const botTree = {
-      identity: this.props.identity,
+      identity: this.state.identity,
       prompt: this.props.res,
       response: {
         buttons: [...this.initialResponses],
         text: ""
       }
     };
-    console.log(botTree);
-    console.log(this.props);
     this.props.syncTree(botTree);
   };
   response;
@@ -51,9 +46,10 @@ class OptionBox extends Component {
           {this.state.responses.map(res => {
             return (
               <Accordion
-                key={res}
-                res={res}
-                identity={res.identity}
+                key={res.key}
+                botKey={res.key}
+                res={res.val}
+                identity={res.key}
                 syncTree={this.props.syncTree}
               />
             );
@@ -95,7 +91,7 @@ class OptionBox extends Component {
   }
   componentDidMount() {
     const height = this.divElement.clientHeight;
-    this.setState({ height: height });
+    this.setState({ height: height, identity: this.props.botKey });
   }
 }
 export default OptionBox;

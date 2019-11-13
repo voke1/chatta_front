@@ -6,11 +6,11 @@ import { Route, Switch } from "react-router-dom";
 import { ManageBot } from "./pages/manageBot";
 import { UserSettings } from "./pages/userSettings";
 import { Dashboard } from "./pages/dashboard";
-import { Bot } from "./components/admin/adminDashboard/admin-bots";
+import { Bot } from "./components/admin/adminDashboard/Bot/admin-bots";
 import { UserList } from "./pages/users";
 import Register from './components/Register'
 import Login from './components/Login'
-import Intent2 from './components/admin/adminDashboard/bot-intent'
+import VerifyEmail from "./components/emailVerification";
 
 function App() {
   return (
@@ -32,7 +32,7 @@ function App() {
         <Route exact path="/dashboard/admin/user" component={UserList}></Route>
         <Route exact path="/auth/register" component={Register}></Route>
         <Route exact path="/auth/login" component={Login}></Route>
-        <Route exact path="/intent" component={Intent2}></Route>
+        <Route exact path="/auth/verify_email" component={VerifyEmail}></Route>
         <Route component={Error}></Route>
       </Switch>
     </div>
