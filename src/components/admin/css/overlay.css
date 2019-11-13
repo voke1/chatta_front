@@ -14,14 +14,14 @@
 }
 
 .container-holder {
-  margin: 5%;
   border: #aa66cc;
-  margin-right: 10%;
-  margin-left: 10%;
+  margin-right: 5%;
+  margin-left: 5%;
+  margin-top: 2%;
 }
 
 #close {
   position: fixed;
-  right: 7%;
+  right: 4%;
   top: 5%;
 }

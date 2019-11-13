@@ -144,5 +144,11 @@ $(document).keydown(function(event) {
     return false;
   }
 });
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
 
 export default App;
+=======
+>>>>>>> fadc463b1c836939be06c9124fcc5bf552580cae
+>>>>>>> christian

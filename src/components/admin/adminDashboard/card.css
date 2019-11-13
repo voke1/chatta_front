@@ -1,0 +1,15 @@
+.card:hover {
+  cursor: pointer;
+}
+.InputAddOn {
+  display: flex;
+}
+
+.InputAddOn-field {
+  flex: 1;
+  /* field styles */
+}
+
+.InputAddOn-item {
+  /* item styles */
+}

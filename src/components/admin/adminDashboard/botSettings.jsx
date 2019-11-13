@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tab, Tabs, Row, Col, Form, Button } from "react-bootstrap";
+import { Tab, Tabs, Row, Col, Form, Button,} from "react-bootstrap";
 import "../plugins/datatables/dataTables.bootstrap4.min.css";
 import "../plugins/datatables/responsive.bootstrap4.min.css";
 import "../css/style.css";
@@ -9,6 +9,8 @@ import "../images/favicon.ico";
 import "../css/overlay.css";
 import "../css/overlay.css";
 import closeImage from "../images/close.jpg";
+import axios from "axios";
+import Overlay from "./overlay";
 
 export class ModalComponent extends Component {
   constructor(props) {
@@ -18,9 +20,59 @@ export class ModalComponent extends Component {
       modal2: false,
       modal3: false,
       modal4: false,
-      modal5: false
+      modal5: false,
+      chatbotName: "",
+      welcomeMessage: "",
+      fallbackMessage: "",
+      delayPrompt: "",
+      botImage: ""
     };
   }
+
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  };
+  handleSubmit = event => {
+    event.preventDefault();
+
+    const setting = {
+      chatbotName: this.state.chatbotName,
+      welcomeMessage: this.state.welcomeMessage,
+      fallbackMessage: this.state.fallbackMessage,
+      delayPrompt: this.state.delayPrompt,
+      botImage: this.state.botImage
+    };
+
+    console.log(setting);
+    axios
+      .post("http://localhost:9000/setting", {
+        ...setting
+      })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  fileSelectedHandler = event => {
+    this.setState({ selectedFile: event.target.files[0] });
+  };
+  fileUploadHandler = () => {
+    const formData = new FormData();
+    formData.append(
+      "image",
+      this.state.selectedFile,
+      this.state.selectedFile.name
+    );
+
+    axios.post("").then(res => {
+      console.log(res);
+    });
+  };
 
   toggle = nr => () => {
     let modalNumber = "modal" + nr;
@@ -28,14 +80,15 @@ export class ModalComponent extends Component {
       [modalNumber]: !this.state[modalNumber]
     });
   };
+
   overlayShow() {
-    const { show } = this.state;
     this.setState({ show: true });
   }
+
   overlayClose() {
-    const { show } = this.state;
     this.setState({ show: false });
   }
+
   render() {
     return (
       <div>
@@ -47,119 +100,7 @@ export class ModalComponent extends Component {
           Create Bot +
         </Button>
 
-        {this.state.show ? (
-          <section id="overlay" show={this.state.show}>
-            <div className="container-holder">
-              <body>
-                &nbsp;&nbsp;
-                <div class="header-bg1">
-                  {/* <!-- Navigation Bar--> */}
-
-                  <div class="container-fluid1">
-                    {/* <!-- Page-Title --> */}
-                  </div>
-                </div>
-                <div className="wraper">
-                  <a href="#" id="close">
-                    <img
-                      src={closeImage}
-                      width="60"
-                      height="60"
-                      onClick={() => this.overlayClose()}
-                    ></img>
-                  </a>
-
-                  <Tabs defaultActiveKey="home" id="uncontrolled-tab-example">
-                    &nbsp;
-                    <Tab eventKey="home" title="Create Bot">
-                      <Form>
-                        &nbsp;
-                        <Form.Group as={Row} controlId="formHorizontalEmail">
-                          <Form.Label column sm={2}>
-                            Bot Name
-                          </Form.Label>
-                          <Col sm={10}>
-                            <Form.Control
-                              type="Name of Bot"
-                              placeholder="Name of Bot"
-                            />
-                          </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} controlId="formHorizontalEmail">
-                          <Form.Label column sm={2}>
-                            Welcome Message
-                          </Form.Label>
-                          <Col sm={10}>
-                            <Form.Control
-                              type="Welcome Message"
-                              placeholder="Welcome Message"
-                            />
-                          </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} controlId="formHorizontalEmail">
-                          <Form.Label column sm={2}>
-                            Fallback Message
-                          </Form.Label>
-                          <Col sm={10}>
-                            <Form.Control
-                              type="Welcome Message"
-                              placeholder="Fallback"
-                            />
-                          </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} controlId="formHorizontalEmail">
-                          <Form.Label column sm={2}>
-                            Delay Prompt
-                          </Form.Label>
-                          <Col sm={10}>
-                            <Form.Control
-                              type="Delay Prompt"
-                              placeholder="Delay Prompt"
-                            />
-                          </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} controlId="formHorizontalPassword">
-                          <Form.Label column sm={2}>
-                            Password
-                          </Form.Label>
-                          <Col sm={10}>
-                            <Form.Control
-                              type="password"
-                              placeholder="Password"
-                            />
-                          </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} controlId="formHorizontalCheck">
-                          <Col sm={{ span: 10, offset: 2 }}>
-                            <Form.Check label="Remember me" />
-                          </Col>
-                        </Form.Group>
-                        <Form.Group as={Row}>
-                          <Col sm={{ span: 10, offset: 2 }}>
-                            <Button type="submit">CREATE</Button>
-                          </Col>
-                        </Form.Group>
-                      </Form>{" "}
-                    </Tab>
-                    <Tab eventKey="profile" title="Add Intent"></Tab>
-                  </Tabs>
-                </div>
-                {/* <!-- Footer --> */}
-                <footer class="footer">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-12">
-                        © 2019 - Crafted with{" "}
-                        <i class="mdi mdi-heart text-danger"></i> by IT Horizons
-                        Limited.
-                      </div>
-                    </div>
-                  </div>
-                </footer>
-              </body>
-            </div>
-          </section>
-        ) : null}
+        {this.state.show ? <Overlay height="100%" /> : null}
       </div>
     );
   }

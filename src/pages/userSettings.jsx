@@ -1,36 +1,100 @@
 import React, { Component, useState } from "react";
 import { Link } from "react-router-dom";
-import avatar from "../images/users/avatar-1.jpg";
-import "../plugins/datatables/dataTables.bootstrap4.min.css";
-import "../plugins/datatables/responsive.bootstrap4.min.css";
-import "../css/style.css";
-import "../css/icons.css";
-import "../css/bootstrap.min.css";
-import "../images/favicon.ico";
+import avatar from "../components/admin/images/users/avatar-1.jpg";
+import "../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
+import "../components/admin/plugins/datatables/responsive.bootstrap4.min.css";
+import "../components/admin/css/style.css";
+import "../components/admin/css/icons.css";
+import "../components/admin/css/bootstrap.min.css";
+import "../components/admin/images/favicon.ico";
+import "../components/admin/css/switch.css";
+import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
+import Axios from "axios";
 
-import { ButtonToolbar, Button } from "react-bootstrap";
-import { ManageBot } from "../adminDashboard/manageBot";
-import { ModalComponent } from "../adminDashboard/botSettings";
-
-export class Bot extends Component {
+export class UserSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      setting: []
+      clients: [],
+      fullName: null,
+      password: null,
+      email: null,
+      phone: null
     };
   }
   componentDidMount() {
-    fetch("http://localhost:9000/setting")
+    fetch(`http://localhost:9000/client/` + this.props.id)
       .then(res => res.json())
       .then(data => {
-        this.setState({ setting: data });
+        this.setState({ clients: data });
       })
-      .catch(console.log);
+      .catch(this.props.id);
   }
 
-  render() {
+  deleteClient(clientId) {
+    if (window.confirm("Are you sure?")) {
+      fetch(`http://localhost:9000/client/` + clientId, {
+        method: "DELETE",
+        header: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          const array = [...this.state.clients];
+          array.splice(array.map(result => result.id).indexOf(data._id), 1);
+          this.setState({ clients: array });
+        });
+    }
+  }
+  toggleSwitchf = () => {
+    this.setState(prevState => {
+      return {
+        switched: !prevState.switched
+      };
+    });
+  };
+
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  };
+  handleSubmit = event => {
+    event.preventDefault();
+
+    const user = {
+      fullName: this.state.fullName,
+      password: this.state.password,
+      email: this.state.email,
+      phone: this.state.phone
+    };
+
+    console.log(user);
+    Axios.put("http://localhost:9000/client", {
+      ...user
+    })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  App = () => {
+    const [modalShow, setModalShow] = useState(false);
+
     return (
       <div>
+        {/* <!-- Loader --> */}
+        <div className="preloader">
+          <div id="status">
+            <div className="spinner"></div>
+          </div>
+        </div>
+
         <div className="header-bg">
           {/* <!-- Navigation Bar--> */}
           <header id="topnav">
@@ -42,21 +106,10 @@ export class Bot extends Component {
                   <a href="index.html" className="logo">
                     <i className="dripicons-broadcast"></i>&nbsp; CHATTA
                   </a>
-
-                  <a href="index.html" className="logo">
-                    <img
-                      src="assets/images/logo-sm.png"
-                      alt=""
-                      height="22"
-                      className="logo-small"
-                    ></img>
-                    <img
-                      src="assets/images/logo.png"
-                      alt=""
-                      height="24"
-                      className="logo-large"
-                    ></img>
-                  </a>
+                  {/* <a href="index.html" className="logo">
+                                <img src="assets/images/logo-sm.png" alt="" height="22" className="logo-small"></img>
+                                <img src="assets/images/logo.png" alt="" height="24" className="logo-large"></img>
+                            </a>  */}
                 </div>
                 {/* <!-- End Logo container--> */}
 
@@ -197,14 +250,6 @@ export class Bot extends Component {
                   {/* <!-- Navigation Menu--> */}
                   <ul className="navigation-menu">
                     <li className="has-submenu">
-                      <Link to="/dashboard/admin">
-                        <a>
-                          <i className="dripicons-device-desktop"></i>Dashboard
-                        </a>
-                      </Link>
-                    </li>
-
-                    <li className="has-submenu">
                       <Link to="/dashboard/admin/bot">
                         <a>
                           <i className="dripicons-device-desktop"></i>Chatbots
@@ -263,6 +308,7 @@ export class Bot extends Component {
 
           <div className="container-fluid">
             {/* <!-- Page-Title --> */}
+            {/* <!-- Page-Title --> */}
             <div className="row">
               <div className="col-sm-12">
                 <div className="page-title-box">
@@ -276,78 +322,187 @@ export class Bot extends Component {
                       <i className="fa fa-search"></i>
                     </button>
                   </form>
-                  <ModalComponent />
                 </div>
               </div>
             </div>
+            {/* <!-- end page title end breadcrumb --> */}
             {/* <!-- end page title end breadcrumb --> */}
           </div>
         </div>
 
         <div className="wrapper">
+          <div className="container-fluid">{/*  <!-- end row --> */}</div>{" "}
+          {/*<!-- end container --> */}
+        </div>
+        {/* <!-- end wrapper --> */}
+        <div className="content">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-12">
-                <div className="card m-b-30">
+              <div className="col-md-8">
+                <div className="card">
+                  <div className="card-header">
+                    <h4 className="card-title">Edit Profile</h4>
+                  </div>
                   <div className="card-body">
-                    <h4 className="mt-0 m-b-30 header-title">CHAT BOTS</h4>
-
-                    <div className="table-responsive">
-                      <table className="table m-t-20 mb-0 table-vertical">
-                        <tbody>
-                          {this.state.setting.map(setting => (
-                            <tr>
-                              <td>
-                                <img
-                                  src="assets/images/users/avatar-2.jpg"
-                                  alt="bot-image"
-                                  className="thumb-sm rounded-circle mr-2"
-                                />
-                                {setting.chatbotName}
-                              </td>
-                              <td>
-                                <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
-                                {setting.welcomeMessage}
-                              </td>
-                              <td>
-                                {setting.fallbackMessage}
-                                <p className="m-0 text-muted font-14">
-                                  Fallback Message
-                                </p>
-                              </td>
-                              <td>
-                                {setting.delayPrompt}
-                                <p className="m-0 text-muted font-14">
-                                  Delay Prompt
-                                </p>
-                              </td>
-                              <td>
-                                <Link to="/dashboard/admin/bot/update">
-                                  <ButtonToolbar>
-                                    <Button className="btn btn-secondary btn-sm waves-effect">
-                                      Manage
-                                    </Button>
-                                  </ButtonToolbar>
-                                </Link>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                    <form onSubmit={this.handleSubmit}>
+                      <div className="row">
+                        <div className="col-md-5 pr-1">
+                          <div className="form-group">
+                            <label>Company (disabled)</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              disabled=""
+                              placeholder="Company"
+                              value="Creative Code Inc."
+                              onChange={this.handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                        <div className="col-md-3 px-1">
+                          <div className="form-group">
+                            <label>Username</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Username"
+                              value="michael23"
+                              onChange={this.handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                        <div className="col-md-4 pl-1">
+                          <div className="form-group">
+                            <label for="exampleInputEmail1">
+                              Email address
+                            </label>
+                            <input
+                              type="email"
+                              className="form-control"
+                              placeholder="Email"
+                              onChange={this.handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 pr-1">
+                          <div className="form-group">
+                            <label>First Name</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Company"
+                              value="Mike"
+                              onChange={this.handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                        <div className="col-md-6 pl-1">
+                          <div className="form-group">
+                            <label>Last Name</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Last Name"
+                              value="Andrew"
+                              onChange={this.handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="form-group">
+                            <label>Address</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Home Address"
+                              value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                              onChange={this.handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-4 pr-1">
+                          <div className="form-group">
+                            <label>City</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="City"
+                              value="Mike"
+                              onChange={this.handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        type="submit"
+                        // className="btn btn-info btn-fill pull-right"
+                        className="btn btn-secondary btn-fill waves-effect pull-right"
+                        onClick={this.handleSubmit}
+                      >
+                        Update Profile
+                      </button>
+                      <div className="clearfix"></div>
+                    </form>
                   </div>
                 </div>
               </div>
-              {/* <!-- end col --> */}
+              <div className="col-md-4">
+                <div className="card card-user">
+                  <div className="card-image">
+                    <img
+                      src="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400"
+                      alt="..."
+                    ></img>
+                  </div>
+                  <div className="card-body">
+                    <div className="author">
+                      <a href="#">
+                        <img
+                          className="avatar border-gray"
+                          src="../assets/img/faces/face-3.jpg"
+                          alt="..."
+                        ></img>
+                        <h5 className="title">Frank ONeil</h5>
+                      </a>
+                      <p className="description">michael24</p>
+                    </div>
+                    <p className="description text-center">"Mercy</p>
+                  </div>
+                  <hr></hr>
+                  <div className="button-container mr-auto ml-auto">
+                    <button
+                      href="#"
+                      className="btn btn-simple btn-link btn-icon"
+                    >
+                      <i className="fa fa-facebook-square"></i>
+                    </button>
+                    <button
+                      href="#"
+                      className="btn btn-simple btn-link btn-icon"
+                    >
+                      <i className="fa fa-twitter"></i>
+                    </button>
+                    <button
+                      href="#"
+                      className="btn btn-simple btn-link btn-icon"
+                    >
+                      <i className="fa fa-google-plus-square"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-            {/*  <!-- end row --> */}
           </div>
-          {/*  <!-- end container -->        */}
         </div>
-        {/* <!-- end wrapper --> */}
 
         {/* <!-- Footer --> */}
-        <footer className="footer" id="check_jq">
+        <footer className="footer">
           <div className="container-fluid">
             <div className="row">
               <div className="col-12">
@@ -361,9 +516,9 @@ export class Bot extends Component {
         {/* <!-- End Footer --> */}
       </div>
     );
-  }
+  };
 
   render() {
-    return <this.Apps />;
+    return <div>{<this.App />}</div>;
   }
 }
