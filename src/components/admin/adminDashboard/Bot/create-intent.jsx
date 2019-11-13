@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../css/intent.css";
+import "../../css/intent.css";
 import Response from "./response";
 import OptionForm from "./option-form";
 import uuid from "uuid/v1";
@@ -11,7 +11,7 @@ class CreateIntent extends Component {
     
   };
   getTree = tree => {
-    console.log(tree);
+    console.log("here is the tree",tree);
   };
 
   onChange = e => {

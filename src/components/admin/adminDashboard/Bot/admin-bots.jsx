@@ -1,16 +1,16 @@
 import React, { Component, useState } from "react";
 import { Link } from "react-router-dom";
-import avatar from "../images/users/avatar-1.jpg";
-import "../plugins/datatables/dataTables.bootstrap4.min.css";
-import "../plugins/datatables/responsive.bootstrap4.min.css";
-import "../css/style.css";
-import "../css/icons.css";
-import "../css/bootstrap.min.css";
-import "../images/favicon.ico";
+import avatar from "../../images/users/avatar-1.jpg";
+import "../../plugins/datatables/dataTables.bootstrap4.min.css";
+import "../../plugins/datatables/responsive.bootstrap4.min.css";
+import "../../css/style.css";
+import "../../css/icons.css";
+import "../../css/bootstrap.min.css";
+import "../../images/favicon.ico";
 
-import { ButtonToolbar } from "react-bootstrap";
-import { ManageBot } from "../adminDashboard/manageBot";
-import { ModalComponent } from "../adminDashboard/botSettings";
+import { ButtonToolbar, Button } from "react-bootstrap";
+import { ManageBot } from "../manageBot";
+import { ModalComponent } from "./botSettings";
 
 export class Bot extends Component {
   constructor(props) {
@@ -287,7 +287,7 @@ export class Bot extends Component {
         <div className="wrapper">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-xl-8">
+              <div className="col-12">
                 <div className="card m-b-30">
                   <div className="card-body">
                     <h4 className="mt-0 m-b-30 header-title">CHAT BOTS</h4>
@@ -324,7 +324,9 @@ export class Bot extends Component {
                               <td>
                                 <Link to="/dashboard/admin/bot/update">
                                   <ButtonToolbar>
-                                    <ManageBot />
+                                    <Button className="btn btn-secondary btn-sm waves-effect">
+                                      Manage
+                                    </Button>
                                   </ButtonToolbar>
                                 </Link>
                               </td>

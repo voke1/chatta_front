@@ -1,7 +1,7 @@
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
-import "./overlay.css";
+import "./css/overlay.css";
 import BotTabs from "./bot-tabs";
 
 class Overlay extends Component {
