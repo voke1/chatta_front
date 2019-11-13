@@ -432,7 +432,7 @@ export class ManageBot extends Component {
                                   </div>
                                   <button
                                     type="submit"
-                                    className="btn btn-info btn-fill pull-right"
+                                    className="btn btn-secondary btn-fill waves-effect pull-right"
                                   >
                                     Update Settings
                                   </button>
