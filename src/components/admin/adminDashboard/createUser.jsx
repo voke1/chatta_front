@@ -12,7 +12,7 @@ import Axios from "axios";
 
 export class CreateUser extends Component {
   state = {
-    full_name: null,
+    fullName: null,
     password: null,
     email: null,
     phone: null
@@ -26,7 +26,7 @@ export class CreateUser extends Component {
     event.preventDefault();
 
     const user = {
-      full_name: this.state.full_name,
+      fullName: this.state.fullName,
       password: this.state.password,
       email: this.state.email,
       phone: this.state.phone
@@ -62,8 +62,8 @@ export class CreateUser extends Component {
                   </Form.Label>
                   <Col sm={10}>
                     <Form.Control
-                      type="full_name"
-                      name="full_name"
+                      type="fullName"
+                      name="fullName"
                       placeholder="Full name"
                       onChange={this.handleChange}
                     />

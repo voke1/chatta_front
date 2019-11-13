@@ -9,22 +9,26 @@ import "../components/admin/css/bootstrap.min.css";
 import "../components/admin/images/favicon.ico";
 import "../components/admin/css/switch.css";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
+import Axios from "axios";
 
 export class UserSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clients: []
+      clients: [],
+      fullName: null,
+      password: null,
+      email: null,
+      phone: null
     };
   }
-
   componentDidMount() {
-    fetch("http://localhost:9000/client")
+    fetch(`http://localhost:9000/client/` + this.props.id)
       .then(res => res.json())
       .then(data => {
         this.setState({ clients: data });
       })
-      .catch(console.log);
+      .catch(this.props.id);
   }
 
   deleteClient(clientId) {
@@ -52,8 +56,36 @@ export class UserSettings extends Component {
     });
   };
 
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  };
+  handleSubmit = event => {
+    event.preventDefault();
+
+    const user = {
+      fullName: this.state.fullName,
+      password: this.state.password,
+      email: this.state.email,
+      phone: this.state.phone
+    };
+
+    console.log(user);
+    Axios.put("http://localhost:9000/client", {
+      ...user
+    })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   App = () => {
     const [modalShow, setModalShow] = useState(false);
+
     return (
       <div>
         {/* <!-- Loader --> */}
@@ -312,7 +344,7 @@ export class UserSettings extends Component {
                     <h4 className="card-title">Edit Profile</h4>
                   </div>
                   <div className="card-body">
-                    <form>
+                    <form onSubmit={this.handleSubmit}>
                       <div className="row">
                         <div className="col-md-5 pr-1">
                           <div className="form-group">
@@ -323,6 +355,7 @@ export class UserSettings extends Component {
                               disabled=""
                               placeholder="Company"
                               value="Creative Code Inc."
+                              onChange={this.handleChange}
                             ></input>
                           </div>
                         </div>
@@ -334,6 +367,7 @@ export class UserSettings extends Component {
                               className="form-control"
                               placeholder="Username"
                               value="michael23"
+                              onChange={this.handleChange}
                             ></input>
                           </div>
                         </div>
@@ -346,6 +380,7 @@ export class UserSettings extends Component {
                               type="email"
                               className="form-control"
                               placeholder="Email"
+                              onChange={this.handleChange}
                             ></input>
                           </div>
                         </div>
@@ -359,6 +394,7 @@ export class UserSettings extends Component {
                               className="form-control"
                               placeholder="Company"
                               value="Mike"
+                              onChange={this.handleChange}
                             ></input>
                           </div>
                         </div>
@@ -370,6 +406,7 @@ export class UserSettings extends Component {
                               className="form-control"
                               placeholder="Last Name"
                               value="Andrew"
+                              onChange={this.handleChange}
                             ></input>
                           </div>
                         </div>
@@ -383,6 +420,7 @@ export class UserSettings extends Component {
                               className="form-control"
                               placeholder="Home Address"
                               value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                              onChange={this.handleChange}
                             ></input>
                           </div>
                         </div>
@@ -396,34 +434,16 @@ export class UserSettings extends Component {
                               className="form-control"
                               placeholder="City"
                               value="Mike"
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="col-md-4 px-1">
-                          <div className="form-group">
-                            <label>Country</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Country"
-                              value="Andrew"
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="col-md-4 pl-1">
-                          <div className="form-group">
-                            <label>Postal Code</label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              placeholder="ZIP Code"
+                              onChange={this.handleChange}
                             ></input>
                           </div>
                         </div>
                       </div>
                       <button
                         type="submit"
-                        className="btn btn-info btn-fill pull-right"
+                        // className="btn btn-info btn-fill pull-right"
+                        className="btn btn-secondary btn-fill waves-effect pull-right"
+                        onClick={this.handleSubmit}
                       >
                         Update Profile
                       </button>
@@ -452,9 +472,7 @@ export class UserSettings extends Component {
                       </a>
                       <p className="description">michael24</p>
                     </div>
-                    <p className="description text-center">
-                      "Lamborghini Mercy
-                    </p>
+                    <p className="description text-center">"Mercy</p>
                   </div>
                   <hr></hr>
                   <div className="button-container mr-auto ml-auto">
