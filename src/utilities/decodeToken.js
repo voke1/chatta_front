@@ -7,12 +7,16 @@ class DecodeToken {
       .join("");
   }
   static async getUserPayload(token) {
-    token = await this.shuffleToken(token);
-    try {
-      return await jwt_decode(token);
-    } catch (e) {
-      window.location = "http://localhost:3000/auth/login";
+    if (token) {
+      token = await this.shuffleToken(token);
+      try {
+        return await jwt_decode(token);
+      } catch (e) {
+        window.location = "http://localhost:3000/auth/login";
+      }
     }
+    return;
+
   }
 }
 export default DecodeToken;
