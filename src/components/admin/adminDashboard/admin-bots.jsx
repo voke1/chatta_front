@@ -15,17 +15,24 @@ import { ModalComponent } from "../adminDashboard/botSettings";
 export class Bot extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       setting: []
     };
+
   }
   componentDidMount() {
     fetch("http://localhost:9000/setting")
-      .then(res => res.json())
+      .then(res => 
+        res.json()
+        )
       .then(data => {
-        this.setState({ setting: data });
+        // this.setState({ setting: data });
+        console.log("error data", data)
       })
-      .catch(console.log);
+      .catch(e => {
+        console.log("error", e)
+      });
   }
 
   render() {
@@ -363,7 +370,7 @@ export class Bot extends Component {
     );
   }
 
-  render() {
-    return <this.Apps />;
-  }
+  // render() {
+  //   return <this.Apps />;
+  // }
 }
