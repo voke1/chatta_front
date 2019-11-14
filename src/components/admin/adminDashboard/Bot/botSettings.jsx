@@ -1,5 +1,9 @@
 import React, { Component } from "react";
+<<<<<<< HEAD:src/components/admin/adminDashboard/Bot/botSettings.jsx
 import { Tab, Tabs, Row, Col, Form, Button,} from "react-bootstrap";
+=======
+import { Tab, Tabs, Row, Col, Form, Button } from "react-bootstrap";
+>>>>>>> origin/christian:src/components/admin/adminDashboard/Bot/botSettings.jsx
 import "../../plugins/datatables/dataTables.bootstrap4.min.css";
 import "../../plugins/datatables/responsive.bootstrap4.min.css";
 import "../../css/style.css";
