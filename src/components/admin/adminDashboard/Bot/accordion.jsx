@@ -1,9 +1,9 @@
 import React, { useState, useRef, Component } from "react";
-import "./accordion.css";
+import "./css/accordion.css";
 import CardView from "./card-view";
 import OptionBox from "./option-box";
 
-class Accordion2 extends Component {
+class Accordion extends Component {
   state = {
     height: "0px",
     active: "",
@@ -52,6 +52,8 @@ class Accordion2 extends Component {
         >
           <OptionBox
             res={this.props.res}
+            key={this.props.botKey}
+            botKey={this.props.botKey}
             syncTree={this.props.syncTree}
             syncHeight={this.syncHeight}
             identity={this.props.identity}
@@ -65,4 +67,4 @@ class Accordion2 extends Component {
     this.setState({ init: height });
   }
 }
-export default Accordion2;
+export default Accordion;

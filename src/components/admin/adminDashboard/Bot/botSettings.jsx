@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import { Tab, Tabs, Row, Col, Form, Button,} from "react-bootstrap";
-import "../plugins/datatables/dataTables.bootstrap4.min.css";
-import "../plugins/datatables/responsive.bootstrap4.min.css";
-import "../css/style.css";
-import "../css/icons.css";
-import "../css/bootstrap.min.css";
-import "../images/favicon.ico";
-import "../css/overlay.css";
-import "../css/overlay.css";
-import closeImage from "../images/close.jpg";
+import { Tab, Tabs, Row, Col, Form, Button } from "react-bootstrap";
+import "../../plugins/datatables/dataTables.bootstrap4.min.css";
+import "../../plugins/datatables/responsive.bootstrap4.min.css";
+import "../../css/style.css";
+import "../../css/icons.css";
+import "../../css/bootstrap.min.css";
+import "../../images/favicon.ico";
+import "../../css/overlay.css";
+import "../../css/overlay.css";
+import closeImage from "../../images/close.jpg";
 import axios from "axios";
 import Overlay from "./overlay";
 

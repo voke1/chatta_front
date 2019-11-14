@@ -6,7 +6,7 @@ import { Route, Switch } from "react-router-dom";
 import { ManageBot } from "./pages/manageBot";
 import { UserSettings } from "./pages/userSettings";
 import { Dashboard } from "./pages/dashboard";
-import { Bot } from "./components/admin/adminDashboard/admin-bots";
+import { Bot } from "./components/admin/adminDashboard/Bot/admin-bots";
 import { UserList } from "./pages/users";
 import Register from './components/Register'
 import Login from './components/Login'

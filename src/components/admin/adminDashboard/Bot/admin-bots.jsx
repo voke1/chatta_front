@@ -1,16 +1,16 @@
 import React, { Component, useState } from "react";
 import { Link } from "react-router-dom";
-import avatar from "../images/users/avatar-1.jpg";
-import "../plugins/datatables/dataTables.bootstrap4.min.css";
-import "../plugins/datatables/responsive.bootstrap4.min.css";
-import "../css/style.css";
-import "../css/icons.css";
-import "../css/bootstrap.min.css";
-import "../images/favicon.ico";
+import avatar from "../../images/users/avatar-1.jpg";
+import "../../plugins/datatables/dataTables.bootstrap4.min.css";
+import "../../plugins/datatables/responsive.bootstrap4.min.css";
+import "../../css/style.css";
+import "../../css/icons.css";
+import "../../css/bootstrap.min.css";
+import "../../images/favicon.ico";
 
 import { ButtonToolbar, Button } from "react-bootstrap";
-import { ManageBot } from "../adminDashboard/manageBot";
-import { ModalComponent } from "../adminDashboard/botSettings";
+import { ManageBot } from "../manageBot";
+import { ModalComponent } from "./botSettings";
 
 export class Bot extends Component {
   constructor(props) {
