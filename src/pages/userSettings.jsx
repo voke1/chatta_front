@@ -72,7 +72,7 @@ export class UserSettings extends Component {
     };
 
     console.log(user);
-    Axios.put("http://localhost:9000/client", {
+    Axios.post("http://localhost:9000/client", {
       ...user
     })
       .then(res => {
@@ -361,12 +361,11 @@ export class UserSettings extends Component {
                         </div>
                         <div className="col-md-3 px-1">
                           <div className="form-group">
-                            <label>Username</label>
+                            <label>Full Name</label>
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Username"
-                              value="michael23"
+                              placeholder="Full name"
                               onChange={this.handleChange}
                             ></input>
                           </div>
@@ -393,7 +392,6 @@ export class UserSettings extends Component {
                               type="text"
                               className="form-control"
                               placeholder="Company"
-                              value="Mike"
                               onChange={this.handleChange}
                             ></input>
                           </div>
@@ -404,8 +402,7 @@ export class UserSettings extends Component {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Last Name"
-                              value="Andrew"
+                              placeholder="Andrew"
                               onChange={this.handleChange}
                             ></input>
                           </div>
@@ -419,7 +416,6 @@ export class UserSettings extends Component {
                               type="text"
                               className="form-control"
                               placeholder="Home Address"
-                              value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
                               onChange={this.handleChange}
                             ></input>
                           </div>
@@ -428,12 +424,11 @@ export class UserSettings extends Component {
                       <div className="row">
                         <div className="col-md-4 pr-1">
                           <div className="form-group">
-                            <label>City</label>
+                            <label>Phone</label>
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="City"
-                              value="Mike"
+                              placeholder="Phone Number"
                               onChange={this.handleChange}
                             ></input>
                           </div>

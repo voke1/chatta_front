@@ -8,7 +8,7 @@ class BotTabs extends Component {
         <Tabs defaultActiveKey="home" id="uncontrolled-tab-example">
           &nbsp;
           <Tab eventKey="home" title="Create Bot">
-            <div className="container" style={{ background: "none" }}>
+            <div className="" style={{ background: "none" }}>
               <div className="card">
                 <div className="card-body px-lg-5">
                   <form
@@ -41,7 +41,6 @@ class BotTabs extends Component {
                         className="form-control"
                         placeholder="Fallback message"
                       />
-                      
                     </div>
                     <div className="md-form">
                       <input
