@@ -398,33 +398,18 @@ export class ManageBot extends Component {
                             ></input>
                           </div>
                         </div>
-                        <div className="col-md-4 px-1">
-                          <div className="form-group">
-                            <label>Country</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Country"
-                              value="Andrew"
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="col-md-4 pl-1">
-                          <div className="form-group">
-                            <label>Postal Code</label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              placeholder="ZIP Code"
-                            ></input>
-                          </div>
-                        </div>
                       </div>
                       <button
                         type="submit"
                         className="btn btn-secondary btn-fill waves-effect pull-right"
                       >
-                        Update Setings
+                        Delete This BOT
+                      </button>
+                      <button
+                        type="submit"
+                        className="btn btn-secondary btn-fill waves-effect pull-right"
+                      >
+                        Update BOT Setings
                       </button>
                       <div className="clearfix"></div>
                     </form>

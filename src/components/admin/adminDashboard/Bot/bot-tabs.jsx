@@ -78,11 +78,7 @@ class BotTabs extends Component {
   render() {
     return (
       <div className="container-holder">
-        <Tabs
-          activeKey={this.state.tab}
-          id="controlled-tab-example"
-          
-        >
+        <Tabs defaultActiveKey={this.state.tab} id="controlled-tab-example">
           &nbsp;
           <Tab eventKey="home" title="Create Bot">
             <div className="" style={{ background: "none" }}>

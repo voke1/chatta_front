@@ -15,46 +15,26 @@ export class UserSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clients: [],
+      client: {},
       fullName: null,
       password: null,
       email: null,
-      phone: null
+      phone: null,
+      clientId: props.match.params.id
     };
   }
   componentDidMount() {
-    fetch(`http://localhost:9000/client/` + this.props.id)
-      .then(res => res.json())
-      .then(data => {
-        this.setState({ clients: data });
-      })
-      .catch(this.props.id);
-  }
+    Axios.get(`http://localhost:9000/client/${this.state.clientId}`)
+      .then(res => {
+        const result = res.data;
+        setTimeout(() => {
+          this.setState({ client: result });
+        }, 2000);
 
-  deleteClient(clientId) {
-    if (window.confirm("Are you sure?")) {
-      fetch(`http://localhost:9000/client/` + clientId, {
-        method: "DELETE",
-        header: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
+        console.log("Result:", result);
       })
-        .then(res => res.json())
-        .then(data => {
-          const array = [...this.state.clients];
-          array.splice(array.map(result => result.id).indexOf(data._id), 1);
-          this.setState({ clients: array });
-        });
-    }
+      .catch(err => {});
   }
-  toggleSwitchf = () => {
-    this.setState(prevState => {
-      return {
-        switched: !prevState.switched
-      };
-    });
-  };
 
   handleChange = event => {
     this.setState({
@@ -71,8 +51,7 @@ export class UserSettings extends Component {
       phone: this.state.phone
     };
 
-    console.log(user);
-    Axios.post("http://localhost:9000/client", {
+    Axios.patch(`http://localhost:9000/client/${this.state.clientId}`, {
       ...user
     })
       .then(res => {
@@ -83,8 +62,9 @@ export class UserSettings extends Component {
       });
   };
 
-  App = () => {
-    const [modalShow, setModalShow] = useState(false);
+  render() {
+    // const [modalShow, setModalShow] = useState(false);
+    console.log("renderClient:", this.state.client);
 
     return (
       <div>
@@ -344,6 +324,8 @@ export class UserSettings extends Component {
                     <h4 className="card-title">Edit Profile</h4>
                   </div>
                   <div className="card-body">
+                    {console.log("CLIENTELETS:")}
+
                     <form onSubmit={this.handleSubmit}>
                       <div className="row">
                         <div className="col-md-5 pr-1">
@@ -365,7 +347,7 @@ export class UserSettings extends Component {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Full name"
+                              placeholder={this.state.client.fullName}
                               onChange={this.handleChange}
                             ></input>
                           </div>
@@ -378,7 +360,7 @@ export class UserSettings extends Component {
                             <input
                               type="email"
                               className="form-control"
-                              placeholder="Email"
+                              placeholder={this.state.client.email}
                               onChange={this.handleChange}
                             ></input>
                           </div>
@@ -428,7 +410,11 @@ export class UserSettings extends Component {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Phone Number"
+                              placeholder={
+                                this.state.client.phone
+                                  ? this.state.client.phone
+                                  : "Add a phone Number"
+                              }
                               onChange={this.handleChange}
                             ></input>
                           </div>
@@ -511,9 +497,5 @@ export class UserSettings extends Component {
         {/* <!-- End Footer --> */}
       </div>
     );
-  };
-
-  render() {
-    return <div>{<this.App />}</div>;
   }
 }

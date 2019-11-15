@@ -384,7 +384,9 @@ export class UserList extends Component {
                             <td>2008/12/19</td>
                             <td>
                               <div className="button-items">
-                                <Link to="/dashboard/admin/user/profile">
+                                <Link
+                                  to={`/dashboard/admin/user/${client._id}`}
+                                >
                                   <Button
                                     type="button"
                                     className="btn btn-secondary btn-sm waves-effect"

@@ -8,8 +8,8 @@ import { UserSettings } from "./pages/userSettings";
 import { Dashboard } from "./pages/dashboard";
 import { Bot } from "./components/admin/adminDashboard/Bot/admin-bots";
 import { UserList } from "./pages/users";
-import Register from './components/Register'
-import Login from './components/Login'
+import Register from "./components/Register";
+import Login from "./components/Login";
 import VerifyEmail from "./components/emailVerification";
 
 function App() {
@@ -21,12 +21,12 @@ function App() {
         <Route exact path="/dashboard/admin/bot" component={Bot}></Route>
         <Route
           exact
-          path="/dashboard/admin/user/profile"
+          path="/dashboard/admin/user/:id"
           component={UserSettings}
         ></Route>
         <Route
           exact
-          path="/dashboard/admin/bot/update"
+          path="/dashboard/admin/bot/:id"
           component={ManageBot}
         ></Route>
         <Route exact path="/dashboard/admin/user" component={UserList}></Route>
