@@ -11,6 +11,8 @@ import { UserList } from "./pages/users";
 import Register from './components/Register'
 import Login from './components/Login'
 import VerifyEmail from "./components/emailVerification";
+import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
+// import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 
 function App() {
   return (
@@ -30,6 +32,7 @@ function App() {
           component={ManageBot}
         ></Route>
         <Route exact path="/dashboard/admin/user" component={UserList}></Route>
+        <Route exact path="/dashboard/admin/company" component={CompaniesComponent}></Route>
         <Route exact path="/auth/register" component={Register}></Route>
         <Route exact path="/auth/login" component={Login}></Route>
         <Route exact path="/auth/verify_email" component={VerifyEmail}></Route>

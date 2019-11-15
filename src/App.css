@@ -20,3 +20,21 @@
 .App-link {
   color: #09d3ac;
 }
+
+
+.floatBtn{
+  top:16% !important;
+  right: 0.8%;
+  position: absolute;
+  cursor: pointer !important;
+  z-index: 100;
+  background-color: red !important;
+}
+
+@media screen and (max-width: 1017px) {
+ 
+  .floatBtn{
+    background-color: red !important;
+  }
+
+}
