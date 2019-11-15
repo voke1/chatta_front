@@ -94,20 +94,22 @@ export default class Convo extends Component {
      * The companyId is gotten from the domain name. But for now it is not passed
      */
 
-    // const convoTree = await this.appService.getConversationTree('tree');   This is your main API function for convo tree
+    // const convoTree = await this.appService.getConversationTree('tree');  This is your main API function for convo tree
 
     axios
       .get("http://localhost:9000/tree/")
       .then(res => {
-        console.log(res.data[res.data.length -1].chat_body);
-        const convoTree = res.data[res.data.length -1].chat_body;
+        console.log(res.data[res.data.length - 1].chat_body);
+        const convoTree = res.data[res.data.length - 1].chat_body;
         setTimeout(() => {
           const conversationTree = this.deepCopy(convoTree);
           conversationTree.push(this.state.empty);
           this.setState({
             conversationTree: conversationTree
           });
-          this.updateConverstion(res.data[res.data.length -1].chat_body[0].identity);
+          this.updateConverstion(
+            res.data[res.data.length - 1].chat_body[0].identity
+          );
           console.log("Conversation Tree:: ", conversationTree);
         }, 10);
       })

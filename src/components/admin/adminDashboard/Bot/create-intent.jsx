@@ -4,11 +4,13 @@ import Response from "./response";
 import OptionForm from "./option-form";
 import uuid from "uuid/v1";
 import * as apiService from "../../../../services/apiservice";
+import ProgressBar from "../../../progressbar";
 class CreateIntent extends Component {
   state = {
     responses: [],
     response: "",
-    chatBody: []
+    chatBody: [],
+    setProgress: false
   };
   getTree = tree => {
     console.log(tree instanceof Object);
@@ -28,18 +30,21 @@ class CreateIntent extends Component {
     });
   };
   handleSubmit = event => {
-    console.log(typeof this.state.chatBody);
+    this.setState({ setProgress: true });
     event.preventDefault();
     apiService
-      .post("tree", { chat_body: this.state.chatBody[0]})
+      .post("tree", { chat_body: this.state.chatBody[0] })
       .then(res => {
         console.log(res);
+        this.setState({ setProgress: false });
       })
       .catch(err => {
         console.log(err);
       });
   };
+
   render() {
+    
     return (
       <div className="container" style={{ background: "none", width: "60%" }}>
         <form className="text-center" onSubmit={this.handleSubmit}>
@@ -61,6 +66,7 @@ class CreateIntent extends Component {
           <hr className="mt-3"></hr>
           <OptionForm tree={this.getTree} prompt={this.state.prompt} />
           <hr></hr>
+          {this.state.setProgress ? <ProgressBar/> : ""}
           <div>
             <button
               className="btn btn-sm btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"

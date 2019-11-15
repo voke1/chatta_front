@@ -93,5 +93,9 @@ class OptionBox extends Component {
     const height = this.divElement.clientHeight;
     this.setState({ height: height, identity: this.props.botKey });
   }
+  componentWillReceiveProps(props) {
+    const height = this.divElement.clientHeight;
+    this.setState({ height: height });
+  }
 }
 export default OptionBox;

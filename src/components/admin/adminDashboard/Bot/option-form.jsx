@@ -1,4 +1,5 @@
 import React, { Component, useState } from "react";
+import { setGlobal } from "reactn";
 import Accordion from "./accordion";
 import uuid from "uuid/v1";
 
@@ -33,6 +34,9 @@ const OptionBox = props => {
       props.tree([newTreeArray]);
     }
   };
+  setGlobal({
+    syncTree
+  });
   const identity = uuid();
   const handleClick = async res => {
     const key = uuid();
@@ -40,7 +44,7 @@ const OptionBox = props => {
       key,
       botKey: key,
       val: response,
-      identity,
+      identity
     });
     setResponses(initialResponses);
     setInputVal("");
