@@ -10,7 +10,11 @@ class CreateIntent extends Component {
     responses: [],
     response: "",
     chatBody: [],
-    setProgress: false
+    showProgress: false,
+    buttonText: "DEPLOY",
+    buttonColor: "btn-outline-info",
+    animation: "",
+    disabledButton: false
   };
   getTree = tree => {
     console.log(tree instanceof Object);
@@ -30,13 +34,23 @@ class CreateIntent extends Component {
     });
   };
   handleSubmit = event => {
-    this.setState({ setProgress: true });
     event.preventDefault();
+    if (this.state.buttonText === "FINISH") {
+      this.props.closeOverlay();
+    }
+    this.setState({ setProgress: true, disabled: true });
     apiService
       .post("tree", { chat_body: this.state.chatBody[0] })
       .then(res => {
         console.log(res);
-        this.setState({ setProgress: false });
+        this.setState({
+          setProgress: false,
+          buttonText: "FINISH",
+          buttonColor: "btn-success",
+          animation: "animated shake",
+          disabledButton: false
+        });
+        this.props.disableHomeTab();
       })
       .catch(err => {
         console.log(err);
@@ -44,7 +58,6 @@ class CreateIntent extends Component {
   };
 
   render() {
-    
     return (
       <div className="container" style={{ background: "none", width: "60%" }}>
         <form className="text-center" onSubmit={this.handleSubmit}>
@@ -66,14 +79,18 @@ class CreateIntent extends Component {
           <hr className="mt-3"></hr>
           <OptionForm tree={this.getTree} prompt={this.state.prompt} />
           <hr></hr>
-          {this.state.setProgress ? <ProgressBar/> : ""}
+          {this.state.setProgress ? <ProgressBar /> : ""}
           <div>
             <button
-              className="btn btn-sm btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
+              className={`btn btn-sm ${this.state.buttonColor} btn-rounded btn-block z-depth-0 my-4 waves-effect ${this.state.animation}`}
               type="submit"
-              style={{ width: "100px", float: "right" }}
+              style={{
+                width: "100px",
+                float: "right"
+              }}
+              disabled={this.state.disabledButton}
             >
-              Deploy
+              {this.state.buttonText}
             </button>
           </div>
         </form>
