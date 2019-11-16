@@ -20,7 +20,8 @@ export default class Chat extends Component {
       measuring_unit: "",
       showChatArea: false,
       textValue: "",
-      userInput: ""
+      userInput: "",
+      btnStyle: { backgroundColor: "orange" }
     };
     this.appService = new AppService();
   }
@@ -87,6 +88,7 @@ export default class Chat extends Component {
         id="chat-opener"
         data-toggle="tooltip"
         title="Chat with us"
+        // style={this.state.btnStyle}
         onClick={this.toggleChatDisplay}
       >
         <i className="far fa-comment-alt fa-2x"></i>
@@ -95,6 +97,11 @@ export default class Chat extends Component {
   }
 
   componentDidMount() {
+    const appKey = window.location.href;
+    console.log("API", appKey);
+    this.setState({
+      btnStyle: { backgroundColor: "red" }
+    });
     // // $('#chat-opener').tooltip();
     // $(document).ready(function () {
     //     $('[data-toggle="tooltip"]').tooltip();

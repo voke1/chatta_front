@@ -100,6 +100,7 @@ export default class Convo extends Component {
       .get("http://localhost:9000/tree/")
       .then(res => {
         console.log(res.data[res.data.length - 1].chat_body);
+        // const convoTree = res.data[res.data.length - 1].chat_body;
         const convoTree = res.data[res.data.length - 1].chat_body;
         setTimeout(() => {
           const conversationTree = this.deepCopy(convoTree);

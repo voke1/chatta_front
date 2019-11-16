@@ -3,30 +3,27 @@ import { Tab, Tabs, Row, Col, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import CreateIntent from "./create-intent";
 import * as apiService from "../../../../services/apiservice";
+import ProgressBar from "../../../progressbar";
 class BotTabs extends Component {
   state = {
-    show: false,
-    modal2: false,
-    modal3: false,
-    modal4: false,
-    modal5: false,
+    showProgress: false,
     chatbotName: "",
     welcomeMessage: "",
     fallbackMessage: "",
     delayPrompt: "",
     botImage: "",
-    tab: "home"
+    tab: "home",
+    settingsSaved: false
   };
 
   handleChange = event => {
-    this.setState({ tab: "home" });
     this.setState({
       [event.target.name]: event.target.value
     });
   };
   handleSubmit = event => {
     event.preventDefault();
-
+    this.setState({ showProgress: true });
     const setting = {
       chatbotName: this.state.chatbotName,
       welcomeMessage: this.state.welcomeMessage,
@@ -37,7 +34,11 @@ class BotTabs extends Component {
     apiService
       .post("setting", setting)
       .then(res => {
-        this.setState({ tab: "intent" });
+        this.setState({
+          tab: "intent",
+          showProgress: false,
+          settingsSaved: true
+        });
         console.log(res);
       })
       .catch(err => {
@@ -60,11 +61,17 @@ class BotTabs extends Component {
       console.log(res);
     });
   };
-
+  getTab = tab => {
+    return this.state.settingsSaved ? tab : this.state.tab;
+  };
   render() {
     return (
       <div className="container-holder">
-        <Tabs defaultActiveKey={this.state.tab} id="controlled-tab-example">
+        <Tabs
+          activeKey={this.state.tab}
+          id="controlled-tab-example"
+          onSelect={tab => this.setState({ tab: this.getTab(tab) })}
+        >
           &nbsp;
           <Tab eventKey="home" title="Create Bot" className>
             <div className="" style={{ background: "none" }}>
@@ -135,6 +142,8 @@ class BotTabs extends Component {
                         Upload bot image
                       </label>
                     </div>
+                    <hr></hr>
+                    {this.state.showProgress ? <ProgressBar /> : ""}
                     <button
                       className="btn btn-sm btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
                       type="submit"
@@ -150,7 +159,12 @@ class BotTabs extends Component {
           <Tab eventKey="intent" title="Add Intent" className="open">
             <div className="card w-100">
               <div className="card-body">
-                <CreateIntent />
+                <CreateIntent
+                  closeOverlay={this.props.closeOverlay}
+                  disableHomeTab={() =>
+                    this.setState({ tab: "intent", settingsSaved: false })
+                  }
+                />
               </div>
             </div>
           </Tab>

@@ -27,7 +27,7 @@ class Overlay extends Component {
         </a>
 
         <div class="overlay-content">
-          <BotTabs />
+          <BotTabs closeOverlay={this.handleClick} />
         </div>
       </div>
     );
