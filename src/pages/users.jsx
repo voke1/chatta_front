@@ -32,9 +32,8 @@ export class UserList extends Component {
           switched: item.isEnabled
         }));
         this.setState({ clients: result });
-        console.log("resuttam:", result);
       })
-      .catch(console.log);
+      .catch(console.error());
   }
 
   deleteClient = clientId => {
@@ -53,7 +52,8 @@ export class UserList extends Component {
               ...this.state.clients.filter(client => client._id !== clientId)
             ]
           });
-        });
+        })
+        .catch(console.error());
     }
   };
   toggleSwitch = id => {
@@ -391,6 +391,7 @@ export class UserList extends Component {
                                   <Button
                                     type="button"
                                     className="btn btn-secondary btn-sm waves-effect"
+                                    clientID={client._id}
                                   >
                                     Edit &nbsp;
                                   </Button>

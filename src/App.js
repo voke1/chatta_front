@@ -26,8 +26,18 @@ function App() {
         ></Route>
         <Route
           exact
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
           path="/dashboard/admin/bot/:id"
           component={ManageBot}
+=======
+          path="/dashboard/admin/bot/update"
+          component={<ManageBot />}
+>>>>>>> Stashed changes
+=======
+          path="/dashboard/admin/bot/update"
+          component={<ManageBot />}
+>>>>>>> Stashed changes
         ></Route>
         <Route exact path="/dashboard/admin/user" component={UserList}></Route>
         <Route exact path="/auth/register" component={Register}></Route>

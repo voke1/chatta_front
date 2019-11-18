@@ -315,62 +315,13 @@ export class ManageBot extends Component {
                   <div className="card-body">
                     <form>
                       <div className="row">
-                        <div className="col-md-5 pr-1">
+                        <div className="col-md-12">
                           <div className="form-group">
-                            <label>Company (disabled)</label>
+                            <label>Bot Name</label>
                             <input
                               type="text"
                               className="form-control"
-                              disabled=""
-                              placeholder="Company"
-                              value="Creative Code Inc."
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="col-md-3 px-1">
-                          <div className="form-group">
-                            <label>Username</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Username"
-                              value="michael23"
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="col-md-4 pl-1">
-                          <div className="form-group">
-                            <label for="exampleInputEmail1">
-                              Email address
-                            </label>
-                            <input
-                              type="email"
-                              className="form-control"
-                              placeholder="Email"
-                            ></input>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-md-6 pr-1">
-                          <div className="form-group">
-                            <label>First Name</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Company"
-                              value="Mike"
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="col-md-6 pl-1">
-                          <div className="form-group">
-                            <label>Last Name</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Last Name"
-                              value="Andrew"
+                              placeholder="Name of Bot"
                             ></input>
                           </div>
                         </div>
@@ -378,29 +329,42 @@ export class ManageBot extends Component {
                       <div className="row">
                         <div className="col-md-12">
                           <div className="form-group">
-                            <label>Address</label>
+                            <label>Welcome message</label>
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Home Address"
-                              value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                              placeholder="Bot welcome message"
                             ></input>
                           </div>
                         </div>
                       </div>
+
                       <div className="row">
-                        <div className="col-md-4 pr-1">
+                        <div className="col-md-12">
                           <div className="form-group">
-                            <label>City</label>
+                            <label>Fallback Message</label>
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="City"
-                              value="Mike"
+                              placeholder="Bot fallback message"
                             ></input>
                           </div>
                         </div>
                       </div>
+
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="form-group">
+                            <label>Delay Prompt</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Bot delay prompt"
+                            ></input>
+                          </div>
+                        </div>
+                      </div>
+
                       <button
                         type="submit"
                         className="btn btn-secondary btn-fill waves-effect pull-right"
@@ -434,9 +398,9 @@ export class ManageBot extends Component {
                           src="../assets/img/faces/face-3.jpg"
                           alt="..."
                         ></img>
-                        <h5 className="title">Frank ONeil</h5>
+                        <h5 className="title">Bot Image</h5>
                       </a>
-                      <p className="description">michael24</p>
+                      <p className="description">Whatsapp Bot</p>
                     </div>
                     <p className="description text-center">
                       "Lamborghini Mercy
