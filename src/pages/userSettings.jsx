@@ -29,7 +29,7 @@ export class UserSettings extends Component {
         const result = res.data;
         setTimeout(() => {
           this.setState({ client: result });
-        }, 2000);
+        }, 1000);
 
         console.log("Result:", result);
       })
@@ -51,11 +51,13 @@ export class UserSettings extends Component {
       phone: this.state.phone
     };
 
-    Axios.patch(`http://localhost:9000/client/${this.state.clientId}`, {
+    console.log(user);
+
+    Axios.put(`http://localhost:9000/client/${this.state.clientId}`, {
       ...user
     })
       .then(res => {
-        console.log(res);
+        console.log("patchedData:", res.data);
       })
       .catch(err => {
         console.log(err);
@@ -333,6 +335,7 @@ export class UserSettings extends Component {
                             <label>Company (disabled)</label>
                             <input
                               type="text"
+                              name="Company"
                               className="form-control"
                               disabled=""
                               placeholder="Company"
@@ -347,6 +350,7 @@ export class UserSettings extends Component {
                             <input
                               type="text"
                               className="form-control"
+                              name="fullName"
                               placeholder={this.state.client.fullName}
                               onChange={this.handleChange}
                             ></input>
@@ -362,6 +366,7 @@ export class UserSettings extends Component {
                               className="form-control"
                               placeholder={this.state.client.email}
                               onChange={this.handleChange}
+                              name="email"
                             ></input>
                           </div>
                         </div>
@@ -375,6 +380,7 @@ export class UserSettings extends Component {
                               className="form-control"
                               placeholder="Company"
                               onChange={this.handleChange}
+                              name="firstName"
                             ></input>
                           </div>
                         </div>
@@ -416,6 +422,7 @@ export class UserSettings extends Component {
                                   : "Add a phone Number"
                               }
                               onChange={this.handleChange}
+                              name="phone"
                             ></input>
                           </div>
                         </div>

@@ -29,7 +29,7 @@ export class UserList extends Component {
       .then(data => {
         const result = data.map(item => ({
           ...item,
-          switched: false
+          switched: item.isEnabled
         }));
         this.setState({ clients: result });
         console.log("resuttam:", result);
@@ -56,7 +56,7 @@ export class UserList extends Component {
         });
     }
   };
-  toggleSwitchf = id => {
+  toggleSwitch = id => {
     fetch(`http://localhost:9000/client/` + id, {
       method: "PATCH",
       header: {
@@ -64,6 +64,7 @@ export class UserList extends Component {
         "Content-Type": "application/json"
       }
     });
+
     this.setState({
       clients: this.state.clients.map(client => {
         if (client._id === id) {
@@ -374,7 +375,7 @@ export class UserList extends Component {
                             <td>
                               <Switch
                                 key={client._id}
-                                onClick={this.toggleSwitchf.bind(
+                                onClick={this.toggleSwitch.bind(
                                   this,
                                   client._id
                                 )}

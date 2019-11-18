@@ -26,7 +26,7 @@ export class ManageBot extends Component {
       .catch(console.log);
   }
 
-  deleteClient(clientId) {
+  deleteClient = clientId => {
     if (window.confirm("Are you sure?")) {
       fetch(`http://localhost:9000/client/` + clientId, {
         method: "DELETE",
@@ -37,12 +37,14 @@ export class ManageBot extends Component {
       })
         .then(res => res.json())
         .then(data => {
-          const array = [...this.state.clients];
-          array.splice(array.map(result => result.id).indexOf(data._id), 1);
-          this.setState({ clients: array });
+          this.setState({
+            clients: [
+              ...this.state.clients.filter(client => client._id !== clientId)
+            ]
+          });
         });
     }
-  }
+  };
   toggleSwitchf = () => {
     this.setState(prevState => {
       return {
