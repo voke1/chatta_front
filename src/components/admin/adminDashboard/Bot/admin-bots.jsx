@@ -16,17 +16,39 @@ export class Bot extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      setting: []
+      settings: []
     };
   }
   componentDidMount() {
     fetch("http://localhost:9000/setting")
       .then(res => res.json())
       .then(data => {
-        this.setState({ setting: data });
+        this.setState({ settings: data });
       })
       .catch(console.log);
   }
+
+  deleteBot = settingId => {
+    if (window.confirm("Are you sure?")) {
+      fetch(`http://localhost:9000/setting/` + settingId, {
+        method: "DELETE",
+        header: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          this.setState({
+            settings: [
+              ...this.state.settings.filter(
+                setting => setting._id !== settingId
+              )
+            ]
+          });
+        });
+    }
+  };
 
   render() {
     return (
@@ -295,7 +317,7 @@ export class Bot extends Component {
                     <div className="table-responsive">
                       <table className="table m-t-20 mb-0 table-vertical">
                         <tbody>
-                          {this.state.setting.map(setting => (
+                          {this.state.settings.map(setting => (
                             <tr>
                               <td>
                                 <img
@@ -322,13 +344,25 @@ export class Bot extends Component {
                                 </p>
                               </td>
                               <td>
-                                <Link to="/dashboard/admin/bot/update">
-                                  <ButtonToolbar>
+                                {console.log("settings ID:", setting._id)}
+
+                                <ButtonToolbar>
+                                  <Link
+                                    to={`/dashboard/admin/bot/${setting._id}`}
+                                  >
                                     <Button className="btn btn-secondary btn-sm waves-effect">
                                       Manage
                                     </Button>
-                                  </ButtonToolbar>
-                                </Link>
+                                  </Link>
+                                  <Button
+                                    className="btn btn-secondary btn-sm waves-effect"
+                                    onClick={() => {
+                                      this.deleteBot(setting._id);
+                                    }}
+                                  >
+                                    Delete
+                                  </Button>
+                                </ButtonToolbar>
                               </td>
                             </tr>
                           ))}

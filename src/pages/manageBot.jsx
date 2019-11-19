@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import avatar from "../components/admin/images/users/avatar-1.jpg";
 import "../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
@@ -8,53 +8,61 @@ import "../components/admin/css/icons.css";
 import "../components/admin/css/bootstrap.min.css";
 import "../components/admin/images/favicon.ico";
 import "../components/admin/css/switch.css";
+import Axios from "axios";
 
 export class ManageBot extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clients: []
+      settings: {},
+      settingId: props.match.params.id,
+      welcomeMessage: null,
+      fallbackMessage: null,
+      delayPrompt: null,
+      chatbotName: null
     };
   }
 
   componentDidMount() {
-    fetch("http://localhost:9000/client")
-      .then(res => res.json())
-      .then(data => {
-        this.setState({ clients: data });
+    Axios.get(`http://localhost:9000/setting/${this.state.settingId}`)
+      .then(res => {
+        const result = res.data;
+        setTimeout(() => {
+          this.setState({ settings: result });
+        }, 1000);
+
+        console.log("Result:", result);
       })
-      .catch(console.log);
+      .catch(err => {});
   }
 
-  deleteClient = clientId => {
-    if (window.confirm("Are you sure?")) {
-      fetch(`http://localhost:9000/client/` + clientId, {
-        method: "DELETE",
-        header: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
-          this.setState({
-            clients: [
-              ...this.state.clients.filter(client => client._id !== clientId)
-            ]
-          });
-        });
-    }
-  };
-  toggleSwitchf = () => {
-    this.setState(prevState => {
-      return {
-        switched: !prevState.switched
-      };
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
     });
+  };
+  handleSubmit = event => {
+    event.preventDefault();
+
+    const bot = {
+      welcomeMessage: this.state.welcomeMessage,
+      fallbackMessage: this.state.fallbackMessage,
+      delayPrompt: this.state.delayPrompt,
+      chatbotName: this.state.chatbotName
+    };
+
+    Axios.put(`http://localhost:9000/setting/${this.state.settingId}`, {
+      ...bot
+    })
+      .then(res => {
+        console.log("patchedData:", res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   App = () => {
-    const [modalShow, setModalShow] = useState(false);
     return (
       <div>
         {/* <!-- Loader --> */}
@@ -313,7 +321,7 @@ export class ManageBot extends Component {
                     <h4 className="card-title">Edit Bot</h4>
                   </div>
                   <div className="card-body">
-                    <form>
+                    <form onSubmit={this.handleSubmit}>
                       <div className="row">
                         <div className="col-md-12">
                           <div className="form-group">
@@ -321,7 +329,9 @@ export class ManageBot extends Component {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Name of Bot"
+                              placeholder={this.state.settings.chatbotName}
+                              name="chatbotName"
+                              onChange={this.handleChange}
                             ></input>
                           </div>
                         </div>
@@ -333,7 +343,9 @@ export class ManageBot extends Component {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Bot welcome message"
+                              placeholder={this.state.settings.welcomeMessage}
+                              name="welcomeMessage"
+                              onChange={this.handleChange}
                             ></input>
                           </div>
                         </div>
@@ -346,7 +358,9 @@ export class ManageBot extends Component {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Bot fallback message"
+                              placeholder={this.state.settings.fallbackMessage}
+                              name="fallbackMessage"
+                              onChange={this.handleChange}
                             ></input>
                           </div>
                         </div>
@@ -359,7 +373,9 @@ export class ManageBot extends Component {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Bot delay prompt"
+                              placeholder={this.state.settings.delayPrompt}
+                              name="delayPrompt"
+                              onChange={this.handleChange}
                             ></input>
                           </div>
                         </div>
@@ -368,12 +384,7 @@ export class ManageBot extends Component {
                       <button
                         type="submit"
                         className="btn btn-secondary btn-fill waves-effect pull-right"
-                      >
-                        Delete This BOT
-                      </button>
-                      <button
-                        type="submit"
-                        className="btn btn-secondary btn-fill waves-effect pull-right"
+                        onClick={this.handleSubmit}
                       >
                         Update BOT Setings
                       </button>
