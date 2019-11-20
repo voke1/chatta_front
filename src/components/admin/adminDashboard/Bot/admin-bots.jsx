@@ -321,7 +321,7 @@ export class Bot extends Component {
                             <tr>
                               <td>
                                 <img
-                                  src="assets/images/users/avatar-2.jpg"
+                                  src={setting.fileUrl}
                                   alt="bot-image"
                                   className="thumb-sm rounded-circle mr-2"
                                 />

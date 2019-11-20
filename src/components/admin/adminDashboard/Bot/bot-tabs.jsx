@@ -4,6 +4,8 @@ import axios from "axios";
 import CreateIntent from "./create-intent";
 import * as apiService from "../../../../services/apiservice";
 import ProgressBar from "../../../progressbar";
+import { storage } from "../../../../firebase/index";
+
 class BotTabs extends Component {
   state = {
     show: false,
@@ -16,27 +18,39 @@ class BotTabs extends Component {
     welcomeMessage: "",
     fallbackMessage: "",
     delayPrompt: "",
-    botImage: "",
+    botImage: " ",
     tab: "home",
-    settingsSaved: false
+    settingsSaved: false,
+    fileUpload: null
   };
 
   handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     });
+    // alert(event.target.value);
   };
-  handleSubmit = event => {
-    event.preventDefault();
-    this.setState({ showProgress: true });
+
+  fileSelectedHandler = event => {
+    // if (event.target.files[0]) {
+    console.log("event.target:", event.target);
+    const fileInput = event.target.files[0];
+    this.setState({ fileUpload: fileInput });
+    console.log("fileUpload", fileInput);
+    // }
+    return null;
+  };
+  saveData = url => {
     const setting = {
       chatbotName: this.state.chatbotName,
       welcomeMessage: this.state.welcomeMessage,
       fallbackMessage: this.state.fallbackMessage,
       delayPrompt: this.state.delayPrompt,
-      botImage: this.state.botImage
+      botImage: url
     };
+    console.log(setting);
     apiService
+
       .post("setting", setting)
       .then(res => {
         this.setState({
@@ -44,28 +58,52 @@ class BotTabs extends Component {
           showProgress: false,
           settingsSaved: true
         });
-        console.log(res);
+        console.log("RESPONSE:", res);
       })
       .catch(err => {
         console.log(err);
       });
   };
+  handleSubmit = event => {
+    event.preventDefault();
+    // this.fileUploadHandler();
+    const { fileUpload } = this.state;
 
-  fileSelectedHandler = event => {
-    this.setState({ selectedFile: event.target.files[0] });
-  };
-  fileUploadHandler = () => {
-    const formData = new FormData();
-    formData.append(
-      "image",
-      this.state.selectedFile,
-      this.state.selectedFile.name
+    const uploadTask = storage.ref(`images/${fileUpload.name}`).put(fileUpload);
+
+    uploadTask.on(
+      "state_changed",
+      snapshot => {
+        // progrss function ....
+        // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        // this.setState({progress});
+      },
+      error => {
+        // error function ....
+        console.log(error);
+      },
+      () => {
+        // complete function ....
+        storage
+          .ref("images")
+          .child(fileUpload.name)
+          .getDownloadURL()
+          .then(url => {
+            console.log("URL:", url);
+            // this.setState({ botImage: url });
+            this.saveData(url);
+            console.log("this.state.botImage: ", this.state.botImage);
+          });
+      }
     );
 
-    axios.post("").then(res => {
-      console.log(res);
-    });
+    this.setState({ showProgress: true });
+
+    // console.log("SETTING:", setting);
   };
+
+  fileUploadHandler = () => {};
+
   getTab = tab => {
     return this.state.settingsSaved ? tab : this.state.tab;
   };
@@ -102,13 +140,12 @@ class BotTabs extends Component {
                       />
                     </div>
                     <div className="md-form">
+                      <p className="text-left">Primary Color</p>
                       <input
-                        type="text"
+                        type="color"
                         id="materialSubscriptionFormEmail"
-                        className="form-control"
                         placeholder="Welcome message"
                         name="welcomeMessage"
-                        value={this.state.welcomeMessage}
                         onChange={this.handleChange}
                       />
                     </div>
@@ -125,12 +162,11 @@ class BotTabs extends Component {
                     </div>
                     <div className="md-form">
                       <input
-                        type="text"
+                        type="number"
                         id="materialSubscriptionFormEmail"
                         className="form-control"
-                        placeholder="Delay prompt"
+                        placeholder="Delay Time"
                         name="delayPrompt"
-                        value={this.state.delayPrompt}
                         onChange={this.handleChange}
                       />
                     </div>
@@ -140,8 +176,7 @@ class BotTabs extends Component {
                         class="custom-file-input"
                         id="customFileLang"
                         lang="en"
-                        name="botImage"
-                        value={this.state.botImage}
+                        onChange={this.fileSelectedHandler}
                       />
                       <label class="custom-file-label" for="customFileLang">
                         Upload bot image
@@ -151,8 +186,9 @@ class BotTabs extends Component {
                     {this.state.showProgress ? <ProgressBar /> : ""}
                     <button
                       className="btn btn-sm btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
-                      type="submit"
+                      // type="submit"
                       style={{ width: "100px", float: "right" }}
+                      onClick={this.handleSubmit}
                     >
                       Next
                     </button>
