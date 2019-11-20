@@ -11,9 +11,12 @@ class Accordion extends Component {
     newHeight: "0px"
   };
   syncHeight = height => {
+    const number = parseInt(this.state.height.match(/(\d+)/)[0], 10);
+    console.log(this.state.init);
+    const newHeight = this.state.init + height + number;
     this.setState({
-      init: this.state.init + height,
-      height: this.state.init + height + this.divElement.clientHeight * 2 + "px"
+      init: newHeight,
+      height: newHeight + this.divElement.clientHeight + "px"
     });
   };
 

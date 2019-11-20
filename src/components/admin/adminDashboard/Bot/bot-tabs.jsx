@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Tab, Tabs, Row, Col, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import CreateIntent from "./create-intent";
+import * as apiService from "../../../../services/apiservice";
+import ProgressBar from "../../../progressbar";
 class BotTabs extends Component {
   state = {
     show: false,
@@ -9,12 +11,14 @@ class BotTabs extends Component {
     modal3: false,
     modal4: false,
     modal5: false,
+    showProgress: false,
     chatbotName: "",
     welcomeMessage: "",
     fallbackMessage: "",
     delayPrompt: "",
     botImage: "",
-    tab: "intent"
+    tab: "home",
+    settingsSaved: false
   };
 
   handleChange = event => {
@@ -24,7 +28,7 @@ class BotTabs extends Component {
   };
   handleSubmit = event => {
     event.preventDefault();
-
+    this.setState({ showProgress: true });
     const setting = {
       chatbotName: this.state.chatbotName,
       welcomeMessage: this.state.welcomeMessage,
@@ -32,12 +36,14 @@ class BotTabs extends Component {
       delayPrompt: this.state.delayPrompt,
       botImage: this.state.botImage
     };
-
-    console.log(setting);
-    axios
-      .post("http://localhost:9000/setting", setting)
+    apiService
+      .post("setting", setting)
       .then(res => {
-        this.setState({ tab: "intent" });
+        this.setState({
+          tab: "intent",
+          showProgress: false,
+          settingsSaved: true
+        });
         console.log(res);
       })
       .catch(err => {
@@ -60,27 +66,19 @@ class BotTabs extends Component {
       console.log(res);
     });
   };
-
-  toggle = nr => () => {
-    let modalNumber = "modal" + nr;
-    this.setState({
-      [modalNumber]: !this.state[modalNumber]
-    });
+  getTab = tab => {
+    return this.state.settingsSaved ? tab : this.state.tab;
   };
-
-  overlayShow() {
-    this.setState({ show: true });
-  }
-
-  overlayClose() {
-    this.setState({ show: false });
-  }
   render() {
     return (
       <div className="container-holder">
-        <Tabs defaultActiveKey={this.state.tab} id="controlled-tab-example">
+        <Tabs
+          activeKey={this.state.tab}
+          id="controlled-tab-example"
+          onSelect={tab => this.setState({ tab: this.getTab(tab) })}
+        >
           &nbsp;
-          <Tab eventKey="home" title="Create Bot">
+          <Tab eventKey="home" title="Create Bot" className>
             <div className="" style={{ background: "none" }}>
               <div className="card">
                 <div className="card-body px-lg-5">
@@ -149,6 +147,8 @@ class BotTabs extends Component {
                         Upload bot image
                       </label>
                     </div>
+                    <hr></hr>
+                    {this.state.showProgress ? <ProgressBar /> : ""}
                     <button
                       className="btn btn-sm btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
                       type="submit"
@@ -164,7 +164,12 @@ class BotTabs extends Component {
           <Tab eventKey="intent" title="Add Intent" className="open">
             <div className="card w-100">
               <div className="card-body">
-                <CreateIntent />
+                <CreateIntent
+                  closeOverlay={this.props.closeOverlay}
+                  disableHomeTab={() =>
+                    this.setState({ tab: "intent", settingsSaved: false })
+                  }
+                />
               </div>
             </div>
           </Tab>

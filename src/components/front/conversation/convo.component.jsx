@@ -4,49 +4,49 @@ import thinker from "../../../thinker.gif";
 import { AppService } from "../../../services/app.service";
 import $ from "jquery";
 import JsonTree from "./convo.json";
+import axios from "axios";
 
 export default class Convo extends Component {
   appService;
-  constructor(props) {
-    super(props);
-    this.state = {
-      conversationTree: [],
-      chatTimer: 1,
-      typingTimer: null,
-      times: [],
-      userChoices: [],
-      thinking: false,
-      self: true,
-      empty: {
-        identity: "empty",
-        prompt:
-          "Sorry I don't understand what you said. Would you like to know about the following?",
-        response: {
-          buttons: [
-            {
-              key: "final_expenses",
-              val: "Final Expenses"
-            },
-            {
-              key: "mortgage_protection",
-              val: "Mortgage Protection"
-            },
-            {
-              key: "college_funding",
-              val: "College Funding"
-            },
-            {
-              key: "income_replacement",
-              val: "Income Replacement"
-            }
-          ],
-          text: "We offer Solutions, applications, delivery.."
-        }
-      },
-      responses: [] //user's choices
-    };
-    this.appService = new AppService();
-  }
+  state = {
+    conversationTree: [],
+    chatTimer: 1,
+    typingTimer: null,
+    times: [],
+    userChoices: [],
+    thinking: false,
+    self: true,
+    tree: [],
+    emeka: "",
+    empty: {
+      identity: "empty",
+      prompt:
+        "Sorry I don't understand what you said. Would you like to know about the following?",
+      response: {
+        buttons: [
+          {
+            key: "final_expenses",
+            val: "Final Expenses"
+          },
+          {
+            key: "mortgage_protection",
+            val: "Mortgage Protection"
+          },
+          {
+            key: "college_funding",
+            val: "College Funding"
+          },
+          {
+            key: "income_replacement",
+            val: "Income Replacement"
+          }
+        ],
+        text: "We offer Solutions, applications, delivery.."
+      }
+    },
+    responses: [] //user's choices
+  };
+  appService = new AppService();
 
   render() {
     return (
@@ -61,14 +61,26 @@ export default class Convo extends Component {
     );
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
+    this.setState({ emeka: "ff" });
     this.getConversationTree();
     this.setDelayListener();
+  };
+  componentWillMount() {
+    axios
+      .get("http://localhost:9000/tree/5dcd740439dc93591a0a8860")
+      .then(res => {
+        this.setState({ tree: ["res.data.chat_body"] });
+        console.log(res.data.chat_body);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   componentWillReceiveProps(newProps) {
     const userInput = newProps.userInput;
-    if (userInput && userInput != this.props.userInput) {
+    if (userInput && userInput !== this.props.userInput) {
       const key = this.searchKeywordsFromUserInput(userInput);
       this.updateConverstion(key, userInput);
     }
@@ -82,19 +94,29 @@ export default class Convo extends Component {
      * The companyId is gotten from the domain name. But for now it is not passed
      */
 
-    // const convoTree = await this.appService.getConversationTree('tree');   This is your main API function for convo tree
+    // const convoTree = await this.appService.getConversationTree('tree');  This is your main API function for convo tree
 
-    const convoTree = JsonTree.tree;
-
-    setTimeout(() => {
-      const conversationTree = this.deepCopy(convoTree);
-      conversationTree.push(this.state.empty);
-      this.setState({
-        conversationTree: conversationTree
+    axios
+      .get("http://localhost:9000/tree/")
+      .then(res => {
+        console.log(res.data[res.data.length - 1].chat_body);
+        // const convoTree = res.data[res.data.length - 1].chat_body;
+        const convoTree = res.data[res.data.length - 1].chat_body;
+        setTimeout(() => {
+          const conversationTree = this.deepCopy(convoTree);
+          conversationTree.push(this.state.empty);
+          this.setState({
+            conversationTree: conversationTree
+          });
+          this.updateConverstion(
+            res.data[res.data.length - 1].chat_body[0].identity
+          );
+          console.log("Conversation Tree:: ", conversationTree);
+        }, 10);
+      })
+      .catch(err => {
+        console.log(err);
       });
-      this.updateConverstion("start");
-      console.log("Conversation Tree:: ", conversationTree);
-    }, 10);
   };
 
   handleUserChoice = () => {};

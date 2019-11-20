@@ -8,7 +8,8 @@ class OptionBox extends Component {
   state = {
     responses: [],
     response: "",
-    height: "0px"
+    height: "0px",
+    identity: ""
   };
   initialResponses = [];
   onChange = e => {
@@ -16,9 +17,6 @@ class OptionBox extends Component {
   };
 
   onClick = info => {
-    const key = uuid();
-    console.log(this.props.identity);
-    const botKeys = uuid();
     this.initialResponses.push({
       key: uuid(),
       val: this.state.response
@@ -30,7 +28,7 @@ class OptionBox extends Component {
       height: this.divElement.clientHeight
     });
     const botTree = {
-      identity: this.props.botKey,
+      identity: this.state.identity,
       prompt: this.props.res,
       response: {
         buttons: [...this.initialResponses],
@@ -92,6 +90,10 @@ class OptionBox extends Component {
     );
   }
   componentDidMount() {
+    const height = this.divElement.clientHeight;
+    this.setState({ height: height, identity: this.props.botKey });
+  }
+  componentWillReceiveProps(props) {
     const height = this.divElement.clientHeight;
     this.setState({ height: height });
   }

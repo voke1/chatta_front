@@ -4,10 +4,10 @@ const app_mode = env ? env.trim() : "development";
 
 const environment = {
     development: {
-        base_url: 'http://localhost:9000'
+        base_url: 'http://localhost:9000',
     },
     production: {
-        base_url: 'http://localhost:9000/trees'
+        base_url: 'http://localhost:9000'
     }
 
 }

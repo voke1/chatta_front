@@ -7,17 +7,16 @@ import uuid from "uuid/v1";
 class CreateIntent extends Component {
   state = {
     responses: [],
-    response: "",
-    
+    response: ""
   };
   getTree = tree => {
-    console.log("here is the tree",tree);
+    console.log("here is the tree", tree);
   };
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  identity = uuid()
+  identity = uuid();
   onClick = info => {
     const initialResponse = [...this.state.responses];
     initialResponse.push(info.response);
@@ -47,10 +46,7 @@ class CreateIntent extends Component {
           </div>
 
           <hr className="mt-3"></hr>
-          <OptionForm
-            tree={this.getTree}
-            prompt={this.state.prompt}
-          />
+          <OptionForm tree={this.getTree} prompt={this.state.prompt} />
           <hr></hr>
           <div>
             <button

@@ -1,4 +1,5 @@
 import React, { Component, useState } from "react";
+import { setGlobal } from "reactn";
 import Accordion from "./accordion";
 import uuid from "uuid/v1";
 
@@ -11,7 +12,6 @@ const OptionBox = props => {
   const [responses, setResponses] = useState([]);
   const [response, setResponse] = useState("");
   const [inputVal, setInputVal] = useState("");
-  const key = uuid();
   const syncTree = (tree, initial) => {
     if (initial) {
       initialTree = initial;
@@ -33,16 +33,25 @@ const OptionBox = props => {
       props.tree([newTreeArray]);
     }
   };
+  setGlobal({
+    syncTree
+  });
+  const identity = uuid();
   const handleClick = async res => {
-    const botKeys = uuid();
-    initialResponses.push({ key, val: response, identity: botKeys });
+    const key = uuid();
+    initialResponses.push({
+      key,
+      botKey: key,
+      val: response,
+      identity
+    });
     setResponses(initialResponses);
     setInputVal("");
     const botTree = {
-      identity: botKeys,
+      identity,
       prompt: props.prompt,
       response: {
-        buttons: [{ key: botKeys, val: response }],
+        buttons: [{ key, val: response }],
         text: ""
       }
     };
@@ -62,11 +71,11 @@ const OptionBox = props => {
       }}
       className="form-group"
     >
-      {initialResponses.map(res => (
+      {responses.map(res => (
         <Accordion
           res={res.val}
           key={res.key}
-          botKey={res.key}
+          botKey={res.botKey}
           syncTree={syncTree}
           identity={res.identity}
         />
