@@ -62,21 +62,9 @@ export default class Convo extends Component {
   }
 
   componentDidMount = () => {
-    this.setState({ emeka: "ff" });
     this.getConversationTree();
     this.setDelayListener();
   };
-  componentWillMount() {
-    axios
-      .get("http://localhost:9000/tree/5dcd740439dc93591a0a8860")
-      .then(res => {
-        this.setState({ tree: ["res.data.chat_body"] });
-        console.log(res.data.chat_body);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
 
   componentWillReceiveProps(newProps) {
     const userInput = newProps.userInput;
@@ -104,14 +92,12 @@ export default class Convo extends Component {
         const convoTree = res.data[res.data.length - 1].chat_body;
         setTimeout(() => {
           const conversationTree = this.deepCopy(convoTree);
-          conversationTree.push(this.state.empty);
           this.setState({
             conversationTree: conversationTree
           });
           this.updateConverstion(
-            res.data[res.data.length - 1].chat_body[0].identity
+            convoTree[0].identity
           );
-          console.log("Conversation Tree:: ", conversationTree);
         }, 10);
       })
       .catch(err => {

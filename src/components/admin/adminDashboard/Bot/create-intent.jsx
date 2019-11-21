@@ -17,7 +17,7 @@ class CreateIntent extends Component {
     disabledButton: false
   };
   getTree = tree => {
-    console.log(tree instanceof Object);
+    console.log("this is tree", tree);
     this.setState({ chatBody: tree });
   };
 
@@ -59,7 +59,7 @@ class CreateIntent extends Component {
 
   render() {
     return (
-      <div className="container" style={{ background: "none", width: "60%" }}>
+      <div className="container" style={{ background: "none", width: "90%" }}>
         <form className="text-center" onSubmit={this.handleSubmit}>
           <div className="row">
             <div className="md-col-8"></div>

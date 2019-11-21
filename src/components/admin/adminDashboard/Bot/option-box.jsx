@@ -9,7 +9,8 @@ class OptionBox extends Component {
     responses: [],
     response: "",
     height: "0px",
-    identity: ""
+    identity: "",
+    prompt: ""
   };
   initialResponses = [];
   onChange = e => {
@@ -21,7 +22,7 @@ class OptionBox extends Component {
       key: uuid(),
       val: this.state.response
     });
-    this.props.syncHeight(this.state.height);
+    this.props.syncHeight(this.state.height + this.divElement.clientHeight);
     this.setState({
       responses: this.initialResponses,
       response: "",
@@ -29,9 +30,9 @@ class OptionBox extends Component {
     });
     const botTree = {
       identity: this.state.identity,
-      prompt: this.props.res,
+      prompt: this.state.prompt,
       response: {
-        buttons: [...this.initialResponses],
+        buttons: this.state.response ? [...this.initialResponses]: [],
         text: ""
       }
     };
@@ -43,17 +44,6 @@ class OptionBox extends Component {
     return (
       <div ref={divElement => (this.divElement = divElement)}>
         <div className="option-box">
-          {this.state.responses.map(res => {
-            return (
-              <Accordion
-                key={res.key}
-                botKey={res.key}
-                res={res.val}
-                identity={res.key}
-                syncTree={this.props.syncTree}
-              />
-            );
-          })}
           <div
             style={{
               marginLeft: "40px",
@@ -62,6 +52,26 @@ class OptionBox extends Component {
             }}
             className="form-group"
           >
+            <input
+              className="form-control border-top-0 border-right-0 border-left-0"
+              placeholder="New prompt"
+              name="prompt"
+              value={this.state.prompt}
+              onChange={this.onChange}
+              style={{ width: "300px" }}
+            ></input>
+            {this.state.responses.map(res => {
+              return (
+                <Accordion
+                  key={res.key}
+                  botKey={res.key}
+                  res={res.val}
+                  identity={res.key}
+                  syncTree={this.props.syncTree}
+                  prompt={this.state.prompt}
+                />
+              );
+            })}
             <div className="form-inline">
               <input
                 className="form-control border-top-0 border-right-0 border-left-0"
@@ -92,10 +102,6 @@ class OptionBox extends Component {
   componentDidMount() {
     const height = this.divElement.clientHeight;
     this.setState({ height: height, identity: this.props.botKey });
-  }
-  componentWillReceiveProps(props) {
-    const height = this.divElement.clientHeight;
-    this.setState({ height: height });
   }
 }
 export default OptionBox;

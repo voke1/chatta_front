@@ -48,6 +48,8 @@ class Accordion extends Component {
           syncHeight={this.syncHeight}
           syncTree={this.props.syncTree}
           res={this.props.res}
+          key={this.props.key}
+          botKey={this.props.botKey}
         />
         <div
           style={{ maxHeight: `${this.state.height}` }}
@@ -60,6 +62,7 @@ class Accordion extends Component {
             syncTree={this.props.syncTree}
             syncHeight={this.syncHeight}
             identity={this.props.identity}
+            prompt={this.props.prompt}
           />
         </div>
       </div>
