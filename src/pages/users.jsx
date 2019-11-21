@@ -27,11 +27,14 @@ export class UserList extends Component {
     fetch("http://localhost:9000/client")
       .then(res => res.json())
       .then(data => {
-        const result = data.map(item => ({
-          ...item,
-          switched: item.isEnabled
-        }));
-        this.setState({ clients: result });
+        if (data) {
+          const result = data.map(item => ({
+            ...item,
+            switched: item.isEnabled
+          }));
+          this.setState({ clients: result });
+        }
+        return null;
       })
       .catch(console.error());
   }
@@ -388,13 +391,13 @@ export class UserList extends Component {
                                 <Link
                                   to={`/dashboard/admin/user/${client._id}`}
                                 >
-                                  <Button
+                                  <button
                                     type="button"
                                     className="btn btn-secondary btn-sm waves-effect"
                                     clientID={client._id}
                                   >
                                     Edit &nbsp;
-                                  </Button>
+                                  </button>
                                 </Link>
 
                                 <button
