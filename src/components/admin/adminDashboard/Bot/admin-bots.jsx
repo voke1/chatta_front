@@ -320,8 +320,9 @@ export class Bot extends Component {
                           {this.state.settings.map(setting => (
                             <tr>
                               <td>
+                                {console.log(setting)}
                                 <img
-                                  src={setting.fileUrl}
+                                  src={setting.botImage}
                                   alt="bot-image"
                                   className="thumb-sm rounded-circle mr-2"
                                 />

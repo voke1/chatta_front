@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Tab, Tabs, Row, Col, Form, Button } from "react-bootstrap";
-import axios from "axios";
+import "../../css/style.css";
+import "../../css/icons.css";
+import "../../css/bootstrap.min.css";
+import "../../images/favicon.ico";
 import CreateIntent from "./create-intent";
 import * as apiService from "../../../../services/apiservice";
 import ProgressBar from "../../../progressbar";
@@ -21,7 +24,10 @@ class BotTabs extends Component {
     botImage: " ",
     tab: "home",
     settingsSaved: false,
-    fileUpload: null
+    fileUpload: null,
+    delayTime: null,
+    primaryColor: " ",
+    secondaryColor: ", "
   };
 
   handleChange = event => {
@@ -43,12 +49,14 @@ class BotTabs extends Component {
   saveData = url => {
     const setting = {
       chatbotName: this.state.chatbotName,
-      welcomeMessage: this.state.welcomeMessage,
       fallbackMessage: this.state.fallbackMessage,
       delayPrompt: this.state.delayPrompt,
-      botImage: url
+      botImage: url,
+      primaryColor: this.state.primaryColor,
+      secondaryColor: this.state.secondaryColor,
+      delayTime: this.state.delayTime
     };
-    console.log(setting);
+    console.log("saving data:", setting);
     apiService
 
       .post("setting", setting)
@@ -126,7 +134,10 @@ class BotTabs extends Component {
                     action="#!"
                     onSubmit={this.handleSubmit}
                   >
-                    <p>Let's start by giving your bot some default settings</p>
+                    <p>
+                      Let's start by giving your bot some default setticolor
+                      picker css stylingcolor picker css stylingngs
+                    </p>
 
                     <div className="md-form mt-3">
                       <input
@@ -135,41 +146,66 @@ class BotTabs extends Component {
                         className="form-control"
                         placeholder="Bot name"
                         name="chatbotName"
-                        value={this.state.chatbotName}
+                        onChange={this.handleChange}
+                      />
+                    </div>
+                    <div className="md-form mt-3">
+                      <input
+                        type="text"
+                        id="materialSubscriptionFormPasswords"
+                        className="form-control"
+                        placeholder="Fallback Message"
+                        name="fallbackMessage"
                         onChange={this.handleChange}
                       />
                     </div>
                     <div className="md-form">
-                      <p className="text-left">Primary Color</p>
-                      <input
-                        type="color"
-                        id="materialSubscriptionFormEmail"
-                        placeholder="Welcome message"
-                        name="welcomeMessage"
-                        onChange={this.handleChange}
-                      />
+                      <Row>
+                        <Col>
+                          <p className="text-left">Primary Colour</p>[]
+                          <input
+                            type="color"
+                            id="materialSubscriptionFormEmail"
+                            onChange={this.handleChange}
+                            className="form-control"
+                            name="primaryColor"
+                          />
+                        </Col>
+                        <Col>
+                          <p className="text-left">Secondary Colour</p>[]
+                          <input
+                            type="color"
+                            id="materialSubscriptionFormEmail"
+                            onChange={this.handleChange}
+                            name="secondaryColor"
+                            className="form-control"
+                          />
+                        </Col>
+                      </Row>
                     </div>
+
                     <div className="md-form">
                       <input
                         type="text"
                         id="materialSubscriptionFormEmail"
                         className="form-control"
-                        placeholder="Fallback message"
-                        name="fallbackMessage"
-                        value={this.state.fallbackMessage}
+                        placeholder="Delay Prompt"
+                        name="delayPrompt"
                         onChange={this.handleChange}
                       />
                     </div>
+
                     <div className="md-form">
                       <input
                         type="number"
                         id="materialSubscriptionFormEmail"
                         className="form-control"
                         placeholder="Delay Time"
-                        name="delayPrompt"
+                        name="delayTime"
                         onChange={this.handleChange}
                       />
                     </div>
+
                     <div class="custom-file">
                       <input
                         type="file"

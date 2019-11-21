@@ -27,11 +27,14 @@ export class UserList extends Component {
     fetch("http://localhost:9000/client")
       .then(res => res.json())
       .then(data => {
-        const result = data.map(item => ({
-          ...item,
-          switched: item.isEnabled
-        }));
-        this.setState({ clients: result });
+        if (data) {
+          const result = data.map(item => ({
+            ...item,
+            switched: item.isEnabled
+          }));
+          this.setState({ clients: result });
+        }
+        return null;
       })
       .catch(console.error());
   }

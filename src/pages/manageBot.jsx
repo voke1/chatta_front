@@ -339,12 +339,12 @@ export class ManageBot extends Component {
                       <div className="row">
                         <div className="col-md-12">
                           <div className="form-group">
-                            <label>Welcome message</label>
+                            <label>Delay Time</label>
                             <input
                               type="text"
                               className="form-control"
-                              placeholder={this.state.settings.welcomeMessage}
-                              name="welcomeMessage"
+                              placeholder={this.state.settings.delayTime}
+                              name="delayTime"
                               onChange={this.handleChange}
                             ></input>
                           </div>
@@ -380,6 +380,34 @@ export class ManageBot extends Component {
                           </div>
                         </div>
                       </div>
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="form-group">
+                            <label>Primary Colour</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder={this.state.settings.primaryColor}
+                              name="primaryColor"
+                              onChange={this.handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="form-group">
+                            <label>Secondary Colour</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder={this.state.settings.secondaryColor}
+                              name="secondaryColor"
+                              onChange={this.handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                      </div>
 
                       <button
                         type="submit"
@@ -396,48 +424,18 @@ export class ManageBot extends Component {
               <div className="col-md-4">
                 <div className="card card-user">
                   <div className="card-image">
-                    <img
-                      src="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400"
-                      alt="..."
-                    ></img>
+                    <img src={this.state.settings.botImage} alt="..."></img>
                   </div>
                   <div className="card-body">
                     <div className="author">
                       <a href="#">
-                        <img
-                          className="avatar border-gray"
-                          src="../assets/img/faces/face-3.jpg"
-                          alt="..."
-                        ></img>
-                        <h5 className="title">Bot Image</h5>
+                        <h5 className="title">
+                          {this.state.settings.chatbotName}
+                        </h5>
                       </a>
-                      <p className="description">Whatsapp Bot</p>
                     </div>
-                    <p className="description text-center">
-                      "Lamborghini Mercy
-                    </p>
                   </div>
                   <hr></hr>
-                  <div className="button-container mr-auto ml-auto">
-                    <button
-                      href="#"
-                      className="btn btn-simple btn-link btn-icon"
-                    >
-                      <i className="fa fa-facebook-square"></i>
-                    </button>
-                    <button
-                      href="#"
-                      className="btn btn-simple btn-link btn-icon"
-                    >
-                      <i className="fa fa-twitter"></i>
-                    </button>
-                    <button
-                      href="#"
-                      className="btn btn-simple btn-link btn-icon"
-                    >
-                      <i className="fa fa-google-plus-square"></i>
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
