@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import avatar from "../components/admin/images/users/avatar-1.jpg";
 import "../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
@@ -8,51 +8,61 @@ import "../components/admin/css/icons.css";
 import "../components/admin/css/bootstrap.min.css";
 import "../components/admin/images/favicon.ico";
 import "../components/admin/css/switch.css";
+import Axios from "axios";
 
 export class ManageBot extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clients: []
+      settings: {},
+      settingId: props.match.params.id,
+      welcomeMessage: null,
+      fallbackMessage: null,
+      delayPrompt: null,
+      chatbotName: null
     };
   }
 
   componentDidMount() {
-    fetch("http://localhost:9000/client")
-      .then(res => res.json())
-      .then(data => {
-        this.setState({ clients: data });
+    Axios.get(`http://localhost:9000/setting/${this.state.settingId}`)
+      .then(res => {
+        const result = res.data;
+        setTimeout(() => {
+          this.setState({ settings: result });
+        }, 1000);
+
+        console.log("Result:", result);
       })
-      .catch(console.log);
+      .catch(err => {});
   }
 
-  deleteClient(clientId) {
-    if (window.confirm("Are you sure?")) {
-      fetch(`http://localhost:9000/client/` + clientId, {
-        method: "DELETE",
-        header: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
-          const array = [...this.state.clients];
-          array.splice(array.map(result => result.id).indexOf(data._id), 1);
-          this.setState({ clients: array });
-        });
-    }
-  }
-  toggleSwitchf = () => {
-    this.setState(prevState => {
-      return {
-        switched: !prevState.switched
-      };
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
     });
+  };
+  handleSubmit = event => {
+    event.preventDefault();
+
+    const bot = {
+      welcomeMessage: this.state.welcomeMessage,
+      fallbackMessage: this.state.fallbackMessage,
+      delayPrompt: this.state.delayPrompt,
+      chatbotName: this.state.chatbotName
+    };
+
+    Axios.put(`http://localhost:9000/setting/${this.state.settingId}`, {
+      ...bot
+    })
+      .then(res => {
+        console.log("patchedData:", res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   App = () => {
-    const [modalShow, setModalShow] = useState(false);
     return (
       <div>
         {/* <!-- Loader --> */}
@@ -311,64 +321,17 @@ export class ManageBot extends Component {
                     <h4 className="card-title">Edit Bot</h4>
                   </div>
                   <div className="card-body">
-                    <form>
+                    <form onSubmit={this.handleSubmit}>
                       <div className="row">
-                        <div className="col-md-5 pr-1">
+                        <div className="col-md-12">
                           <div className="form-group">
-                            <label>Company (disabled)</label>
+                            <label>Bot Name</label>
                             <input
                               type="text"
                               className="form-control"
-                              disabled=""
-                              placeholder="Company"
-                              value="Creative Code Inc."
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="col-md-3 px-1">
-                          <div className="form-group">
-                            <label>Username</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Username"
-                              value="michael23"
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="col-md-4 pl-1">
-                          <div className="form-group">
-                            <label for="exampleInputEmail1">
-                              Email address
-                            </label>
-                            <input
-                              type="email"
-                              className="form-control"
-                              placeholder="Email"
-                            ></input>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-md-6 pr-1">
-                          <div className="form-group">
-                            <label>First Name</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Company"
-                              value="Mike"
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="col-md-6 pl-1">
-                          <div className="form-group">
-                            <label>Last Name</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Last Name"
-                              value="Andrew"
+                              placeholder={this.state.settings.chatbotName}
+                              name="chatbotName"
+                              onChange={this.handleChange}
                             ></input>
                           </div>
                         </div>
@@ -376,55 +339,82 @@ export class ManageBot extends Component {
                       <div className="row">
                         <div className="col-md-12">
                           <div className="form-group">
-                            <label>Address</label>
+                            <label>Delay Time</label>
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Home Address"
-                              value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                              placeholder={this.state.settings.delayTime}
+                              name="delayTime"
+                              onChange={this.handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="form-group">
+                            <label>Fallback Message</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder={this.state.settings.fallbackMessage}
+                              name="fallbackMessage"
+                              onChange={this.handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="form-group">
+                            <label>Delay Prompt</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder={this.state.settings.delayPrompt}
+                              name="delayPrompt"
+                              onChange={this.handleChange}
                             ></input>
                           </div>
                         </div>
                       </div>
                       <div className="row">
-                        <div className="col-md-4 pr-1">
+                        <div className="col-md-12">
                           <div className="form-group">
-                            <label>City</label>
+                            <label>Primary Colour</label>
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="City"
-                              value="Mike"
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="col-md-4 px-1">
-                          <div className="form-group">
-                            <label>Country</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Country"
-                              value="Andrew"
-                            ></input>
-                          </div>
-                        </div>
-                        <div className="col-md-4 pl-1">
-                          <div className="form-group">
-                            <label>Postal Code</label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              placeholder="ZIP Code"
+                              placeholder={this.state.settings.primaryColor}
+                              name="primaryColor"
+                              onChange={this.handleChange}
                             ></input>
                           </div>
                         </div>
                       </div>
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="form-group">
+                            <label>Secondary Colour</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder={this.state.settings.secondaryColor}
+                              name="secondaryColor"
+                              onChange={this.handleChange}
+                            ></input>
+                          </div>
+                        </div>
+                      </div>
+
                       <button
                         type="submit"
                         className="btn btn-secondary btn-fill waves-effect pull-right"
+                        onClick={this.handleSubmit}
                       >
-                        Update Setings
+                        Update BOT Setings
                       </button>
                       <div className="clearfix"></div>
                     </form>
@@ -434,48 +424,18 @@ export class ManageBot extends Component {
               <div className="col-md-4">
                 <div className="card card-user">
                   <div className="card-image">
-                    <img
-                      src="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400"
-                      alt="..."
-                    ></img>
+                    <img src={this.state.settings.botImage} alt="..."></img>
                   </div>
                   <div className="card-body">
                     <div className="author">
                       <a href="#">
-                        <img
-                          className="avatar border-gray"
-                          src="../assets/img/faces/face-3.jpg"
-                          alt="..."
-                        ></img>
-                        <h5 className="title">Frank ONeil</h5>
+                        <h5 className="title">
+                          {this.state.settings.chatbotName}
+                        </h5>
                       </a>
-                      <p className="description">michael24</p>
                     </div>
-                    <p className="description text-center">
-                      "Lamborghini Mercy
-                    </p>
                   </div>
                   <hr></hr>
-                  <div className="button-container mr-auto ml-auto">
-                    <button
-                      href="#"
-                      className="btn btn-simple btn-link btn-icon"
-                    >
-                      <i className="fa fa-facebook-square"></i>
-                    </button>
-                    <button
-                      href="#"
-                      className="btn btn-simple btn-link btn-icon"
-                    >
-                      <i className="fa fa-twitter"></i>
-                    </button>
-                    <button
-                      href="#"
-                      className="btn btn-simple btn-link btn-icon"
-                    >
-                      <i className="fa fa-google-plus-square"></i>
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>

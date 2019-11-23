@@ -27,14 +27,16 @@ export class UserList extends Component {
     fetch("http://localhost:9000/client")
       .then(res => res.json())
       .then(data => {
-        const result = data.map(item => ({
-          ...item,
-          switched: false
-        }));
-        this.setState({ clients: result });
-        console.log("resuttam:", result);
+        if (data) {
+          const result = data.map(item => ({
+            ...item,
+            switched: item.isEnabled
+          }));
+          this.setState({ clients: result });
+        }
+        return null;
       })
-      .catch(console.log);
+      .catch(console.error());
   }
 
   deleteClient = clientId => {
@@ -53,10 +55,11 @@ export class UserList extends Component {
               ...this.state.clients.filter(client => client._id !== clientId)
             ]
           });
-        });
+        })
+        .catch(console.error());
     }
   };
-  toggleSwitchf = id => {
+  toggleSwitch = id => {
     fetch(`http://localhost:9000/client/` + id, {
       method: "PATCH",
       header: {
@@ -64,6 +67,7 @@ export class UserList extends Component {
         "Content-Type": "application/json"
       }
     });
+
     this.setState({
       clients: this.state.clients.map(client => {
         if (client._id === id) {
@@ -374,7 +378,7 @@ export class UserList extends Component {
                             <td>
                               <Switch
                                 key={client._id}
-                                onClick={this.toggleSwitchf.bind(
+                                onClick={this.toggleSwitch.bind(
                                   this,
                                   client._id
                                 )}
@@ -384,10 +388,13 @@ export class UserList extends Component {
                             <td>2008/12/19</td>
                             <td>
                               <div className="button-items">
-                                <Link to="/dashboard/admin/user/profile">
+                                <Link
+                                  to={`/dashboard/admin/user/${client._id}`}
+                                >
                                   <Button
                                     type="button"
                                     className="btn btn-secondary btn-sm waves-effect"
+                                    clientID={client._id}
                                   >
                                     Edit &nbsp;
                                   </Button>

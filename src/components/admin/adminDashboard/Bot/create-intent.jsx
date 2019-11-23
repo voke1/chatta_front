@@ -3,24 +3,14 @@ import "../../css/intent.css";
 import Response from "./response";
 import OptionForm from "./option-form";
 import uuid from "uuid/v1";
-import * as apiService from "../../../../services/apiservice";
-import ProgressBar from "../../../progressbar";
-
 
 class CreateIntent extends Component {
   state = {
     responses: [],
-    response: "",
-    chatBody: [],
-    showProgress: false,
-    buttonText: "DEPLOY",
-    buttonColor: "btn-outline-info",
-    animation: "",
-    disabledButton: false
+    response: ""
   };
   getTree = tree => {
-    console.log("this is tree", tree);
-    this.setState({ chatBody: tree });
+    console.log("here is the tree", tree);
   };
 
   onChange = e => {
@@ -35,34 +25,11 @@ class CreateIntent extends Component {
       response: ""
     });
   };
-  handleSubmit = event => {
-    event.preventDefault();
-    if (this.state.buttonText === "FINISH") {
-      this.props.closeOverlay();
-    }
-    this.setState({ setProgress: true, disabled: true });
-    apiService
-      .post("tree", { chat_body: this.state.chatBody[0] })
-      .then(res => {
-        console.log(res);
-        this.setState({
-          setProgress: false,
-          buttonText: "FINISH",
-          buttonColor: "btn-success",
-          animation: "animated shake",
-          disabledButton: false
-        });
-        this.props.disableHomeTab();
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
 
   render() {
     return (
-      <div className="container" style={{ background: "none", width: "90%" }}>
-        <form className="text-center" onSubmit={this.handleSubmit}>
+      <div className="container" style={{ background: "none", width: "60%" }}>
+        <form className="text-center">
           <div className="row">
             <div className="md-col-8"></div>
           </div>
@@ -81,18 +48,13 @@ class CreateIntent extends Component {
           <hr className="mt-3"></hr>
           <OptionForm tree={this.getTree} prompt={this.state.prompt} />
           <hr></hr>
-          {this.state.setProgress ? <ProgressBar /> : ""}
           <div>
             <button
-              className={`btn btn-sm ${this.state.buttonColor} btn-rounded btn-block z-depth-0 my-4 waves-effect ${this.state.animation}`}
+              className="btn btn-sm btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
               type="submit"
-              style={{
-                width: "100px",
-                float: "right"
-              }}
-              disabled={this.state.disabledButton}
+              style={{ width: "100px", float: "right" }}
             >
-              {this.state.buttonText}
+              Deploy
             </button>
           </div>
         </form>
