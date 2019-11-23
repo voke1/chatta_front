@@ -5,6 +5,8 @@ import OptionForm from "./option-form";
 import uuid from "uuid/v1";
 import * as apiService from "../../../../services/apiservice";
 import ProgressBar from "../../../progressbar";
+
+
 class CreateIntent extends Component {
   state = {
     responses: [],

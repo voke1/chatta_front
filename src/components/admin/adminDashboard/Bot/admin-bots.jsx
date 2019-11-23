@@ -7,7 +7,7 @@ import "../../css/style.css";
 import "../../css/icons.css";
 import "../../css/bootstrap.min.css";
 import "../../images/favicon.ico";
-
+import BotForm from './bot-form'
 import { ButtonToolbar, Button } from "react-bootstrap";
 import { ManageBot } from "../manageBot";
 import { ModalComponent } from "./botSettings";

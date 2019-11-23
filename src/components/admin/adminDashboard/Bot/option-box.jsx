@@ -54,7 +54,7 @@ class OptionBox extends Component {
           >
             <input
               className="form-control border-top-0 border-right-0 border-left-0"
-              placeholder="New prompt"
+              placeholder={`E.g:  Below are our various ${this.props.res} options`}
               name="prompt"
               value={this.state.prompt}
               onChange={this.onChange}
