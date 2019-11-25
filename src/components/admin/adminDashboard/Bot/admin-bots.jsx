@@ -295,43 +295,45 @@ export class Bot extends Component {
                     <div className="table-responsive">
                       <table className="table m-t-20 mb-0 table-vertical">
                         <tbody>
-                          {this.state.setting.map(setting => (
-                            <tr>
-                              <td>
-                                <img
-                                  src="assets/images/users/avatar-2.jpg"
-                                  alt="bot-image"
-                                  className="thumb-sm rounded-circle mr-2"
-                                />
-                                {setting.chatbotName}
-                              </td>
-                              <td>
-                                <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
-                                {setting.welcomeMessage}
-                              </td>
-                              <td>
-                                {setting.fallbackMessage}
-                                <p className="m-0 text-muted font-14">
-                                  Fallback Message
-                                </p>
-                              </td>
-                              <td>
-                                {setting.delayPrompt}
-                                <p className="m-0 text-muted font-14">
-                                  Delay Prompt
-                                </p>
-                              </td>
-                              <td>
-                                <Link to="/dashboard/admin/bot/update">
-                                  <ButtonToolbar>
-                                    <Button className="btn btn-secondary btn-sm waves-effect">
-                                      Manage
-                                    </Button>
-                                  </ButtonToolbar>
-                                </Link>
-                              </td>
-                            </tr>
-                          ))}
+                          {this.state.setting
+                            ? this.state.setting.map(setting => (
+                                <tr>
+                                  <td>
+                                    <img
+                                      src="assets/images/users/avatar-2.jpg"
+                                      alt="bot-image"
+                                      className="thumb-sm rounded-circle mr-2"
+                                    />
+                                    {setting.chatbotName}
+                                  </td>
+                                  <td>
+                                    <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
+                                    {setting.welcomeMessage}
+                                  </td>
+                                  <td>
+                                    {setting.fallbackMessage}
+                                    <p className="m-0 text-muted font-14">
+                                      Fallback Message
+                                    </p>
+                                  </td>
+                                  <td>
+                                    {setting.delayPrompt}
+                                    <p className="m-0 text-muted font-14">
+                                      Delay Prompt
+                                    </p>
+                                  </td>
+                                  <td>
+                                    <Link to="/dashboard/admin/bot/update">
+                                      <ButtonToolbar>
+                                        <Button className="btn btn-secondary btn-sm waves-effect">
+                                          Manage
+                                        </Button>
+                                      </ButtonToolbar>
+                                    </Link>
+                                  </td>
+                                </tr>
+                              ))
+                            : ""}
                         </tbody>
                       </table>
                     </div>

@@ -68,7 +68,7 @@ class BotTabs extends Component {
     return (
       <div className="container-holder">
         <Tabs
-          activeKey="intent"
+          activeKey={this.state.tab}
           id="controlled-tab-example"
           onSelect={tab => this.setState({ tab: this.getTab(tab) })}
         >

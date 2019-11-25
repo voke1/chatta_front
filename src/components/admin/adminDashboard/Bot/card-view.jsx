@@ -76,6 +76,8 @@ export default class Card extends Component {
               key={this.props.key}
               botKey={this.props.botKey}
               syncTree={this.props.syncTree}
+              chatTree={this.props.chatTree}
+              identity={this.props.identity}
             />
           </div>
         </div>
@@ -86,7 +88,7 @@ export default class Card extends Component {
     const height = this.divElement.clientHeight;
     this.setState({ height: height });
   }
-  componentWillReceiveProps() {
+  componentWillReceiveProps(props) {
     const height = this.divElement.clientHeight;
     this.setState({ height: height });
   }
