@@ -1,249 +1,239 @@
 {
   "tree": [
-    {
-      "identity": "start",
-      "prompt": "Hello, my name is Chatta. Welcome, and how may I help?",
-      "response": {
-        "buttons": [
-          {
-            "key": "why",
-            "val": "Why Buy Life Insurance?"
-          },
-          {
-            "key": "who",
-            "val": "Who Needs Life Insurance?"
-          },
-          {
-            "key": "when",
-            "val": "When Should I Purchase Life Insurance?"
-          },
-          {
-            "key": "what",
-            "val": "What Are the Various Types of Life Insurance Plans?"
+      {
+          "identity": "95bebaa0-0de8-11ea-ad77-e78eca50f5f3",
+          "prompt": "Welcome to chatta. These are the services we offer:",
+          "response": {
+              "buttons": [
+                  {
+                      "key": "96ca1020-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "Loan"
+                  },
+                  {
+                      "key": "99b79320-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "Insurance"
+                  },
+                  {
+                      "key": "9f1d4210-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "Mortgage"
+                  }
+              ],
+              "text": ""
           }
-        ],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "delay_prompt",
-      "prompt": "Hello, are you still there?... You can check out the various types of life insurance we offer:",
-      "response": {
-        "buttons": [
-          {
-            "key": "whole_life_coverage",
-            "val": "Whole Life Coverage"
-          },
-          {
-            "key": "universal_life_coverage",
-            "val": "Universal Life Coverage"
-          },
-          {
-            "key": "limited_pay",
-            "val": "Limited pay"
-          },
-          {
-            "key": "endowments",
-            "val": "Endowments"
-          },
-          {
-            "key": "accidental_death",
-            "val": "Accidental Death"
+      },
+      {
+          "identity": "96ca1020-0de8-11ea-ad77-e78eca50f5f3",
+          "prompt": "We offer various kinds of loan services",
+          "response": {
+              "buttons": [
+                  {
+                      "key": "b03b1fe0-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "Short term"
+                  },
+                  {
+                      "key": "b66a3950-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "Long term"
+                  },
+                  {
+                      "key": "bdd35960-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "Medium term"
+                  }
+              ],
+              "text": ""
           }
-        ],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "why",
-      "prompt": "There are four important reasons to purchase life insurance:",
-      "response": {
-        "buttons": [
-          {
-            "key": "final_expenses",
-            "val": "Final Expenses"
-          },
-          {
-            "key": "mortgage_protection",
-            "val": "Mortgage Protection"
-          },
-          {
-            "key": "college_funding",
-            "val": "College Funding"
-          },
-          {
-            "key": "income_replacement",
-            "val": "Income Replacement"
+      },
+      {
+          "identity": "b03b1fe0-0de8-11ea-ad77-e78eca50f5f3",
+          "prompt": "Short term loans are loans repayable within 3 - 9 months. Below are our various options",
+          "response": {
+              "buttons": [
+                  {
+                      "key": "d9a7ad80-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "3 months"
+                  },
+                  {
+                      "key": "dd240300-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "6 months"
+                  },
+                  {
+                      "key": "e1454b10-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "9 months"
+                  }
+              ],
+              "text": ""
           }
-        ],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "who",
-      "prompt": "Everyone can benefit from a life insurance policy. Life insurance policies help pay for expenses that remain after a death. Almost everyone will acquire some type of medical expenses upon death. The same applies to funeral expenses.Beneficiaries are not always family, spouses, or children, so these life insurance policies do not exclude single individuals. You may choose whomever you want to entrust with your life insurance benefit to help pay for expenses and obligations after you are gone.",
-      "response": {
-        "buttons": [
-          {
-            "key": "business_owners",
-            "val": "Business owners"
-          },
-          {
-            "key": "net_worth",
-            "val": "High net worth individuals"
-          },
-          {
-            "key": "parents",
-            "val": "Parents"
-          },
-          {
-            "key": "singles",
-            "val": "Singles Who Eventually Want a Family "
+      },
+      {
+          "identity": "b66a3950-0de8-11ea-ad77-e78eca50f5f3",
+          "prompt": "Long term loans are loans repayable within 3 - 5 years. Below are our various options",
+          "response": {
+              "buttons": [
+                  {
+                      "key": "f6b014d0-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "3 years"
+                  },
+                  {
+                      "key": "fb0bcdd0-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "4 years"
+                  },
+                  {
+                      "key": "01621e50-0de9-11ea-ad77-e78eca50f5f3",
+                      "val": "5 years"
+                  }
+              ],
+              "text": ""
           }
-        ],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "when",
-      "prompt": "Death can come at any time. Purchasing life insurance as soon as you are able is the best time to do so. Many people find reasons to put off purchasing life insurance, believing that there is always more time to pick up a policy. That time is not always there.",
-      "response": {
-        "buttons": [],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "final_expenses",
-      "prompt": "Medical bills, funeral expenses, and burial costs can add up quickly and usually cost thousands of dollars. Few people want to face their own mortality, but a life insurance policy will help your family handle these expenses after you are gone",
-      "response": {
-        "buttons": [],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "mortgage_protection",
-      "prompt": "In the event of death, life insurance policies may be used to pay off outstanding balances on mortgages",
-      "response": {
-        "buttons": [],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "college_funding",
-      "prompt": "In the event of your death, your life insurance policy can help to pay for your children’s education.",
-      "response": {
-        "buttons": [],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "income_replacement",
-      "prompt": "When a couple plans to exist on two incomes, and the income is reduced to one because of death, life insurance policies can help. The death benefit paid to your spouse can help maintain the lifestyle to which she is accustomed.",
-      "response": {
-        "buttons": [],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "what",
-      "prompt": "There are several different types of life insurance plans. In order to get the best one to fulfill the needs that you have established, you should research what plans insurance companies offer and the costs and benefits associated. Types of life insurance include:",
-      "response": {
-        "buttons": [
-          {
-            "key": "whole_life_coverage",
-            "val": "Whole Life Coverage"
-          },
-          {
-            "key": "universal_life_coverage",
-            "val": "Universal Life Coverage"
-          },
-          {
-            "key": "limited_pay",
-            "val": "Limited pay"
-          },
-          {
-            "key": "endowments",
-            "val": "Endowments"
-          },
-          {
-            "key": "accidental_death",
-            "val": "Accidental Death"
+      },
+      {
+          "identity": "bdd35960-0de8-11ea-ad77-e78eca50f5f3",
+          "prompt": "Medium term loans are loans repayable within 1 year and 2 years. Below are our various options",
+          "response": {
+              "buttons": [
+                  {
+                      "key": "25655380-0de9-11ea-ad77-e78eca50f5f3",
+                      "val": "1 year"
+                  },
+                  {
+                      "key": "28f09d20-0de9-11ea-ad77-e78eca50f5f3",
+                      "val": "2 years"
+                  }
+              ],
+              "text": ""
           }
-        ],
-        "text": "We offer Solutions, applications, delivery.."
+      },
+      {
+          "identity": "99b79320-0de8-11ea-ad77-e78eca50f5f3",
+          "prompt": "There are various kinds of insurance offer",
+          "response": {
+              "buttons": [
+                  {
+                      "key": "3b92d100-0de9-11ea-ad77-e78eca50f5f3",
+                      "val": "Life Insurance"
+                  },
+                  {
+                      "key": "41292ce0-0de9-11ea-ad77-e78eca50f5f3",
+                      "val": "Health Insurance"
+                  },
+                  {
+                      "key": "4e30bf20-0de9-11ea-ad77-e78eca50f5f3",
+                      "val": "Car Insurance"
+                  }
+              ],
+              "text": ""
+          }
+      },
+      {
+          "identity": "3b92d100-0de9-11ea-ad77-e78eca50f5f3",
+          "prompt": "Life insurance are of two types",
+          "response": {
+              "buttons": [
+                  {
+                      "key": "5b93dee0-0de9-11ea-ad77-e78eca50f5f3",
+                      "val": "Family"
+                  },
+                  {
+                      "key": "5fc6da30-0de9-11ea-ad77-e78eca50f5f3",
+                      "val": "Individual"
+                  }
+              ],
+              "text": ""
+          }
+      },
+      {
+          "identity": "41292ce0-0de9-11ea-ad77-e78eca50f5f3",
+          "prompt": "Health Insurance are of two types",
+          "response": {
+              "buttons": [
+                  {
+                      "key": "70303510-0de9-11ea-ad77-e78eca50f5f3",
+                      "val": "Family"
+                  },
+                  {
+                      "key": "743bf950-0de9-11ea-ad77-e78eca50f5f3",
+                      "val": "Individual"
+                  }
+              ],
+              "text": ""
+          }
+      },
+      {
+          "identity": "4e30bf20-0de9-11ea-ad77-e78eca50f5f3",
+          "prompt": "Car insurance is of two types",
+          "response": {
+              "buttons": [
+                  {
+                      "key": "8457d070-0de9-11ea-ad77-e78eca50f5f3",
+                      "val": "Comprehensive"
+                  },
+                  {
+                      "key": "88963d70-0de9-11ea-ad77-e78eca50f5f3",
+                      "val": "Third party"
+                  }
+              ],
+              "text": ""
+          }
+      },
+      {
+          "identity": "9f1d4210-0de8-11ea-ad77-e78eca50f5f3",
+          "prompt": "Our Mortgage services are of two types",
+          "response": {
+              "buttons": [
+                  {
+                      "key": "b5284e00-0de9-11ea-ad77-e78eca50f5f3",
+                      "val": "Land"
+                  },
+                  {
+                      "key": "bba36490-0de9-11ea-ad77-e78eca50f5f3",
+                      "val": "House"
+                  }
+              ],
+              "text": ""
+          }
+      },
+      {
+          "identity": "empty",
+          "prompt": "Sorry I don't understand what you said. Would you like to know about the following?",
+          "response": {
+              "buttons": [
+                  {
+                      "key": "96ca1020-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "Loan"
+                  },
+                  {
+                      "key": "99b79320-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "Insurance"
+                  },
+                  {
+                      "key": "9f1d4210-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "Mortgage"
+                  }
+              ],
+              "text": ""
+          }
+      },
+      {
+          "identity": "delay_prompt",
+          "prompt": "Hello, are you still there?... You can check out the various types of life insurance we offer:",
+          "response": {
+              "buttons": [
+                  {
+                      "key": "96ca1020-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "Loan"
+                  },
+                  {
+                      "key": "99b79320-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "Insurance"
+                  },
+                  {
+                      "key": "9f1d4210-0de8-11ea-ad77-e78eca50f5f3",
+                      "val": "Mortgage"
+                  }
+              ],
+              "text": ""
+          }
       }
-    },
-    {
-      "identity": "whole_life_coverage",
-      "prompt": "Whole Life Coverage is a life insurance policy which is guaranteed to remain in force for the insured's entire lifetime, provided required premiums are paid, or to the maturity date.",
-      "response": {
-        "buttons": [],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "universal_life_coverage",
-      "prompt": "Universal life insurance is permanent life insurance with an investment savings element and low premiums like term life insurance. Most universal life insurance policies contain a flexible premium option. However, some require a single premium (single lump-sum premium) or fixed premiums (scheduled fixed premiums).",
-      "response": {
-        "buttons": [],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "limited_pay",
-      "prompt": "Limited Pay Life Insurance, is for an individual who owns a Whole Life Insurance policy but chooses to pay for the total cost of their premiums for a limited number of years. With the Limited Pay Life Insurance option, you pay premiums in the first 10, 15 or 20 years of ownership, but the benefits last a lifetime",
-      "response": {
-        "buttons": [],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "endowments",
-      "prompt": "An endowment policy is a life insurance contract designed to pay a lump sum after a specific term (on its 'maturity') or on death. Typical maturities are ten, fifteen or twenty years up to a certain age limit. ... Pension insurance provides many benefits. They can be used as a low-risk way to save.",
-      "response": {
-        "buttons": [],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "accidental_death",
-      "prompt": "accidental death and dismemberment (AD&D) is a policy that pays benefits to the beneficiary if the cause of death is an accident. This is a limited form of life insurance which is generally less expensive, or in some cases is an added benefit to an existing life insurance policy",
-      "response": {
-        "buttons": [],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "business_owners",
-      "prompt": "Life insurance can be used to pay off your business debts if you die, help your heirs pay off estate taxes, or fund a buy-sell agreement. With a permanent life insurance policy, you can borrow against the cash value to cover business expenses. You can even fund a retirement plan for your employees with life insurance.",
-      "response": {
-        "buttons": [],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "net_worth",
-      "prompt": "If you have a high net worth, permanent life insurance can help your heirs cover estate or inheritance taxes.",
-      "response": {
-        "buttons": [],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "parents",
-      "prompt": "Parents are the most money obvious life insurance candidates. However, most readers will assume that reference is only to working moms and dads. That perception is flawed. Whether a parent works or not, they are most likely still providing some sort of monetary value for their family that a surviving parent cannot afford to replace. For example, salary.com's cost estimators found that stay-at-home dads provide more than $60K worth of labor at home while stay-at-home moms' contributions more than double that figure.",
-      "response": {
-        "buttons": [],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    },
-    {
-      "identity": "singles",
-      "prompt": "If you are single today but see a family in your future, the question is not whether you should have life insurance. The more appropriate question is when should you invest in a policy. Every expert will tell you that now is the best time, and they're right. Locking in your rates while you are still young and healthy is the best way forward. Your rates at 25 years old can be more than 50% lower than what they would be at 35. Locking in now will help you accumulate a larger payout overtime.",
-      "response": {
-        "buttons": [],
-        "text": "We offer Solutions, applications, delivery.."
-      }
-    }
-  ]
+  ],
+  "_id": "5dd9211621ed9e1034cee85a",
+  "created_at": "2019-11-23T12:07:50.128Z",
+  "__v": 0
 }

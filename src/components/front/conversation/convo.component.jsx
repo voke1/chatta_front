@@ -5,49 +5,85 @@ import { AppService } from "../../../services/app.service";
 import $ from "jquery";
 import JsonTree from "./convo.json";
 import axios from "axios";
+import BotForm from "../../../components/admin/adminDashboard/Bot/botForm";
 
 export default class Convo extends Component {
   appService;
-  state = {
-    conversationTree: [],
-    chatTimer: 1,
-    typingTimer: null,
-    times: [],
-    userChoices: [],
-    thinking: false,
-    self: true,
-    tree: [],
-    emeka: "",
-    empty: {
-      identity: "empty",
-      prompt:
-        "Sorry I don't understand what you said. Would you like to know about the following?",
-      response: {
-        buttons: [
-          {
-            key: "final_expenses",
-            val: "Final Expenses"
-          },
-          {
-            key: "mortgage_protection",
-            val: "Mortgage Protection"
-          },
-          {
-            key: "college_funding",
-            val: "College Funding"
-          },
-          {
-            key: "income_replacement",
-            val: "Income Replacement"
-          }
-        ],
-        text: "We offer Solutions, applications, delivery.."
-      }
-    },
-    responses: [] //user's choices
+  static userName;
+  constructor(props) {
+    super(props);
+    this.state = {
+      conversationTree: [],
+      chatTimer: 1,
+      typingTimer: null,
+      times: [],
+      userChoices: [],
+      thinking: false,
+      self: true,
+      tree: [],
+      collectUserInfo: true,
+      anything: "xx",
+      username: "",
+      email: "",
+      userDetails: {
+        name: "",
+        email: ""
+      },
+      empty: {
+        identity: "empty",
+        prompt:
+          "Sorry I don't understand what you said. Would you like to know about the following?",
+        response: {
+          buttons: [
+            {
+              key: "final_expenses",
+              val: "Final Expenses"
+            },
+            {
+              key: "mortgage_protection",
+              val: "Mortgage Protection"
+            },
+            {
+              key: "college_funding",
+              val: "College Funding"
+            },
+            {
+              key: "income_replacement",
+              val: "Income Replacement"
+            }
+          ],
+          text: "We offer Solutions, applications, delivery.."
+        }
+      },
+      responses: [] //user's choices
+    };
+  }
+  details = {
+    name: "",
+    email: ""
   };
   appService = new AppService();
 
+  handleBotFormsubmit = userDetails => {
+    this.details = userDetails;
+    const userName = userDetails.name;
+    const userEmail = userDetails.email;
+    // setUserName(userName);
+    // this.setState({
+    //   collectUserInfo: false,
+    //   userDetails: { name: "emeka", email: "nwodochr@gjg.com"}
+    // });
+
+    setTimeout(() => {
+      this.setState({
+        username: userName,
+        email: userEmail,
+        anything: "yyy",
+        collectUserInfo: false
+      });
+      this.searchTree("start", `Thanks ${this.state.username}`);
+    }, 10);
+  };
   render() {
     return (
       <div>
@@ -62,21 +98,9 @@ export default class Convo extends Component {
   }
 
   componentDidMount = () => {
-    this.setState({ emeka: "ff" });
     this.getConversationTree();
     this.setDelayListener();
   };
-  componentWillMount() {
-    axios
-      .get("http://localhost:9000/tree/5dcd740439dc93591a0a8860")
-      .then(res => {
-        this.setState({ tree: ["res.data.chat_body"] });
-        console.log(res.data.chat_body);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
 
   componentWillReceiveProps(newProps) {
     const userInput = newProps.userInput;
@@ -102,16 +126,15 @@ export default class Convo extends Component {
         console.log(res.data[res.data.length - 1].chat_body);
         // const convoTree = res.data[res.data.length - 1].chat_body;
         const convoTree = res.data[res.data.length - 1].chat_body;
+        console.log("tree", this.state.username);
+        // convoTree[0].prompt = `Thanks ${this.state.username} ${convoTree[0].prompt}`;
+        // convoTree.prompt =
         setTimeout(() => {
           const conversationTree = this.deepCopy(convoTree);
-          conversationTree.push(this.state.empty);
           this.setState({
             conversationTree: conversationTree
           });
-          this.updateConverstion(
-            res.data[res.data.length - 1].chat_body[0].identity
-          );
-          console.log("Conversation Tree:: ", conversationTree);
+          this.updateConverstion(convoTree[0].identity);
         }, 10);
       })
       .catch(err => {
@@ -125,8 +148,12 @@ export default class Convo extends Component {
    * This method searches the conversation tree
    * to match  bot response, but returns a default message if match fails;
    */
-  searchTree = key => {
-    const result = this.state.conversationTree.filter(node => {
+  searchTree = (key, info = null) => {
+    const result = this.state.conversationTree.filter((node, index) => {
+      if (info && index === 0) {
+        node.prompt = `${info} ${node.prompt}`;
+      }
+      // console.log("Serach tree Calling::", this.state.username);
       return node.identity === key;
     });
 
@@ -182,7 +209,12 @@ export default class Convo extends Component {
     const responses = this.deepCopy(choices);
     const times = this.deepCopy(this.state.times);
     times.push(this.setTimeOfChat());
-    responses.push(this.searchTree(key));
+    let info = null;
+    if (this.state.username) {
+      info = `Thanks ${this.state.username}`;
+    }
+    console.log("refreshing");
+    responses.push(this.searchTree(key, info));
     this.restartTimer();
     this.delayChat();
     setTimeout(() => {
@@ -236,8 +268,14 @@ export default class Convo extends Component {
    * This method renders the UI converstion
    */
   renderConversation = () => {
+    // console.log("Render Calling::", this.state.username, "ggdgd");
     let now = new Date();
     let time = now.getTime();
+
+    if (this.state.collectUserInfo) {
+      return <BotForm handleBotFormsubmit={this.handleBotFormsubmit} />;
+    }
+
     return this.state.responses.map((convo, index) => {
       return (
         <li key={this.setUniqueKey(convo.id)}>

@@ -11,6 +11,7 @@ import { UserList } from "./pages/users";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import VerifyEmail from "./components/emailVerification";
+import FetchTree from './components/admin/adminDashboard/Bot/fetch-tree'
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route exact path="/auth/register" component={Register}></Route>
         <Route exact path="/auth/login" component={Login}></Route>
         <Route exact path="/auth/verify_email" component={VerifyEmail}></Route>
+        <Route exact path="/tree" component={FetchTree}></Route>
         <Route component={Error}></Route>
       </Switch>
     </div>

@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React, { Component } from "reactn";
 import Response from "./response";
 import "./css/card.css";
 import Accordion from "./accordion";
 import uuid from "uuid/v1";
-import ConvoTree from '../../../front/conversation/convo.json'
-const identity = uuid();
+import ConvoTree from "../../../front/conversation/convo.json";
+import {useGlobal} from 'reactn';
 class OptionBox extends Component {
   state = {
     responses: [],
@@ -16,18 +16,21 @@ class OptionBox extends Component {
   initialResponses = [];
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+    console.log(this.global.syncTree)
   };
 
   onClick = tree => {
+    console.log("hahahaha", tree)
     if (tree.val) {
       this.initialResponses.push(tree);
-    } else {
-      this.initialResponses.push({
-        key: uuid(),
-        val: this.state.response
-      });
-    }
-
+    } 
+      else{
+        this.initialResponses.push({
+          key: uuid(),
+          val: this.state.response
+        });
+      }
+    
     this.props.syncHeight(this.state.height + this.divElement.clientHeight);
     this.setState({
       responses: this.initialResponses,
@@ -42,11 +45,8 @@ class OptionBox extends Component {
         text: ""
       }
     };
-    if(!tree.val) {
-      this.props.syncTree(botTree);
-    }
+    this.props.syncTree(botTree)
   };
-  response;
 
   render() {
     return (
@@ -62,7 +62,7 @@ class OptionBox extends Component {
           >
             <input
               className="form-control border-top-0 border-right-0 border-left-0"
-              placeholder="New prompt"
+              placeholder={`E.g:  Below are our various ${this.props.res} options`}
               name="prompt"
               value={this.state.prompt}
               onChange={this.onChange}
@@ -77,7 +77,6 @@ class OptionBox extends Component {
                   identity={res.key}
                   syncTree={this.props.syncTree}
                   prompt={this.state.prompt}
-                  chatTree={this.props.chatTree}
                 />
               );
             })}
@@ -112,16 +111,16 @@ class OptionBox extends Component {
     const height = this.divElement.clientHeight;
     this.setState({ height: height, identity: this.props.botKey });
     ConvoTree.tree.forEach(tree => {
-      if(tree.identity === this.props.botKey) {
-        console.log(tree)
+      if (tree.identity === this.props.botKey) {
         tree.response.buttons.forEach(button => {
           setTimeout(() => {
-            this.onClick(button)
+            this.onClick(button);
             this.setState({prompt: tree.prompt})
           }, 10);
-        })
+        });
       }
-    })
+    });
   }
+  
 }
 export default OptionBox;
