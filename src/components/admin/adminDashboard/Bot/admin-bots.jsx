@@ -351,18 +351,18 @@ export class Bot extends Component {
                                   <Link
                                     to={`/dashboard/admin/bot/${setting._id}`}
                                   >
-                                    <Button className="btn btn-secondary btn-sm waves-effect">
+                                    <button className="btn btn-secondary btn-sm waves-effect">
                                       Manage
-                                    </Button>
+                                    </button>
                                   </Link>
-                                  <Button
+                                  <button
                                     className="btn btn-secondary btn-sm waves-effect"
                                     onClick={() => {
                                       this.deleteBot(setting._id);
                                     }}
                                   >
                                     Delete
-                                  </Button>
+                                  </button>
                                 </ButtonToolbar>
                               </td>
                             </tr>

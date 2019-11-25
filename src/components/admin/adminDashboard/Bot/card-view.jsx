@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Dialogue from "./response-dialog";
+import OptionMenu from "./option-menu-overlay";
 import "./css/card.css";
 
 export default class Card extends Component {
@@ -43,7 +44,6 @@ export default class Card extends Component {
         }}
         onMouseOver={this.showContent}
         onMouseOut={this.hideContent}
-        onClick={this.props.onClick}
       >
         {this.state.openDialogue ? (
           <Dialogue open={this.state.openDialogue} response={this.props.res} />
@@ -51,8 +51,12 @@ export default class Card extends Component {
           ""
         )}
         <div className="card-body pt-1 pb-1">
-          <div className="row" style={{}}>
-            <div className="col-20" style={{ margin: "10px" }}>
+          <div className="row">
+            <div
+              className="col-20"
+              style={{ margin: "10px" }}
+              onClick={this.props.onClick}
+            >
               <p
                 className="card-text m-0"
                 style={{
@@ -67,17 +71,24 @@ export default class Card extends Component {
                 {this.props.res}
               </p>
             </div>
-            <div className="ml-5" style={{ display: this.state.options }}>
-              <i className="fas fa-pen m-1" onClick={this.onClick}></i>
-              <i className="far fa-trash-alt m-1"></i>
-              <i className="fas fa-plus m-1" onClick={this.handleToggle}></i>
-            </div>
+            <OptionMenu
+              res={this.props.res}
+              key={this.props.key}
+              botKey={this.props.botKey}
+              syncTree={this.props.syncTree}
+              chatTree={this.props.chatTree}
+              identity={this.props.identity}
+            />
           </div>
         </div>
       </div>
     );
   }
   componentDidMount() {
+    const height = this.divElement.clientHeight;
+    this.setState({ height: height });
+  }
+  componentWillReceiveProps(props) {
     const height = this.divElement.clientHeight;
     this.setState({ height: height });
   }
