@@ -15,6 +15,7 @@ import { ModalComponent } from "./botSettings";
 export class Bot extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       settings: []
     };
@@ -24,8 +25,12 @@ export class Bot extends Component {
       .then(res => res.json())
       .then(data => {
         this.setState({ settings: data });
+        // this.setState({ setting: data });
+        console.log("error data", data);
       })
-      .catch(console.log);
+      .catch(e => {
+        console.log("error", e);
+      });
   }
 
   deleteBot = settingId => {
@@ -397,4 +402,8 @@ export class Bot extends Component {
       </div>
     );
   }
+
+  // render() {
+  //   return <this.Apps />;
+  // }
 }

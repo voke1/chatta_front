@@ -1,0 +1,32 @@
+
+div.alert{
+
+    z-index: 10000000000000000000;
+    max-width: 20%;
+    top:8%;
+    position: absolute;
+    left:78%;
+}
+
+
+.alert-success {
+    color: white !important;
+    background-color: green !important;
+}
+.close{
+    color: white !important;
+}
+
+.alert-warning {
+    color: white !important;
+    background-color: darkgoldenrod !important;
+}
+
+.alert-danger {
+    color: white !important;
+    background-color: red !important;
+}
+.alert-infox {
+    color: white !important;
+    background-color: blue !important;
+}

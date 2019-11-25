@@ -3,10 +3,10 @@ import jwt_decode from "jwt-decode";
 class DecodeToken {
   static async shuffleToken(token) {
     if (token) {
-    return token
-      .split("")
-      .reverse()
-      .join("");
+      return token
+        .split("")
+        .reverse()
+        .join("");
     }
     return null;
   }

@@ -64,6 +64,39 @@ export const put = async (url, data = null) => {
 
 }
 
+export const patch = async (url, data = null) => {
+    const path = `${BASE_URL}/${url}`;
+    return await axios.patch(path, data).then(
+        (response) => { return response.data; }).catch((error) => {
+            const errorResponse = {
+                data: error,
+                message: error.message,
+                requestStatus: false,
+                statusCode: error
+            }
+            throw errorResponse;
+        }
+        )
+
+}
+
+
+export const del = async (url) => {
+    const path = `${BASE_URL}/${url}`;
+    return await axios.delete(path).then(
+        (response) => { return response.data; }).catch((error) => {
+            const errorResponse = {
+                data: error,
+                message: error.message,
+                requestStatus: false,
+                statusCode: error
+            }
+            throw errorResponse;
+        }
+        )
+
+}
+
 
 export const postFile = async (url, file, data = null) => {
     const path = extractDataAsParam(`${BASE_URL}/${url}`, data);
