@@ -3,6 +3,7 @@ import Response from "./response";
 import "./css/card.css";
 import Accordion from "./accordion";
 import uuid from "uuid/v1";
+import ConvoTree from '../../../front/conversation/convo.json'
 const identity = uuid();
 class OptionBox extends Component {
   state = {
@@ -17,11 +18,16 @@ class OptionBox extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  onClick = info => {
-    this.initialResponses.push({
-      key: uuid(),
-      val: this.state.response
-    });
+  onClick = tree => {
+    if (tree.val) {
+      this.initialResponses.push(tree);
+    } else {
+      this.initialResponses.push({
+        key: uuid(),
+        val: this.state.response
+      });
+    }
+
     this.props.syncHeight(this.state.height + this.divElement.clientHeight);
     this.setState({
       responses: this.initialResponses,
@@ -32,11 +38,13 @@ class OptionBox extends Component {
       identity: this.state.identity,
       prompt: this.state.prompt,
       response: {
-        buttons: this.state.response ? [...this.initialResponses]: [],
+        buttons: this.state.response ? [...this.initialResponses] : [],
         text: ""
       }
     };
-    this.props.syncTree(botTree);
+    if(!tree.val) {
+      this.props.syncTree(botTree);
+    }
   };
   response;
 
@@ -69,6 +77,7 @@ class OptionBox extends Component {
                   identity={res.key}
                   syncTree={this.props.syncTree}
                   prompt={this.state.prompt}
+                  chatTree={this.props.chatTree}
                 />
               );
             })}
@@ -102,6 +111,17 @@ class OptionBox extends Component {
   componentDidMount() {
     const height = this.divElement.clientHeight;
     this.setState({ height: height, identity: this.props.botKey });
+    ConvoTree.tree.forEach(tree => {
+      if(tree.identity === this.props.botKey) {
+        console.log(tree)
+        tree.response.buttons.forEach(button => {
+          setTimeout(() => {
+            this.onClick(button)
+            this.setState({prompt: tree.prompt})
+          }, 10);
+        })
+      }
+    })
   }
 }
 export default OptionBox;
