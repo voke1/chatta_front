@@ -16,17 +16,39 @@ export class Bot extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      setting: []
+      settings: []
     };
   }
   componentDidMount() {
     fetch("http://localhost:9000/setting")
       .then(res => res.json())
       .then(data => {
-        this.setState({ setting: data });
+        this.setState({ settings: data });
       })
       .catch(console.log);
   }
+
+  deleteBot = settingId => {
+    if (window.confirm("Are you sure?")) {
+      fetch(`http://localhost:9000/setting/` + settingId, {
+        method: "DELETE",
+        header: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          this.setState({
+            settings: [
+              ...this.state.settings.filter(
+                setting => setting._id !== settingId
+              )
+            ]
+          });
+        });
+    }
+  };
 
   render() {
     return (
@@ -295,45 +317,56 @@ export class Bot extends Component {
                     <div className="table-responsive">
                       <table className="table m-t-20 mb-0 table-vertical">
                         <tbody>
-                          {this.state.setting
-                            ? this.state.setting.map(setting => (
-                                <tr>
-                                  <td>
-                                    <img
-                                      src="assets/images/users/avatar-2.jpg"
-                                      alt="bot-image"
-                                      className="thumb-sm rounded-circle mr-2"
-                                    />
-                                    {setting.chatbotName}
-                                  </td>
-                                  <td>
-                                    <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
-                                    {setting.welcomeMessage}
-                                  </td>
-                                  <td>
-                                    {setting.fallbackMessage}
-                                    <p className="m-0 text-muted font-14">
-                                      Fallback Message
-                                    </p>
-                                  </td>
-                                  <td>
-                                    {setting.delayPrompt}
-                                    <p className="m-0 text-muted font-14">
-                                      Delay Prompt
-                                    </p>
-                                  </td>
-                                  <td>
-                                    <Link to="/dashboard/admin/bot/update">
-                                      <ButtonToolbar>
-                                        <Button className="btn btn-secondary btn-sm waves-effect">
-                                          Manage
-                                        </Button>
-                                      </ButtonToolbar>
-                                    </Link>
-                                  </td>
-                                </tr>
-                              ))
-                            : ""}
+                          {this.state.settings.map(setting => (
+                            <tr>
+                              <td>
+                                {console.log(setting)}
+                                <img
+                                  src={setting.botImage}
+                                  alt="bot-image"
+                                  className="thumb-sm rounded-circle mr-2"
+                                />
+                                {setting.chatbotName}
+                              </td>
+                              <td>
+                                <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
+                                {setting.welcomeMessage}
+                              </td>
+                              <td>
+                                {setting.fallbackMessage}
+                                <p className="m-0 text-muted font-14">
+                                  Fallback Message
+                                </p>
+                              </td>
+                              <td>
+                                {setting.delayPrompt}
+                                <p className="m-0 text-muted font-14">
+                                  Delay Prompt
+                                </p>
+                              </td>
+                              <td>
+                                {console.log("settings ID:", setting._id)}
+
+                                <ButtonToolbar>
+                                  <Link
+                                    to={`/dashboard/admin/bot/${setting._id}`}
+                                  >
+                                    <button className="btn btn-secondary btn-sm waves-effect">
+                                      Manage
+                                    </button>
+                                  </Link>
+                                  <button
+                                    className="btn btn-secondary btn-sm waves-effect"
+                                    onClick={() => {
+                                      this.deleteBot(setting._id);
+                                    }}
+                                  >
+                                    Delete
+                                  </button>
+                                </ButtonToolbar>
+                              </td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>

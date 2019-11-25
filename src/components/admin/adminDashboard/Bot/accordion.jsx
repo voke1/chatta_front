@@ -74,8 +74,13 @@ class Accordion extends Component {
   componentDidMount() {
     const height = this.divElement.clientHeight;
     this.setState({ init: height });
+    if (this.props.chatTree) {
+      setTimeout(() => {
+        this.toggleAccordion();
+      }, 10);
+      this.toggleAccordion();
+    }
   }
-  componentWillReceiveProps(props) {
-  }
+  componentWillReceiveProps(props) {}
 }
 export default Accordion;

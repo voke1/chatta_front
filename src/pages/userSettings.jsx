@@ -15,46 +15,26 @@ export class UserSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clients: [],
+      client: {},
       fullName: null,
       password: null,
       email: null,
-      phone: null
+      phone: null,
+      clientId: props.match.params.id
     };
   }
   componentDidMount() {
-    fetch(`http://localhost:9000/client/` + this.props.id)
-      .then(res => res.json())
-      .then(data => {
-        this.setState({ clients: data });
-      })
-      .catch(this.props.id);
-  }
+    Axios.get(`http://localhost:9000/client/${this.state.clientId}`)
+      .then(res => {
+        const result = res.data;
+        setTimeout(() => {
+          this.setState({ client: result });
+        }, 1000);
 
-  deleteClient(clientId) {
-    if (window.confirm("Are you sure?")) {
-      fetch(`http://localhost:9000/client/` + clientId, {
-        method: "DELETE",
-        header: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
+        console.log("Result:", result);
       })
-        .then(res => res.json())
-        .then(data => {
-          const array = [...this.state.clients];
-          array.splice(array.map(result => result.id).indexOf(data._id), 1);
-          this.setState({ clients: array });
-        });
-    }
+      .catch(err => {});
   }
-  toggleSwitchf = () => {
-    this.setState(prevState => {
-      return {
-        switched: !prevState.switched
-      };
-    });
-  };
 
   handleChange = event => {
     this.setState({
@@ -72,19 +52,21 @@ export class UserSettings extends Component {
     };
 
     console.log(user);
-    Axios.put("http://localhost:9000/client", {
+
+    Axios.put(`http://localhost:9000/client/${this.state.clientId}`, {
       ...user
     })
       .then(res => {
-        console.log(res);
+        console.log("patchedData:", res.data);
       })
       .catch(err => {
         console.log(err);
       });
   };
 
-  App = () => {
-    const [modalShow, setModalShow] = useState(false);
+  render() {
+    // const [modalShow, setModalShow] = useState(false);
+    console.log("renderClient:", this.state.client);
 
     return (
       <div>
@@ -344,6 +326,8 @@ export class UserSettings extends Component {
                     <h4 className="card-title">Edit Profile</h4>
                   </div>
                   <div className="card-body">
+                    {console.log("CLIENTELETS:")}
+
                     <form onSubmit={this.handleSubmit}>
                       <div className="row">
                         <div className="col-md-5 pr-1">
@@ -351,6 +335,7 @@ export class UserSettings extends Component {
                             <label>Company (disabled)</label>
                             <input
                               type="text"
+                              name="Company"
                               className="form-control"
                               disabled=""
                               placeholder="Company"
@@ -361,12 +346,12 @@ export class UserSettings extends Component {
                         </div>
                         <div className="col-md-3 px-1">
                           <div className="form-group">
-                            <label>Username</label>
+                            <label>Full Name</label>
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Username"
-                              value="michael23"
+                              name="fullName"
+                              placeholder={this.state.client.fullName}
                               onChange={this.handleChange}
                             ></input>
                           </div>
@@ -379,8 +364,9 @@ export class UserSettings extends Component {
                             <input
                               type="email"
                               className="form-control"
-                              placeholder="Email"
+                              placeholder={this.state.client.email}
                               onChange={this.handleChange}
+                              name="email"
                             ></input>
                           </div>
                         </div>
@@ -393,8 +379,8 @@ export class UserSettings extends Component {
                               type="text"
                               className="form-control"
                               placeholder="Company"
-                              value="Mike"
                               onChange={this.handleChange}
+                              name="firstName"
                             ></input>
                           </div>
                         </div>
@@ -404,8 +390,7 @@ export class UserSettings extends Component {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Last Name"
-                              value="Andrew"
+                              placeholder="Andrew"
                               onChange={this.handleChange}
                             ></input>
                           </div>
@@ -419,7 +404,6 @@ export class UserSettings extends Component {
                               type="text"
                               className="form-control"
                               placeholder="Home Address"
-                              value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
                               onChange={this.handleChange}
                             ></input>
                           </div>
@@ -428,13 +412,17 @@ export class UserSettings extends Component {
                       <div className="row">
                         <div className="col-md-4 pr-1">
                           <div className="form-group">
-                            <label>City</label>
+                            <label>Phone</label>
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="City"
-                              value="Mike"
+                              placeholder={
+                                this.state.client.phone
+                                  ? this.state.client.phone
+                                  : "Add a phone Number"
+                              }
                               onChange={this.handleChange}
+                              name="phone"
                             ></input>
                           </div>
                         </div>
@@ -516,9 +504,5 @@ export class UserSettings extends Component {
         {/* <!-- End Footer --> */}
       </div>
     );
-  };
-
-  render() {
-    return <div>{<this.App />}</div>;
   }
 }

@@ -2,13 +2,13 @@ import jwt_decode from "jwt-decode";
 
 class DecodeToken {
   static async shuffleToken(token) {
-    // if (token) {
+    if (token) {
     return token
       .split("")
       .reverse()
       .join("");
-    // }
-    // return null;
+    }
+    return null;
   }
   static async getUserPayload(token) {
     token = await this.shuffleToken(token);
