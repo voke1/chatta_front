@@ -11,7 +11,6 @@ class Example extends Component {
   };
 
   handleCheck = event => {
-    console.log("called")
     if (event.target.name === "fallback") {
       this.setState({ fallback: !this.state.fallback });
       this.props.syncTree(null, null, {
@@ -104,7 +103,7 @@ class Example extends Component {
   }
   componentDidMount() {
     // set fallback options
-    if(this.props.chatTree) {
+    if (this.props.chatTree) {
       const fallbackTree = this.props.chatTree.tree.filter(
         tree => tree.identity === "empty"
       );
@@ -137,7 +136,6 @@ class Example extends Component {
         }
       });
     }
-    
   }
 }
 export default Example;

@@ -1,37 +1,64 @@
 import React, { Component } from "react";
 import { Tab, Tabs, Row, Col, Form, Button } from "react-bootstrap";
-import axios from "axios";
+import "../../css/style.css";
+import "../../css/icons.css";
+import "../../css/bootstrap.min.css";
+import "../../images/favicon.ico";
 import CreateIntent from "./create-intent";
 import * as apiService from "../../../../services/apiservice";
 import ProgressBar from "../../../progressbar";
+import { storage } from "../../../../firebase/index";
+
 class BotTabs extends Component {
   state = {
+    show: false,
+    modal2: false,
+    modal3: false,
+    modal4: false,
+    modal5: false,
     showProgress: false,
     chatbotName: "",
     welcomeMessage: "",
     fallbackMessage: "",
     delayPrompt: "",
-    botImage: "",
+    botImage: " ",
     tab: "home",
-    settingsSaved: false
+    settingsSaved: false,
+    fileUpload: null,
+    delayTime: null,
+    primaryColor: " ",
+    secondaryColor: ", "
   };
 
   handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     });
+    // alert(event.target.value);
   };
-  handleSubmit = event => {
-    event.preventDefault();
-    this.setState({ showProgress: true });
+
+  fileSelectedHandler = event => {
+    // if (event.target.files[0]) {
+    console.log("event.target:", event.target);
+    const fileInput = event.target.files[0];
+    this.setState({ fileUpload: fileInput });
+    console.log("fileUpload", fileInput);
+    // }
+    return null;
+  };
+  saveData = url => {
     const setting = {
       chatbotName: this.state.chatbotName,
-      welcomeMessage: this.state.welcomeMessage,
       fallbackMessage: this.state.fallbackMessage,
       delayPrompt: this.state.delayPrompt,
-      botImage: this.state.botImage
+      botImage: url,
+      primaryColor: this.state.primaryColor,
+      secondaryColor: this.state.secondaryColor,
+      delayTime: this.state.delayTime
     };
+    console.log("saving data:", setting);
     apiService
+
       .post("setting", setting)
       .then(res => {
         this.setState({
@@ -39,28 +66,52 @@ class BotTabs extends Component {
           showProgress: false,
           settingsSaved: true
         });
-        console.log(res);
+        console.log("RESPONSE:", res);
       })
       .catch(err => {
         console.log(err);
       });
   };
+  handleSubmit = event => {
+    event.preventDefault();
+    // this.fileUploadHandler();
+    const { fileUpload } = this.state;
 
-  fileSelectedHandler = event => {
-    this.setState({ selectedFile: event.target.files[0] });
-  };
-  fileUploadHandler = () => {
-    const formData = new FormData();
-    formData.append(
-      "image",
-      this.state.selectedFile,
-      this.state.selectedFile.name
+    const uploadTask = storage.ref(`images/${fileUpload.name}`).put(fileUpload);
+
+    uploadTask.on(
+      "state_changed",
+      snapshot => {
+        // progrss function ....
+        // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        // this.setState({progress});
+      },
+      error => {
+        // error function ....
+        console.log(error);
+      },
+      () => {
+        // complete function ....
+        storage
+          .ref("images")
+          .child(fileUpload.name)
+          .getDownloadURL()
+          .then(url => {
+            console.log("URL:", url);
+            // this.setState({ botImage: url });
+            this.saveData(url);
+            console.log("this.state.botImage: ", this.state.botImage);
+          });
+      }
     );
 
-    axios.post("").then(res => {
-      console.log(res);
-    });
+    this.setState({ showProgress: true });
+
+    // console.log("SETTING:", setting);
   };
+
+  fileUploadHandler = () => {};
+
   getTab = tab => {
     return this.state.settingsSaved ? tab : this.state.tab;
   };
@@ -68,7 +119,7 @@ class BotTabs extends Component {
     return (
       <div className="container-holder">
         <Tabs
-          activeKey="intent"
+          activeKey={this.state.tab}
           id="controlled-tab-example"
           onSelect={tab => this.setState({ tab: this.getTab(tab) })}
         >
@@ -83,7 +134,10 @@ class BotTabs extends Component {
                     action="#!"
                     onSubmit={this.handleSubmit}
                   >
-                    <p>Let's start by giving your bot some default settings</p>
+                    <p>
+                      Let's start by giving your bot some default setticolor
+                      picker css stylingcolor picker css stylingngs
+                    </p>
 
                     <div className="md-form mt-3">
                       <input
@@ -92,51 +146,73 @@ class BotTabs extends Component {
                         className="form-control"
                         placeholder="Bot name"
                         name="chatbotName"
-                        value={this.state.chatbotName}
                         onChange={this.handleChange}
                       />
-                    </div>
-                    <div className="md-form">
+          Row          </div>
+                    <div className="md-form mt-3">
                       <input
                         type="text"
-                        id="materialSubscriptionFormEmail"
+                        id="materialSubscriptionFormPasswords"
                         className="form-control"
-                        placeholder="Welcome message"
-                        name="welcomeMessage"
-                        value={this.state.welcomeMessage}
-                        onChange={this.handleChange}
-                      />
-                    </div>
-                    <div className="md-form">
-                      <input
-                        type="text"
-                        id="materialSubscriptionFormEmail"
-                        className="form-control"
-                        placeholder="Fallback message"
+                        placeholder="Fallback Message"
                         name="fallbackMessage"
-                        value={this.state.fallbackMessage}
                         onChange={this.handleChange}
                       />
                     </div>
+                    <div className="md-form">
+                      <Row>
+                        <Col>
+                          <p className="text-left">Primary Colour</p>[]
+                          <input
+                            type="color"
+                            id="materialSubscriptionFormEmail"
+                            onChange={this.handleChange}
+                            className="form-control"
+                            name="primaryColor"
+                          />
+                        </Col>
+                        <Col>
+                          <p className="text-left">Secondary Colour</p>[]
+                          <input
+                            type="color"
+                            id="materialSubscriptionFormEmail"
+                            onChange={this.handleChange}
+                            name="secondaryColor"
+                            className="form-control"
+                          />
+                        </Col>
+                      </Row>
+                    </div>
+
                     <div className="md-form">
                       <input
                         type="text"
                         id="materialSubscriptionFormEmail"
                         className="form-control"
-                        placeholder="Delay prompt"
+                        placeholder="Delay Prompt"
                         name="delayPrompt"
-                        value={this.state.delayPrompt}
                         onChange={this.handleChange}
                       />
                     </div>
+
+                    <div className="md-form">
+                      <input
+                        type="number"
+                        id="materialSubscriptionFormEmail"
+                        className="form-control"
+                        placeholder="Delay Time"
+                        name="delayTime"
+                        onChange={this.handleChange}
+                      />
+                    </div>
+
                     <div class="custom-file">
                       <input
                         type="file"
                         class="custom-file-input"
                         id="customFileLang"
                         lang="en"
-                        name="botImage"
-                        value={this.state.botImage}
+                        onChange={this.fileSelectedHandler}
                       />
                       <label class="custom-file-label" for="customFileLang">
                         Upload bot image
@@ -146,8 +222,9 @@ class BotTabs extends Component {
                     {this.state.showProgress ? <ProgressBar /> : ""}
                     <button
                       className="btn btn-sm btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
-                      type="submit"
+                      // type="submit"
                       style={{ width: "100px", float: "right" }}
+                      onClick={this.handleSubmit}
                     >
                       Next
                     </button>

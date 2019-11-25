@@ -16,7 +16,7 @@ export class Validation {
       success,
       "password",
       "Password must be between 8 and 20 characters long and must contain" +
-        " at least 1 number"
+      " at least 1 number"
     );
   }
   static async validateFullName(fullName) {
