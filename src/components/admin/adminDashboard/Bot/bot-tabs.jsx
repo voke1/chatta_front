@@ -35,7 +35,6 @@ class BotTabs extends Component {
     this.setState({
       [event.target.name]: event.target.value
     });
-    // alert(event.target.value);
   };
 
   fileSelectedHandler = event => {
@@ -97,7 +96,6 @@ class BotTabs extends Component {
           .child(fileUpload.name)
           .getDownloadURL()
           .then(url => {
-            // this.setState({ botImage: url });
             this.saveData(url);
           });
       }
@@ -144,7 +142,6 @@ class BotTabs extends Component {
                         name="chatbotName"
                         onChange={this.handleChange}
                       />
-                      Row{" "}
                     </div>
                     <div className="md-form mt-3">
                       <input
@@ -162,6 +159,7 @@ class BotTabs extends Component {
                           <p className="text-left">Primary Colour</p>
                           <input
                             type="color"
+                            value={this.state.primaryColor}
                             id="materialSubscriptionFormEmail"
                             onChange={this.handleChange}
                             // className="form-control"
@@ -181,6 +179,7 @@ class BotTabs extends Component {
                             style={{
                               width: "100%"
                             }}
+
                             // className="form-control"
                           />
                         </Col>

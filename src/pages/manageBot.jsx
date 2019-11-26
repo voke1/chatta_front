@@ -23,7 +23,11 @@ export class ManageBot extends Component {
       delayPrompt: null,
       chatbotName: null,
       tab: "settings",
-      fetchedTree: false
+      fetchedTree: false,
+      delayTime: " ",
+      primaryColor: " ",
+      secondaryColor: " ",
+      file: " "
     };
   }
 
@@ -34,10 +38,21 @@ export class ManageBot extends Component {
         setTimeout(() => {
           this.setState({ settings: result });
         }, 1000);
-
-        console.log("Result:", result);
       })
       .catch(err => {});
+    console.log("Result67:", this.state.settings);
+
+    setTimeout(() => {
+      this.setState({
+        primaryColor: this.state.settings.primaryColor,
+        secondaryColor: this.state.settings.secondaryColor,
+        fallbackMessage: this.state.settings.fallbackMessage,
+        botImage: this.state.settings.botImage,
+        delayPrompt: this.state.settings.delayPrompt,
+        chatbotName: this.state.settings.chatbotName,
+        delayTime: this.state.settings.delayTime
+      });
+    }, 2000);
   }
 
   handleChange = event => {
@@ -45,6 +60,24 @@ export class ManageBot extends Component {
       [event.target.name]: event.target.value
     });
   };
+  handleImageChange = e => {
+    e.preventDefault();
+    console.log("uploaded files:", e.target.files[0]);
+    if (e.target.files[0]) {
+      let reader = new FileReader();
+      let image = e.target.files[0];
+
+      reader.onloadend = () => {
+        this.setState({
+          file: image,
+          botImage: reader.result
+        });
+      };
+
+      reader.readAsDataURL(image);
+    }
+  };
+
   handleSubmit = event => {
     event.preventDefault();
 
@@ -52,15 +85,16 @@ export class ManageBot extends Component {
       welcomeMessage: this.state.welcomeMessage,
       fallbackMessage: this.state.fallbackMessage,
       delayPrompt: this.state.delayPrompt,
-      chatbotName: this.state.chatbotName
+      chatbotName: this.state.chatbotName,
+      primaryColor: this.state.primaryColor,
+      secondaryColor: this.state.secondaryColor,
+      delayTime: this.state.delayTime
     };
 
     Axios.put(`http://localhost:9000/setting/${this.state.settingId}`, {
       ...bot
     })
-      .then(res => {
-        console.log("patchedData:", res.data);
-      })
+      .then(res => {})
       .catch(err => {
         console.log(err);
       });
@@ -343,9 +377,7 @@ export class ManageBot extends Component {
                                     <input
                                       type="text"
                                       className="form-control"
-                                      placeholder={
-                                        this.state.settings.chatbotName
-                                      }
+                                      value={this.state.chatbotName}
                                       name="chatbotName"
                                       onChange={this.handleChange}
                                     ></input>
@@ -359,9 +391,7 @@ export class ManageBot extends Component {
                                     <input
                                       type="text"
                                       className="form-control"
-                                      placeholder={
-                                        this.state.settings.delayTime
-                                      }
+                                      value={this.state.delayTime}
                                       name="delayTime"
                                       onChange={this.handleChange}
                                     ></input>
@@ -376,9 +406,7 @@ export class ManageBot extends Component {
                                     <input
                                       type="text"
                                       className="form-control"
-                                      placeholder={
-                                        this.state.settings.fallbackMessage
-                                      }
+                                      value={this.state.fallbackMessage}
                                       name="fallbackMessage"
                                       onChange={this.handleChange}
                                     ></input>
@@ -393,9 +421,7 @@ export class ManageBot extends Component {
                                     <input
                                       type="text"
                                       className="form-control"
-                                      placeholder={
-                                        this.state.settings.delayPrompt
-                                      }
+                                      value={this.state.delayPrompt}
                                       name="delayPrompt"
                                       onChange={this.handleChange}
                                     ></input>
@@ -407,13 +433,11 @@ export class ManageBot extends Component {
                                   <div className="form-group">
                                     <label>Primary Colour</label>
                                     <input
-                                      type="text"
+                                      type="color"
                                       className="form-control"
-                                      placeholder={
-                                        this.state.settings.primaryColor
-                                      }
                                       name="primaryColor"
                                       onChange={this.handleChange}
+                                      value={this.state.primaryColor}
                                     ></input>
                                   </div>
                                 </div>
@@ -423,13 +447,11 @@ export class ManageBot extends Component {
                                   <div className="form-group">
                                     <label>Secondary Colour</label>
                                     <input
-                                      type="text"
+                                      type="color"
                                       className="form-control"
-                                      placeholder={
-                                        this.state.settings.secondaryColor
-                                      }
                                       name="secondaryColor"
                                       onChange={this.handleChange}
+                                      value={this.state.secondaryColor}
                                     ></input>
                                   </div>
                                 </div>
@@ -461,18 +483,17 @@ export class ManageBot extends Component {
               <div className="col-md-4">
                 <div className="card card-user">
                   <div className="card-image">
-                    <img src={this.state.settings.botImage} alt="..."></img>
+                    <div>
+                      <br />
+                      <input type="file" onChange={this.handleImageChange} />
+                      <br />
+                    </div>
+
+                    <img src={this.state.botImage} alt="..."></img>
                   </div>
                   <div className="card-body">
-                    <div className="author">
-                      <a href="#">
-                        <h5 className="title">
-                          {this.state.settings.chatbotName}
-                        </h5>
-                      </a>
-                    </div>
+                    <h5 className="title">{this.state.chatbotName}</h5>
                   </div>
-                  <hr></hr>
                 </div>
               </div>
             </div>
