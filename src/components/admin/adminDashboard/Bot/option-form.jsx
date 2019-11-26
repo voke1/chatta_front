@@ -129,7 +129,7 @@ const OptionBox = props => {
   return (
     <div
       style={{
-        marginLeft: "40px",
+        marginLeft: !props.marginLeft ? "40px" : props.marginLeft,
         marginRight: "100px"
       }}
       className="form-group"

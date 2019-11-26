@@ -4,7 +4,7 @@ import "./css/card.css";
 import Accordion from "./accordion";
 import uuid from "uuid/v1";
 import ConvoTree from "../../../front/conversation/convo.json";
-import {useGlobal} from 'reactn';
+import { useGlobal } from "reactn";
 class OptionBox extends Component {
   state = {
     responses: [],
@@ -16,21 +16,20 @@ class OptionBox extends Component {
   initialResponses = [];
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-    console.log(this.global.syncTree)
+    console.log(this.global.syncTree);
   };
 
   onClick = tree => {
-    console.log("hahahaha", tree)
+    console.log("hahahaha", tree);
     if (tree.val) {
       this.initialResponses.push(tree);
-    } 
-      else{
-        this.initialResponses.push({
-          key: uuid(),
-          val: this.state.response
-        });
-      }
-    
+    } else {
+      this.initialResponses.push({
+        key: uuid(),
+        val: this.state.response
+      });
+    }
+
     this.props.syncHeight(this.state.height + this.divElement.clientHeight);
     this.setState({
       responses: this.initialResponses,
@@ -45,7 +44,7 @@ class OptionBox extends Component {
         text: ""
       }
     };
-    this.props.syncTree(botTree)
+    this.props.syncTree(botTree);
   };
 
   render() {
@@ -115,12 +114,11 @@ class OptionBox extends Component {
         tree.response.buttons.forEach(button => {
           setTimeout(() => {
             this.onClick(button);
-            this.setState({prompt: tree.prompt})
+            this.setState({ prompt: tree.prompt });
           }, 10);
         });
       }
     });
   }
-  
 }
 export default OptionBox;
