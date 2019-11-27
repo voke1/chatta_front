@@ -1,13 +1,15 @@
-import React, { useState, Component } from "react";
+import React, { useState, Component } from "reactn";
 import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Button from "react-bootstrap/Button";
+
 import "./css/option-menu.css";
 
 class Example extends Component {
   state = {
     fallback: false,
-    delayprompt: false
+    delayprompt: false,
+    delete: false
   };
 
   handleCheck = event => {
@@ -30,6 +32,17 @@ class Example extends Component {
       });
     }
   };
+  handleClick = () => {
+    console.log(this.global);
+    this.global.openDialog();
+    this.setGlobal({
+      modify: this.props.modifyOption,
+      key: this.props.botKey,
+      options: {
+        type: "delete"
+      }
+    });
+  };
   render() {
     return (
       <OverlayTrigger
@@ -45,16 +58,19 @@ class Example extends Component {
                   <span style={{ marginLeft: "5px" }}>Edit</span>
                 </Popover.Content>
               </div>
-              <div className="option">
+              <div className="option" onClick={this.handleClick}>
                 <Popover.Content>
                   <i class="fas fa-trash"></i>{" "}
                   <span style={{ marginLeft: "5px" }}>Delete</span>
                 </Popover.Content>
               </div>
-              <div className="option">
+              <div
+                className="option"
+                onClick={() => this.props.toggleAccordion()}
+              >
                 <Popover.Content>
                   <i class="fas fa-plus"></i>{" "}
-                  <span style={{ marginLeft: "5px" }}>Add</span>
+                  <span style={{ marginLeft: "5px" }}>Add option</span>
                 </Popover.Content>
               </div>
 
@@ -102,6 +118,7 @@ class Example extends Component {
     );
   }
   componentDidMount() {
+    console.log(this.global);
     // set fallback options
     if (this.props.chatTree) {
       const fallbackTree = this.props.chatTree.tree.filter(

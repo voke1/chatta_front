@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from "reactn";
 import { Tab, Tabs, Row, Col, Form, Button } from "react-bootstrap";
 import "../../css/style.css";
 import "../../css/icons.css";
@@ -8,7 +8,6 @@ import CreateIntent from "./create-intent";
 import * as apiService from "../../../../services/apiservice";
 import ProgressBar from "../../../progressbar";
 import { storage } from "../../../../firebase/index";
-
 class BotTabs extends Component {
   state = {
     show: false,
@@ -30,7 +29,6 @@ class BotTabs extends Component {
     secondaryColor: ", ",
     file: " Upload bot image"
   };
-
   handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value
@@ -239,6 +237,7 @@ class BotTabs extends Component {
             <div className="card w-100">
               <div className="card-body">
                 <CreateIntent
+                  getTab={() => this.setState({ tab: "intent" })}
                   closeOverlay={this.props.closeOverlay}
                   disableHomeTab={() =>
                     this.setState({ tab: "intent", settingsSaved: false })
@@ -250,6 +249,9 @@ class BotTabs extends Component {
         </Tabs>
       </div>
     );
+  }
+  componentDidMount() {
+    this.setGlobal({ getTab: this.getTab });
   }
 }
 export default BotTabs;

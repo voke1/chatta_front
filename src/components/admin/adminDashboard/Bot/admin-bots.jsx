@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import avatar from "../../images/users/avatar-1.jpg";
 import "../../plugins/datatables/dataTables.bootstrap4.min.css";
@@ -8,8 +8,8 @@ import "../../css/icons.css";
 import "../../css/bootstrap.min.css";
 import "../../images/favicon.ico";
 
-import { ButtonToolbar, Button } from "react-bootstrap";
-import { ManageBot } from "../manageBot";
+import { ButtonToolbar } from "react-bootstrap";
+import { Manage } from "../manageBot";
 import { ModalComponent } from "./botSettings";
 
 export class Bot extends Component {
@@ -34,25 +34,22 @@ export class Bot extends Component {
   }
 
   deleteBot = settingId => {
-    if (window.confirm("Are you sure?")) {
-      fetch(`http://localhost:9000/setting/` + settingId, {
-        method: "DELETE",
-        header: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
-          this.setState({
-            settings: [
-              ...this.state.settings.filter(
-                setting => setting._id !== settingId
-              )
-            ]
-          });
+    fetch(`http://localhost:9000/setting/` + settingId, {
+      method: "DELETE",
+      header: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          settings: [
+            ...this.state.settings.filter(setting => setting._id !== settingId)
+          ]
         });
-    }
+        console.log("THis is settings:", this.state.settings);
+      });
   };
 
   render() {
