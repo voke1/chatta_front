@@ -20,7 +20,7 @@ const OptionBox = props => {
   1 Delete a button (from response.buttons)
   2 Search the tree for a conversation whose identity corresponds to the button.key (deleted in 1)
   3.Get the array of the buttons from the convo found in 2 and delete convo.
-  4.For each button found in 3, repeat step 2.
+  4.For each button found in 3, repeat step 2
   */
 
   const findAndDelete = (botId, initialTreeButtons) => {
