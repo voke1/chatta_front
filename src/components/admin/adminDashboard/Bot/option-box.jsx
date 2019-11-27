@@ -3,7 +3,7 @@ import Response from "./response";
 import "./css/card.css";
 import Accordion from "./accordion";
 import uuid from "uuid/v1";
-import ConvoTree from '../../../front/conversation/convo.json'
+import ConvoTree from "../../../front/conversation/convo.json";
 const identity = uuid();
 class OptionBox extends Component {
   state = {
@@ -19,13 +19,16 @@ class OptionBox extends Component {
   };
 
   onClick = tree => {
+    console.log("it is..", tree);
     if (tree.val) {
       this.initialResponses.push(tree);
     } else {
-      this.initialResponses.push({
-        key: uuid(),
-        val: this.state.response
-      });
+      if (!tree.botId) {
+        this.initialResponses.push({
+          key: uuid(),
+          val: this.state.response
+        });
+      }
     }
 
     this.props.syncHeight(this.state.height + this.divElement.clientHeight);
@@ -38,15 +41,31 @@ class OptionBox extends Component {
       identity: this.state.identity,
       prompt: this.state.prompt,
       response: {
-        buttons: this.state.response ? [...this.initialResponses] : [],
+        buttons:
+          this.state.response || tree.action.type ? [...this.initialResponses] : [],
         text: ""
       }
     };
-    if(!tree.val) {
+    console.log("here here", botTree);
+    if (!tree.val) {
       this.props.syncTree(botTree);
+      if (tree.botId) {
+        this.props.syncTree(botTree, null, null, {
+          botId: tree.botId,
+          action: tree.action.type
+        });
+      }
     }
   };
-  response;
+  modifyOption = (botId, action) => {
+    if (action.type === "delete") {
+      const button = this.initialResponses.filter(
+        button => button.key === botId
+      );
+      this.initialResponses.splice(this.initialResponses.indexOf(button[0]), 1);
+      this.onClick({ botId, action });
+    }
+  };
 
   render() {
     return (
@@ -78,6 +97,7 @@ class OptionBox extends Component {
                   syncTree={this.props.syncTree}
                   prompt={this.state.prompt}
                   chatTree={this.props.chatTree}
+                  modifyOption={this.modifyOption}
                 />
               );
             })}
@@ -112,16 +132,16 @@ class OptionBox extends Component {
     const height = this.divElement.clientHeight;
     this.setState({ height: height, identity: this.props.botKey });
     ConvoTree.tree.forEach(tree => {
-      if(tree.identity === this.props.botKey) {
-        console.log(tree)
+      if (tree.identity === this.props.botKey) {
+        console.log(tree);
         tree.response.buttons.forEach(button => {
           setTimeout(() => {
-            this.onClick(button)
-            this.setState({prompt: tree.prompt})
+            this.onClick(button);
+            this.setState({ prompt: tree.prompt });
           }, 10);
-        })
+        });
       }
-    })
+    });
   }
 }
 export default OptionBox;

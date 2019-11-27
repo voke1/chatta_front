@@ -1,4 +1,4 @@
-import React, { useState, useRef, Component } from "react";
+import React, { Component } from "reactn";
 import "./css/accordion.css";
 import CardView from "./card-view";
 import OptionBox from "./option-box";
@@ -52,6 +52,9 @@ class Accordion extends Component {
           botKey={this.props.botKey}
           chatTree={this.props.chatTree}
           identity={this.props.identity}
+          modifyOption={this.props.modifyOption}
+          getTab={this.props.getTab}
+          toggleAccordion={this.toggleAccordion}
         />
         <div
           style={{ maxHeight: `${this.state.height}` }}
@@ -66,14 +69,17 @@ class Accordion extends Component {
             identity={this.props.identity}
             prompt={this.props.prompt}
             chatTree={this.props.chatTree}
+            modifyOption={this.props.modifyOption}
           />
         </div>
       </div>
     );
   }
   componentDidMount() {
+    this.setGlobal({ toggleAccordion: this.toggleAccordion });
     const height = this.divElement.clientHeight;
     this.setState({ init: height });
+    // collapse chat tree as default after fetching and rendering
     if (this.props.chatTree) {
       setTimeout(() => {
         this.toggleAccordion();

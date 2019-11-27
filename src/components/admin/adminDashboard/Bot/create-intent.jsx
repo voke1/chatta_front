@@ -1,10 +1,11 @@
-import React, { Component } from "react";
+import React, { Component } from "reactn";
 import "../../css/intent.css";
 import Response from "./response";
 import OptionForm from "./option-form";
 import uuid from "uuid/v1";
 import * as apiService from "../../../../services/apiservice";
 import ProgressBar from "../../../progressbar";
+import DeletePrompt from "./delete-prompt-modal";
 class CreateIntent extends Component {
   state = {
     responses: [],
@@ -14,13 +15,24 @@ class CreateIntent extends Component {
     buttonText: "DEPLOY",
     buttonColor: "btn-outline-info",
     animation: "",
-    disabledButton: false
+    disabledButton: false,
+    openDialog: false
   };
   getTree = tree => {
     console.log("this is tree", tree);
     this.setState({ chatBody: tree });
   };
-
+  openDialog = () => {
+    console.log("open dialogue");
+    this.setState({
+      openDialog: true
+    });
+  };
+  closeDialog = () => {
+    this.setState({
+      openDialog: false
+    });
+  };
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -60,6 +72,8 @@ class CreateIntent extends Component {
   render() {
     return (
       <div className="container" style={{ background: "none", width: "90%" }}>
+        {this.state.openDialog ? <DeletePrompt /> : ""}
+
         <form className="text-center" onSubmit={this.handleSubmit}>
           <div className="row">
             <div className="md-col-8"></div>
@@ -77,7 +91,11 @@ class CreateIntent extends Component {
           </div>
 
           <hr className="mt-3"></hr>
-          <OptionForm tree={this.getTree} prompt={this.state.prompt} />
+          <OptionForm
+            tree={this.getTree}
+            prompt={this.state.prompt}
+            getTab={this.props.getTab}
+          />
           <hr></hr>
           {this.state.setProgress ? <ProgressBar /> : ""}
           <div>
@@ -96,6 +114,12 @@ class CreateIntent extends Component {
         </form>
       </div>
     );
+  }
+  componentDidMount() {
+    this.setGlobal({
+      openDialog: this.openDialog,
+      closeDialog: this.closeDialog
+    });
   }
 }
 export default CreateIntent;
