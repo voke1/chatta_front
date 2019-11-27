@@ -11,6 +11,7 @@ import "../components/admin/css/switch.css";
 import Axios from "axios";
 import { Tab, Tabs, Row, Col, Form, Button } from "react-bootstrap";
 import FetchTree from "../components/admin/adminDashboard/Bot/fetch-tree";
+import { storage } from "../firebase/index";
 
 export class ManageBot extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ export class ManageBot extends Component {
       delayTime: " ",
       primaryColor: " ",
       secondaryColor: " ",
-      file: " "
+      fileUpload: null
     };
   }
 
@@ -62,6 +63,7 @@ export class ManageBot extends Component {
   };
   handleImageChange = e => {
     e.preventDefault();
+
     console.log("uploaded files:", e.target.files[0]);
     if (e.target.files[0]) {
       let reader = new FileReader();
@@ -69,7 +71,7 @@ export class ManageBot extends Component {
 
       reader.onloadend = () => {
         this.setState({
-          file: image,
+          fileUpload: image,
           botImage: reader.result
         });
       };
@@ -78,8 +80,46 @@ export class ManageBot extends Component {
     }
   };
 
+  uploadImageToFirebase = () => {
+    // this.fileUploadHandler();
+    const { fileUpload } = this.state;
+
+    if (fileUpload) {
+      const uploadTask = storage
+        .ref(`images/${fileUpload.name}`)
+        .put(fileUpload);
+
+      uploadTask.on(
+        "state_changed",
+        snapshot => {
+          // progrss function ....
+          // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          // this.setState({progress});
+        },
+        error => {
+          // error function ....
+          console.log(error);
+        },
+        () => {
+          // complete function ....
+          storage
+            .ref("images")
+            .child(fileUpload.name)
+            .getDownloadURL()
+            .then(url => {
+              this.setState({ botImage: url });
+              console.log("setstate url:", this.state.botImage);
+            });
+        }
+      );
+    }
+  };
+
   handleSubmit = event => {
     event.preventDefault();
+    if (this.state.fileUpload) {
+      this.uploadImageToFirebase();
+    }
 
     const bot = {
       welcomeMessage: this.state.welcomeMessage,
@@ -88,7 +128,8 @@ export class ManageBot extends Component {
       chatbotName: this.state.chatbotName,
       primaryColor: this.state.primaryColor,
       secondaryColor: this.state.secondaryColor,
-      delayTime: this.state.delayTime
+      delayTime: this.state.delayTime,
+      botImage: this.state.botImage
     };
 
     Axios.put(`http://localhost:9000/setting/${this.state.settingId}`, {
