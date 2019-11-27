@@ -781,8 +781,8 @@ code {
 }
 
 .alert-success {
-  color: #6fd088;
-  background-color: #e2f6e7;
+  color: white;
+  background-color: green;
 }
 
 .alert-success .alert-link {
@@ -794,8 +794,8 @@ code {
 }
 
 .alert-info {
-  color: #4bbbce;
-  background-color: #d7f0f4;
+  color: #ffffff;
+  background-color: #2081d6;
 }
 
 .alert-info .alert-link {

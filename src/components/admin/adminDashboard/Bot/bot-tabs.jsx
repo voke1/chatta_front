@@ -26,22 +26,23 @@ class BotTabs extends Component {
     fileUpload: null,
     delayTime: null,
     primaryColor: " ",
-    secondaryColor: ", "
+    secondaryColor: ", ",
+    file: " Upload bot image"
   };
   handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     });
-    // alert(event.target.value);
   };
 
   fileSelectedHandler = event => {
-    // if (event.target.files[0]) {
-    console.log("event.target:", event.target);
-    const fileInput = event.target.files[0];
-    this.setState({ fileUpload: fileInput });
-    console.log("fileUpload", fileInput);
-    // }
+    if (event.target.files[0]) {
+      const fileInput = event.target.files[0];
+      this.setState({
+        fileUpload: fileInput,
+        file: event.target.files[0].name
+      });
+    }
     return null;
   };
   saveData = url => {
@@ -54,7 +55,6 @@ class BotTabs extends Component {
       secondaryColor: this.state.secondaryColor,
       delayTime: this.state.delayTime
     };
-    console.log("saving data:", setting);
     apiService
 
       .post("setting", setting)
@@ -64,7 +64,6 @@ class BotTabs extends Component {
           showProgress: false,
           settingsSaved: true
         });
-        console.log("RESPONSE:", res);
       })
       .catch(err => {
         console.log(err);
@@ -95,17 +94,12 @@ class BotTabs extends Component {
           .child(fileUpload.name)
           .getDownloadURL()
           .then(url => {
-            console.log("URL:", url);
-            // this.setState({ botImage: url });
             this.saveData(url);
-            console.log("this.state.botImage: ", this.state.botImage);
           });
       }
     );
 
     this.setState({ showProgress: true });
-
-    // console.log("SETTING:", setting);
   };
 
   fileUploadHandler = () => {};
@@ -161,23 +155,31 @@ class BotTabs extends Component {
                     <div className="md-form">
                       <Row>
                         <Col>
-                          <p className="text-left">Primary Colour</p>[]
+                          <p className="text-left">Primary Colour</p>
                           <input
                             type="color"
+                            value={this.state.primaryColor}
                             id="materialSubscriptionFormEmail"
                             onChange={this.handleChange}
-                            className="form-control"
+                            // className="form-control"
                             name="primaryColor"
+                            style={{
+                              width: "100%"
+                            }}
                           />
                         </Col>
                         <Col>
-                          <p className="text-left">Secondary Colour</p>[]
+                          <p className="text-left">Secondary Colour</p>
                           <input
                             type="color"
                             id="materialSubscriptionFormEmail"
                             onChange={this.handleChange}
                             name="secondaryColor"
-                            className="form-control"
+                            style={{
+                              width: "100%"
+                            }}
+
+                            // className="form-control"
                           />
                         </Col>
                       </Row>
@@ -214,7 +216,7 @@ class BotTabs extends Component {
                         onChange={this.fileSelectedHandler}
                       />
                       <label class="custom-file-label" for="customFileLang">
-                        Upload bot image
+                        {this.state.file}
                       </label>
                     </div>
                     <hr></hr>

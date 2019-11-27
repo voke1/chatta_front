@@ -1,0 +1,9 @@
+@import "../plugins/datatables/dataTables.bootstrap4.min.css";
+@import "../plugins/datatables/responsive.bootstrap4.min.css"; 
+@import "../css/style.css";
+@import "../css/icons.css";
+ @import "../css/bootstrap.min.css";
+/* @import "../images/favicon.ico"; */
+@import "../css/switch.css";
+@import "../../../../node_modules/react-toggle-switch/dist/css/switch.min.css";
+

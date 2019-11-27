@@ -8,7 +8,7 @@ export const register = newUser => {
       password: newUser.password
     })
     .then(res => {
-      return res.data;
+      return res;
     })
     .catch(err => {
       return err.response;
@@ -34,7 +34,7 @@ export const verifyEmail = token => {
   return axios
     .get(`http://localhost:9000/auth/verify_email?token=${token}`)
     .then(res => {
-      console.log("Res ",res)
+      console.log("Res ", res)
       return res.data;
     })
     .catch(err => {

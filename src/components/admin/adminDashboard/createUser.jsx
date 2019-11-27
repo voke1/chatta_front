@@ -29,7 +29,8 @@ export class CreateUser extends Component {
       fullName: this.state.fullName,
       password: this.state.password,
       email: this.state.email,
-      phone: this.state.phone
+      phone: this.state.phone,
+      isVerified: true
     };
 
     console.log(user);

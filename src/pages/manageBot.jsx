@@ -11,6 +11,7 @@ import "../components/admin/css/switch.css";
 import Axios from "axios";
 import { Tab, Tabs, Row, Col, Form, Button } from "react-bootstrap";
 import FetchTree from "../components/admin/adminDashboard/Bot/fetch-tree";
+import { storage } from "../firebase/index";
 
 export class ManageBot extends Component {
   constructor(props) {
@@ -23,7 +24,11 @@ export class ManageBot extends Component {
       delayPrompt: null,
       chatbotName: null,
       tab: "settings",
-      fetchedTree: false
+      fetchedTree: false,
+      delayTime: " ",
+      primaryColor: " ",
+      secondaryColor: " ",
+      fileUpload: null
     };
   }
 
@@ -34,10 +39,21 @@ export class ManageBot extends Component {
         setTimeout(() => {
           this.setState({ settings: result });
         }, 1000);
-
-        console.log("Result:", result);
       })
       .catch(err => {});
+    console.log("Result67:", this.state.settings);
+
+    setTimeout(() => {
+      this.setState({
+        primaryColor: this.state.settings.primaryColor,
+        secondaryColor: this.state.settings.secondaryColor,
+        fallbackMessage: this.state.settings.fallbackMessage,
+        botImage: this.state.settings.botImage,
+        delayPrompt: this.state.settings.delayPrompt,
+        chatbotName: this.state.settings.chatbotName,
+        delayTime: this.state.settings.delayTime
+      });
+    }, 2000);
   }
 
   handleChange = event => {
@@ -45,22 +61,81 @@ export class ManageBot extends Component {
       [event.target.name]: event.target.value
     });
   };
+  handleImageChange = e => {
+    e.preventDefault();
+
+    console.log("uploaded files:", e.target.files[0]);
+    if (e.target.files[0]) {
+      let reader = new FileReader();
+      let image = e.target.files[0];
+
+      reader.onloadend = () => {
+        this.setState({
+          fileUpload: image,
+          botImage: reader.result
+        });
+      };
+
+      reader.readAsDataURL(image);
+    }
+  };
+
+  uploadImageToFirebase = () => {
+    // this.fileUploadHandler();
+    const { fileUpload } = this.state;
+
+    if (fileUpload) {
+      const uploadTask = storage
+        .ref(`images/${fileUpload.name}`)
+        .put(fileUpload);
+
+      uploadTask.on(
+        "state_changed",
+        snapshot => {
+          // progrss function ....
+          // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          // this.setState({progress});
+        },
+        error => {
+          // error function ....
+          console.log(error);
+        },
+        () => {
+          // complete function ....
+          storage
+            .ref("images")
+            .child(fileUpload.name)
+            .getDownloadURL()
+            .then(url => {
+              this.setState({ botImage: url });
+              console.log("setstate url:", this.state.botImage);
+            });
+        }
+      );
+    }
+  };
+
   handleSubmit = event => {
     event.preventDefault();
+    if (this.state.fileUpload) {
+      this.uploadImageToFirebase();
+    }
 
     const bot = {
       welcomeMessage: this.state.welcomeMessage,
       fallbackMessage: this.state.fallbackMessage,
       delayPrompt: this.state.delayPrompt,
-      chatbotName: this.state.chatbotName
+      chatbotName: this.state.chatbotName,
+      primaryColor: this.state.primaryColor,
+      secondaryColor: this.state.secondaryColor,
+      delayTime: this.state.delayTime,
+      botImage: this.state.botImage
     };
 
     Axios.put(`http://localhost:9000/setting/${this.state.settingId}`, {
       ...bot
     })
-      .then(res => {
-        console.log("patchedData:", res.data);
-      })
+      .then(res => {})
       .catch(err => {
         console.log(err);
       });
@@ -320,7 +395,7 @@ export class ManageBot extends Component {
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-8">
-                <div className="card container">
+                <div className="card">
                   <Tabs
                     defaultActiveKey={this.state.tab}
                     id="controlled-tab-example"
@@ -343,9 +418,7 @@ export class ManageBot extends Component {
                                     <input
                                       type="text"
                                       className="form-control"
-                                      placeholder={
-                                        this.state.settings.chatbotName
-                                      }
+                                      value={this.state.chatbotName}
                                       name="chatbotName"
                                       onChange={this.handleChange}
                                     ></input>
@@ -359,9 +432,7 @@ export class ManageBot extends Component {
                                     <input
                                       type="text"
                                       className="form-control"
-                                      placeholder={
-                                        this.state.settings.delayTime
-                                      }
+                                      value={this.state.delayTime}
                                       name="delayTime"
                                       onChange={this.handleChange}
                                     ></input>
@@ -376,9 +447,7 @@ export class ManageBot extends Component {
                                     <input
                                       type="text"
                                       className="form-control"
-                                      placeholder={
-                                        this.state.settings.fallbackMessage
-                                      }
+                                      value={this.state.fallbackMessage}
                                       name="fallbackMessage"
                                       onChange={this.handleChange}
                                     ></input>
@@ -393,9 +462,7 @@ export class ManageBot extends Component {
                                     <input
                                       type="text"
                                       className="form-control"
-                                      placeholder={
-                                        this.state.settings.delayPrompt
-                                      }
+                                      value={this.state.delayPrompt}
                                       name="delayPrompt"
                                       onChange={this.handleChange}
                                     ></input>
@@ -407,13 +474,11 @@ export class ManageBot extends Component {
                                   <div className="form-group">
                                     <label>Primary Colour</label>
                                     <input
-                                      type="text"
+                                      type="color"
                                       className="form-control"
-                                      placeholder={
-                                        this.state.settings.primaryColor
-                                      }
                                       name="primaryColor"
                                       onChange={this.handleChange}
+                                      value={this.state.primaryColor}
                                     ></input>
                                   </div>
                                 </div>
@@ -423,13 +488,11 @@ export class ManageBot extends Component {
                                   <div className="form-group">
                                     <label>Secondary Colour</label>
                                     <input
-                                      type="text"
+                                      type="color"
                                       className="form-control"
-                                      placeholder={
-                                        this.state.settings.secondaryColor
-                                      }
                                       name="secondaryColor"
                                       onChange={this.handleChange}
+                                      value={this.state.secondaryColor}
                                     ></input>
                                   </div>
                                 </div>
@@ -451,29 +514,27 @@ export class ManageBot extends Component {
                     <Tab eventKey="intent" title="Edit tree">
                       <div className="card w-100">
                         <div className="card-body">
-                          {this.state.tab === "intent"?<FetchTree /> : ""}
+                          {this.state.tab === "intent" ? <FetchTree /> : ""}
                         </div>
                       </div>
                     </Tab>
                   </Tabs>
-                  <div className="card-body"></div>
                 </div>
               </div>
               <div className="col-md-4">
                 <div className="card card-user">
                   <div className="card-image">
-                    <img src={this.state.settings.botImage} alt="..."></img>
+                    <div>
+                      <br />
+                      <input type="file" onChange={this.handleImageChange} />
+                      <br />
+                    </div>
+
+                    <img src={this.state.botImage} alt="..."></img>
                   </div>
                   <div className="card-body">
-                    <div className="author">
-                      <a href="#">
-                        <h5 className="title">
-                          {this.state.settings.chatbotName}
-                        </h5>
-                      </a>
-                    </div>
+                    <h5 className="title">{this.state.chatbotName}</h5>
                   </div>
-                  <hr></hr>
                 </div>
               </div>
             </div>
