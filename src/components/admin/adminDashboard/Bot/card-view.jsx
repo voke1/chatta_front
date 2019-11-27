@@ -35,7 +35,7 @@ export default class Card extends Component {
     return (
       <div
         ref={divElement => (this.divElement = divElement)}
-        className="card"
+        className="card animated fadeIn"
         style={{
           width: "fit-content",
           borderRadius: "5px",
@@ -78,6 +78,8 @@ export default class Card extends Component {
               syncTree={this.props.syncTree}
               chatTree={this.props.chatTree}
               identity={this.props.identity}
+              modifyOption={this.props.modifyOption}
+              toggleAccordion={this.props.toggleAccordion}
             />
           </div>
         </div>

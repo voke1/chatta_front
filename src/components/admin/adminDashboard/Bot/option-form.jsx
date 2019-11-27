@@ -15,7 +15,64 @@ const OptionBox = props => {
   const [response, setResponse] = useState("");
   const [inputVal, setInputVal] = useState("");
 
-  const syncTree = (tree, initial, message) => {
+  /*
+  Algorithm
+  1 Delete a button (from response.buttons)
+  2 Search the tree for a conversation whose identity corresponds to the button.key (deleted in 1)
+  3.Get the array of the buttons from the convo found in 2 and delete convo.
+  4.For each button found in 3, repeat step 2.
+  */
+
+  const findAndDelete = (botId, initialTreeButtons) => {
+    /*
+    first check if deleted option serves as an option for fallback or delay prompt message.
+    If so, remove them from delayprompt and/Or fallback options
+    */
+    //delete option from fallback options
+    if (newTreeArray[newTreeArray.length - 2]) {
+      const fallbackButtons =
+        newTreeArray[newTreeArray.length - 2].response.buttons;
+      for (let index = 0; index < fallbackButtons.length; index++) {
+        if (fallbackButtons[index].key === botId) {
+          fallbackButtons.splice(index, 1);
+          break;
+        }
+      }
+    }
+    //delete options from delayprompt options
+    if (newTreeArray[newTreeArray.length - 1]) {
+      const delaypromptButtons =
+        newTreeArray[newTreeArray.length - 1].response.buttons;
+      for (let index = 0; index < delaypromptButtons.length; index++) {
+        if (delaypromptButtons[index].key === botId) {
+          delaypromptButtons.splice(index, 1);
+          break;
+        }
+      }
+    }
+    let optionButtons = [];
+
+    const convo = identities.filter(convo => convo.identity === botId);
+    if (convo.length) {
+      const buttons = convo[0].response.buttons;
+      identities.splice(identities.indexOf(convo[0]), 1); // deletes convo
+      buttons.forEach(button => optionButtons.push(button));
+    }
+    for (let index = 0; index < optionButtons.length; index++) {
+      const convoTree = identities.filter(
+        convo => convo.identity === optionButtons[index].key
+      );
+      if (convoTree.length) {
+        const buttons = convoTree[0].response.buttons;
+        identities.splice(identities.indexOf(convoTree[0]), 1);
+        buttons.forEach(button => optionButtons.push(button));
+      }
+    }
+  };
+  /*
+  syncTree function builds the chat tree including also the fallback and delay prompt body
+  */
+  const syncTree = (tree, initial, message, option) => {
     if (message) {
       if (message.type === "fallback") {
         const fallback = {
@@ -86,13 +143,43 @@ const OptionBox = props => {
       );
       if (isFound.length > 0) {
         const index = identities.indexOf(isFound[0]);
-        identities[index].response.buttons.push(
-          tree.response.buttons[tree.response.buttons.length - 1]
-        );
+        if (option) {
+          identities[index].response.buttons = tree.response.buttons;
+          console.log(tree.response.buttons);
+          findAndDelete(option.botId);
+        } else {
+          identities[index].response.buttons.push(
+            tree.response.buttons[tree.response.buttons.length - 1]
+          );
+        }
       } else {
         identities.push(tree);
       }
     }
+    newTreeArray = [initialTree, ...identities, fallbackTree, DelayPromptTree];
+    props.tree([newTreeArray]);
+  };
+
+  const modifyOption = (botId, action) => {
+    if (action.type === "delete") {
+      const convoButtons = newTreeArray[0].response.buttons;
+      for (let index = 0; index < convoButtons.length; index++) {
+        if (convoButtons[index].key === botId) {
+          convoButtons.splice(index, 1);
+          break;
+        }
+      }
+      findAndDelete(botId, convoButtons);
+      // updates the chat UI
+      const responseArray = initialResponses.filter(
+        response => response.botKey === botId
+      );
+      initialResponses.splice(initialResponses.indexOf(responseArray[0]), 1);
+      setResponses(initialResponses);
+    }
+    if (action.type === "edit") {
+    }
+    props.getTab();
     newTreeArray = [initialTree, ...identities, fallbackTree, DelayPromptTree];
     props.tree([newTreeArray]);
   };
@@ -141,6 +228,7 @@ const OptionBox = props => {
           botKey={res.botKey}
           syncTree={syncTree}
           identity={res.identity}
+          modifyOption={modifyOption}
         />
       ))}
 

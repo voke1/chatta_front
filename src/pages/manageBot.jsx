@@ -320,7 +320,7 @@ export class ManageBot extends Component {
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-8">
-                <div className="card">
+                <div className="card container">
                   <Tabs
                     defaultActiveKey={this.state.tab}
                     id="controlled-tab-example"

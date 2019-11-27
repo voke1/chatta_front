@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from "reactn";
 import { Tab, Tabs, Row, Col, Form, Button } from "react-bootstrap";
 import "../../css/style.css";
 import "../../css/icons.css";
@@ -8,7 +8,6 @@ import CreateIntent from "./create-intent";
 import * as apiService from "../../../../services/apiservice";
 import ProgressBar from "../../../progressbar";
 import { storage } from "../../../../firebase/index";
-
 class BotTabs extends Component {
   state = {
     show: false,
@@ -29,7 +28,6 @@ class BotTabs extends Component {
     primaryColor: " ",
     secondaryColor: ", "
   };
-
   handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value
@@ -119,7 +117,7 @@ class BotTabs extends Component {
     return (
       <div className="container-holder">
         <Tabs
-          activeKey={this.state.tab}
+          activeKey="intent"
           id="controlled-tab-example"
           onSelect={tab => this.setState({ tab: this.getTab(tab) })}
         >
@@ -148,7 +146,8 @@ class BotTabs extends Component {
                         name="chatbotName"
                         onChange={this.handleChange}
                       />
-          Row          </div>
+                      Row{" "}
+                    </div>
                     <div className="md-form mt-3">
                       <input
                         type="text"
@@ -237,6 +236,7 @@ class BotTabs extends Component {
             <div className="card w-100">
               <div className="card-body">
                 <CreateIntent
+                 getTab={() => this.setState({tab:"intent"})}
                   closeOverlay={this.props.closeOverlay}
                   disableHomeTab={() =>
                     this.setState({ tab: "intent", settingsSaved: false })
@@ -248,6 +248,9 @@ class BotTabs extends Component {
         </Tabs>
       </div>
     );
+  }
+  componentDidMount() {
+    this.setGlobal({getTab :this.getTab}) 
   }
 }
 export default BotTabs;
