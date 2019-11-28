@@ -23,7 +23,7 @@ const OptionBox = props => {
   4.For each button found in 3, repeat step 2
   */
 
-  const findAndDelete = (botId, initialTreeButtons) => {
+  const findAndDelete = botId => {
     /*
     first check if deleted option serves as an option for fallback or delay prompt message.
     If so, remove them from delayprompt and/Or fallback options
@@ -66,6 +66,31 @@ const OptionBox = props => {
         const buttons = convoTree[0].response.buttons;
         identities.splice(identities.indexOf(convoTree[0]), 1);
         buttons.forEach(button => optionButtons.push(button));
+      }
+    }
+  };
+
+  const findAndEdit = (botId, text) => {
+    console.log("yyyyy");
+    if (newTreeArray[newTreeArray.length - 2]) {
+      const fallbackButtons =
+        newTreeArray[newTreeArray.length - 2].response.buttons;
+      for (let index = 0; index < fallbackButtons.length; index++) {
+        if (fallbackButtons[index].key === botId) {
+          fallbackButtons[index].val = text;
+          break;
+        }
+      }
+    }
+    //edit options in delayprompt options
+    if (newTreeArray[newTreeArray.length - 1]) {
+      const delaypromptButtons =
+        newTreeArray[newTreeArray.length - 1].response.buttons;
+      for (let index = 0; index < delaypromptButtons.length; index++) {
+        if (delaypromptButtons[index].key === botId) {
+          delaypromptButtons[index].val = text;
+          break;
+        }
       }
     }
   };
@@ -145,8 +170,12 @@ const OptionBox = props => {
         const index = identities.indexOf(isFound[0]);
         if (option) {
           identities[index].response.buttons = tree.response.buttons;
-          console.log(tree.response.buttons);
-          findAndDelete(option.botId);
+          if (option.action === "delete") {
+            findAndDelete(option.botId);
+          }
+          if (option.action === "edit") {
+            findAndEdit(option.botId, option.text);
+          }
         } else {
           identities[index].response.buttons.push(
             tree.response.buttons[tree.response.buttons.length - 1]
@@ -178,13 +207,32 @@ const OptionBox = props => {
       setResponses(initialResponses);
     }
     if (action.type === "edit") {
+      console.log("it is edit");
+      const convoButtons = newTreeArray[0].response.buttons;
+      for (let index = 0; index < convoButtons.length; index++) {
+        if (convoButtons[index].key === botId) {
+          console.log("shout yes", convoButtons[index].val);
+          console.log("new response", action.text);
+          convoButtons[index].val = action.text;
+          break;
+        }
+      }
+      findAndEdit(botId, action.text);
+      // update UI
+      const responseArray = initialResponses.filter(
+        response => response.key === botId
+      );
+      responseArray[0].val = action.text;
+      setResponses(initialResponses);
     }
     props.getTab();
     newTreeArray = [initialTree, ...identities, fallbackTree, DelayPromptTree];
     props.tree([newTreeArray]);
   };
   setGlobal({
-    syncTree
+    syncTree,
+    modifyOption: modifyOption,
+    findAndEdit
   });
   const identity = uuid();
   const handleClick = async res => {

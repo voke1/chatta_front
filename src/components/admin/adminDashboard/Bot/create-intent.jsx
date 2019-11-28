@@ -6,6 +6,7 @@ import uuid from "uuid/v1";
 import * as apiService from "../../../../services/apiservice";
 import ProgressBar from "../../../progressbar";
 import DeletePrompt from "./delete-prompt-modal";
+import EditPrompt from "./response-dialog";
 class CreateIntent extends Component {
   state = {
     responses: [],
@@ -16,22 +17,28 @@ class CreateIntent extends Component {
     buttonColor: "btn-outline-info",
     animation: "",
     disabledButton: false,
-    openDialog: false
+    openDialog: false,
+    openEditDialog: false
   };
   getTree = tree => {
     console.log("this is tree", tree);
     this.setState({ chatBody: tree });
   };
-  openDialog = () => {
-    console.log("open dialogue");
+  openDeleteDialog = () => {
     this.setState({
       openDialog: true
     });
   };
-  closeDialog = () => {
+  closeDeleteDialog = () => {
     this.setState({
       openDialog: false
     });
+  };
+  openEditDialog = () => {
+    this.setState({ openEditDialog: true });
+  };
+  closeEditDialog = () => {
+    this.setState({ openEditDialog: false });
   };
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -73,6 +80,11 @@ class CreateIntent extends Component {
     return (
       <div className="container" style={{ background: "none", width: "90%" }}>
         {this.state.openDialog ? <DeletePrompt /> : ""}
+        {this.state.openEditDialog ? (
+          <EditPrompt response={this.global.response} />
+        ) : (
+          ""
+        )}
 
         <form className="text-center" onSubmit={this.handleSubmit}>
           <div className="row">
@@ -117,8 +129,10 @@ class CreateIntent extends Component {
   }
   componentDidMount() {
     this.setGlobal({
-      openDialog: this.openDialog,
-      closeDialog: this.closeDialog
+      openDialog: this.openDeleteDialog,
+      closeDialog: this.closeDeleteDialog,
+      openEditDialog: this.openEditDialog,
+      closeEditDialog: this.closeEditDialog
     });
   }
 }
