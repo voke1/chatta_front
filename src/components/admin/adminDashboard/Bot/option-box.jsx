@@ -62,6 +62,7 @@ class OptionBox extends Component {
     }
   };
   modifyOption = (botId, action) => {
+    console.log("this is global", this.global);
     if (action.type === "delete") {
       const button = this.initialResponses.filter(
         button => button.key === botId
