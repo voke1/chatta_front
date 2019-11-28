@@ -42,10 +42,7 @@ class OptionBox extends Component {
       prompt: this.state.prompt,
       response: {
         buttons:
-          this.state.response || tree.action
-            ? tree.action.type
-            : null
-            ? [...this.initialResponses]
+          this.state.response || tree.action?  [...this.initialResponses]
             : [],
         text: ""
       }
@@ -62,6 +59,7 @@ class OptionBox extends Component {
     }
   };
   modifyOption = (botId, action) => {
+    console.log("this is global", this.global);
     if (action.type === "delete") {
       const button = this.initialResponses.filter(
         button => button.key === botId

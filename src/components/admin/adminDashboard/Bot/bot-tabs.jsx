@@ -111,7 +111,7 @@ class BotTabs extends Component {
     return (
       <div className="container-holder">
         <Tabs
-          activeKey="intent"
+          activeKey={this.state.tab}
           id="controlled-tab-example"
           onSelect={tab => this.setState({ tab: this.getTab(tab) })}
         >
@@ -238,7 +238,7 @@ class BotTabs extends Component {
             <div className="card w-100">
               <div className="card-body">
                 <CreateIntent
-                 getTab={() => this.setState({tab:"intent"})}
+                  getTab={() => this.setState({ tab: "intent" })}
                   closeOverlay={this.props.closeOverlay}
                   disableHomeTab={() =>
                     this.setState({ tab: "intent", settingsSaved: false })
@@ -252,7 +252,7 @@ class BotTabs extends Component {
     );
   }
   componentDidMount() {
-    this.setGlobal({getTab :this.getTab}) 
+    this.setGlobal({ getTab: this.getTab });
   }
 }
 export default BotTabs;
