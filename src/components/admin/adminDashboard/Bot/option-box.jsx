@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from "reactn";
 import Response from "./response";
 import "./css/card.css";
 import Accordion from "./accordion";
@@ -42,17 +42,21 @@ class OptionBox extends Component {
       prompt: this.state.prompt,
       response: {
         buttons:
-          this.state.response || tree.action.type ? [...this.initialResponses] : [],
+          this.state.response || tree.action
+            ? tree.action.type
+            : null
+            ? [...this.initialResponses]
+            : [],
         text: ""
       }
     };
-    console.log("here here", botTree);
     if (!tree.val) {
       this.props.syncTree(botTree);
       if (tree.botId) {
         this.props.syncTree(botTree, null, null, {
           botId: tree.botId,
-          action: tree.action.type
+          action: tree.action.type,
+          text: tree.action.text
         });
       }
     }
@@ -64,6 +68,14 @@ class OptionBox extends Component {
       );
       this.initialResponses.splice(this.initialResponses.indexOf(button[0]), 1);
       this.onClick({ botId, action });
+    }
+    if (action.type === "edit") {
+      const button = this.initialResponses.filter(
+        button => button.key === botId
+      );
+      button[0].val = action.text;
+      this.onClick({ botId, action });
+      this.global.findAndEdit(botId, action.text);
     }
   };
 
