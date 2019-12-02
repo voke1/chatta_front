@@ -13,7 +13,7 @@ class CreateIntent extends Component {
     chatBody: [],
     showProgress: false,
     buttonText: "DEPLOY",
-    buttonColor: "btn-outline-info",
+    buttonColor: "btn-success",
     animation: "",
     disabledButton: false,
     openDialog: false
@@ -100,7 +100,7 @@ class CreateIntent extends Component {
           {this.state.setProgress ? <ProgressBar /> : ""}
           <div>
             <button
-              className={`btn btn-sm ${this.state.buttonColor} btn-rounded btn-block z-depth-0 my-4 waves-effect ${this.state.animation}`}
+              className={` ${this.state.buttonColor} btn btn-secondary btn-sm waves-effect ${this.state.animation}`}
               type="submit"
               style={{
                 width: "100px",

@@ -11,13 +11,16 @@ import "../../images/favicon.ico";
 import { ButtonToolbar } from "react-bootstrap";
 import { Manage } from "../manageBot";
 import { ModalComponent } from "./botSettings";
+import BotDeleteDialog from "../Bot/botDeleteDialog";
 
 export class Bot extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      settings: []
+      settings: [],
+      loading: true,
+      botDelete: false
     };
   }
   componentDidMount() {
@@ -30,6 +33,10 @@ export class Bot extends Component {
         console.log("error", e);
       });
   }
+
+  confirmDelete = settingId => {
+    this.setState({ botDelete: true });
+  };
 
   deleteBot = settingId => {
     fetch(`http://localhost:9000/setting/` + settingId, {
@@ -44,7 +51,8 @@ export class Bot extends Component {
         this.setState({
           settings: [
             ...this.state.settings.filter(setting => setting._id !== settingId)
-          ]
+          ],
+          loading: false
         });
       });
   };
@@ -52,6 +60,13 @@ export class Bot extends Component {
   render() {
     return (
       <div>
+        {this.state.loading ? (
+          <div className="preloader">
+            <div id="status">
+              <div className="spinner"></div>
+            </div>
+          </div>
+        ) : null}
         <div className="header-bg">
           {/* <!-- Navigation Bar--> */}
           <header id="topnav">
@@ -313,6 +328,7 @@ export class Bot extends Component {
                     <h4 className="mt-0 m-b-30 header-title">CHAT BOTS</h4>
 
                     <div className="table-responsive">
+                      {this.state.botDelete ? <BotDeleteDialog /> : null}
                       <table className="table m-t-20 mb-0 table-vertical">
                         <tbody>
                           {this.state.settings

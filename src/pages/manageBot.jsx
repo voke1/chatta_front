@@ -12,6 +12,7 @@ import Axios from "axios";
 import { Tab, Tabs, Row, Col, Form, Button } from "react-bootstrap";
 import FetchTree from "../components/admin/adminDashboard/Bot/fetch-tree";
 import { storage } from "../firebase/index";
+import BotUpdateAlertDialog from "../components/admin/adminDashboard/Bot/botUpdateDialog";
 
 export class ManageBot extends Component {
   constructor(props) {
@@ -28,8 +29,11 @@ export class ManageBot extends Component {
       delayTime: " ",
       primaryColor: " ",
       secondaryColor: " ",
-      fileUpload: null
+      fileUpload: null,
+      loading: true,
+      updateSettings: false
     };
+    this.inputRef = React.createRef();
   }
 
   componentDidMount() {
@@ -51,7 +55,8 @@ export class ManageBot extends Component {
         botImage: this.state.settings.botImage,
         delayPrompt: this.state.settings.delayPrompt,
         chatbotName: this.state.settings.chatbotName,
-        delayTime: this.state.settings.delayTime
+        delayTime: this.state.settings.delayTime,
+        loading: false
       });
     }, 2000);
   }
@@ -61,6 +66,10 @@ export class ManageBot extends Component {
       [event.target.name]: event.target.value
     });
   };
+  getImage = () => {
+    this.inputRef.current.click();
+  };
+
   handleImageChange = e => {
     e.preventDefault();
 
@@ -117,6 +126,7 @@ export class ManageBot extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
+    this.setState({ updateSettings: true });
     if (this.state.fileUpload) {
       this.uploadImageToFirebase();
     }
@@ -144,13 +154,6 @@ export class ManageBot extends Component {
   App = () => {
     return (
       <div>
-        {/* <!-- Loader --> */}
-        <div className="preloader">
-          <div id="status">
-            <div className="spinner"></div>
-          </div>
-        </div>
-
         <div className="header-bg">
           {/* <!-- Navigation Bar--> */}
           <header id="topnav">
@@ -386,167 +389,189 @@ export class ManageBot extends Component {
           </div>
         </div>
 
-        <div className="wrapper">
-          <div className="container-fluid">{/*  <!-- end row --> */}</div>{" "}
-          {/*<!-- end container --> */}
-        </div>
-        {/* <!-- end wrapper --> */}
-        <div className="content">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-md-8">
-                <div className="card">
-                  <Tabs
-                    defaultActiveKey={this.state.tab}
-                    id="controlled-tab-example"
-                    onSelect={tab =>
-                      tab === "intent"
-                        ? this.setState({ tab, fetchedTree: true })
-                        : this.setState({ tab })
-                    }
-                  >
-                    &nbsp;
-                    <Tab eventKey="settings" title="Edit Bot" className>
-                      <div className="" style={{ background: "none" }}>
-                        <div className="card">
-                          <div className="card-body px-lg-5">
-                            <form onSubmit={this.handleSubmit}>
-                              <div className="row">
-                                <div className="col-md-12">
-                                  <div className="form-group">
-                                    <label>Bot Name</label>
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      value={this.state.chatbotName}
-                                      name="chatbotName"
-                                      onChange={this.handleChange}
-                                    ></input>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="row">
-                                <div className="col-md-12">
-                                  <div className="form-group">
-                                    <label>Delay Time</label>
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      value={this.state.delayTime}
-                                      name="delayTime"
-                                      onChange={this.handleChange}
-                                    ></input>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div className="row">
-                                <div className="col-md-12">
-                                  <div className="form-group">
-                                    <label>Fallback Message</label>
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      value={this.state.fallbackMessage}
-                                      name="fallbackMessage"
-                                      onChange={this.handleChange}
-                                    ></input>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div className="row">
-                                <div className="col-md-12">
-                                  <div className="form-group">
-                                    <label>Delay Prompt</label>
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      value={this.state.delayPrompt}
-                                      name="delayPrompt"
-                                      onChange={this.handleChange}
-                                    ></input>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="row">
-                                <div className="col-md-12">
-                                  <div className="form-group">
-                                    <label>Primary Colour</label>
-                                    <input
-                                      type="color"
-                                      className="form-control"
-                                      name="primaryColor"
-                                      onChange={this.handleChange}
-                                      value={this.state.primaryColor}
-                                    ></input>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="row">
-                                <div className="col-md-12">
-                                  <div className="form-group">
-                                    <label>Secondary Colour</label>
-                                    <input
-                                      type="color"
-                                      className="form-control"
-                                      name="secondaryColor"
-                                      onChange={this.handleChange}
-                                      value={this.state.secondaryColor}
-                                    ></input>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <button
-                                type="submit"
-                                className="btn btn-secondary btn-fill waves-effect pull-right"
-                                onClick={this.handleSubmit}
-                              >
-                                Update BOT Setings
-                              </button>
-                              <div className="clearfix"></div>
-                            </form>
-                          </div>
-                        </div>
-                      </div>
-                    </Tab>
-                    <Tab eventKey="intent" title="Edit tree">
-                      <div className="card w-100">
-                        <div className="card-body">
-                          {this.state.tab === "intent" ? <FetchTree /> : ""}
-                        </div>
-                      </div>
-                    </Tab>
-                  </Tabs>
+        {this.state.loading ? (
+          <div className="wrapper">
+            <div className="container-fluid">
+              <div className="preloader">
+                <div id="status">
+                  <div className="spinner"></div>
                 </div>
               </div>
-              <div className="col-md-4">
-                <div className="card card-user">
-                  <div className="card-image">
-                    <div>
-                      <br />
-                      <input type="file" onChange={this.handleImageChange} />
-                      <br />
-                    </div>
+            </div>
+            {/*<!-- end container --> */}
+          </div>
+        ) : (
+          <div className="content">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-8">
+                  <div className="card">
+                    {this.state.updateSettings ? (
+                      <BotUpdateAlertDialog />
+                    ) : null}
+                    <Tabs
+                      defaultActiveKey={this.state.tab}
+                      id="controlled-tab-example"
+                      onSelect={tab =>
+                        tab === "intent"
+                          ? this.setState({ tab, fetchedTree: true })
+                          : this.setState({ tab })
+                      }
+                    >
+                      &nbsp;
+                      <Tab eventKey="settings" title="Edit Bot" className>
+                        <div className="" style={{ background: "none" }}>
+                          <div className="card">
+                            <div className="card-body px-lg-5">
+                              <form onSubmit={this.handleSubmit}>
+                                <div className="row">
+                                  <div className="col-md-12">
+                                    <div className="form-group">
+                                      <label>Bot Name</label>
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        value={this.state.chatbotName}
+                                        name="chatbotName"
+                                        onChange={this.handleChange}
+                                      ></input>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="row">
+                                  <div className="col-md-12">
+                                    <div className="form-group">
+                                      <label>Delay Time</label>
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        value={this.state.delayTime}
+                                        name="delayTime"
+                                        onChange={this.handleChange}
+                                      ></input>
+                                    </div>
+                                  </div>
+                                </div>
 
-                    <img
-                      src={this.state.botImage}
-                      alt="BOT "
-                      className="img-thumbnail"
-                      style={{ width: "50%", height: "50%", marginLeft: "25%" }}
-                    ></img>
+                                <div className="row">
+                                  <div className="col-md-12">
+                                    <div className="form-group">
+                                      <label>Fallback Message</label>
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        value={this.state.fallbackMessage}
+                                        name="fallbackMessage"
+                                        onChange={this.handleChange}
+                                      ></input>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="row">
+                                  <div className="col-md-12">
+                                    <div className="form-group">
+                                      <label>Delay Prompt</label>
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        value={this.state.delayPrompt}
+                                        name="delayPrompt"
+                                        onChange={this.handleChange}
+                                      ></input>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="row">
+                                  <div className="col-md-12">
+                                    <div className="form-group">
+                                      <label>Primary Colour</label>
+                                      <input
+                                        type="color"
+                                        className="form-control"
+                                        name="primaryColor"
+                                        onChange={this.handleChange}
+                                        value={this.state.primaryColor}
+                                      ></input>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="row">
+                                  <div className="col-md-12">
+                                    <div className="form-group">
+                                      <label>Secondary Colour</label>
+                                      <input
+                                        type="color"
+                                        className="form-control"
+                                        name="secondaryColor"
+                                        onChange={this.handleChange}
+                                        value={this.state.secondaryColor}
+                                      ></input>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <button
+                                  type="submit"
+                                  className="btn btn-secondary btn-fill waves-effect pull-right"
+                                  onClick={this.handleSubmit}
+                                >
+                                  Update BOT Setings
+                                </button>
+
+                                <div className="clearfix"></div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </Tab>
+                      <Tab eventKey="intent" title="Edit tree">
+                        <div className="card w-100">
+                          <div className="card-body">
+                            {this.state.tab === "intent" ? <FetchTree /> : ""}
+                          </div>
+                        </div>
+                      </Tab>
+                    </Tabs>
                   </div>
-                  <div className="card-body">
-                    <h5 className="title" style={{ marginLeft: "35%" }}>
-                      {this.state.chatbotName}
-                    </h5>
+                </div>
+                <div className="col-md-4">
+                  <div className="card card-user">
+                    <div className="card-image">
+                      <div>
+                        <br />
+                        <input
+                          type="file"
+                          onChange={this.handleImageChange}
+                          ref={this.inputRef}
+                          style={{ display: "none" }}
+                        />
+                        <br />
+                      </div>
+
+                      <img
+                        src={this.state.botImage}
+                        alt="BOT "
+                        className="img-thumbnail"
+                        style={{
+                          width: "50%",
+                          height: "50%",
+                          marginLeft: "25%"
+                        }}
+                        onClick={this.getImage}
+                      ></img>
+                    </div>
+                    <div className="card-body">
+                      <h5 className="title" style={{ marginLeft: "35%" }}>
+                        {this.state.chatbotName}
+                      </h5>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* <!-- Footer --> */}
         <footer className="footer">
