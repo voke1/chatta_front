@@ -18,7 +18,13 @@ class CreateIntent extends Component {
     animation: "",
     disabledButton: false,
     openDialog: false,
-    openEditDialog: false
+    openEditDialog: false,
+    warning: false,
+    fallbackClass: "fas fa-times animated fadeIn red-text",
+    delayPromptClass: "fas fa-times animated fadeIn red-text",
+    fallbackCount: 0,
+    delayPromptCount: 0,
+    message: ""
   };
   getTree = tree => {
     console.log("this is tree", tree);
@@ -76,9 +82,55 @@ class CreateIntent extends Component {
       });
   };
 
+  enableButton = (fallbackTree, delayPromptTree) => {
+    console.log("called");
+    this.setState({
+      disabledButton: false,
+      message: "",
+      fallbackClass: "fas fa-check animated fadeIn green-text",
+      delayPromptClass: "fas fa-check animated fadeIn green-text",
+      fallbackCount: fallbackTree.response.buttons.length,
+      delayPromptCount: delayPromptTree.response.buttons.length
+    });
+  };
+  disableButton = (fallbackTree, delayPromptTree) => {
+    this.setState({
+      disabledButton: true,
+      message: "Please set at least one fallback and one delay prompt option",
+      fallbackClass:
+        !fallbackTree || !fallbackTree.response.buttons.length
+          ? "fas fa-times animated pulse red-text"
+          : "fas fa-check animated fadeIn green-text",
+      delayPromptClass:
+        !delayPromptTree || !delayPromptTree.response.buttons.length
+          ? "fas fa-times animated pulse red-text"
+          : "fas fa-check animated fadeIn green-text",
+      fallbackCount: fallbackTree ? fallbackTree.response.buttons.length : 0,
+      delayPromptCount: delayPromptTree
+        ? delayPromptTree.response.buttons.length
+        : 0
+    });
+  };
   render() {
     return (
       <div className="container" style={{ background: "none", width: "90%" }}>
+        <div style={{ color: "#595855", fontSize: "15px" }}>
+          <i class={this.state.fallbackClass}></i>{" "}
+          <span>Fallback option set ({this.state.fallbackCount})</span>
+          <br></br>
+          <i class={this.state.delayPromptClass}></i>{" "}
+          <span>Delay prompt option set ({this.state.delayPromptCount})</span>
+        </div>
+        {/* {this.state.message ? (
+          <div
+            className="animated shake"
+            style={{ color: "red", marginTop: "10px" }}
+          >
+            <p>{this.state.message}</p>
+          </div>
+        ) : (
+          ""
+        )} */}
         {this.state.openDialog ? <DeletePrompt /> : ""}
         {this.state.openEditDialog ? (
           <EditPrompt response={this.global.response} />
@@ -110,6 +162,7 @@ class CreateIntent extends Component {
           />
           <hr></hr>
           {this.state.setProgress ? <ProgressBar /> : ""}
+
           <div>
             <button
               className={`btn btn-sm ${this.state.buttonColor} btn-rounded btn-block z-depth-0 my-4 waves-effect ${this.state.animation}`}
@@ -132,7 +185,9 @@ class CreateIntent extends Component {
       openDialog: this.openDeleteDialog,
       closeDialog: this.closeDeleteDialog,
       openEditDialog: this.openEditDialog,
-      closeEditDialog: this.closeEditDialog
+      closeEditDialog: this.closeEditDialog,
+      enableButton: this.enableButton,
+      disableButton: this.disableButton
     });
   }
 }

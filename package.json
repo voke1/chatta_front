@@ -15,6 +15,7 @@
     "mdbreact": "^4.21.1",
     "popper.js": "^1.16.0",
     "postscribe": "^2.0.8",
+    "query-string": "^6.9.0",
     "react": "^16.9.0",
     "react-bootstrap": "^1.0.0-beta.14",
     "react-bootstrap-modal": "^4.2.0",
