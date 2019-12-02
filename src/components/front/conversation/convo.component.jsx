@@ -123,7 +123,7 @@ export default class Convo extends Component {
     axios
       .get("http://localhost:9000/tree/")
       .then(res => {
-        console.log(res.data[res.data.length - 1].chat_body);
+        console.log("chat_body:", res.data[res.data.length - 1].chat_body);
         // const convoTree = res.data[res.data.length - 1].chat_body;
         const convoTree = res.data[res.data.length - 1].chat_body;
         console.log("tree", this.state.username);

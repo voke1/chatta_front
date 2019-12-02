@@ -530,10 +530,17 @@ export class ManageBot extends Component {
                       <br />
                     </div>
 
-                    <img src={this.state.botImage} alt="..."></img>
+                    <img
+                      src={this.state.botImage}
+                      alt="BOT "
+                      className="img-thumbnail"
+                      style={{ width: "50%", height: "50%", marginLeft: "25%" }}
+                    ></img>
                   </div>
                   <div className="card-body">
-                    <h5 className="title">{this.state.chatbotName}</h5>
+                    <h5 className="title" style={{ marginLeft: "35%" }}>
+                      {this.state.chatbotName}
+                    </h5>
                   </div>
                 </div>
               </div>

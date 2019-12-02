@@ -47,7 +47,7 @@ export class UserList extends Component {
           Accept: "application/json",
           "Content-Type": "application/json"
         }
-      })
+      }) 
         .then(res => res.json())
         .then(data => {
           this.setState({

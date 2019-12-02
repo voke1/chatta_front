@@ -25,8 +25,6 @@ export class Bot extends Component {
       .then(res => res.json())
       .then(data => {
         this.setState({ settings: data });
-        // this.setState({ setting: data });
-        console.log("error data", data);
       })
       .catch(e => {
         console.log("error", e);
@@ -48,7 +46,6 @@ export class Bot extends Component {
             ...this.state.settings.filter(setting => setting._id !== settingId)
           ]
         });
-        console.log("THis is settings:", this.state.settings);
       });
   };
 
@@ -91,7 +88,6 @@ export class Bot extends Component {
                       <a
                         className="nav-link dropdown-toggle arrow-none waves-effect"
                         data-toggle="dropdown"
-                        href="#"
                         role="button"
                         aria-haspopup="false"
                         aria-expanded="false"
@@ -319,56 +315,58 @@ export class Bot extends Component {
                     <div className="table-responsive">
                       <table className="table m-t-20 mb-0 table-vertical">
                         <tbody>
-                          {this.state.settings.map(setting => (
-                            <tr>
-                              <td>
-                                {console.log(setting)}
-                                <img
-                                  src={setting.botImage}
-                                  alt="bot-image"
-                                  className="thumb-sm rounded-circle mr-2"
-                                />
-                                {setting.chatbotName}
-                              </td>
-                              <td>
-                                <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
-                                {setting.welcomeMessage}
-                              </td>
-                              <td>
-                                {setting.fallbackMessage}
-                                <p className="m-0 text-muted font-14">
-                                  Fallback Message
-                                </p>
-                              </td>
-                              <td>
-                                {setting.delayPrompt}
-                                <p className="m-0 text-muted font-14">
-                                  Delay Prompt
-                                </p>
-                              </td>
-                              <td>
-                                {console.log("settings ID:", setting._id)}
+                          {this.state.settings
+                            ? this.state.settings.map(setting => (
+                                <tr>
+                                  <td>
+                                    {console.log(setting)}
+                                    <img
+                                      src={setting.botImage}
+                                      alt="bot-image"
+                                      className="thumb-sm rounded-circle mr-2"
+                                    />
+                                    {setting.chatbotName}
+                                  </td>
+                                  <td>
+                                    <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
+                                    {setting.welcomeMessage}
+                                  </td>
+                                  <td>
+                                    {setting.fallbackMessage}
+                                    <p className="m-0 text-muted font-14">
+                                      Fallback Message
+                                    </p>
+                                  </td>
+                                  <td>
+                                    {setting.delayPrompt}
+                                    <p className="m-0 text-muted font-14">
+                                      Delay Prompt
+                                    </p>
+                                  </td>
+                                  <td>
+                                    {console.log("settings ID:", setting._id)}
 
-                                <ButtonToolbar>
-                                  <Link
-                                    to={`/dashboard/admin/bot/${setting._id}`}
-                                  >
-                                    <button className="btn btn-secondary btn-sm waves-effect">
-                                      Manage
-                                    </button>
-                                  </Link>
-                                  <button
-                                    className="btn btn-secondary btn-sm waves-effect"
-                                    onClick={() => {
-                                      this.deleteBot(setting._id);
-                                    }}
-                                  >
-                                    Delete
-                                  </button>
-                                </ButtonToolbar>
-                              </td>
-                            </tr>
-                          ))}
+                                    <ButtonToolbar>
+                                      <Link
+                                        to={`/dashboard/admin/bot/${setting._id}`}
+                                      >
+                                        <button className="btn btn-secondary btn-sm waves-effect">
+                                          Manage
+                                        </button>
+                                      </Link>
+                                      <button
+                                        className="btn btn-secondary btn-sm waves-effect"
+                                        onClick={() => {
+                                          this.deleteBot(setting._id);
+                                        }}
+                                      >
+                                        Delete
+                                      </button>
+                                    </ButtonToolbar>
+                                  </td>
+                                </tr>
+                              ))
+                            : null}
                         </tbody>
                       </table>
                     </div>
@@ -404,3 +402,5 @@ export class Bot extends Component {
   //   return <this.Apps />;
   // }
 }
+
+
