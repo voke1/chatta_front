@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { setGlobal, useGlobal } from "reactn";
 import Accordion from "./accordion";
 import uuid from "uuid/v1";
@@ -11,6 +11,8 @@ let fallbackTree;
 let DelayPromptTree;
 
 const OptionBox = props => {
+  console.log("props from option box", props.chatTree);
+
   const [responses, setResponses] = useState([]);
   const [response, setResponse] = useState("");
   const [inputVal, setInputVal] = useState("");
@@ -18,6 +20,42 @@ const OptionBox = props => {
   const [message, setMessage] = useState("");
   const [disableButton, setDisableButton] = useGlobal("disableButton");
   const [enableButton, setEnableButton] = useGlobal("enableButton");
+  const [buttonText, setButtonText] = useGlobal("setButtonText");
+  const [rendered, setRendered] = useState(false);
+
+  // render saved chat tree
+  useEffect(() => {
+    if (props.chatTree) {
+      identities = props.chatTree.slice(1, props.chatTree.length - 2);
+      initialTree = props.chatTree[0];
+      fallbackTree = props.chatTree[props.chatTree.length - 2];
+      DelayPromptTree = props.chatTree[props.chatTree.length - 1];
+
+      console.log("it is our new array", newTreeArray);
+      props.chatTree[0].response.buttons.forEach(button => {
+        const body = {
+          key: button.key,
+          botKey: button.key,
+          val: button.val,
+          identity: props.chatTree[0].identity
+        };
+        if (!initialResponses.indexOf(body) > -1) {
+          initialResponses.push(body);
+        }
+      });
+
+      newTreeArray = [
+        initialTree,
+        ...identities,
+        fallbackTree,
+        DelayPromptTree
+      ];
+      if (!rendered) {
+        setResponses(initialResponses);
+      }
+      setRendered(true);
+    }
+  }, [props.chatTree]);
 
   /*
   Algorithm
@@ -100,7 +138,7 @@ const OptionBox = props => {
   /*
   syncTree function builds the chat tree including also the fallback and delay prompt body
   */
-  const syncTree = (tree, initial, message, option) => {
+  function syncTree(tree, initial, message, option) {
     if (message) {
       if (message.type === "fallback") {
         const fallback = {
@@ -201,7 +239,7 @@ const OptionBox = props => {
         disableButton(fallbackTree, DelayPromptTree);
       }
     } else disableButton(fallbackTree, DelayPromptTree);
-  };
+  }
 
   const modifyOption = (botId, action) => {
     if (action.type === "delete") {
@@ -236,7 +274,9 @@ const OptionBox = props => {
       responseArray[0].val = action.text;
       setResponses(initialResponses);
     }
-    props.getTab();
+    if (!props.chatTree) {
+      props.getTab();
+    }
     newTreeArray = [initialTree, ...identities, fallbackTree, DelayPromptTree];
     setGlobal({ chatTree: newTreeArray });
     props.tree([newTreeArray]);

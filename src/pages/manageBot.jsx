@@ -512,7 +512,7 @@ export class ManageBot extends Component {
                       </div>
                     </Tab>
                     <Tab eventKey="intent" title="Edit tree">
-                      <div className="card w-100">
+                      <div className="card w-100 container">
                         <div className="card-body">
                           {this.state.tab === "intent" ? <FetchTree /> : ""}
                         </div>
