@@ -80,12 +80,11 @@ class Accordion extends Component {
     const height = this.divElement.clientHeight;
     this.setState({ init: height });
     // collapse chat tree as default after fetching and rendering
-    if (this.props.chatTree) {
-      setTimeout(() => {
-        this.toggleAccordion();
-      }, 10);
+
+    setTimeout(() => {
       this.toggleAccordion();
-    }
+    }, 10);
+    this.toggleAccordion();
   }
   componentWillReceiveProps(props) {}
 }

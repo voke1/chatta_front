@@ -1,5 +1,5 @@
-import React, { Component, useState } from "react";
-import { setGlobal } from "reactn";
+import React, { useState, useEffect } from "react";
+import { setGlobal, useGlobal } from "reactn";
 import Accordion from "./accordion";
 import uuid from "uuid/v1";
 
@@ -11,9 +11,50 @@ let fallbackTree;
 let DelayPromptTree;
 
 const OptionBox = props => {
+  console.log("props from option box", props.chatTree);
+
   const [responses, setResponses] = useState([]);
   const [response, setResponse] = useState("");
   const [inputVal, setInputVal] = useState("");
+  const [validated, setValidated] = useState(false);
+  const [message, setMessage] = useState("");
+  const [disableButton, setDisableButton] = useGlobal("disableButton");
+  const [enableButton, setEnableButton] = useGlobal("enableButton");
+  const [buttonText, setButtonText] = useGlobal("setButtonText");
+  const [rendered, setRendered] = useState(false);
+
+  useEffect(() => {
+    if (props.chatTree) {
+      identities = props.chatTree.slice(1, props.chatTree.length - 2);
+      initialTree = props.chatTree[0];
+      fallbackTree = props.chatTree[props.chatTree.length - 2];
+      DelayPromptTree = props.chatTree[props.chatTree.length - 1];
+
+      console.log("it is our new array", newTreeArray);
+      props.chatTree[0].response.buttons.forEach(button => {
+        const body = {
+          key: button.key,
+          botKey: button.key,
+          val: button.val,
+          identity: props.chatTree[0].identity
+        };
+        if (!initialResponses.indexOf(body) > -1) {
+          initialResponses.push(body);
+        }
+      });
+
+      newTreeArray = [
+        initialTree,
+        ...identities,
+        fallbackTree,
+        DelayPromptTree
+      ];
+      if (!rendered) {
+        setResponses(initialResponses);
+      }
+      setRendered(true);
+    }
+  }, [props.chatTree]);
 
   /*
   Algorithm
@@ -23,7 +64,7 @@ const OptionBox = props => {
   4.For each button found in 3, repeat step 2
   */
 
-  const findAndDelete = (botId, initialTreeButtons) => {
+  const findAndDelete = botId => {
     /*
     first check if deleted option serves as an option for fallback or delay prompt message.
     If so, remove them from delayprompt and/Or fallback options
@@ -69,10 +110,34 @@ const OptionBox = props => {
       }
     }
   };
+
+  const findAndEdit = (botId, text) => {
+    if (newTreeArray[newTreeArray.length - 2]) {
+      const fallbackButtons =
+        newTreeArray[newTreeArray.length - 2].response.buttons;
+      for (let index = 0; index < fallbackButtons.length; index++) {
+        if (fallbackButtons[index].key === botId) {
+          fallbackButtons[index].val = text;
+          break;
+        }
+      }
+    }
+    //edit options in delayprompt options
+    if (newTreeArray[newTreeArray.length - 1]) {
+      const delaypromptButtons =
+        newTreeArray[newTreeArray.length - 1].response.buttons;
+      for (let index = 0; index < delaypromptButtons.length; index++) {
+        if (delaypromptButtons[index].key === botId) {
+          delaypromptButtons[index].val = text;
+          break;
+        }
+      }
+    }
+  };
   /*
   syncTree function builds the chat tree including also the fallback and delay prompt body
   */
-  const syncTree = (tree, initial, message, option) => {
+  function syncTree(tree, initial, message, option) {
     if (message) {
       if (message.type === "fallback") {
         const fallback = {
@@ -89,7 +154,7 @@ const OptionBox = props => {
           const isFound = options.filter(
             fallback => fallback.key === message.botKey
           );
-          if (isFound.length > 0) {
+          if (isFound.length) {
             const index = options.indexOf(isFound[0]);
             options.splice(index, 1);
           }
@@ -120,7 +185,7 @@ const OptionBox = props => {
           const isFound = options.filter(
             delayprompt => delayprompt.key === message.botKey
           );
-          if (isFound.length > 0) {
+          if (isFound.length) {
             const index = options.indexOf(isFound[0]);
             options.splice(index, 1);
           }
@@ -141,12 +206,16 @@ const OptionBox = props => {
       const isFound = identities.filter(
         botTree => tree.identity === botTree.identity
       );
-      if (isFound.length > 0) {
+      if (isFound.length) {
         const index = identities.indexOf(isFound[0]);
         if (option) {
           identities[index].response.buttons = tree.response.buttons;
-          console.log(tree.response.buttons);
-          findAndDelete(option.botId);
+          if (option.action === "delete") {
+            findAndDelete(option.botId);
+          }
+          if (option.action === "edit") {
+            findAndEdit(option.botId, option.text);
+          }
         } else {
           identities[index].response.buttons.push(
             tree.response.buttons[tree.response.buttons.length - 1]
@@ -158,7 +227,18 @@ const OptionBox = props => {
     }
     newTreeArray = [initialTree, ...identities, fallbackTree, DelayPromptTree];
     props.tree([newTreeArray]);
-  };
+    if (fallbackTree && DelayPromptTree) {
+      console.log(fallbackTree.response.buttons.length);
+      if (
+        fallbackTree.response.buttons.length &&
+        DelayPromptTree.response.buttons.length
+      ) {
+        enableButton(fallbackTree, DelayPromptTree);
+      } else {
+        disableButton(fallbackTree, DelayPromptTree);
+      }
+    } else disableButton(fallbackTree, DelayPromptTree);
+  }
 
   const modifyOption = (botId, action) => {
     if (action.type === "delete") {
@@ -178,14 +258,68 @@ const OptionBox = props => {
       setResponses(initialResponses);
     }
     if (action.type === "edit") {
+      const convoButtons = newTreeArray[0].response.buttons;
+      for (let index = 0; index < convoButtons.length; index++) {
+        if (convoButtons[index].key === botId) {
+          convoButtons[index].val = action.text;
+          break;
+        }
+      }
+      findAndEdit(botId, action.text);
+      // update UI
+      const responseArray = initialResponses.filter(
+        response => response.key === botId
+      );
+      responseArray[0].val = action.text;
+      setResponses(initialResponses);
     }
-    props.getTab();
+    if (!props.chatTree) {
+      props.getTab();
+    }
     newTreeArray = [initialTree, ...identities, fallbackTree, DelayPromptTree];
+    setGlobal({ chatTree: newTreeArray });
     props.tree([newTreeArray]);
   };
   setGlobal({
-    syncTree
+    syncTree,
+    modifyOption: modifyOption,
+    findAndEdit
   });
+  const checkDuplicate = (event, target) => {
+    if (!target) {
+      const isFound = initialResponses.filter(
+        response =>
+          response.val.trim().toLowerCase() ===
+          event.target.value.trim().toLowerCase()
+      );
+
+      if (isFound.length) {
+        let message;
+        if (event.target.value.length > 30) {
+          message = event.target.value.substr(0, 30) + "...";
+        } else message = event.target.value;
+        return {
+          success: false,
+          message: `"${message}" already exists as an option`
+        };
+      }
+      return {
+        success: true,
+        message: ""
+      };
+    }
+  };
+  const handleChange = e => {
+    setResponse(e.target.value);
+    setInputVal(e.target.value);
+    const validation = checkDuplicate(e);
+    setValidated(validation.success);
+    setMessage(validation.message);
+    if (e.target.value.length === 0) {
+      setValidated(false);
+    }
+  };
+
   const identity = uuid();
   const handleClick = async res => {
     const key = uuid();
@@ -197,6 +331,7 @@ const OptionBox = props => {
     });
     setResponses(initialResponses);
     setInputVal("");
+    setValidated(false);
     const botTree = {
       identity,
       prompt: props.prompt,
@@ -237,24 +372,33 @@ const OptionBox = props => {
           className="form-control"
           placeholder="Enter response"
           name="response"
-          onChange={e => {
-            setResponse(e.target.value);
-            setInputVal(e.target.value);
-          }}
+          onChange={handleChange}
           value={inputVal}
           style={{ width: "40%" }}
         ></input>
+
         <div style={{ marginLeft: "3px" }}>
           <button
             className="btn btn-sm"
             type="button"
             onClick={handleClick}
             style={{ backgroundColor: "#d0e4f2", color: "#3c3e40" }}
+            disabled={!validated}
           >
             Add
           </button>
         </div>
       </div>
+      {message ? (
+        <div
+          className="animated shake"
+          style={{ float: "left", marginLeft: "10px", color: "red" }}
+        >
+          <p>{message}</p>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

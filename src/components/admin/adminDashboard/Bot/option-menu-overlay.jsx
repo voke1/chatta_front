@@ -32,14 +32,25 @@ class Example extends Component {
       });
     }
   };
-  handleClick = () => {
-    console.log(this.global);
+  handleDelete = () => {
     this.global.openDialog();
     this.setGlobal({
       modify: this.props.modifyOption,
       key: this.props.botKey,
       options: {
         type: "delete"
+      }
+    });
+  };
+  handleEdit = () => {
+    this.global.openEditDialog();
+    this.setGlobal({
+      modify: this.props.modifyOption,
+      response: this.props.res,
+      key: this.props.botKey,
+      options: {
+        type: "edit",
+        text: this.props.res
       }
     });
   };
@@ -52,13 +63,13 @@ class Example extends Component {
           <Popover id="popover-basic">
             <div className="animated">
               <Popover.Title as="h3">Menu</Popover.Title>
-              <div className="option">
+              <div className="option" onClick={this.handleEdit}>
                 <Popover.Content>
                   <i class="fas fa-pen"></i>{" "}
                   <span style={{ marginLeft: "5px" }}>Edit</span>
                 </Popover.Content>
               </div>
-              <div className="option" onClick={this.handleClick}>
+              <div className="option" onClick={this.handleDelete}>
                 <Popover.Content>
                   <i class="fas fa-trash"></i>{" "}
                   <span style={{ marginLeft: "5px" }}>Delete</span>
@@ -118,10 +129,10 @@ class Example extends Component {
     );
   }
   componentDidMount() {
-    console.log(this.global);
+    console.log("it just mounted",this.global);
     // set fallback options
-    if (this.props.chatTree) {
-      const fallbackTree = this.props.chatTree.tree.filter(
+    if (this.global.chatTree) {
+      const fallbackTree = this.global.chatTree.tree.filter(
         tree => tree.identity === "empty"
       );
       const fallBackTreeButtons = fallbackTree[0].response.buttons;
@@ -137,7 +148,7 @@ class Example extends Component {
         }
       });
       // set delay prompt options
-      const delaypromptTree = this.props.chatTree.tree.filter(
+      const delaypromptTree = this.global.chatTree.tree.filter(
         tree => tree.identity === "empty"
       );
       const delaypromptTreeButtons = delaypromptTree[0].response.buttons;
