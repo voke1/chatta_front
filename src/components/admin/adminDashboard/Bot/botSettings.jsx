@@ -83,7 +83,7 @@ export class ModalComponent extends Component {
   };
 
   overlayShow() {
-    console.log("overlay showed");
+  
     this.setState({ show: true });
   }
 
@@ -105,8 +105,10 @@ export class ModalComponent extends Component {
         {this.state.show ? (
           <Overlay height="100%" closeOverlayWithState={this.overlayClose} />
         ) : null}
-        {console.log("State value:", this.state.show)}
+        
       </div>
     );
   }
 }
+
+

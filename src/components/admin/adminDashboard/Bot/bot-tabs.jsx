@@ -9,6 +9,10 @@ import * as apiService from "../../../../services/apiservice";
 import ProgressBar from "../../../progressbar";
 import { storage } from "../../../../firebase/index";
 class BotTabs extends Component {
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
   state = {
     show: false,
     modal2: false,
@@ -17,7 +21,7 @@ class BotTabs extends Component {
     modal5: false,
     showProgress: false,
     chatbotName: "",
-    welcomeMessage: "",
+    welcomeMessage: null,
     fallbackMessage: "",
     delayPrompt: "",
     botImage: " ",
@@ -26,8 +30,9 @@ class BotTabs extends Component {
     fileUpload: null,
     delayTime: null,
     primaryColor: " ",
-    secondaryColor: ", ",
+    secondaryColor: " ",
     file: " Upload bot image"
+    // displayState: "none"
   };
   handleChange = event => {
     this.setState({
@@ -55,8 +60,8 @@ class BotTabs extends Component {
       secondaryColor: this.state.secondaryColor,
       delayTime: this.state.delayTime
     };
-    apiService
 
+    apiService
       .post("setting", setting)
       .then(res => {
         this.setState({
@@ -71,35 +76,41 @@ class BotTabs extends Component {
   };
   handleSubmit = event => {
     event.preventDefault();
-    // this.fileUploadHandler();
     const { fileUpload } = this.state;
 
-    const uploadTask = storage.ref(`images/${fileUpload.name}`).put(fileUpload);
+    if (!fileUpload) {
+      this.setState({ displayState: "visible" });
+    }
 
-    uploadTask.on(
-      "state_changed",
-      snapshot => {
-        // progrss function ....
-        // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        // this.setState({progress});
-      },
-      error => {
-        // error function ....
-        console.log(error);
-      },
-      () => {
-        // complete function ....
-        storage
-          .ref("images")
-          .child(fileUpload.name)
-          .getDownloadURL()
-          .then(url => {
-            this.saveData(url);
-          });
-      }
-    );
-
-    this.setState({ showProgress: true });
+    // this.fileUploadHandler();
+    if (fileUpload) {
+      const uploadTask = storage
+        .ref(`images/${fileUpload.name}`)
+        .put(fileUpload);
+      uploadTask.on(
+        "state_changed",
+        snapshot => {
+          // progrss function ....
+          // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          // this.setState({progress});
+        },
+        error => {
+          // error function ....
+          console.log(error);
+        },
+        () => {
+          // complete function ....
+          storage
+            .ref("images")
+            .child(fileUpload.name)
+            .getDownloadURL()
+            .then(url => {
+              this.saveData(url);
+            });
+        }
+      );
+      this.setState({ showProgress: true });
+    }
   };
 
   fileUploadHandler = () => {};
@@ -126,11 +137,24 @@ class BotTabs extends Component {
                     action="#!"
                     onSubmit={this.handleSubmit}
                   >
+                    {console.log("displayState:", this.state.displayState)}
+                    {console.log(
+                      "secondshowProgress: ",
+                      this.state.showProgress
+                    )}
+                    <p
+                      style={{
+                        display: `none`,
+                        color: "red"
+                      }}
+                    >
+                      Please update all Fields to continue...
+                    </p>
+
                     <p>
                       Let's start by giving your bot some default setticolor
                       picker css stylingcolor picker css stylingngs
                     </p>
-
                     <div className="md-form mt-3">
                       <input
                         type="text"
@@ -138,6 +162,7 @@ class BotTabs extends Component {
                         className="form-control"
                         placeholder="Bot name"
                         name="chatbotName"
+                        value={this.state.chatbotName}
                         onChange={this.handleChange}
                       />
                     </div>
@@ -149,6 +174,7 @@ class BotTabs extends Component {
                         placeholder="Fallback Message"
                         name="fallbackMessage"
                         onChange={this.handleChange}
+                        value={this.state.fallbackMessage}
                       />
                     </div>
                     <div className="md-form">
@@ -174,6 +200,7 @@ class BotTabs extends Component {
                             id="materialSubscriptionFormEmail"
                             onChange={this.handleChange}
                             name="secondaryColor"
+                            value={this.state.secondaryColor}
                             style={{
                               width: "100%"
                             }}
@@ -183,7 +210,6 @@ class BotTabs extends Component {
                         </Col>
                       </Row>
                     </div>
-
                     <div className="md-form">
                       <input
                         type="text"
@@ -191,10 +217,10 @@ class BotTabs extends Component {
                         className="form-control"
                         placeholder="Delay Prompt"
                         name="delayPrompt"
+                        value={this.state.delayPrompt}
                         onChange={this.handleChange}
                       />
                     </div>
-
                     <div className="md-form">
                       <input
                         type="number"
@@ -202,10 +228,10 @@ class BotTabs extends Component {
                         className="form-control"
                         placeholder="Delay Time"
                         name="delayTime"
+                        value={this.state.delayTime}
                         onChange={this.handleChange}
                       />
                     </div>
-
                     <div class="custom-file">
                       <input
                         type="file"
@@ -221,7 +247,7 @@ class BotTabs extends Component {
                     <hr></hr>
                     {this.state.showProgress ? <ProgressBar /> : ""}
                     <button
-                      className="btn btn-sm btn-outline-info btn-rounded btn-block z-depth-0 my-4 waves-effect"
+                      className="   btn btn-secondary btn-sm waves-effect"
                       // type="submit"
                       style={{ width: "100px", float: "right" }}
                       onClick={this.handleSubmit}
