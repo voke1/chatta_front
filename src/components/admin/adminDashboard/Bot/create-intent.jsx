@@ -188,20 +188,24 @@ class CreateIntent extends Component {
     );
   }
   componentDidMount() {
-    const fallbackCount = this.props.ConvoTree.tree[
-      this.props.ConvoTree.tree.length - 2
-    ].response.buttons.length;
-    const delayPromptCount = this.props.ConvoTree.tree[
-      this.props.ConvoTree.tree.length - 1
-    ].response.buttons.length;
     this.setState({
       prompt: this.props.ConvoTree ? this.props.ConvoTree.tree[0].prompt : "",
       chatBody: this.props.ConvoTree ? this.props.ConvoTree.tree : [],
       buttonText: this.props.ConvoTree ? "SAVE" : "DEPLOY",
-      fallbackCount: fallbackCount,
-      delayPromptCount,
-      fallbackClass: "fas fa-check animated fadeIn green-text",
-      delayPromptClass: "fas fa-check animated fadeIn green-text",
+      fallbackCount: this.props.ConvoTree
+        ? this.props.ConvoTree.tree[this.props.ConvoTree.tree.length - 2]
+            .response.buttons.length
+        : 0,
+      delayPromptCount: this.props.ConvoTree
+        ? this.props.ConvoTree.tree[this.props.ConvoTree.tree.length - 1]
+            .response.buttons.length
+        : 0,
+      fallbackClass: this.props.ConvoTree
+        ? "fas fa-check animated fadeIn green-text"
+        : "fas fa-times animated fadeIn red-text",
+      delayPromptClass: this.props.ConvoTree
+        ? "fas fa-check animated fadeIn green-text"
+        : "fas fa-times animated fadeIn red-text",
       disabledButton: true
     });
     this.setGlobal({

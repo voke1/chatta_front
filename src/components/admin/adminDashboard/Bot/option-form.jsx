@@ -21,7 +21,7 @@ const OptionBox = props => {
   const [disableButton, setDisableButton] = useGlobal("disableButton");
   const [enableButton, setEnableButton] = useGlobal("enableButton");
   const [buttonText, setButtonText] = useGlobal("setButtonText");
-  const [rendered, setRendered] = useState(false)
+  const [rendered, setRendered] = useState(false);
 
   useEffect(() => {
     if (props.chatTree) {
@@ -52,7 +52,7 @@ const OptionBox = props => {
       if (!rendered) {
         setResponses(initialResponses);
       }
-      setRendered(true)
+      setRendered(true);
     }
   }, [props.chatTree]);
 
