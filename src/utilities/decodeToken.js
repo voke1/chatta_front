@@ -1,7 +1,7 @@
 import jwt_decode from "jwt-decode";
 import { APP_ENVIRONMENT } from "../environments/environment";
 
-const BASE_URL = APP_ENVIRONMENT.base_url;
+const BASE_URL = APP_ENVIRONMENT.base_url_front;
 class DecodeToken {
   static async shuffleToken(token) {
     if (token) {
