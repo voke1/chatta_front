@@ -167,7 +167,7 @@ class CreateIntent extends Component {
             tree={this.getTree}
             prompt={this.state.prompt}
             getTab={this.props.getTab}
-            chatTree={this.props.ConvoTree ? this.props.ConvoTree.tree : null}
+            chatTree={this.props.ConvoTree}
           />
           <hr></hr>
           {this.state.setProgress ? <ProgressBar /> : ""}

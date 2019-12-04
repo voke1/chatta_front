@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { setGlobal, useGlobal } from "reactn";
 import Accordion from "./accordion";
 import uuid from "uuid/v1";
-
+import ConvoTree from "../../../front/conversation/convo.json";
 const initialResponses = [];
 let identities = [];
 let initialTree;
@@ -11,7 +11,7 @@ let fallbackTree;
 let DelayPromptTree;
 
 const OptionBox = props => {
-  console.log("props from option box", props.chatTree);
+  console.log("props from option box", ConvoTree.tree);
 
   const [responses, setResponses] = useState([]);
   const [response, setResponse] = useState("");
@@ -21,22 +21,22 @@ const OptionBox = props => {
   const [disableButton, setDisableButton] = useGlobal("disableButton");
   const [enableButton, setEnableButton] = useGlobal("enableButton");
   const [buttonText, setButtonText] = useGlobal("setButtonText");
-  const [rendered, setRendered] = useState(false);
+  const [rendered, setRendered] = useGlobal("rendered");
 
   useEffect(() => {
     if (props.chatTree) {
-      identities = props.chatTree.slice(1, props.chatTree.length - 2);
-      initialTree = props.chatTree[0];
-      fallbackTree = props.chatTree[props.chatTree.length - 2];
-      DelayPromptTree = props.chatTree[props.chatTree.length - 1];
+      identities = ConvoTree.tree.slice(1, ConvoTree.tree.length - 2);
+      initialTree = ConvoTree.tree[0];
+      fallbackTree = ConvoTree.tree[ConvoTree.tree.length - 2];
+      DelayPromptTree = ConvoTree.tree[ConvoTree.tree.length - 1];
 
       console.log("it is our new array", newTreeArray);
-      props.chatTree[0].response.buttons.forEach(button => {
+      ConvoTree.tree[0].response.buttons.forEach(button => {
         const body = {
           key: button.key,
           botKey: button.key,
           val: button.val,
-          identity: props.chatTree[0].identity
+          identity: ConvoTree.tree[0].identity
         };
         if (!initialResponses.indexOf(body) > -1) {
           initialResponses.push(body);
@@ -54,7 +54,7 @@ const OptionBox = props => {
       }
       setRendered(true);
     }
-  }, [props.chatTree]);
+  }, [ConvoTree.tree]);
 
   /*
   Algorithm
@@ -364,6 +364,7 @@ const OptionBox = props => {
           syncTree={syncTree}
           identity={res.identity}
           modifyOption={modifyOption}
+          chatTree={props.chatTree}
         />
       ))}
 
