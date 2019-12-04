@@ -14,14 +14,34 @@ import { Button, ButtonToolbar } from "react-bootstrap";
 import { CreateUser } from "../components/admin/adminDashboard/createUser";
 import { UserSettings } from "./userSettings";
 
+import UserDialog from "../components/admin/adminDashboard/Bot/userDeleteDialgo";
+
 export class UserList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       clients: [],
-      switched: false
+      switched: false,
+      loading: true,
+      userDelete: false,
+      userId: null
     };
   }
+
+  closeDialog = () => {
+    this.setState({ userDelete: false });
+  };
+
+  dialogConfirmDelete = () => {
+    this.setState({ delete: true, userDelete: false });
+    // if (this.state.delete) {
+    this.deleteClient(this.state.userId);
+    // }
+  };
+
+  confirmDelete = identity => {
+    this.setState({ userDelete: true, userId: identity });
+  };
 
   componentDidMount() {
     fetch("http://localhost:9000/client")
@@ -32,7 +52,7 @@ export class UserList extends Component {
             ...item,
             switched: item.isEnabled
           }));
-          this.setState({ clients: result });
+          this.setState({ clients: result, loading: false });
         }
         return null;
       })
@@ -40,24 +60,22 @@ export class UserList extends Component {
   }
 
   deleteClient = clientId => {
-    if (window.confirm("Are you sure?")) {
-      fetch(`http://localhost:9000/client/` + clientId, {
-        method: "DELETE",
-        header: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
+    fetch(`http://localhost:9000/client/` + clientId, {
+      method: "DELETE",
+      header: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          clients: [
+            ...this.state.clients.filter(client => client._id !== clientId)
+          ]
+        });
       })
-        .then(res => res.json())
-        .then(data => {
-          this.setState({
-            clients: [
-              ...this.state.clients.filter(client => client._id !== clientId)
-            ]
-          });
-        })
-        .catch(console.error());
-    }
+      .catch(console.error());
   };
   toggleSwitch = id => {
     fetch(`http://localhost:9000/client/` + id, {
@@ -83,11 +101,13 @@ export class UserList extends Component {
     return (
       <div>
         {/* <!-- Loader --> */}
-        <div className="preloader">
-          <div id="status">
-            <div className="spinner"></div>
+        {this.state.loading ? (
+          <div className="preloader">
+            <div id="status">
+              <div className="spinner"></div>
+            </div>
           </div>
-        </div>
+        ) : null}
 
         <div className="header-bg">
           {/* <!-- Navigation Bar--> */}
@@ -368,7 +388,12 @@ export class UserList extends Component {
                           <th>Option</th>
                         </tr>
                       </thead>
-
+                      {this.state.userDelete ? (
+                        <UserDialog
+                          dialogDelete={this.dialogConfirmDelete}
+                          closeDialog={this.closeDialog}
+                        />
+                      ) : null}
                       <tbody>
                         {this.state.clients.map((client, index) => (
                           <tr>
@@ -404,7 +429,7 @@ export class UserList extends Component {
                                   type="button"
                                   className="btn btn-secondary btn-sm waves-effect"
                                   onClick={() => {
-                                    this.deleteClient(client._id);
+                                    this.confirmDelete(client._id);
                                   }}
                                 >
                                   Delete
