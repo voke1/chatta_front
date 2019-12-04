@@ -11,11 +11,28 @@ class OptionBox extends Component {
     response: "",
     height: "0px",
     identity: "",
-    prompt: ""
+    prompt: "",
+    validated: false,
+    message: "",
+    noOption: false
   };
   initialResponses = [];
   onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ [e.target.name]: e.target.value, validated: false });
+    const validated = this.checkDuplicate(e);
+    this.setState({
+      validated: validated.success,
+      message: validated.message
+    });
+    if (
+      e.target.name === "prompt" &&
+      (!e.target.value.length || !this.state.response)
+    ) {
+      this.setState({ validated: false });
+    }
+    if (e.target.name === "response" && !e.target.value.length) {
+      this.setState({ validated: false });
+    }
   };
 
   onClick = tree => {
@@ -35,15 +52,15 @@ class OptionBox extends Component {
     this.setState({
       responses: this.initialResponses,
       response: "",
-      height: this.divElement.clientHeight
+      height: this.divElement.clientHeight,
+      validated: false
     });
     const botTree = {
       identity: this.state.identity,
       prompt: this.state.prompt,
       response: {
         buttons:
-          this.state.response || tree.action?  [...this.initialResponses]
-            : [],
+          this.state.response || tree.action ? [...this.initialResponses] : [],
         text: ""
       }
     };
@@ -57,6 +74,28 @@ class OptionBox extends Component {
         });
       }
     }
+  };
+  checkDuplicate = event => {
+    const isFound = this.initialResponses.filter(
+      response =>
+        response.val.trim().toLowerCase() ===
+        event.target.value.trim().toLowerCase()
+    );
+
+    if (isFound.length) {
+      let message;
+      if (event.target.value.length > 30) {
+        message = event.target.value.substr(0, 30) + "...";
+      } else message = event.target.value;
+      return {
+        success: false,
+        message: `"${message}" already exists as an option`
+      };
+    }
+    return {
+      success: true,
+      message: ""
+    };
   };
   modifyOption = (botId, action) => {
     console.log("this is global", this.global);
@@ -119,6 +158,7 @@ class OptionBox extends Component {
                 value={this.state.response}
                 onChange={this.onChange}
                 style={{ width: "300px" }}
+                disabled={this.state.noOption}
               ></input>
               <div style={{ width: "10%" }}>
                 <button
@@ -128,6 +168,7 @@ class OptionBox extends Component {
                     this.onClick({ response: this.state.response })
                   }
                   style={{ backgroundColor: "#ededed", color: "#5b616b" }}
+                  disabled={!this.state.validated}
                 >
                   Add
                 </button>
@@ -135,6 +176,16 @@ class OptionBox extends Component {
             </div>
           </div>
         </div>
+        {this.state.message ? (
+          <div
+            className="animated shake"
+            style={{ float: "left", marginLeft: "10px", color: "red" }}
+          >
+            <p>{this.state.message}</p>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     );
   }
