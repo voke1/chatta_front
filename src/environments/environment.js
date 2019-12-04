@@ -5,6 +5,7 @@ console.log("env", env, process.env)
 const environment = {
     development: {
         base_url: 'https://agile-reef-92956.herokuapp.com',
+        base_url_front: 'https://chattang.herokuapp.com'
     },
     production: {
         base_url: 'https://agile-reef-92956.herokuapp.com'

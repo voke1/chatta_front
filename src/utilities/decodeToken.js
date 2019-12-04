@@ -1,5 +1,7 @@
 import jwt_decode from "jwt-decode";
+import { APP_ENVIRONMENT } from "../environments/environment";
 
+const BASE_URL = APP_ENVIRONMENT.base_url;
 class DecodeToken {
   static async shuffleToken(token) {
     if (token) {
@@ -15,7 +17,7 @@ class DecodeToken {
     try {
       return await jwt_decode(token);
     } catch (e) {
-      window.location = "http://localhost:3000/auth/login";
+      window.location = `${BASE_URL}/auth/login`;
     }
   }
 }
