@@ -21,9 +21,12 @@
   color: #09d3ac;
 }
 
+button:disabled {
+  cursor: not-allowed !important;
+}
 
-.floatBtn{
-  top:16% !important;
+.floatBtn {
+  top: 16% !important;
   right: 0.8%;
   position: absolute;
   cursor: pointer !important;
@@ -32,9 +35,7 @@
 }
 
 @media screen and (max-width: 1017px) {
- 
-  .floatBtn{
+  .floatBtn {
     background-color: red !important;
   }
-
 }
