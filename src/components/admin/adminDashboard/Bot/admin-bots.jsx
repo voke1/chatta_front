@@ -40,7 +40,7 @@ export class Bot extends Component {
 
   deleteBot = settingId => {
     if (window.confirm("Are you sure?")) {
-      fetch(`http://localhost:9000/setting/` + settingId, {
+      fetch(`${BASE_URL}/setting` + settingId, {
         method: "DELETE",
         header: {
           Accept: "application/json",

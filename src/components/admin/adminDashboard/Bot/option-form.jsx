@@ -3,7 +3,7 @@ import { setGlobal, useGlobal } from "reactn";
 import Accordion from "./accordion";
 import uuid from "uuid/v1";
 
-const initialResponses = [];
+let initialResponses = [];
 let identities = [];
 let initialTree;
 let newTreeArray;
@@ -23,20 +23,21 @@ const OptionBox = props => {
   const [buttonText, setButtonText] = useGlobal("setButtonText");
   const [rendered, setRendered] = useState(false);
 
+  // runs when components mounts
   useEffect(() => {
     if (props.chatTree) {
-      identities = props.chatTree.slice(1, props.chatTree.length - 2);
-      initialTree = props.chatTree[0];
-      fallbackTree = props.chatTree[props.chatTree.length - 2];
-      DelayPromptTree = props.chatTree[props.chatTree.length - 1];
+      identities = props.chatTree.tree.slice(1, props.chatTree.tree.length - 2);
+      initialTree = props.chatTree.tree[0];
+      fallbackTree = props.chatTree.tree[props.chatTree.tree.length - 2];
+      DelayPromptTree = props.chatTree.tree[props.chatTree.tree.length - 1];
 
       console.log("it is our new array", newTreeArray);
-      props.chatTree[0].response.buttons.forEach(button => {
+      props.chatTree.tree[0].response.buttons.forEach(button => {
         const body = {
           key: button.key,
           botKey: button.key,
           val: button.val,
-          identity: props.chatTree[0].identity
+          identity: props.chatTree.tree[0].identity
         };
         if (!initialResponses.indexOf(body) > -1) {
           initialResponses.push(body);
@@ -56,6 +57,17 @@ const OptionBox = props => {
     }
   }, [props.chatTree]);
 
+  // runs when component is unmounted
+  useEffect(() => {
+    return () => {
+      initialResponses = [];
+      identities = [];
+      initialTree = null;
+      newTreeArray = null;
+      fallbackTree = null;
+      DelayPromptTree = null;
+    };
+  }, []);
   /*
   Algorithm
   1 Delete a button (from response.buttons)
@@ -240,7 +252,7 @@ const OptionBox = props => {
     } else disableButton(fallbackTree, DelayPromptTree);
   }
 
-  const modifyOption = (botId, action) => {
+  const modifyOption =  async (botId, action) => {
     if (action.type === "delete") {
       const convoButtons = newTreeArray[0].response.buttons;
       for (let index = 0; index < convoButtons.length; index++) {

@@ -11,7 +11,9 @@ import "../../css/overlay.css";
 import closeImage from "../../images/close.jpg";
 import axios from "axios";
 import Overlay from "./overlay";
+import { APP_ENVIRONMENT } from "../../../../environments/environment";
 
+const BASE_URL = APP_ENVIRONMENT.base_url;
 export class ModalComponent extends Component {
   constructor(props) {
     super(props);
@@ -47,7 +49,7 @@ export class ModalComponent extends Component {
 
     console.log(setting);
     axios
-      .post("http://localhost:9000/setting", {
+      .post(`${BASE_URL}/setting`, {
         ...setting
       })
       .then(res => {

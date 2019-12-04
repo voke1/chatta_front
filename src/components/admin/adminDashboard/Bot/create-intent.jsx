@@ -62,7 +62,9 @@ class CreateIntent extends Component {
   };
   handleSubmit = event => {
     event.preventDefault();
-
+    if (this.state.buttonText === "FINISH") {
+      this.props.closeOverlay();
+    }
     this.setState({ setProgress: true, disabled: true });
     apiService
       .post("tree", { chat_body: this.state.chatBody[0] })
@@ -70,7 +72,7 @@ class CreateIntent extends Component {
         console.log(res);
         this.setState({
           setProgress: false,
-          buttonText: this.props.ConvoTree ? "SAVED" : "DEPLOYED",
+          buttonText: this.props.ConvoTree ? "SAVED" : "FINISH",
           buttonColor: "btn-success",
           animation: "animated shake",
           disabledButton: this.props.ConvoTree ? true : false
@@ -83,7 +85,7 @@ class CreateIntent extends Component {
   };
   setButtonText = () => {
     this.setState({
-      buttonText: "SAVE",
+      buttonText: this.props.ConvoTree ? "SAVE" : "DEPLOY",
       buttonColor: "btn-outline-info",
       disabledButton: false
     });
@@ -165,7 +167,8 @@ class CreateIntent extends Component {
             tree={this.getTree}
             prompt={this.state.prompt}
             getTab={this.props.getTab}
-            chatTree={this.props.ConvoTree ? this.props.ConvoTree.tree : null}
+            chatTree={this.props.ConvoTree}
+            fetchTree={this.props.fetchTree}
           />
           <hr></hr>
           {this.state.setProgress ? <ProgressBar /> : ""}

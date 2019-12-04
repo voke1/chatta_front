@@ -11,7 +11,7 @@ class FetchTree extends Component {
     return (
       <div>
         {!this.state.rendered ? (
-          <CreateIntent ConvoTree={this.state.ConvoTree} />
+          <CreateIntent ConvoTree={this.state.ConvoTree} fetchTree={true}/>
         ) : (
           ""
         )}

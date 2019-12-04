@@ -1,3 +1,10 @@
+.cardview {
+  width: fit-content !important;
+  border-radius: 5px !important;
+  background-color: #edeff0 !important;
+  transition: max-width 0.6s ease !important;
+}
+
 .card:hover {
   cursor: pointer;
 }
@@ -13,4 +20,3 @@
 .InputAddOn-item {
   /* item styles */
 }
-

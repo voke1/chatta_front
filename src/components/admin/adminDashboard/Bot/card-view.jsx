@@ -35,13 +35,7 @@ export default class Card extends Component {
     return (
       <div
         ref={divElement => (this.divElement = divElement)}
-        className="card animated fadeIn"
-        style={{
-          width: "fit-content",
-          borderRadius: "5px",
-          backgroundColor: "#edeff0",
-          transition: "max-width 0.6s ease"
-        }}
+        className="card animated fadeIn cardview"
         onMouseOver={this.showContent}
         onMouseOut={this.hideContent}
       >
