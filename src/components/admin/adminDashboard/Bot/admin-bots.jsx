@@ -11,6 +11,9 @@ import "../../images/favicon.ico";
 import { ButtonToolbar, Button } from "react-bootstrap";
 import { ManageBot } from "../manageBot";
 import { ModalComponent } from "./botSettings";
+import { APP_ENVIRONMENT } from "../../../../environments/environment";
+
+const BASE_URL = APP_ENVIRONMENT.base_url;
 
 export class Bot extends Component {
   constructor(props) {
@@ -21,7 +24,9 @@ export class Bot extends Component {
     };
   }
   componentDidMount() {
-    fetch("http://localhost:9000/setting")
+    console.log("THIS IS EVV", process.env);
+
+    fetch(`${BASE_URL}/setting`)
       .then(res => res.json())
       .then(data => {
         this.setState({ settings: data });

@@ -62,7 +62,9 @@ class CreateIntent extends Component {
   };
   handleSubmit = event => {
     event.preventDefault();
-
+    if (this.state.buttonText === "FINISH") {
+      this.props.closeOverlay();
+    }
     this.setState({ setProgress: true, disabled: true });
     apiService
       .post("tree", { chat_body: this.state.chatBody[0] })
@@ -70,10 +72,10 @@ class CreateIntent extends Component {
         console.log(res);
         this.setState({
           setProgress: false,
-          buttonText: this.props.ConvoTree ? "SAVED" : "DEPLOYED",
+          buttonText: this.props.ConvoTree ? "SAVED" : "FINISH",
           buttonColor: "btn-success",
           animation: "animated shake",
-          disabledButton: this.props.ConvoTree ? true : false
+          disabledButton:this.props.ConvoTree? true: false
         });
         this.props.disableHomeTab();
       })
@@ -83,7 +85,7 @@ class CreateIntent extends Component {
   };
   setButtonText = () => {
     this.setState({
-      buttonText: "SAVE",
+      buttonText: this.props.chatTree ? "SAVE" : "DEPLOY",
       buttonColor: "btn-outline-info",
       disabledButton: false
     });
@@ -188,20 +190,24 @@ class CreateIntent extends Component {
     );
   }
   componentDidMount() {
-    const fallbackCount = this.props.ConvoTree.tree[
-      this.props.ConvoTree.tree.length - 2
-    ].response.buttons.length;
-    const delayPromptCount = this.props.ConvoTree.tree[
-      this.props.ConvoTree.tree.length - 1
-    ].response.buttons.length;
     this.setState({
       prompt: this.props.ConvoTree ? this.props.ConvoTree.tree[0].prompt : "",
       chatBody: this.props.ConvoTree ? this.props.ConvoTree.tree : [],
       buttonText: this.props.ConvoTree ? "SAVE" : "DEPLOY",
-      fallbackCount: fallbackCount,
-      delayPromptCount,
-      fallbackClass: "fas fa-check animated fadeIn green-text",
-      delayPromptClass: "fas fa-check animated fadeIn green-text",
+      fallbackCount: this.props.ConvoTree
+        ? this.props.ConvoTree.tree[this.props.ConvoTree.tree.length - 2]
+            .response.buttons.length
+        : 0,
+      delayPromptCount: this.props.ConvoTree
+        ? this.props.ConvoTree.tree[this.props.ConvoTree.tree.length - 1]
+            .response.buttons.length
+        : 0,
+      fallbackClass: this.props.ConvoTree
+        ? "fas fa-check animated fadeIn green-text"
+        : "fas fa-times animated fadeIn red-text",
+      delayPromptClass: this.props.ConvoTree
+        ? "fas fa-check animated fadeIn green-text"
+        : "fas fa-times animated fadeIn red-text",
       disabledButton: true
     });
     this.setGlobal({
