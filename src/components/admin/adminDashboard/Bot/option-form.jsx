@@ -23,7 +23,6 @@ const OptionBox = props => {
   const [buttonText, setButtonText] = useGlobal("setButtonText");
   const [rendered, setRendered] = useState(false);
 
-  // render saved chat tree
   useEffect(() => {
     if (props.chatTree) {
       identities = props.chatTree.slice(1, props.chatTree.length - 2);
