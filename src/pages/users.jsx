@@ -13,7 +13,9 @@ import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import { Button, ButtonToolbar } from "react-bootstrap";
 import { CreateUser } from "../components/admin/adminDashboard/createUser";
 import { UserSettings } from "./userSettings";
+import { APP_ENVIRONMENT } from "../environments/environment";
 
+const BASE_URL = APP_ENVIRONMENT.base_url;
 export class UserList extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +26,7 @@ export class UserList extends Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:9000/client")
+    fetch(`${BASE_URL}/client`)
       .then(res => res.json())
       .then(data => {
         if (data) {
@@ -41,7 +43,7 @@ export class UserList extends Component {
 
   deleteClient = clientId => {
     if (window.confirm("Are you sure?")) {
-      fetch(`http://localhost:9000/client/` + clientId, {
+      fetch(`${BASE_URL}/client/` + clientId, {
         method: "DELETE",
         header: {
           Accept: "application/json",
@@ -60,7 +62,7 @@ export class UserList extends Component {
     }
   };
   toggleSwitch = id => {
-    fetch(`http://localhost:9000/client/` + id, {
+    fetch(`${BASE_URL}/client`/ + id, {
       method: "PATCH",
       header: {
         Accept: "application/json",

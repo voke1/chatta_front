@@ -6,7 +6,9 @@ import { AppService } from "../../../../services/app.service";
 import LayoutHeader from "../../layouts/layouts.header";
 import LayoutFooter from "../../layouts/layouts.footer";
 import AppLoader from "../../../../utilities/loader";
+import { APP_ENVIRONMENT } from "../../../../environments/environment";
 
+const BASE_URL = APP_ENVIRONMENT.base_url;
 
 export default class CompaniesComponent extends Component {
 
@@ -78,7 +80,7 @@ export default class CompaniesComponent extends Component {
 
     deletecompany = companyId => {
         if (window.confirm("Are you sure?")) {
-            fetch(`http://localhost:9000/company/` + companyId, {
+            fetch(`${BASE_URL}/company/` + companyId, {
                 method: "DELETE",
                 header: {
                     Accept: "application/json",

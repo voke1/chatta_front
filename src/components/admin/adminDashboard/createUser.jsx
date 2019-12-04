@@ -9,6 +9,9 @@ import "../images/favicon.ico";
 import { Tabs, Tab, Row, Col, Form } from "react-bootstrap";
 import "../css/customise.css";
 import Axios from "axios";
+import { APP_ENVIRONMENT } from "../../../environments/environment";
+
+const BASE_URL = APP_ENVIRONMENT.base_url;
 
 export class CreateUser extends Component {
   state = {
@@ -34,7 +37,7 @@ export class CreateUser extends Component {
     };
 
     console.log(user);
-    Axios.post("http://localhost:9000/client", {
+    Axios.post(`${BASE_URL}/client`, {
       ...user
     })
       .then(res => {

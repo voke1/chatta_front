@@ -12,7 +12,9 @@ import Axios from "axios";
 import { Tab, Tabs, Row, Col, Form, Button } from "react-bootstrap";
 import FetchTree from "../components/admin/adminDashboard/Bot/fetch-tree";
 import { storage } from "../firebase/index";
+import { APP_ENVIRONMENT } from "../environments/environment";
 
+const BASE_URL = APP_ENVIRONMENT.base_url;
 export class ManageBot extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +35,7 @@ export class ManageBot extends Component {
   }
 
   componentDidMount() {
-    Axios.get(`http://localhost:9000/setting/${this.state.settingId}`)
+    Axios.get(`${BASE_URL}/setting/${this.state.settingId}`)
       .then(res => {
         const result = res.data;
         setTimeout(() => {
@@ -132,7 +134,7 @@ export class ManageBot extends Component {
       botImage: this.state.botImage
     };
 
-    Axios.put(`http://localhost:9000/setting/${this.state.settingId}`, {
+    Axios.put(`${BASE_URL}/setting/${this.state.settingId}`, {
       ...bot
     })
       .then(res => {})
