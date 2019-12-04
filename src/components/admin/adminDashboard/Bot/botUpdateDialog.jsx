@@ -6,7 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-export default function AlertDialog() {
+export default function AlertDialog(props) {
   const [open, setOpen] = React.useState(true);
 
   const handleClose = () => {
@@ -26,15 +26,12 @@ export default function AlertDialog() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to update BOT settings?
+            Chat Bot settings successfully updated
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            NO
-          </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            YES
+          <Button onClick={props.closeDialog} color="primary" autoFocus>
+            OKAY
           </Button>
         </DialogActions>
       </Dialog>

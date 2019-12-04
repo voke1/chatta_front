@@ -20,9 +20,12 @@ export class Bot extends Component {
     this.state = {
       settings: [],
       loading: true,
-      botDelete: false
+      botDelete: false,
+      delete: false,
+      settingsId: null
     };
   }
+
   componentDidMount() {
     fetch("http://localhost:9000/setting")
       .then(res => res.json())
@@ -33,9 +36,19 @@ export class Bot extends Component {
         console.log("error", e);
       });
   }
+  closeDialog = () => {
+    this.setState({ botDelete: false });
+  };
+
+  dialogConfirmDelete = () => {
+    this.setState({ delete: true, botDelete: false });
+    // if (this.state.delete) {
+    this.deleteBot(this.state.settingsId);
+    // }
+  };
 
   confirmDelete = settingId => {
-    this.setState({ botDelete: true });
+    this.setState({ botDelete: true, settingsId: settingId });
   };
 
   deleteBot = settingId => {
@@ -328,8 +341,13 @@ export class Bot extends Component {
                     <h4 className="mt-0 m-b-30 header-title">CHAT BOTS</h4>
 
                     <div className="table-responsive">
-                      {this.state.botDelete ? <BotDeleteDialog /> : null}
                       <table className="table m-t-20 mb-0 table-vertical">
+                        {this.state.botDelete ? (
+                          <BotDeleteDialog
+                            closeDialog={this.closeDialog}
+                            dialogDelete={this.dialogConfirmDelete}
+                          />
+                        ) : null}
                         <tbody>
                           {this.state.settings
                             ? this.state.settings.map(setting => (
@@ -373,7 +391,7 @@ export class Bot extends Component {
                                       <button
                                         className="btn btn-secondary btn-sm waves-effect"
                                         onClick={() => {
-                                          this.deleteBot(setting._id);
+                                          this.confirmDelete(setting._id);
                                         }}
                                       >
                                         Delete
@@ -418,5 +436,3 @@ export class Bot extends Component {
   //   return <this.Apps />;
   // }
 }
-
-

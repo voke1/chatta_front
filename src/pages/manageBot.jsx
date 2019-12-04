@@ -70,6 +70,10 @@ export class ManageBot extends Component {
     this.inputRef.current.click();
   };
 
+  closeDialog = () => {
+    this.setState({ updateSettings: false });
+  };
+
   handleImageChange = e => {
     e.preventDefault();
 
@@ -407,7 +411,7 @@ export class ManageBot extends Component {
                 <div className="col-md-8">
                   <div className="card">
                     {this.state.updateSettings ? (
-                      <BotUpdateAlertDialog />
+                      <BotUpdateAlertDialog closeDialog={this.closeDialog} />
                     ) : null}
                     <Tabs
                       defaultActiveKey={this.state.tab}
