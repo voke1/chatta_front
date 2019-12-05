@@ -34,7 +34,7 @@ export class CreateUser extends Component {
     };
 
     console.log(user);
-    Axios.post("http://localhost:9000/client", {
+    Axios.post("http://localhost:9000/client/newclient", {
       ...user
     })
       .then(res => {
