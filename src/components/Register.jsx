@@ -38,6 +38,7 @@ class Register extends Component {
       fullName: this.state.fullName
     };
     register(user).then(res => {
+      console.log("this is res.data", res.data)
       if (res) {
         if (!res.data.success) {
           console.log(res);
@@ -104,9 +105,8 @@ class Register extends Component {
                 </p>
 
                 <div
-                  className="alert"
+                  className="alert2"
                   style={{
-                    border: this.state.message ? this.state.borderColor : ""
                   }}
                 >
                   {this.state.isChanged ? message : ""}

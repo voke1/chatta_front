@@ -5,7 +5,7 @@ const BASE_URL = APP_ENVIRONMENT.base_url;
 
 export const register = newUser => {
   return axios
-    .post(`${BASE_URL}/client`, {
+    .post(`http://localhost:9000/client`, {
       fullName: newUser.fullName,
       email: newUser.email,
       password: newUser.password
@@ -34,14 +34,13 @@ export const login = user => {
 };
 
 export const verifyEmail = token => {
-  
   return axios
     .get(`${BASE_URL}/auth/verify_email?token=${token}`)
     .then(res => {
-      console.log("Res ", res)
+      console.log("Res ", res);
       return res.data;
     })
     .catch(err => {
-      return err
+      return err;
     });
 };
