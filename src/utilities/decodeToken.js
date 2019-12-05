@@ -13,11 +13,13 @@ class DecodeToken {
     return null;
   }
   static async getUserPayload(token) {
-    token = await this.shuffleToken(token);
+    console.log("called getuser", token)
+    const token_string = await this.shuffleToken(token);
     try {
-      return await jwt_decode(token);
+      return await jwt_decode(token_string);
     } catch (e) {
-      window.location = `${BASE_URL}/auth/login`;
+      console.log(e)
+      // window.location = `${BASE_URL}/auth/login`;
     }
   }
 }
