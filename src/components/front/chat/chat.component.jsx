@@ -97,7 +97,6 @@ export default class Chat extends Component {
   }
 
   componentDidMount() {
-    alert("here");
     const appKey = window.location.href;
     console.log("API", appKey);
     this.setState({
