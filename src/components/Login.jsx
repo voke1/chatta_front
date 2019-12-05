@@ -29,19 +29,20 @@ class Login extends Component {
     };
     login(user).then(res => {
       if (res) {
-        if (!res.data.success) {
+        console.log(Object.keys(res))
+        if (!res.success) {
           console.log(res);
           this.setState({
             isChanged: true,
-            message: res.data.message,
+            message: res.message,
             disabled: false,
             showProgress: false
           });
         }
       }
 
-      if (res.data.success) {
-        if (!res.data.userDetails.isAdmin) {
+      if (res.success) {
+        if (!res.userDetails.isAdmin) {
           this.setState({
             redirect: "/dashboard/admin"
           });
@@ -90,12 +91,7 @@ class Login extends Component {
                 Sign in to continue to Chatta.
               </p>
 
-              <div
-                className="alert"
-                style={{
-                  border: this.state.message ? "1px solid #edabaf" : null
-                }}
-              >
+              <div className="alert2" style={{}}>
                 <div
                   className="row align-items-center justify-content-center"
                   style={{ margin: 1 }}
