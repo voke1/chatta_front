@@ -10,6 +10,7 @@ class Overlay extends Component {
   };
   handleClick = () => {
     this.setState({ height: "0%" });
+    this.props.closeOverlayWithState();
   };
   render() {
     return (

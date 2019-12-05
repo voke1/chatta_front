@@ -21,7 +21,8 @@ export class UserList extends Component {
     super(props);
     this.state = {
       clients: [],
-      switched: false
+      switched: false,
+      loading: true
     };
   }
 
@@ -34,7 +35,7 @@ export class UserList extends Component {
             ...item,
             switched: item.isEnabled
           }));
-          this.setState({ clients: result });
+          this.setState({ clients: result, loading: false });
         }
         return null;
       })
@@ -49,7 +50,7 @@ export class UserList extends Component {
           Accept: "application/json",
           "Content-Type": "application/json"
         }
-      })
+      }) 
         .then(res => res.json())
         .then(data => {
           this.setState({
@@ -85,11 +86,13 @@ export class UserList extends Component {
     return (
       <div>
         {/* <!-- Loader --> */}
-        <div className="preloader">
-          <div id="status">
-            <div className="spinner"></div>
+        {this.state.loading ? (
+          <div className="preloader">
+            <div id="status">
+              <div className="spinner"></div>
+            </div>
           </div>
-        </div>
+        ) : null}
 
         <div className="header-bg">
           {/* <!-- Navigation Bar--> */}
