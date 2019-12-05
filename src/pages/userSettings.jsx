@@ -11,6 +11,7 @@ import "../components/admin/css/switch.css";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import Axios from "axios";
 import { APP_ENVIRONMENT } from "../environments/environment";
+import UserUpdateDialog from "../components/admin/adminDashboard/Bot/userUpdateDialog";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 export class UserSettings extends Component {
@@ -22,7 +23,8 @@ export class UserSettings extends Component {
       password: null,
       email: null,
       phone: null,
-      clientId: props.match.params.id
+      clientId: props.match.params.id,
+      updateUser: false
     };
   }
   componentDidMount() {
@@ -43,9 +45,13 @@ export class UserSettings extends Component {
       [event.target.name]: event.target.value
     });
   };
+
+  closeDialog = () => {
+    this.setState({ updateUser: false });
+  };
   handleSubmit = event => {
     event.preventDefault();
-
+    this.setState({ updateUser: true });
     const user = {
       fullName: this.state.fullName,
       password: this.state.password,
@@ -329,6 +335,9 @@ export class UserSettings extends Component {
                   </div>
                   <div className="card-body">
                     {console.log("CLIENTELETS:")}
+                    {this.state.updateUser ? (
+                      <UserUpdateDialog closeDialog={this.closeDialog} />
+                    ) : null}
 
                     <form onSubmit={this.handleSubmit}>
                       <div className="row">

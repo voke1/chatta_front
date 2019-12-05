@@ -14,17 +14,35 @@ import { Button, ButtonToolbar } from "react-bootstrap";
 import { CreateUser } from "../components/admin/adminDashboard/createUser";
 import { UserSettings } from "./userSettings";
 import { APP_ENVIRONMENT } from "../environments/environment";
-
+import UserDialog from "../components/admin/adminDashboard/Bot/userDeleteDialgo";
 const BASE_URL = APP_ENVIRONMENT.base_url;
+
 export class UserList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       clients: [],
       switched: false,
-      loading: true
+      loading: true,
+      userDelete: false,
+      userId: null
     };
   }
+
+  closeDialog = () => {
+    this.setState({ userDelete: false });
+  };
+
+  dialogConfirmDelete = () => {
+    this.setState({ delete: true, userDelete: false });
+    // if (this.state.delete) {
+    this.deleteClient(this.state.userId);
+    // }
+  };
+
+  confirmDelete = identity => {
+    this.setState({ userDelete: true, userId: identity });
+  };
 
   componentDidMount() {
     fetch(`${BASE_URL}/client`)
@@ -50,7 +68,7 @@ export class UserList extends Component {
           Accept: "application/json",
           "Content-Type": "application/json"
         }
-      }) 
+      })
         .then(res => res.json())
         .then(data => {
           this.setState({
@@ -61,9 +79,25 @@ export class UserList extends Component {
         })
         .catch(console.error());
     }
+    fetch(`${BASE_URL}/client/` + clientId, {
+      method: "DELETE",
+      header: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          clients: [
+            ...this.state.clients.filter(client => client._id !== clientId)
+          ]
+        });
+      })
+      .catch(console.error());
   };
   toggleSwitch = id => {
-    fetch(`${BASE_URL}/client`/ + id, {
+    fetch(`${BASE_URL}/client` / +id, {
       method: "PATCH",
       header: {
         Accept: "application/json",
@@ -373,7 +407,12 @@ export class UserList extends Component {
                           <th>Option</th>
                         </tr>
                       </thead>
-
+                      {this.state.userDelete ? (
+                        <UserDialog
+                          dialogDelete={this.dialogConfirmDelete}
+                          closeDialog={this.closeDialog}
+                        />
+                      ) : null}
                       <tbody>
                         {this.state.clients.map((client, index) => (
                           <tr>
@@ -409,7 +448,7 @@ export class UserList extends Component {
                                   type="button"
                                   className="btn btn-secondary btn-sm waves-effect"
                                   onClick={() => {
-                                    this.deleteClient(client._id);
+                                    this.confirmDelete(client._id);
                                   }}
                                 >
                                   Delete
