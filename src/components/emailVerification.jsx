@@ -17,6 +17,7 @@ class EmailVerification extends Component {
   }
   async componentDidMount() {
     const params = query_string.parse(this.props.location.search);
+    console.log()
     verifyEmail(params.token)
       .then(res => {
         if (res.data.success) {
