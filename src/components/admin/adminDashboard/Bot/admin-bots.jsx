@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import avatar from "../../images/users/avatar-1.jpg";
 import "../../plugins/datatables/dataTables.bootstrap4.min.css";
@@ -7,9 +7,9 @@ import "../../css/style.css";
 import "../../css/icons.css";
 import "../../css/bootstrap.min.css";
 import "../../images/favicon.ico";
-
-import { ButtonToolbar, Button } from "react-bootstrap";
-import { ManageBot } from "../manageBot";
+import BotDeleteDialog from "../Bot/botDeleteDialog";
+import { ButtonToolbar } from "react-bootstrap";
+import { Manage } from "../manageBot";
 import { ModalComponent } from "./botSettings";
 import { APP_ENVIRONMENT } from "../../../../environments/environment";
 
@@ -20,9 +20,14 @@ export class Bot extends Component {
     super(props);
 
     this.state = {
-      settings: []
+      settings: [],
+      loading: true,
+      botDelete: false,
+      delete: false,
+      settingsId: null
     };
   }
+
   componentDidMount() {
     console.log("THIS IS EVV", process.env);
 
@@ -30,39 +35,55 @@ export class Bot extends Component {
       .then(res => res.json())
       .then(data => {
         this.setState({ settings: data });
-        // this.setState({ setting: data });
-        console.log("error data", data);
       })
       .catch(e => {
         console.log("error", e);
       });
   }
+  closeDialog = () => {
+    this.setState({ botDelete: false });
+  };
+
+  dialogConfirmDelete = () => {
+    this.setState({ delete: true, botDelete: false });
+    // if (this.state.delete) {
+    this.deleteBot(this.state.settingsId);
+    // }
+  };
+
+  confirmDelete = settingId => {
+    this.setState({ botDelete: true, settingsId: settingId });
+  };
 
   deleteBot = settingId => {
-    if (window.confirm("Are you sure?")) {
-      fetch(`${BASE_URL}/setting` + settingId, {
-        method: "DELETE",
-        header: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
-          this.setState({
-            settings: [
-              ...this.state.settings.filter(
-                setting => setting._id !== settingId
-              )
-            ]
-          });
+    fetch(`${BASE_URL}/setting/` + settingId, {
+      method: "DELETE",
+      header: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        this.setState({
+          settings: [
+            ...this.state.settings.filter(setting => setting._id !== settingId)
+          ],
+          loading: false
         });
-    }
+      });
   };
 
   render() {
     return (
       <div>
+        {this.state.loading ? (
+          <div className="preloader">
+            <div id="status">
+              <div className="spinner"></div>
+            </div>
+          </div>
+        ) : null}
         <div className="header-bg">
           {/* <!-- Navigation Bar--> */}
           <header id="topnav">
@@ -99,7 +120,6 @@ export class Bot extends Component {
                       <a
                         className="nav-link dropdown-toggle arrow-none waves-effect"
                         data-toggle="dropdown"
-                        href="#"
                         role="button"
                         aria-haspopup="false"
                         aria-expanded="false"
@@ -326,57 +346,65 @@ export class Bot extends Component {
 
                     <div className="table-responsive">
                       <table className="table m-t-20 mb-0 table-vertical">
+                        {this.state.botDelete ? (
+                          <BotDeleteDialog
+                            closeDialog={this.closeDialog}
+                            dialogDelete={this.dialogConfirmDelete}
+                          />
+                        ) : null}
                         <tbody>
-                          {this.state.settings.map(setting => (
-                            <tr>
-                              <td>
-                                {console.log(setting)}
-                                <img
-                                  src={setting.botImage}
-                                  alt="bot-image"
-                                  className="thumb-sm rounded-circle mr-2"
-                                />
-                                {setting.chatbotName}
-                              </td>
-                              <td>
-                                <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
-                                {setting.welcomeMessage}
-                              </td>
-                              <td>
-                                {setting.fallbackMessage}
-                                <p className="m-0 text-muted font-14">
-                                  Fallback Message
-                                </p>
-                              </td>
-                              <td>
-                                {setting.delayPrompt}
-                                <p className="m-0 text-muted font-14">
-                                  Delay Prompt
-                                </p>
-                              </td>
-                              <td>
-                                {console.log("settings ID:", setting._id)}
+                          {this.state.settings
+                            ? this.state.settings.map(setting => (
+                                <tr>
+                                  <td>
+                                    {console.log(setting)}
+                                    <img
+                                      src={setting.botImage}
+                                      alt="bot-image"
+                                      className="thumb-sm rounded-circle mr-2"
+                                    />
+                                    {setting.chatbotName}
+                                  </td>
+                                  <td>
+                                    <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
+                                    {setting.welcomeMessage}
+                                  </td>
+                                  <td>
+                                    {setting.fallbackMessage}
+                                    <p className="m-0 text-muted font-14">
+                                      Fallback Message
+                                    </p>
+                                  </td>
+                                  <td>
+                                    {setting.delayPrompt}
+                                    <p className="m-0 text-muted font-14">
+                                      Delay Prompt
+                                    </p>
+                                  </td>
+                                  <td>
+                                    {console.log("settings ID:", setting._id)}
 
-                                <ButtonToolbar>
-                                  <Link
-                                    to={`/dashboard/admin/bot/${setting._id}`}
-                                  >
-                                    <button className="btn btn-secondary btn-sm waves-effect">
-                                      Manage
-                                    </button>
-                                  </Link>
-                                  <button
-                                    className="btn btn-secondary btn-sm waves-effect"
-                                    onClick={() => {
-                                      this.deleteBot(setting._id);
-                                    }}
-                                  >
-                                    Delete
-                                  </button>
-                                </ButtonToolbar>
-                              </td>
-                            </tr>
-                          ))}
+                                    <ButtonToolbar>
+                                      <Link
+                                        to={`/dashboard/admin/bot/${setting._id}`}
+                                      >
+                                        <button className="btn btn-secondary btn-sm waves-effect">
+                                          Manage
+                                        </button>
+                                      </Link>
+                                      <button
+                                        className="btn btn-secondary btn-sm waves-effect"
+                                        onClick={() => {
+                                          this.confirmDelete(setting._id);
+                                        }}
+                                      >
+                                        Delete
+                                      </button>
+                                    </ButtonToolbar>
+                                  </td>
+                                </tr>
+                              ))
+                            : null}
                         </tbody>
                       </table>
                     </div>

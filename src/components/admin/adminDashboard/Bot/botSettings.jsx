@@ -29,6 +29,7 @@ export class ModalComponent extends Component {
       delayPrompt: "",
       botImage: ""
     };
+    this.overlayClose = this.overlayClose.bind(this);
   }
 
   handleChange = event => {
@@ -84,6 +85,7 @@ export class ModalComponent extends Component {
   };
 
   overlayShow() {
+  
     this.setState({ show: true });
   }
 
@@ -102,8 +104,13 @@ export class ModalComponent extends Component {
           Create Bot +
         </Button>
 
-        {this.state.show ? <Overlay height="100%" /> : null}
+        {this.state.show ? (
+          <Overlay height="100%" closeOverlayWithState={this.overlayClose} />
+        ) : null}
+        
       </div>
     );
   }
 }
+
+
