@@ -28,30 +28,31 @@ class Login extends Component {
       disabled: true
     };
     login(user).then(res => {
-      if (res) {
-        console.log(Object.keys(res))
-        if (!res.success) {
-          console.log(res);
+                console.log("this is res", res);
+
+      if (res.data) {
+        if (!res.data.success) {
           this.setState({
             isChanged: true,
-            message: res.message,
+            message: res.data.message,
             disabled: false,
             showProgress: false
           });
         }
-      }
-
-      if (res.success) {
-        if (!res.userDetails.isAdmin) {
-          this.setState({
-            redirect: "/dashboard/admin"
-          });
-        } else {
-          this.setState({
-            redirect: "/dashboard/admin"
-          });
+        if (res.data.success) {
+          if (!res.data.userDetails.isAdmin) {
+            this.setState({
+              redirect: "/dashboard/admin"
+            });
+          } else {
+            this.setState({
+              redirect: "/dashboard/admin"
+            });
+          }
         }
       }
+
+      
     });
   };
   renderRedirect = target => {
