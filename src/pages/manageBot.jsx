@@ -408,10 +408,10 @@ export class ManageBot extends Component {
           </div>
         ) : (
           <div className="content">
-            <div className="container-fluid">
+            <div className="container-fluid" style={{marginTop: "25px"}}>
               <div className="row">
-                <div className="col-md-8">
-                  <div className="card">
+                <div className="col-md-8 mt-20">
+                  <div className="card ">
                     {this.state.updateSettings ? (
                       <BotUpdateAlertDialog closeDialog={this.closeDialog} />
                     ) : null}

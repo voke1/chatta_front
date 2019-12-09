@@ -101,30 +101,28 @@ class Login extends Component {
               </div>
               <form
                 onSubmit={this.onSubmit}
-                className="form-horizontal m-t-30"
+                className="text-center m-t-30"
                 action="https://themesbrand.com/fonik/purple/index.html"
               >
-                <div className="form-group">
-                  <label for="email">Email</label>
+                <div className="md-form">
                   <input
                     name="email"
                     onChange={this.onChange}
                     type="email"
                     className="form-control"
                     id="email"
-                    placeholder="Enter Email"
+                    placeholder="Email"
                   ></input>
                 </div>
 
-                <div className="form-group">
-                  <label for="password">Password</label>
+                <div className="md-form">
                   <input
                     name="password"
                     onChange={this.onChange}
                     type="password"
                     className="form-control"
                     id="password"
-                    placeholder="Enter password"
+                    placeholder="Password"
                   ></input>
                 </div>
 

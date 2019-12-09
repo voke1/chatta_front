@@ -13,10 +13,11 @@ import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import { Button, ButtonToolbar } from "react-bootstrap";
 import { CreateUser } from "../components/admin/adminDashboard/createUser";
 import { UserSettings } from "./userSettings";
-import { APP_ENVIRONMENT } from "../environments/environment";
-import UserDialog from "../components/admin/adminDashboard/Bot/userDeleteDialgo";
-const BASE_URL = APP_ENVIRONMENT.base_url;
 
+import UserDialog from "../components/admin/adminDashboard/Bot/userDeleteDialgo";
+import { APP_ENVIRONMENT } from "../environments/environment";
+
+const BASE_URL = APP_ENVIRONMENT.base_url;
 export class UserList extends Component {
   constructor(props) {
     super(props);
@@ -61,24 +62,6 @@ export class UserList extends Component {
   }
 
   deleteClient = clientId => {
-    if (window.confirm("Are you sure?")) {
-      fetch(`${BASE_URL}/client/` + clientId, {
-        method: "DELETE",
-        header: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
-          this.setState({
-            clients: [
-              ...this.state.clients.filter(client => client._id !== clientId)
-            ]
-          });
-        })
-        .catch(console.error());
-    }
     fetch(`${BASE_URL}/client/` + clientId, {
       method: "DELETE",
       header: {
@@ -97,7 +80,7 @@ export class UserList extends Component {
       .catch(console.error());
   };
   toggleSwitch = id => {
-    fetch(`${BASE_URL}/client` / +id, {
+    fetch(`${BASE_URL}/client/` + id, {
       method: "PATCH",
       header: {
         Accept: "application/json",

@@ -42,8 +42,8 @@ class DialogBox extends Component {
             </DialogTitle>
             <DialogContent>
               <span style={{ fontSize: 16 }}>
-                You are about to delete this option from every conversation. Continue
-                anyway ?
+                You are about to delete this option from every conversation.
+                Continue anyway ?
               </span>
             </DialogContent>
             <DialogActions>
