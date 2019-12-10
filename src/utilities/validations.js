@@ -36,7 +36,7 @@ export class Validation {
     return await Validation.getResponse(
       success,
       "phone",
-      "Please enter a valide phone number"
+      "Please enter a valid phone number"
     );
   }
   static async validateAll(e) {

@@ -41,6 +41,7 @@ class OptionBox extends Component {
       this.initialResponses.push(tree);
     } else {
       if (!tree.botId) {
+        console.log("pushing")
         this.initialResponses.push({
           key: uuid(),
           val: this.state.response
@@ -190,19 +191,22 @@ class OptionBox extends Component {
     );
   }
   componentDidMount() {
+    console.log("option box mounted", this.props.chatTree);
     const height = this.divElement.clientHeight;
     this.setState({ height: height, identity: this.props.botKey });
-    ConvoTree.tree.forEach(tree => {
-      if (tree.identity === this.props.botKey) {
-        console.log(tree);
-        tree.response.buttons.forEach(button => {
-          setTimeout(() => {
-            this.onClick(button);
-            this.setState({ prompt: tree.prompt });
-          }, 10);
-        });
-      }
-    });
+    if (this.props.chatTree) {
+      this.props.chatTree.forEach(tree => {
+        if (tree.identity === this.props.botKey) {
+          console.log(tree);
+          tree.response.buttons.forEach(button => {
+            setTimeout(() => {
+              this.onClick(button);
+              this.setState({ prompt: tree.prompt });
+            }, 10);
+          });
+        }
+      });
+    }
   }
 }
 export default OptionBox;
