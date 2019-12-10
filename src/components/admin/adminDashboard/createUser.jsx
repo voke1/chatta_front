@@ -80,8 +80,8 @@ export class CreateUser extends Component {
     );
     return (
       <Modal {...this.props}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create a user</Modal.Title>
+        <Modal.Header closeButton style={{ backgroundColor: "#37295C" }}>
+          <Modal.Title style={{ color: "white" }}>Create a user</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {this.state.isChanged ? displayMessage : ""}
@@ -90,111 +90,87 @@ export class CreateUser extends Component {
             className="needs-validation"
             onSubmit={this.handleSubmit}
             noValidate
-            style={{ padding: "2%" }}
           >
-            <MDBRow md="4" className="mb-3">
-              <label htmlFor="defaultFormRegisterNameEx" className="grey-text">
-                Full Name
-              </label>
-              <input
-                value={this.state.fname}
-                name="fullName"
-                onChange={this.handleChange}
-                type="text"
-                id="defaultFormRegisterNameEx"
-                className="form-control"
-                placeholder="Full Name"
-                required
-              />
-              <div className="invalid-feedback">
-                Please enter your full name.
-              </div>
-              <div className="valid-feedback">Looks good!</div>
-            </MDBRow>
-            <MDBRow md="4" className="mb-3">
-              <label
-                htmlFor="defaultFormRegisterConfirmEx1"
-                className="grey-text"
-              >
-                Email
-              </label>
-              <input
-                value={this.state.email}
-                onChange={this.handleChange}
-                type="email"
-                id="defaultFormRegisterConfirmEx1"
-                className="form-control"
-                name="email"
-                placeholder="Your Email address"
-                required
-              />
-              <div className="valid-feedback">Looks good!</div>
-
-              <div className="invalid-feedback">
-                Please provide a valid email.
-              </div>
-            </MDBRow>
-            <MDBRow md="4" className="mb-3">
-              <label
-                htmlFor="defaultFormRegisterConfirmEx2"
-                className="grey-text"
-              >
-                Phone
-              </label>
-                           
-              <input
-                className="form-control"
-                name="phone"
-                id="defaultFormRegisterConfirmEx2"
-                onChange={this.handleChange}
-                value={this.state.phone}
-                type="number"
-                placeholder="Enter a phone number"
-                required
-              />
-              <div className="valid-feedback">Looks good!</div> 
-              <div className="invalid-feedback">
-                Please provide a valid Phone number.
-              </div>
-                         
-            </MDBRow>
-            <MDBRow md="4" className="mb-3">
-                        
-              <label
-                htmlFor="defaultFormRegisterConfirmEx3"
-                className="grey-text"
-                style={{ marginLeft: "-6%", marginTop: "-2%" }}
-              >
-                Password
-              </label>
-                            
-              <input
-                type="password"
-                className="form-control"
-                id="defaultFormRegisterConfirmEx3"
-                name="password"
-                onChange={this.handleChange}
-                placeholder="Enter password"
-                value={this.state.password}
-                required
-              />
-              <div className="valid-feedback">Looks good!</div>
-              <div className="invalid-feedback">Please enter a Password.</div>
-                                 
-            </MDBRow>
-
-            <button
-              className="btn btn-primary w-md waves-effect waves-light"
-              color="primary"
-              type="submit"
-              onClick={this.handleSubmit}
-              style={{ marginLeft: "64%" }}
-              disabled={this.state.disabled}
+            <label
+              htmlFor="defaultFormRegisterNameEx"
+              style={{ marginTop: "3%" }}
             >
-              CREATE USER
-            </button>
+              Full Name
+            </label>
+            <input
+              value={this.state.fname}
+              name="fullName"
+              onChange={this.handleChange}
+              type="text"
+              id="defaultFormRegisterNameEx"
+              className="form-control"
+              placeholder="Full Name"
+              required
+            />
+            <label
+              htmlFor="defaultFormRegisterConfirmEx1"
+              style={{ marginTop: "3%" }}
+            >
+              Email
+            </label>
+            <input
+              value={this.state.email}
+              onChange={this.handleChange}
+              type="email"
+              id="defaultFormRegisterConfirmEx1"
+              className="form-control"
+              name="email"
+              placeholder="Your Email address"
+              required
+            />
+            <label
+              htmlFor="defaultFormRegisterConfirmEx2"
+              style={{ marginTop: "3%" }}
+            >
+              Phone
+            </label>
+                         
+            <input
+              className="form-control"
+              name="phone"
+              id="defaultFormRegisterConfirmEx2"
+              onChange={this.handleChange}
+              value={this.state.phone}
+              type="number"
+              placeholder="Enter a phone number"
+              required
+            />
+            <label
+              htmlFor="defaultFormRegisterConfirmEx2"
+              style={{ marginTop: "3%" }}
+            >
+              Password
+            </label>
+                         
+            <input
+              className="form-control"
+              name="password"
+              id="defaultFormRegisterConfirmEx2"
+              type="password"
+              onChange={this.handleChange}
+              value={this.state.password}
+              placeholder="Enter a password"
+              required
+            />
+                                                      
           </form>
         </Modal.Body>
+        <Modal.Footer>
+          <button
+            className="btn"
+            type="submit"
+            onClick={this.handleSubmit}
+            disabled={this.state.disabled}
+            style={{ backgroundColor: "#36295C", color: "white" }}
+          >
+            CREATE USER
+          </button>
+        </Modal.Footer>
       </Modal>
     );
   }
