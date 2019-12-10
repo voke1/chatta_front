@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from "reactn";
 import { Link } from "react-router-dom";
 import avatar from "../components/admin/images/users/avatar-1.jpg";
 import "../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
@@ -33,7 +33,9 @@ export class ManageBot extends Component {
       secondaryColor: " ",
       fileUpload: null,
       loading: true,
-      updateSettings: false
+      updateSettings: false,
+      chatTree: [],
+      treeId: ""
     };
     this.inputRef = React.createRef();
   }
@@ -42,25 +44,22 @@ export class ManageBot extends Component {
     Axios.get(`${BASE_URL}/setting/${this.state.settingId}`)
       .then(res => {
         const result = res.data;
-        setTimeout(() => {
-          this.setState({ settings: result });
-        }, 1000);
+        const settings = result.findTree.setting_id;
+        this.setState({
+          settings,
+          chatTree: result.findTree.chat_body,
+          treeId: result.findTree._id,
+          chatbotName: settings.chatbotName,
+          welcomeMessage: settings.welcomeMessage,
+          fallbackMessage: settings.fallbackMessage,
+          delayPrompt: settings.delayPrompt,
+          delayTime: settings.delayTime,
+          primaryColor: settings.primaryColor,
+          secondaryColor: settings.secondaryColor,
+          botImage: settings.botImage
+        });
       })
       .catch(err => {});
-    console.log("Result67:", this.state.settings);
-
-    setTimeout(() => {
-      this.setState({
-        primaryColor: this.state.settings.primaryColor,
-        secondaryColor: this.state.settings.secondaryColor,
-        fallbackMessage: this.state.settings.fallbackMessage,
-        botImage: this.state.settings.botImage,
-        delayPrompt: this.state.settings.delayPrompt,
-        chatbotName: this.state.settings.chatbotName,
-        delayTime: this.state.settings.delayTime,
-        loading: false
-      });
-    }, 2000);
   }
 
   handleChange = event => {
@@ -148,10 +147,9 @@ export class ManageBot extends Component {
       botImage: this.state.botImage
     };
 
-    Axios.put(`${BASE_URL}/setting/${this.state.settingId}`, {
-      ...bot
-    })
-      .then(res => {})
+    Axios.put(`${BASE_URL}/setting/${this.state.settingId}`, bot)
+      .then(res => {
+      })
       .catch(err => {
         console.log(err);
       });
@@ -395,7 +393,7 @@ export class ManageBot extends Component {
           </div>
         </div>
 
-        {this.state.loading ? (
+        {!this.state.settings.fallbackMessage ? (
           <div className="wrapper">
             <div className="container-fluid">
               <div className="preloader">
@@ -408,7 +406,7 @@ export class ManageBot extends Component {
           </div>
         ) : (
           <div className="content">
-            <div className="container-fluid" style={{marginTop: "25px"}}>
+            <div className="container-fluid" style={{ marginTop: "25px" }}>
               <div className="row">
                 <div className="col-md-8 mt-20">
                   <div className="card ">
@@ -534,7 +532,18 @@ export class ManageBot extends Component {
                       <Tab eventKey="intent" title="Edit tree">
                         <div className="card w-100">
                           <div className="card-body">
-                            {this.state.tab === "intent" ? <FetchTree /> : ""}
+                            {this.state.tab === "intent" ? (
+                              <FetchTree
+                                chatTree={this.state.chatTree}
+                                treeId={this.state.treeId}
+                                settings={{
+                                  fallbackMessage: this.state.fallbackMessage,
+                                  delayPrompt: this.state.delayPrompt
+                                }}
+                              />
+                            ) : (
+                              ""
+                            )}
                           </div>
                         </div>
                       </Tab>

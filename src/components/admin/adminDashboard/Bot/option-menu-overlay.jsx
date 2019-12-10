@@ -133,7 +133,7 @@ class Example extends Component {
     // set fallback options
     if (this.global.chatTree) {
       console.log("yes")
-      const fallbackTree = this.global.chatTree.tree.filter(
+      const fallbackTree = this.global.chatTree.filter(
         tree => tree.identity === "empty"
       );
       const fallBackTreeButtons = fallbackTree[0].response.buttons;
@@ -149,7 +149,7 @@ class Example extends Component {
         }
       });
       // set delay prompt options
-      const delaypromptTree = this.global.chatTree.tree.filter(
+      const delaypromptTree = this.global.chatTree.filter(
         tree => tree.identity === "empty"
       );
       const delaypromptTreeButtons = delaypromptTree[0].response.buttons;
