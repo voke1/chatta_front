@@ -3,6 +3,9 @@ import { Modal, Button } from "react-bootstrap";
 import { MDBRow, MDBBtn } from "mdbreact";
 import { Validation } from "../../../utilities/validations";
 import Axios from "axios";
+import { APP_ENVIRONMENT } from "../../../environments/environment";
+
+const BASE_URL = APP_ENVIRONMENT.base_url;
 
 export class CreateUser extends Component {
   constructor(props) {
@@ -44,7 +47,8 @@ export class CreateUser extends Component {
       isVerified: true
     };
 
-    Axios.post("http://localhost:9000/client/newclient", {
+    console.log(user);
+    Axios.post(`${BASE_URL}/client/newclient`, {
       ...user
     })
       .then(res => {

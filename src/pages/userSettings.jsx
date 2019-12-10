@@ -10,8 +10,10 @@ import "../components/admin/images/favicon.ico";
 import "../components/admin/css/switch.css";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import Axios from "axios";
+import { APP_ENVIRONMENT } from "../environments/environment";
 import UserUpdateDialog from "../components/admin/adminDashboard/Bot/userUpdateDialog";
 
+const BASE_URL = APP_ENVIRONMENT.base_url;
 export class UserSettings extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +28,7 @@ export class UserSettings extends Component {
     };
   }
   componentDidMount() {
-    Axios.get(`http://localhost:9000/client/${this.state.clientId}`)
+    Axios.get(`${BASE_URL}/client/${this.state.clientId}`)
       .then(res => {
         const result = res.data;
         setTimeout(() => {
@@ -59,7 +61,7 @@ export class UserSettings extends Component {
 
     console.log(user);
 
-    Axios.put(`http://localhost:9000/client/${this.state.clientId}`, {
+    Axios.put(`${BASE_URL}/client/${this.state.clientId}`, {
       ...user
     })
       .then(res => {

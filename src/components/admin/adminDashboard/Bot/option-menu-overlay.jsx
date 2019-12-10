@@ -132,6 +132,7 @@ class Example extends Component {
     console.log("it just mounted",this.global);
     // set fallback options
     if (this.global.chatTree) {
+      console.log("yes")
       const fallbackTree = this.global.chatTree.tree.filter(
         tree => tree.identity === "empty"
       );

@@ -6,7 +6,9 @@ import $ from "jquery";
 import JsonTree from "./convo.json";
 import axios from "axios";
 import BotForm from "../../../components/admin/adminDashboard/Bot/botForm";
+import { APP_ENVIRONMENT } from "../../../environments/environment";
 
+const BASE_URL = APP_ENVIRONMENT.base_url;
 export default class Convo extends Component {
   appService;
   static userName;
@@ -121,7 +123,7 @@ export default class Convo extends Component {
     // const convoTree = await this.appService.getConversationTree('tree');  This is your main API function for convo tree
 
     axios
-      .get("http://localhost:9000/tree/")
+      .get(`${BASE_URL}/tree`)
       .then(res => {
         console.log("chat_body:", res.data[res.data.length - 1].chat_body);
         // const convoTree = res.data[res.data.length - 1].chat_body;

@@ -17,21 +17,20 @@ class EmailVerification extends Component {
   }
   async componentDidMount() {
     const params = query_string.parse(this.props.location.search);
+    console.log()
     verifyEmail(params.token)
       .then(res => {
         if (res.data.success) {
-            window.localStorage.token = params.token;
+          window.localStorage.token = params.token;
           this.setState({
             redirect: "/dashboard/admin"
           });
         }
-
-
       })
       .catch(error => {
-          console.log("error response",error)
+        console.log("error response", error);
         this.setState({
-          redirect: "/error_page"
+          redirect: "/dashboard/admin"
         });
       });
   }

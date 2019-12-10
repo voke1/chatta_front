@@ -38,6 +38,7 @@ class Register extends Component {
       fullName: this.state.fullName
     };
     register(user).then(res => {
+      console.log("this is res.data", res.data)
       if (res) {
         if (!res.data.success) {
           console.log(res);
@@ -104,19 +105,17 @@ class Register extends Component {
                 </p>
 
                 <div
-                  className="alert"
+                  className="alert2"
                   style={{
-                    border: this.state.message ? this.state.borderColor : ""
                   }}
                 >
                   {this.state.isChanged ? message : ""}
                 </div>
                 <form
-                  className="form-horizontal m-t-30"
+                  className="text-center m-t-30"
                   onSubmit={this.onSubmit}
                 >
-                  <div className="form-group">
-                    <label htmlFor="fullName">Full Name</label>
+                  <div className="md-form">
                     <input
                       disabled={this.state.success}
                       style={{ backgroundColor: this.state.nameColor }}
@@ -126,12 +125,11 @@ class Register extends Component {
                       name="fullName"
                       value={this.state.fullName}
                       onChange={this.onChange}
-                      placeholder="Enter full name"
+                      placeholder="Full name"
                     />
                   </div>
 
-                  <div className="form-group">
-                    <label htmlFor="email">Email</label>
+                  <div className="md-form">
                     <input
                       disabled={this.state.success}
                       style={{ backgroundColor: this.state.emailColor }}
@@ -141,12 +139,11 @@ class Register extends Component {
                       name="email"
                       value={this.state.email}
                       onChange={this.onChange}
-                      placeholder="Enter email"
+                      placeholder="Email"
                     />
                   </div>
 
-                  <div className="form-group">
-                    <label htmlFor="password">Password</label>
+                  <div className="md-form">
                     <input
                       disabled={this.state.success}
                       style={{ backgroundColor: this.state.passwordColor }}
@@ -156,7 +153,7 @@ class Register extends Component {
                       name="password"
                       value={this.state.password}
                       onChange={this.onChange}
-                      placeholder="Enter password"
+                      placeholder="Password"
                     />
                   </div>
 

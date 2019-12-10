@@ -28,9 +28,10 @@ class Login extends Component {
       disabled: true
     };
     login(user).then(res => {
-      if (res) {
+                console.log("this is res", res);
+
+      if (res.data) {
         if (!res.data.success) {
-          console.log(res);
           this.setState({
             isChanged: true,
             message: res.data.message,
@@ -38,19 +39,20 @@ class Login extends Component {
             showProgress: false
           });
         }
-      }
-
-      if (res.data.success) {
-        if (!res.data.userDetails.isAdmin) {
-          this.setState({
-            redirect: "/dashboard/admin"
-          });
-        } else {
-          this.setState({
-            redirect: "/dashboard/admin"
-          });
+        if (res.data.success) {
+          if (!res.data.userDetails.isAdmin) {
+            this.setState({
+              redirect: "/dashboard/admin"
+            });
+          } else {
+            this.setState({
+              redirect: "/dashboard/admin"
+            });
+          }
         }
       }
+
+      
     });
   };
   renderRedirect = target => {
@@ -90,12 +92,7 @@ class Login extends Component {
                 Sign in to continue to Chatta.
               </p>
 
-              <div
-                className="alert"
-                style={{
-                  border: this.state.message ? "1px solid #edabaf" : null
-                }}
-              >
+              <div className="alert2" style={{}}>
                 <div
                   className="row align-items-center justify-content-center"
                   style={{ margin: 1 }}
@@ -104,30 +101,28 @@ class Login extends Component {
               </div>
               <form
                 onSubmit={this.onSubmit}
-                className="form-horizontal m-t-30"
+                className="text-center m-t-30"
                 action="https://themesbrand.com/fonik/purple/index.html"
               >
-                <div className="form-group">
-                  <label for="email">Email</label>
+                <div className="md-form">
                   <input
                     name="email"
                     onChange={this.onChange}
                     type="email"
                     className="form-control"
                     id="email"
-                    placeholder="Enter Email"
+                    placeholder="Email"
                   ></input>
                 </div>
 
-                <div className="form-group">
-                  <label for="password">Password</label>
+                <div className="md-form">
                   <input
                     name="password"
                     onChange={this.onChange}
                     type="password"
                     className="form-control"
                     id="password"
-                    placeholder="Enter password"
+                    placeholder="Password"
                   ></input>
                 </div>
 

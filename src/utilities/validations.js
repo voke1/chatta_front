@@ -30,12 +30,21 @@ export class Validation {
       "Name should contain first name and last name and must be between 4 to 30 characters long"
     );
   }
-
+  static async validatePhone(phone) {
+    const passwordRegex = /^[0][1-9]\d{9}$|^[1-9]\d{9}$/;
+    const success = passwordRegex.test(phone);
+    return await Validation.getResponse(
+      success,
+      "phone",
+      "Please enter a valide phone number"
+    );
+  }
   static async validateAll(e) {
     const validate = {
       email: this.validateEmail,
       password: this.validatePassword,
-      fullName: this.validateFullName
+      fullName: this.validateFullName,
+      phone: this.validatePhone
     };
     const validated = e.target.name;
     const result = await validate[validated](e.target.value);

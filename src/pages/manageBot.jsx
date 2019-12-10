@@ -12,8 +12,10 @@ import Axios from "axios";
 import { Tab, Tabs, Row, Col, Form, Button } from "react-bootstrap";
 import FetchTree from "../components/admin/adminDashboard/Bot/fetch-tree";
 import { storage } from "../firebase/index";
+import { APP_ENVIRONMENT } from "../environments/environment";
 import BotUpdateAlertDialog from "../components/admin/adminDashboard/Bot/botUpdateDialog";
 
+const BASE_URL = APP_ENVIRONMENT.base_url;
 export class ManageBot extends Component {
   constructor(props) {
     super(props);
@@ -37,7 +39,7 @@ export class ManageBot extends Component {
   }
 
   componentDidMount() {
-    Axios.get(`http://localhost:9000/setting/${this.state.settingId}`)
+    Axios.get(`${BASE_URL}/setting/${this.state.settingId}`)
       .then(res => {
         const result = res.data;
         setTimeout(() => {
@@ -146,7 +148,7 @@ export class ManageBot extends Component {
       botImage: this.state.botImage
     };
 
-    Axios.put(`http://localhost:9000/setting/${this.state.settingId}`, {
+    Axios.put(`${BASE_URL}/setting/${this.state.settingId}`, {
       ...bot
     })
       .then(res => {})
@@ -406,10 +408,10 @@ export class ManageBot extends Component {
           </div>
         ) : (
           <div className="content">
-            <div className="container-fluid">
+            <div className="container-fluid" style={{marginTop: "25px"}}>
               <div className="row">
-                <div className="col-md-8">
-                  <div className="card">
+                <div className="col-md-8 mt-20">
+                  <div className="card ">
                     {this.state.updateSettings ? (
                       <BotUpdateAlertDialog closeDialog={this.closeDialog} />
                     ) : null}
