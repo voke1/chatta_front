@@ -1,3 +1,4 @@
+
 const validations = [];
 export class Validation {
   static async validateEmail(email) {
