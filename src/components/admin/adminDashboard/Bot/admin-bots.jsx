@@ -29,7 +29,6 @@ export class Bot extends Component {
   }
 
   componentDidMount() {
-    console.log("THIS IS EVV", process.env);
 
     fetch(`${BASE_URL}/setting`)
       .then(res => res.json())

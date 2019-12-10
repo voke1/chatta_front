@@ -1,5 +1,5 @@
 import axios from "axios";
-import { APP_ENVIRONMENT } from "../environments/environment";
+import { APP_ENVIRONMENT } from "../../../../environments/environment";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 

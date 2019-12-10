@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { register } from "./UserFunctions";
-import { Validation } from "../utilities/validations";
+import { Validation } from "../../../../utilities/validations";
 import ProgressBar from "./progressbar";
 
 class Register extends Component {
@@ -16,6 +16,7 @@ class Register extends Component {
     };
     this.onChange = this.onChange.bind(this);
   }
+
   async onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
     const result = await Validation.validateAll(e);
@@ -38,7 +39,7 @@ class Register extends Component {
       fullName: this.state.fullName
     };
     register(user).then(res => {
-      console.log("this is res.data", res.data)
+      console.log("this is res.data", res.data);
       if (res) {
         if (!res.data.success) {
           console.log(res);
@@ -104,17 +105,10 @@ class Register extends Component {
                   Get your free Chatta account now.
                 </p>
 
-                <div
-                  className="alert2"
-                  style={{
-                  }}
-                >
+                <div className="alert2" style={{}}>
                   {this.state.isChanged ? message : ""}
                 </div>
-                <form
-                  className="text-center m-t-30"
-                  onSubmit={this.onSubmit}
-                >
+                <form className="text-center m-t-30" onSubmit={this.onSubmit}>
                   <div className="md-form">
                     <input
                       disabled={this.state.success}

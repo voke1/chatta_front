@@ -6,7 +6,7 @@ import "../../css/bootstrap.min.css";
 import "../../images/favicon.ico";
 import CreateIntent from "./create-intent";
 import * as apiService from "../../../../services/apiservice";
-import ProgressBar from "../../../progressbar";
+import ProgressBar from "../Authentication/progressbar";
 import { storage } from "../../../../firebase/index";
 class BotTabs extends Component {
   constructor(props) {
@@ -31,7 +31,8 @@ class BotTabs extends Component {
     delayTime: null,
     primaryColor: " ",
     secondaryColor: " ",
-    file: " Upload bot image"
+    file: " Upload bot image",
+    settings: {}
     // displayState: "none"
   };
   handleChange = event => {
@@ -67,7 +68,8 @@ class BotTabs extends Component {
         this.setState({
           tab: "intent",
           showProgress: false,
-          settingsSaved: true
+          settingsSaved: true,
+          settings: res
         });
       })
       .catch(err => {
@@ -263,6 +265,7 @@ class BotTabs extends Component {
             <div className="card w-100">
               <div className="card-body">
                 <CreateIntent
+                  settings={this.state.settings}
                   getTab={() => this.setState({ tab: "intent" })}
                   closeOverlay={this.props.closeOverlay}
                   disableHomeTab={() =>
