@@ -4,7 +4,7 @@ import Response from "./response";
 import OptionForm from "./option-form";
 import uuid from "uuid/v1";
 import * as apiService from "../../../../services/apiservice";
-import ProgressBar from "../../../progressbar";
+import ProgressBar from "../Authentication/progressbar";
 import DeletePrompt from "./delete-prompt-modal";
 import EditPrompt from "./response-dialog";
 class CreateIntent extends Component {
@@ -24,7 +24,10 @@ class CreateIntent extends Component {
     delayPromptClass: "fas fa-times animated fadeIn red-text",
     fallbackCount: 0,
     delayPromptCount: 0,
-    message: ""
+    message: "",
+    settings: {},
+    treeId: "",
+    fetched: false
   };
   getTree = tree => {
     console.log("this is tree", tree);
@@ -64,24 +67,50 @@ class CreateIntent extends Component {
     event.preventDefault();
     if (this.state.buttonText === "FINISH") {
       this.props.closeOverlay();
+    } else {
+      this.setState({ setProgress: true, disabled: true });
+      if (this.props.fetched) {
+        console.log("was saved", this.state.chatBody[0]);
+        apiService
+          .patch(`tree/${this.state.treeId}`, {
+            chat_body: this.state.chatBody[0]
+          })
+          .then(res => {
+            console.log("saved tree", res);
+            this.setState({
+              setProgress: false,
+              buttonText: this.props.ConvoTree ? "SAVED" : "FINISH",
+              buttonColor: "btn-success",
+              animation: "animated shake",
+              disabledButton: this.props.ConvoTree ? true : false
+            });
+            this.props.disableHomeTab();
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else {
+        console.log("deployed");
+        apiService
+          .post("tree", {
+            setting_id: this.props.settings._id,
+            chat_body: this.state.chatBody[0]
+          })
+          .then(res => {
+            this.setState({
+              setProgress: false,
+              buttonText: this.props.ConvoTree ? "SAVED" : "FINISH",
+              buttonColor: "btn-success",
+              animation: "animated shake",
+              disabledButton: this.props.ConvoTree ? true : false
+            });
+            this.props.disableHomeTab();
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     }
-    this.setState({ setProgress: true, disabled: true });
-    apiService
-      .post("tree", { chat_body: this.state.chatBody[0] })
-      .then(res => {
-        console.log(res);
-        this.setState({
-          setProgress: false,
-          buttonText: this.props.ConvoTree ? "SAVED" : "FINISH",
-          buttonColor: "btn-success",
-          animation: "animated shake",
-          disabledButton: this.props.ConvoTree ? true : false
-        });
-        this.props.disableHomeTab();
-      })
-      .catch(err => {
-        console.log(err);
-      });
   };
   setButtonText = () => {
     this.setState({
@@ -169,6 +198,8 @@ class CreateIntent extends Component {
             getTab={this.props.getTab}
             chatTree={this.props.ConvoTree}
             fetchTree={this.props.fetchTree}
+            settings={this.state.settings}
+            fetched={this.props.fetched}
           />
           <hr></hr>
           {this.state.setProgress ? <ProgressBar /> : ""}
@@ -191,17 +222,18 @@ class CreateIntent extends Component {
     );
   }
   componentDidMount() {
+    console.log("settings from create intent", this.props.ConvoTree);
     this.setState({
-      prompt: this.props.ConvoTree ? this.props.ConvoTree.tree[0].prompt : "",
-      chatBody: this.props.ConvoTree ? this.props.ConvoTree.tree : [],
+      prompt: this.props.ConvoTree ? this.props.ConvoTree[0].prompt : "",
+      chatBody: this.props.ConvoTree ? this.props.ConvoTree : [],
       buttonText: this.props.ConvoTree ? "SAVE" : "DEPLOY",
       fallbackCount: this.props.ConvoTree
-        ? this.props.ConvoTree.tree[this.props.ConvoTree.tree.length - 2]
-            .response.buttons.length
+        ? this.props.ConvoTree[this.props.ConvoTree.length - 2].response.buttons
+            .length
         : 0,
       delayPromptCount: this.props.ConvoTree
-        ? this.props.ConvoTree.tree[this.props.ConvoTree.tree.length - 1]
-            .response.buttons.length
+        ? this.props.ConvoTree[this.props.ConvoTree.length - 1].response.buttons
+            .length
         : 0,
       fallbackClass: this.props.ConvoTree
         ? "fas fa-check animated fadeIn green-text"
@@ -209,7 +241,9 @@ class CreateIntent extends Component {
       delayPromptClass: this.props.ConvoTree
         ? "fas fa-check animated fadeIn green-text"
         : "fas fa-times animated fadeIn red-text",
-      disabledButton: true
+      disabledButton: true,
+      treeId: this.props.treeId,
+      fetched: this.props.fetched
     });
     this.setGlobal({
       openDialog: this.openDeleteDialog,
@@ -220,6 +254,10 @@ class CreateIntent extends Component {
       disableButton: this.disableButton,
       setButtonText: this.setButtonText
     });
+  }
+  componentWillReceiveProps(props) {
+    console.log("receivin props", props);
+    this.setState({ settings: props.settings });
   }
 }
 export default CreateIntent;

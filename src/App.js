@@ -8,9 +8,9 @@ import { UserSettings } from "./pages/userSettings";
 import { Dashboard } from "./pages/dashboard";
 import { Bot } from "./components/admin/adminDashboard/Bot/admin-bots";
 import { UserList } from "./pages/users";
-import Register from "./components/Register";
-import Login from "./components/Login";
-import VerifyEmail from "./components/emailVerification";
+import Register from "./components/admin/adminDashboard/Authentication/Register";
+import Login from "./components/admin/adminDashboard/Authentication/Login";
+import VerifyEmail from "./components/admin/adminDashboard/Authentication/emailVerification";
 import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 // import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 

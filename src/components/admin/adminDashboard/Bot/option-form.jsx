@@ -11,8 +11,8 @@ let fallbackTree;
 let DelayPromptTree;
 
 const OptionBox = props => {
-  console.log("props from option box", props.chatTree);
-
+  console.log("props from option box", props);
+  console.log("this is the new props", props);
   const [responses, setResponses] = useState([]);
   const [response, setResponse] = useState("");
   const [inputVal, setInputVal] = useState("");
@@ -22,22 +22,22 @@ const OptionBox = props => {
   const [enableButton, setEnableButton] = useGlobal("enableButton");
   const [buttonText, setButtonText] = useGlobal("setButtonText");
   const [rendered, setRendered] = useState(false);
+  const [settings, setSettings] = useState(props.settings);
 
   // runs when components mounts
   useEffect(() => {
     if (props.chatTree) {
-      identities = props.chatTree.tree.slice(1, props.chatTree.tree.length - 2);
-      initialTree = props.chatTree.tree[0];
-      fallbackTree = props.chatTree.tree[props.chatTree.tree.length - 2];
-      DelayPromptTree = props.chatTree.tree[props.chatTree.tree.length - 1];
+      identities = props.chatTree.slice(1, props.chatTree.length - 2);
+      initialTree = props.chatTree[0];
+      fallbackTree = props.chatTree[props.chatTree.length - 2];
+      DelayPromptTree = props.chatTree[props.chatTree.length - 1];
 
-      console.log("it is our new array", newTreeArray);
-      props.chatTree.tree[0].response.buttons.forEach(button => {
+      props.chatTree[0].response.buttons.forEach(button => {
         const body = {
           key: button.key,
           botKey: button.key,
           val: button.val,
-          identity: props.chatTree.tree[0].identity
+          identity: props.chatTree[0].identity
         };
         if (!initialResponses.indexOf(body) > -1) {
           initialResponses.push(body);
@@ -150,12 +150,15 @@ const OptionBox = props => {
   syncTree function builds the chat tree including also the fallback and delay prompt body
   */
   function syncTree(tree, initial, message, option) {
+    if (props.fetched) {
+      fallbackTree.prompt = props.settings.fallbackMessage;
+      DelayPromptTree.prompt = props.settings.delayPrompt;
+    }
     if (message) {
       if (message.type === "fallback") {
         const fallback = {
           identity: "empty",
-          prompt:
-            "Sorry I don't understand what you said. Would you like to know about the following?",
+          prompt: props.settings.fallbackMessage,
           response: {
             buttons: [{ key: message.botKey, val: message.response }],
             text: ""
@@ -185,8 +188,7 @@ const OptionBox = props => {
       if (message.type === "delayprompt") {
         const delayprompt = {
           identity: "delay_prompt",
-          prompt:
-            "Hello, are you still there?... You can check out the various types of life insurance we offer:",
+          prompt: props.settings.delayPrompt,
           response: {
             buttons: [{ key: message.botKey, val: message.response }],
             text: ""
@@ -252,7 +254,7 @@ const OptionBox = props => {
     } else disableButton(fallbackTree, DelayPromptTree);
   }
 
-  const modifyOption =  async (botId, action) => {
+  const modifyOption = async (botId, action) => {
     if (action.type === "delete") {
       const convoButtons = newTreeArray[0].response.buttons;
       for (let index = 0; index < convoButtons.length; index++) {
@@ -376,6 +378,7 @@ const OptionBox = props => {
           syncTree={syncTree}
           identity={res.identity}
           modifyOption={modifyOption}
+          chatTree={props.chatTree}
         />
       ))}
 
@@ -416,5 +419,3 @@ const OptionBox = props => {
 };
 
 export default OptionBox;
-
-
