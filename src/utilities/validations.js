@@ -31,15 +31,17 @@ export class Validation {
     );
   }
   static async validatePhone(phone) {
-    const passwordRegex = /^[0][1-9]\d{9}$|^[1-9]\d{9}$/;
-    const success = passwordRegex.test(phone);
+    const result = phone.toString();
+    const stripedResult = result.slice(1);
+    const passwordRegex = /^[0-9]{10}$|^[0-9]{12}$/;
+    const success = passwordRegex.test(stripedResult);
     return await Validation.getResponse(
       success,
       "phone",
       "Please enter a valid phone number"
     );
   }
-  static async validateAll(e) {
+  static async validateAll(e, client) {
     const validate = {
       email: this.validateEmail,
       password: this.validatePassword,
@@ -55,10 +57,12 @@ export class Validation {
     } else {
       if (validations.indexOf(validated) === -1) validations.push(validated);
     }
-    return await Validation.runCheck(result);
+    return await Validation.runCheck(result, client);
   }
-  static async runCheck(result) {
-    if (validations.length === 3) {
+  static async runCheck(result, client) {
+    const length = client ? 4 : 3;
+
+    if (validations.length === length) {
       return Validation.getResponse(true, result.type, "", false);
     } else {
       return result;

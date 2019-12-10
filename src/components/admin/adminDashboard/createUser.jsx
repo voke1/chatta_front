@@ -15,7 +15,8 @@ export class CreateUser extends Component {
       password: null,
       email: null,
       phone: null,
-      disabled: true
+      disabled: true,
+      setValidate: true
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -25,7 +26,7 @@ export class CreateUser extends Component {
       [event.target.name]: event.target.value
     });
 
-    const result = await Validation.validateAll(event);
+    const result = await Validation.validateAll(event, this.state.setValidate);
     this.setState({
       isChanged: true,
       message: result.message,
@@ -148,9 +149,8 @@ export class CreateUser extends Component {
                 onChange={this.handleChange}
                 value={this.state.phone}
                 type="number"
-                placeholder="Enter Phone Number"
+                placeholder="Enter a phone number"
                 required
-                maxlength="11"
               />
               <div className="valid-feedback">Looks good!</div> 
               <div className="invalid-feedback">
