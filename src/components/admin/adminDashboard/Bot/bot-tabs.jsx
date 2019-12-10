@@ -8,6 +8,7 @@ import CreateIntent from "./create-intent";
 import * as apiService from "../../../../services/apiservice";
 import ProgressBar from "../../../progressbar";
 import { storage } from "../../../../firebase/index";
+
 class BotTabs extends Component {
   constructor(props) {
     super(props);
@@ -247,7 +248,7 @@ class BotTabs extends Component {
                     <hr></hr>
                     {this.state.showProgress ? <ProgressBar /> : ""}
                     <button
-                      className="   btn btn-secondary btn-sm waves-effect"
+                      className="btn btn-secondary btn-sm waves-effect"
                       // type="submit"
                       style={{ width: "100px", float: "right" }}
                       onClick={this.handleSubmit}

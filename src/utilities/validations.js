@@ -16,14 +16,14 @@ export class Validation {
       success,
       "password",
       "Password must be between 8 and 20 characters long and must contain" +
-      " at least 1 number"
+        " at least 1 number"
     );
   }
   static async validateFullName(fullName) {
     const words = fullName.split(" ");
     const nameRegex = /^[a-zA-Z ]{4,30}$/;
     const success =
-      nameRegex.test(fullName) && (words.length > 1 && words[1].length > 0);
+      nameRegex.test(fullName) && words.length > 1 && words[1].length > 0;
     return await Validation.getResponse(
       success,
       "name",

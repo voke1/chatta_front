@@ -12,7 +12,6 @@ import Switch from "react-toggle-switch";
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import { Button, ButtonToolbar } from "react-bootstrap";
 import { CreateUser } from "../components/admin/adminDashboard/createUser";
-import { UserSettings } from "./userSettings";
 
 import UserDialog from "../components/admin/adminDashboard/Bot/userDeleteDialgo";
 
@@ -24,7 +23,9 @@ export class UserList extends Component {
       switched: false,
       loading: true,
       userDelete: false,
-      userId: null
+      userId: null,
+      result: "",
+      notification: false
     };
   }
 
@@ -52,7 +53,10 @@ export class UserList extends Component {
             ...item,
             switched: item.isEnabled
           }));
-          this.setState({ clients: result, loading: false });
+          this.setState({
+            clients: result,
+            loading: false
+          });
         }
         return null;
       })
@@ -96,6 +100,11 @@ export class UserList extends Component {
     });
   };
 
+  updateList = () => {
+    this.componentDidMount();
+    this.setState({ notification: true });
+  };
+
   App = () => {
     const [modalShow, setModalShow] = useState(false);
     return (
@@ -106,6 +115,23 @@ export class UserList extends Component {
             <div id="status">
               <div className="spinner"></div>
             </div>
+          </div>
+        ) : null}
+        {this.state.notification ? (
+          <div
+            className="alert alert-success alert-dismissible fade show animated slideInRight faster"
+            role="alert"
+          >
+            <strong>User created successfully!</strong>
+
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
         ) : null}
 
@@ -355,6 +381,7 @@ export class UserList extends Component {
                     <CreateUser
                       show={modalShow}
                       onHide={() => setModalShow(false)}
+                      updateList={this.updateList}
                     />
                   </ButtonToolbar>
                 </div>
