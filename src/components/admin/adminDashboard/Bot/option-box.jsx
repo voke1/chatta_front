@@ -193,7 +193,7 @@ class OptionBox extends Component {
   componentDidMount() {
     const height = this.divElement.clientHeight;
     this.setState({ height: height, identity: this.props.botKey });
-    if (this.props.chatTree || this.props.props.chatTree) {
+    if (this.props.chatTree) {
       this.props.chatTree.forEach(tree => {
         if (tree.identity === this.props.botKey) {
           tree.response.buttons.forEach(button => {
