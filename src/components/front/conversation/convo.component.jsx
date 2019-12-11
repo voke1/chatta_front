@@ -21,9 +21,11 @@ export default class Convo extends Component {
       times: [],
       userChoices: [],
       thinking: false,
+      canListen: true,
       self: true,
       tree: [],
-      collectUserInfo: true,
+      collectUserInfo: false,
+      userIsKnown: false,
       anything: "xx",
       username: "",
       email: "",
@@ -81,10 +83,13 @@ export default class Convo extends Component {
         username: userName,
         email: userEmail,
         anything: "yyy",
-        collectUserInfo: false
+        collectUserInfo: false,
+        userIsKnown: true,
+        canListen: true
       });
       this.searchTree("start", `Thanks ${this.state.username}`);
     }, 10);
+    this.setDelayListener(true);
   };
   render() {
     return (
@@ -98,10 +103,14 @@ export default class Convo extends Component {
       </div>
     );
   }
+  determineLister() {}
 
   componentDidMount = () => {
+    // this.determineLister()
+    if (this.props.settings.collectUserInfo) {
+      this.setState({ canListen: false, collectUserInfo: true });
+    }
     this.getConversationTree();
-    this.setDelayListener();
   };
 
   componentWillReceiveProps(newProps) {
@@ -195,10 +204,12 @@ export default class Convo extends Component {
       };
       choices.push(userChoice);
     }
+
     this.setState({
       thinking: true,
       responses: choices
     });
+    this.props.getResponder(true);
     //this set timeout forces the  update scrollbar function
     setTimeout(() => {
       this.updateScrollbar();
@@ -215,18 +226,21 @@ export default class Convo extends Component {
     if (this.state.username) {
       info = `Thanks ${this.state.username}`;
     }
-    console.log("refreshing");
-    responses.push(this.searchTree(key, info));
+    const searchResult = this.searchTree(key, info);
+    responses.push(searchResult);
+    console.log("refreshing result", searchResult);
     this.restartTimer();
-    this.delayChat();
+    const timeOutTime = this.delayChat(searchResult.prompt);
     setTimeout(() => {
       this.setState({
         responses: responses,
         times: times,
         thinking: false
       });
+      this.props.getResponder(false);
+
       this.updateScrollbar();
-    }, this.delayChat());
+    }, timeOutTime);
   };
 
   /**
@@ -247,7 +261,7 @@ export default class Convo extends Component {
   setUniqueKey = (id, l = "li") => {
     return `${Date.now()}${Math.random()}${id}${l}`;
   };
-
+  renderConversation;
   /**
    * This method creates a detached (deep) copy of a variable
    */
@@ -260,11 +274,12 @@ export default class Convo extends Component {
    * This method sets delay for bot response
    */
 
-  delayChat = () => {
-    const period = Math.floor(Math.random() * 10);
-    const delay = period > 4 ? 3 : period;
-    console.log("Delay ::", delay);
-    return delay * 1000;
+  delayChat = prompt => {
+    const noOfWords = prompt.split(" ").length;
+    const time = noOfWords * 250;
+    const delayTime = time > 10000 ? 10000 : time;
+
+    return delayTime;
   };
   /**
    * This method renders the UI converstion
@@ -275,7 +290,12 @@ export default class Convo extends Component {
     let time = now.getTime();
 
     if (this.state.collectUserInfo) {
-      return <BotForm handleBotFormsubmit={this.handleBotFormsubmit} />;
+      return (
+        <BotForm
+          handleBotFormsubmit={this.handleBotFormsubmit}
+          settings={this.props.settings}
+        />
+      );
     }
 
     return this.state.responses.map((convo, index) => {
@@ -286,7 +306,8 @@ export default class Convo extends Component {
               <div className="bot-div">
                 <div className="message-data">
                   <span className="message-data-name">
-                    <i className="fa fa-circle me"></i> chatta
+                    <i className="fa fa-circle me"></i>{" "}
+                    {this.props.settings.chatbotName}
                   </span>
                   <span className="message-data-time">
                     {this.state.times[index] || "Now"}
@@ -355,7 +376,7 @@ export default class Convo extends Component {
    */
   updateScrollbar = () => {
     const scrollBar = document.getElementById("chat_bottom");
-    if (scrollBar) {
+    if (scrollBar && this.state.userIsKnown) {
       scrollBar.scrollIntoView({ behavior: "smooth" });
     }
   };
@@ -412,17 +433,20 @@ export default class Convo extends Component {
    * This method sets the delay listener that checks user activity
    */
 
-  setDelayListener = () => {
-    const typingTimer = setInterval(() => {
-      let timer = this.deepCopy(this.state.chatTimer);
-      const refreshTimer = timer >= 60000; //delay of 60 seconds
-      timer += 1000;
-      this.setState({ chatTimer: timer });
-      this.promptUser(refreshTimer);
-    }, 1000);
+  setDelayListener = (listen = null) => {
+    if (this.state.canListen || listen) {
+      const typingTimer = setInterval(() => {
+        let timer = this.deepCopy(this.state.chatTimer); //get initial delay time
+        const refreshTimer =
+          timer >= (this.props.settings.delayTime + 0 || 60000); //delay of 60 seconds
+        timer += 1000;
+        this.setState({ chatTimer: timer });
+        this.promptUser(refreshTimer);
+      }, 1000);
 
-    this.setState({
-      typingTimer: typingTimer
-    });
+      this.setState({
+        typingTimer: typingTimer
+      });
+    }
   };
 }
