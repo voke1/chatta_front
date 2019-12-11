@@ -14,6 +14,7 @@ import FetchTree from "../components/admin/adminDashboard/Bot/fetch-tree";
 import { storage } from "../firebase/index";
 import { APP_ENVIRONMENT } from "../environments/environment";
 import BotUpdateAlertDialog from "../components/admin/adminDashboard/Bot/botUpdateDialog";
+import { Card } from "react-bootstrap";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 export class ManageBot extends Component {
@@ -41,6 +42,7 @@ export class ManageBot extends Component {
   }
 
   componentDidMount() {
+    console.log("is mounted");
     Axios.get(`${BASE_URL}/setting/${this.state.settingId}`)
       .then(res => {
         const result = res.data;
@@ -148,8 +150,7 @@ export class ManageBot extends Component {
     };
 
     Axios.put(`${BASE_URL}/setting/${this.state.settingId}`, bot)
-      .then(res => {
-      })
+      .then(res => {})
       .catch(err => {
         console.log(err);
       });
@@ -416,11 +417,14 @@ export class ManageBot extends Component {
                     <Tabs
                       defaultActiveKey={this.state.tab}
                       id="controlled-tab-example"
-                      onSelect={tab =>
+                      onSelect={tab => {
                         tab === "intent"
                           ? this.setState({ tab, fetchedTree: true })
-                          : this.setState({ tab })
-                      }
+                          : this.setState({ tab });
+                        if (tab === "settings") {
+                          this.componentDidMount();
+                        }
+                      }}
                     >
                       &nbsp;
                       <Tab eventKey="settings" title="Edit Bot" className>
@@ -430,15 +434,17 @@ export class ManageBot extends Component {
                               <form onSubmit={this.handleSubmit}>
                                 <div className="row">
                                   <div className="col-md-12">
-                                    <div className="form-group">
-                                      <label>Bot Name</label>
+                                    <label>Bot Name</label>
+                                    <div className="md-form mt-3">
                                       <input
                                         type="text"
+                                        id="materialSubscriptionFormPasswords"
                                         className="form-control"
                                         value={this.state.chatbotName}
                                         name="chatbotName"
                                         onChange={this.handleChange}
-                                      ></input>
+                                        style={{ marginTop: "-2%" }}
+                                      />
                                     </div>
                                   </div>
                                 </div>
@@ -446,13 +452,16 @@ export class ManageBot extends Component {
                                   <div className="col-md-12">
                                     <div className="form-group">
                                       <label>Delay Time</label>
-                                      <input
-                                        type="text"
-                                        className="form-control"
-                                        value={this.state.delayTime}
-                                        name="delayTime"
-                                        onChange={this.handleChange}
-                                      ></input>
+                                      <div className="md-form mt-3">
+                                        <input
+                                          type="text"
+                                          className="form-control"
+                                          value={this.state.delayTime}
+                                          name="delayTime"
+                                          onChange={this.handleChange}
+                                          style={{ marginTop: "-2%" }}
+                                        />
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -461,13 +470,16 @@ export class ManageBot extends Component {
                                   <div className="col-md-12">
                                     <div className="form-group">
                                       <label>Fallback Message</label>
-                                      <input
-                                        type="text"
-                                        className="form-control"
-                                        value={this.state.fallbackMessage}
-                                        name="fallbackMessage"
-                                        onChange={this.handleChange}
-                                      ></input>
+                                      <div className="md-form mt-3">
+                                        <input
+                                          type="text"
+                                          className="form-control"
+                                          value={this.state.fallbackMessage}
+                                          name="fallbackMessage"
+                                          onChange={this.handleChange}
+                                          style={{ marginTop: "-2%" }}
+                                        ></input>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -476,13 +488,16 @@ export class ManageBot extends Component {
                                   <div className="col-md-12">
                                     <div className="form-group">
                                       <label>Delay Prompt</label>
-                                      <input
-                                        type="text"
-                                        className="form-control"
-                                        value={this.state.delayPrompt}
-                                        name="delayPrompt"
-                                        onChange={this.handleChange}
-                                      ></input>
+                                      <div className="md-form mt-3">
+                                        <input
+                                          type="text"
+                                          className="form-control"
+                                          value={this.state.delayPrompt}
+                                          name="delayPrompt"
+                                          onChange={this.handleChange}
+                                          style={{ marginTop: "-2%" }}
+                                        ></input>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -552,8 +567,23 @@ export class ManageBot extends Component {
                 </div>
                 <div className="col-md-4">
                   <div className="card card-user">
-                    <div className="card-image">
-                      <div>
+                    <Card style={{ width: "30rem%", height: "100%" }}>
+                      <Card.Img
+                        variant="top"
+                        src={this.state.botImage}
+                        style={{ height: "20rem" }}
+                      />
+                      <Card.Body>
+                        <Card.Title> {this.state.chatbotName}</Card.Title>
+                        <Card.Text>
+                          Some quick example text to build on the card title and
+                          make up the bulk of the card's content.
+                        </Card.Text>
+                        <Button variant="primary">Go somewhere</Button>
+                      </Card.Body>
+                    </Card>
+                    {/* <div className="card-image"> */}
+                    {/* <div>
                         <br />
                         <input
                           type="file"
@@ -562,25 +592,25 @@ export class ManageBot extends Component {
                           style={{ display: "none" }}
                         />
                         <br />
-                      </div>
+                      </div> */}
 
-                      <img
+                    {/* <img
                         src={this.state.botImage}
                         alt="BOT "
-                        className="img-thumbnail"
+                        className="img-fluid  zoom"
                         style={{
                           width: "50%",
                           height: "50%",
                           marginLeft: "25%"
                         }}
                         onClick={this.getImage}
-                      ></img>
-                    </div>
-                    <div className="card-body">
+                      ></img> */}
+                    {/* </div> */}
+                    {/* <div className="card-body">
                       <h5 className="title" style={{ marginLeft: "35%" }}>
                         {this.state.chatbotName}
                       </h5>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

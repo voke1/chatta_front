@@ -137,7 +137,6 @@ class BotTabs extends Component {
                   <form
                     className="text-center"
                     style={{ color: "#757575" }}
-                    action="#!"
                     onSubmit={this.handleSubmit}
                   >
                     {console.log("displayState:", this.state.displayState)}
@@ -154,10 +153,7 @@ class BotTabs extends Component {
                       Please update all Fields to continue...
                     </p>
 
-                    <p>
-                      Let's start by giving your bot some default setticolor
-                      picker css stylingcolor picker css stylingngs
-                    </p>
+                    <p>Let's start by giving your bot some default settings</p>
                     <div className="md-form mt-3">
                       <input
                         type="text"
