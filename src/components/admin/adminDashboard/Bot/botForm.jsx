@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./css/botform.css";
 
 class BotForm extends Component {
   constructor() {
@@ -21,44 +22,60 @@ class BotForm extends Component {
   };
   render() {
     return (
-      <div class="card">
-        <div class="card-body px-lg-5">
-          <form
-            class="text-center"
-            style={{ color: "#757575" }}
-            onSubmit={this.onSubmit}
-          >
-            <div class="md-form mt-3">
-              <input
-                type="text"
-                id="materialSubscriptionFormPasswords"
-                class="form-control"
-                onChange={this.onChange}
-                name="name"
-                value={this.state.name}
-                placeholder="Name"
-              />
-            </div>
+      <div>
+        <span className="message-data-name">
+          <i className="fa fa-circle me"></i> {this.props.settings.chatbotName}
+        </span>
+        <div
+          className="message other-message"
+          id="chat_box"
+          style={{
+            marginBottom: "9px",
+            overflow: "hidden"
+          }}
+        >
+          <div>
+            <span className="a-triangle"></span>
+            {`Hi. my name is ${this.props.settings.chatbotName}. Kindly fill in the form below in case anything goes wrong`}
+          </div>
+        </div>
+        <div className="">
+          <div className="">
+            <form className="text-center" onSubmit={this.onSubmit}>
+              <div className="md-form">
+                <input
+                  type="text"
+                  id="materialSubscriptionFormPasswords"
+                  className="form-control"
+                  onChange={this.onChange}
+                  name="name"
+                  value={this.state.name}
+                  placeholder="Name"
+                />
+              </div>
 
-            <div class="md-form">
-              <input
-                type="email"
-                id="materialSubscriptionFormEmail"
-                class="form-control"
-                onChange={this.onChange}
-                name="email"
-                value={this.state.email}
-                placeholder="Email"
-              />
-            </div>
+              <div className="md-form">
+                <input
+                  type="email"
+                  id="materialSubscriptionFormEmail"
+                  className="form-control"
+                  onChange={this.onChange}
+                  name="email"
+                  value={this.state.email}
+                  placeholder="Email"
+                />
+              </div>
 
-            <button
-              class="btn btn-outline-info btn-rounded btn-block z-depth-0 my-2 waves-effect"
-              type="submit"
-            >
-              Submit
-            </button>
-          </form>
+              <button
+                class=" btn "
+                id="formBtn"
+                type="submit"
+                style={{ backgroundColor: this.props.settings.secondaryColor }}
+              >
+                Submit
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     );

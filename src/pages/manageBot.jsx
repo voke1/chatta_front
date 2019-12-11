@@ -42,7 +42,6 @@ export class ManageBot extends Component {
   }
 
   componentDidMount() {
-    console.log("is mounted");
     Axios.get(`${BASE_URL}/setting/${this.state.settingId}`)
       .then(res => {
         const result = res.data;
