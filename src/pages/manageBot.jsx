@@ -41,7 +41,6 @@ export class ManageBot extends Component {
   }
 
   componentDidMount() {
-    console.log("is mounted");
     Axios.get(`${BASE_URL}/setting/${this.state.settingId}`)
       .then(res => {
         const result = res.data;
@@ -345,7 +344,6 @@ export class ManageBot extends Component {
                           <i className="dripicons-device-desktop"></i>Analytics
                         </a>
                       </Link>
-                      componentDid
                     </li>
 
                     <li className="has-submenu">
