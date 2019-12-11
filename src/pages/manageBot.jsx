@@ -41,6 +41,7 @@ export class ManageBot extends Component {
   }
 
   componentDidMount() {
+    console.log("is mounted");
     Axios.get(`${BASE_URL}/setting/${this.state.settingId}`)
       .then(res => {
         const result = res.data;
@@ -148,8 +149,7 @@ export class ManageBot extends Component {
     };
 
     Axios.put(`${BASE_URL}/setting/${this.state.settingId}`, bot)
-      .then(res => {
-      })
+      .then(res => {})
       .catch(err => {
         console.log(err);
       });
@@ -345,6 +345,7 @@ export class ManageBot extends Component {
                           <i className="dripicons-device-desktop"></i>Analytics
                         </a>
                       </Link>
+                      componentDid
                     </li>
 
                     <li className="has-submenu">
@@ -416,11 +417,14 @@ export class ManageBot extends Component {
                     <Tabs
                       defaultActiveKey={this.state.tab}
                       id="controlled-tab-example"
-                      onSelect={tab =>
+                      onSelect={tab => {
                         tab === "intent"
                           ? this.setState({ tab, fetchedTree: true })
-                          : this.setState({ tab })
-                      }
+                          : this.setState({ tab });
+                          if(tab ==="settings") {
+                            this.componentDidMount()
+                          }
+                      }}
                     >
                       &nbsp;
                       <Tab eventKey="settings" title="Edit Bot" className>
