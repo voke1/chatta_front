@@ -571,45 +571,21 @@ export class ManageBot extends Component {
                         variant="top"
                         src={this.state.botImage}
                         style={{ height: "20rem" }}
+                        onClick={this.getImage}
                       />
                       <Card.Body>
                         <Card.Title> {this.state.chatbotName}</Card.Title>
-                        <Card.Text>
-                          Some quick example text to build on the card title and
-                          make up the bulk of the card's content.
-                        </Card.Text>
-                        <Button variant="primary">Go somewhere</Button>
                       </Card.Body>
                     </Card>
-                    {/* <div className="card-image"> */}
-                    {/* <div>
-                        <br />
-                        <input
-                          type="file"
-                          onChange={this.handleImageChange}
-                          ref={this.inputRef}
-                          style={{ display: "none" }}
-                        />
-                        <br />
-                      </div> */}
 
-                    {/* <img
-                        src={this.state.botImage}
-                        alt="BOT "
-                        className="img-fluid  zoom"
-                        style={{
-                          width: "50%",
-                          height: "50%",
-                          marginLeft: "25%"
-                        }}
-                        onClick={this.getImage}
-                      ></img> */}
-                    {/* </div> */}
-                    {/* <div className="card-body">
-                      <h5 className="title" style={{ marginLeft: "35%" }}>
-                        {this.state.chatbotName}
-                      </h5>
-                    </div> */}
+                    <div>
+                      <input
+                        type="file"
+                        onChange={this.handleImageChange}
+                        ref={this.inputRef}
+                        style={{ display: "none" }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
