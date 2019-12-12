@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Axios from "axios";
+import * as query_string from "query-string";
+
 import "../conversation/convo.component.css";
 import "./chat.component.css";
 import "../../../utilities/slimscroll/slimscroll.css";
@@ -29,7 +31,8 @@ export default class Chat extends Component {
       who: "",
       btnStyle: { backgroundColor: "transparent" },
       settings: {},
-      botImage: ""
+      botImage: "",
+      chat_body: []
     };
     this.appService = new AppService();
   }
@@ -75,6 +78,7 @@ export default class Chat extends Component {
               userInput={this.state.userInput}
               getResponder={this.getResponder}
               settings={this.state.settings}
+              chat_body={this.state.chat_body}
             />
 
             <div id="input-container" className="chat-message clearfix">
@@ -121,12 +125,16 @@ export default class Chat extends Component {
   }
 
   async componentDidMount() {
-    const appKey = window.location.href;
-    console.log("API", appKey);
+    const params = query_string.parse(this.props.location.search);
     try {
-      const result = await Axios.get(`${BASE_URL}/setting`);
+      const result = await Axios.get(
+        `${BASE_URL}/setting/${params.setting_id}`
+      );
+      console.log("result", result);
       if (result.data) {
-        const settings = result.data[result.data.length - 1];
+        // const settings = result.data[result.data.length - 1];
+        const settings = result.data.findTree.setting_id;
+
         settings.collectUserInfo = true;
         console.log("settings", settings);
         this.setState({
@@ -138,7 +146,8 @@ export default class Chat extends Component {
           },
           who: settings.chatbotName,
           botImage: settings.botImage,
-          settings
+          settings,
+          chat_body: result.data.findTree.chat_body
         });
       }
     } catch (e) {}
