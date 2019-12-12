@@ -84,7 +84,7 @@ class CreateIntent extends Component {
               animation: "animated shake",
               disabledButton: this.props.ConvoTree ? true : false
             });
-            this.props.disableHomeTab();
+            // this.props.disableHomeTab();
           })
           .catch(err => {
             console.log(err);
@@ -104,7 +104,7 @@ class CreateIntent extends Component {
               animation: "animated shake",
               disabledButton: this.props.ConvoTree ? true : false
             });
-            this.props.disableHomeTab();
+            // this.props.disableHomeTab();
           })
           .catch(err => {
             console.log(err);

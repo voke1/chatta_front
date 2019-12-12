@@ -8,7 +8,10 @@ import CreateIntent from "./create-intent";
 import * as apiService from "../../../../services/apiservice";
 import ProgressBar from "../Authentication/progressbar";
 import { storage } from "../../../../firebase/index";
+import Preview from "./preview";
+import { APP_ENVIRONMENT } from "../../../../environments/environment";
 
+const BASE_URL = APP_ENVIRONMENT.base_url_front;
 class BotTabs extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +36,8 @@ class BotTabs extends Component {
     primaryColor: " ",
     secondaryColor: " ",
     file: " Upload bot image",
-    settings: {}
+    settings: {},
+    previewSelected: false
     // displayState: "none"
   };
   handleChange = event => {
@@ -125,7 +129,7 @@ class BotTabs extends Component {
     return (
       <div className="container-holder">
         <Tabs
-          activeKey={this.state.tab}
+          activekey={this.state.tab}
           id="controlled-tab-example"
           onSelect={tab => this.setState({ tab: this.getTab(tab) })}
         >
@@ -272,9 +276,19 @@ class BotTabs extends Component {
               </div>
             </div>
           </Tab>
+          <Tab eventKey="preview" title="Preview" className="open">
+            <div className="w-100">
+              <div className="card-body">{this.getPreview()}</div>
+            </div>
+          </Tab>
         </Tabs>
       </div>
     );
+  }
+  getPreview() {
+    return this.state.settingsSaved && this.state.tab === "preview" ? (
+      <Preview orgUrl={`${BASE_URL}/?setting_id=${this.state.settings._id}`} />
+    ) : null;
   }
   componentDidMount() {
     this.setGlobal({ getTab: this.getTab });
