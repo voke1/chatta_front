@@ -108,7 +108,11 @@ export default class Convo extends Component {
   componentDidMount = () => {
     // this.determineLister()
     if (this.props.settings.collectUserInfo) {
-      this.setState({ canListen: false, collectUserInfo: true });
+      this.setState({
+        canListen: false,
+        collectUserInfo: true,
+        chat_body: this.props.chat_body
+      });
     }
     this.getConversationTree();
   };
@@ -131,26 +135,32 @@ export default class Convo extends Component {
 
     // const convoTree = await this.appService.getConversationTree('tree');  This is your main API function for convo tree
 
-    axios
-      .get(`${BASE_URL}/tree`)
-      .then(res => {
-        console.log("chat_body:", res.data[res.data.length - 1].chat_body);
-        // const convoTree = res.data[res.data.length - 1].chat_body;
-        const convoTree = res.data[res.data.length - 1].chat_body;
-        console.log("tree", this.state.username);
-        // convoTree[0].prompt = `Thanks ${this.state.username} ${convoTree[0].prompt}`;
-        // convoTree.prompt =
-        setTimeout(() => {
-          const conversationTree = this.deepCopy(convoTree);
-          this.setState({
-            conversationTree: conversationTree
-          });
-          this.updateConverstion(convoTree[0].identity);
-        }, 10);
-      })
-      .catch(err => {
-        console.log(err);
+    // axios
+    //   .get(`${BASE_URL}/tree`)
+    //   .then(res => {
+    //     console.log("chat_body:", res.data[res.data.length - 1].chat_body);
+    //     // const convoTree = res.data[res.data.length - 1].chat_body;
+    //     const convoTree = res.data[res.data.length - 1].chat_body;
+    //     console.log("tree", this.state.username);
+    //     // convoTree[0].prompt = `Thanks ${this.state.username} ${convoTree[0].prompt}`;
+    //     // convoTree.prompt =
+    //     setTimeout(() => {
+
+    //     }, 10);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
+    console.log("chat body", this.props.chat_body);
+    setTimeout(() => {
+      const convoTree = this.state.chat_body;
+      convoTree[0].prompt = `Thanks ${this.state.username} ${convoTree[0].prompt}`;
+      const conversationTree = this.deepCopy(convoTree);
+      this.setState({
+        conversationTree: conversationTree
       });
+      this.updateConverstion(convoTree[0].identity);
+    }, 10);
   };
 
   handleUserChoice = () => {};

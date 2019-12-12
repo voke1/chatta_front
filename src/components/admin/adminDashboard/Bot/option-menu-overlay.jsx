@@ -129,7 +129,6 @@ class Example extends Component {
     );
   }
   componentDidMount() {
-    console.log("it just mounted",this.global);
     // set fallback options
     if (this.global.chatTree) {
       console.log("yes")
