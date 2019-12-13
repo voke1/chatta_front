@@ -149,7 +149,7 @@ class Example extends Component {
       });
       // set delay prompt options
       const delaypromptTree = this.global.chatTree.filter(
-        tree => tree.identity === "empty"
+        tree => tree.identity === "delay_prompt"
       );
       const delaypromptTreeButtons = delaypromptTree[0].response.buttons;
       let delayPromptKeys = [];

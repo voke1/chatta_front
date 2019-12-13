@@ -10,7 +10,7 @@ import ProgressBar from "../Authentication/progressbar";
 import { storage } from "../../../../firebase/index";
 import Preview from "./preview";
 import { APP_ENVIRONMENT } from "../../../../environments/environment";
-
+import EmbedCode from './embed-code-dialog';
 const BASE_URL = APP_ENVIRONMENT.base_url_front;
 class BotTabs extends Component {
   constructor(props) {
@@ -128,6 +128,7 @@ class BotTabs extends Component {
   render() {
     return (
       <div className="container-holder">
+        <EmbedCode/>
         <Tabs
           activekey={this.state.tab}
           id="controlled-tab-example"

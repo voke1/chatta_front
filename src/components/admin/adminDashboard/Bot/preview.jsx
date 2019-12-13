@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "reactn";
-import ChatComponent from "../../../front/chat/chat.component";
-import previewBackground from "../../../../preview_background.jpg";
+import React, { useState, useEffect, useGlobal } from "reactn";
+import EmbeddedCodeDialog from "./embed-code-dialog";
 const BotPreview = props => {
   const getEmbedScript = url => {
     return `<iframe src="${props.orgUrl}" frameborder="0" style="background-color:transparent;
@@ -13,13 +12,25 @@ const BotPreview = props => {
   };
 
   const [url, setUrl] = useState("");
+  const [embedeCode, setEmbedCode] = useState(false);
+  const [global, setOpen] = useGlobal();
+
   useEffect(() => {
+    console.log("global", global);
     setUrl(props.orgUrl);
-    console.log("embedded script", getEmbedScript(url));
   }, [props.orgUrl]);
 
+  const showEmbedCode = () => {
+    global.handleOpen(getEmbedScript());
+  };
   return (
     <div>
+      {embedeCode ? (
+        <EmbeddedCodeDialog
+          embedScript={getEmbedScript()}
+          openDialog={embedeCode}
+        />
+      ) : null}
       <div
         className="card "
         style={{ padding: "none", backgroundColor: "#E0F3FD" }}
@@ -33,7 +44,25 @@ const BotPreview = props => {
             height: "100%",
             width: "40%"
           }}
-        ></div>
+        >
+          <div style={{ marginTop: "300px" }}>
+            <button
+              className="btn"
+              style={{
+                backgroundColor: "#65678f",
+                borderRadius: "5px",
+                width: "250px",
+                height: "50px",
+                color: "white",
+                border: "2px solid #f5f5f5",
+                fontStyle: "bold"
+              }}
+              onClick={showEmbedCode}
+            >
+              {"< Copy embedded code />"}
+            </button>
+          </div>
+        </div>
         <iframe
           src={url}
           height="600px"
