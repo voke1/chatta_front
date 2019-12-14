@@ -1,0 +1,22 @@
+.cardview {
+  width: fit-content !important;
+  border-radius: 5px !important;
+  background-color: #edeff0 !important;
+  transition: max-width 0.6s ease !important;
+}
+
+.card:hover {
+  cursor: pointer;
+}
+.InputAddOn {
+  display: flex;
+}
+
+.InputAddOn-field {
+  flex: 1;
+  /* field styles */
+}
+
+.InputAddOn-item {
+  /* item styles */
+}

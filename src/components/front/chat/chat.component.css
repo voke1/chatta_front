@@ -91,9 +91,10 @@ body {
 .chat .chat-header .chat-with {
   font-weight: bold;
   font-size: 16px;
+  color:white;
 }
 .chat .chat-header .chat-num-messages {
-  color: #92959E;
+  color: white;
 }
 .chat .chat-header .fa-star {
   float: right;
@@ -279,8 +280,8 @@ body {
   bottom: 34px;
    right: 34px;
    position: fixed;
-   background: #F68121;
    padding: 12px 14px 11px; 
+   background-color: orange;
   
   color: white;
   
