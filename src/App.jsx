@@ -1,17 +1,17 @@
-import React from "react";
-import "./App.css";
-import Chat from "./components/front/chat/chat.component";
-import Error from "./pages/error";
-import { Route, Switch } from "react-router-dom";
-import { ManageBot } from "./pages/manageBot";
-import { UserSettings } from "./pages/userSettings";
-import { Dashboard } from "./pages/dashboard";
-import { Bot } from "./components/admin/adminDashboard/Bot/admin-bots";
-import { UserList } from "./pages/users";
-import Register from "./components/admin/adminDashboard/Authentication/Register";
-import Login from "./components/admin/adminDashboard/Authentication/Login";
-import VerifyEmail from "./components/admin/adminDashboard/Authentication/emailVerification";
-import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
+import React from 'react';
+import './App.css';
+import Chat from './components/front/chat/chat.component';
+import Error from './pages/error';
+import { Route, Switch } from 'react-router-dom';
+import { ManageBot } from './pages/manageBot';
+import { UserSettings } from './pages/userSettings';
+import { Dashboard } from './pages/dashboard';
+import { Bot } from './components/admin/adminDashboard/Bot/admin-bots';
+import { UserList } from './pages/users';
+import Register from './components/admin/adminDashboard/Authentication/Register';
+import Login from './components/admin/adminDashboard/Authentication/Login';
+import VerifyEmail from './components/admin/adminDashboard/Authentication/emailVerification';
+import CompaniesComponent from './components/admin/adminDashboard/companies/listCompanies';
 // import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 
 function App() {
