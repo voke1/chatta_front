@@ -148,46 +148,47 @@ export default class CompaniesComponent extends Component {
         {/* <!-- Loader --> */}
 
         {/* <Button className=" btn floatBtn">What is this??</Button> */}
+        <div className='header-bg'>
+          <LayoutHeader
+            pageTitle={this.pageTitle}
+            notification={this.state.notification}
+          />
 
-        <LayoutHeader
-          pageTitle={this.pageTitle}
-          notification={this.state.notification}
-        />
+          <div className="container-fluid">
+            {/* <!-- Page-Title --> */}
+            <div className="row">
+              <div className="col-sm-12">
+                <div className="page-title-box">
+                  <form className="float-right app-search">
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      className="form-control"
+                    ></input>
+                    <button type="submit">
+                      <i className="fa fa-search"></i>
+                    </button>
+                  </form>
 
-        <div className="container-fluid">
-          {/* <!-- Page-Title --> */}
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="page-title-box">
-                <form className="float-right app-search">
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="form-control"
-                  ></input>
-                  <button type="submit">
-                    <i className="fa fa-search"></i>
-                  </button>
-                </form>
-
-                <ButtonToolbar>
-                  <Button
-                    className="btn btn-outline-light ml-1 waves-effect waves-light"
-                    variant="primary"
-                    onClick={() => setModalShow(true)}
-                  >
-                    Create User +
+                  <ButtonToolbar>
+                    <Button
+                      className="btn btn-outline-light ml-1 waves-effect waves-light"
+                      variant="primary"
+                      onClick={() => setModalShow(true)}
+                    >
+                      Create User +
                   </Button>
-                  {/* <CreateUser
+                    {/* <CreateUser
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                     updateList={this.updateList}
                   /> */}
-                </ButtonToolbar>
+                  </ButtonToolbar>
+                </div>
               </div>
             </div>
+            {/* <!-- end page title end breadcrumb --> */}
           </div>
-          {/* <!-- end page title end breadcrumb --> */}
         </div>
 
         <div className="wrapper">
