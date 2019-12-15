@@ -12,7 +12,7 @@ export default class LayoutHeader extends Component {
 
   render() {
     return (
-      <div className="header-bg">
+      <div>
         {/* <!-- Navigation Bar--> */}
         <header id="topnav">
           <div className="topbar-main">
