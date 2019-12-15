@@ -15,6 +15,7 @@ import "../../../admin/css/icons.css";
 import "../../../admin/css/bootstrap.min.css";
 import "../../../admin/images/favicon.ico";
 import "../../../admin/css/switch.css";
+import CreateCompanyModal from '../Bot/createCompany';
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
@@ -27,7 +28,7 @@ export default class CompaniesComponent extends Component {
       companies: [],
       switched: false,
       loading: true,
-      notification: { msg: null, type: null }
+      notification: { msg: null, type: null },
     };
 
     this.appService = new AppService();
@@ -148,7 +149,6 @@ export default class CompaniesComponent extends Component {
     return (
       <div>
         {/* <!-- Loader --> */}
-
         {/* <Button className=" btn floatBtn">What is this??</Button> */}
         <div className='header-bg'>
           <LayoutHeader
@@ -172,20 +172,16 @@ export default class CompaniesComponent extends Component {
                     </button>
                   </form>
 
-                  <ButtonToolbar>
-                    <Button
-                      className="btn btn-outline-light ml-1 waves-effect waves-light"
-                      variant="primary"
-                      onClick={() => setModalShow(true)}
-                    >
-                      Create Company +
-                  </Button>
-                    {/* <CreateUser
+
+
+                  <CreateCompanyModal />
+
+                  {/* <CreateUser
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                     updateList={this.updateList}
                   /> */}
-                  </ButtonToolbar>
+
                 </div>
               </div>
             </div>
