@@ -181,7 +181,6 @@ export default class CompaniesComponent extends Component {
                     onHide={() => setModalShow(false)}
                     updateList={this.updateList}
                   /> */}
-
                 </div>
               </div>
             </div>
