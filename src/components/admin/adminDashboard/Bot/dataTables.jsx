@@ -1,16 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MDBDataTable } from 'mdbreact';
-
-const btn = <button
-    type="button"
-    className="btn btn-secondary btn-sm waves-effect"
+import Switch from "react-toggle-switch";
+import { Link } from 'react-router-dom'
 
 
->
-    Delete
-</button >
+
+let btn = <div className="button-items">
+    <Link
+        to={`/dashboard/admin/company/us`}>
+
+        <button
+            type="button"
+            className="btn btn-secondary btn-sm waves-effect"
+            onClick={() => { console.log('Edit button clicked:') }}
+        // clientID={client._id}
+        >
+            Edit &nbsp;
+  </button>
+    </Link>
+
+    <button
+        type="button"
+        className="btn btn-secondary btn-sm waves-effect"
+        onClick={() => {
+            console.log('delete button clicked')
+        }}
+    >
+        Delete
+</button>
+</div>
 
 const DatatablePage = () => {
+    const toggleSwitch = <Switch
+        key
+        onClick={() => { console.log("toggleswitch is clicked") }}
+    />
+    const [switchShow, setSwitchShow] = useState(false)
+
     const data = {
         columns: [
             {
@@ -60,7 +86,16 @@ const DatatablePage = () => {
             {
                 company: 'IT Horizon',
                 domain: 'ITH.com',
-                status: 'Edinburgh',
+                status: toggleSwitch,
+                phone: '+234822222222',
+                date: '2011/04/25',
+                dateUpdated: '2011/04/25',
+                option: btn,
+            },
+            {
+                company: 'IT Horizon',
+                domain: 'ITH.com',
+                status: toggleSwitch,
                 phone: '+234822222222',
                 date: '2011/04/25',
                 dateUpdated: '2011/04/25',
@@ -69,7 +104,7 @@ const DatatablePage = () => {
             {
                 company: 'IT Horizon',
                 domain: 'ITH.com',
-                status: 'Edinburgh',
+                status: toggleSwitch,
                 phone: '+234822222222',
                 date: '2011/04/25',
                 dateUpdated: '2011/04/25',
@@ -78,7 +113,7 @@ const DatatablePage = () => {
             {
                 company: 'IT Horizon',
                 domain: 'ITH.com',
-                status: 'Edinburgh',
+                status: toggleSwitch,
                 phone: '+234822222222',
                 date: '2011/04/25',
                 dateUpdated: '2011/04/25',
@@ -87,7 +122,7 @@ const DatatablePage = () => {
             {
                 company: 'IT Horizon',
                 domain: 'ITH.com',
-                status: 'Edinburgh',
+                status: toggleSwitch,
                 phone: '+234822222222',
                 date: '2011/04/25',
                 dateUpdated: '2011/04/25',
@@ -96,7 +131,7 @@ const DatatablePage = () => {
             {
                 company: 'IT Horizon',
                 domain: 'ITH.com',
-                status: 'Edinburgh',
+                status: toggleSwitch,
                 phone: '+234822222222',
                 date: '2011/04/25',
                 dateUpdated: '2011/04/25',
@@ -105,7 +140,7 @@ const DatatablePage = () => {
             {
                 company: 'IT Horizon',
                 domain: 'ITH.com',
-                status: 'Edinburgh',
+                status: toggleSwitch,
                 phone: '+234822222222',
                 date: '2011/04/25',
                 dateUpdated: '2011/04/25',
@@ -114,7 +149,7 @@ const DatatablePage = () => {
             {
                 company: 'IT Horizon',
                 domain: 'ITH.com',
-                status: 'Edinburgh',
+                status: toggleSwitch,
                 phone: '+234822222222',
                 date: '2011/04/25',
                 dateUpdated: '2011/04/25',
@@ -123,7 +158,7 @@ const DatatablePage = () => {
             {
                 company: 'IT Horizon',
                 domain: 'ITH.com',
-                status: 'Edinburgh',
+                status: toggleSwitch,
                 phone: '+234822222222',
                 date: '2011/04/25',
                 dateUpdated: '2011/04/25',
@@ -132,7 +167,7 @@ const DatatablePage = () => {
             {
                 company: 'IT Horizon',
                 domain: 'ITH.com',
-                status: 'Edinburgh',
+                status: toggleSwitch,
                 phone: '+234822222222',
                 date: '2011/04/25',
                 dateUpdated: '2011/04/25',
@@ -141,7 +176,7 @@ const DatatablePage = () => {
             {
                 company: 'IT Horizon',
                 domain: 'ITH.com',
-                status: 'Edinburgh',
+                status: toggleSwitch,
                 phone: '+234822222222',
                 date: '2011/04/25',
                 dateUpdated: '2011/04/25',
@@ -150,7 +185,7 @@ const DatatablePage = () => {
             {
                 company: 'IT Horizon',
                 domain: 'ITH.com',
-                status: 'Edinburgh',
+                status: toggleSwitch,
                 phone: '+234822222222',
                 date: '2011/04/25',
                 dateUpdated: '2011/04/25',
@@ -159,16 +194,7 @@ const DatatablePage = () => {
             {
                 company: 'IT Horizon',
                 domain: 'ITH.com',
-                status: 'Edinburgh',
-                phone: '+234822222222',
-                date: '2011/04/25',
-                dateUpdated: '2011/04/25',
-                option: btn
-            },
-            {
-                company: 'IT Horizon',
-                domain: 'ITH.com',
-                status: 'Edinburgh',
+                status: toggleSwitch,
                 phone: '+234822222222',
                 date: '2011/04/25',
                 dateUpdated: '2011/04/25',

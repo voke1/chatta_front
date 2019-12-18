@@ -13,6 +13,8 @@ import Login from "./components/admin/adminDashboard/Authentication/Login";
 import VerifyEmail from "./components/admin/adminDashboard/Authentication/emailVerification";
 import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 // import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
+import { CompanySettings } from './components/admin/adminDashboard/Bot/companySettings'
+
 
 function App() {
   return (
@@ -32,6 +34,7 @@ function App() {
           component={ManageBot}
         ></Route>
         <Route exact path="/dashboard/admin/user" component={UserList}></Route>
+        <Route exact path='/dashboard/admin/company/us' component={CompanySettings}></Route>
         <Route
           exact
           path="/dashboard/admin/company"
