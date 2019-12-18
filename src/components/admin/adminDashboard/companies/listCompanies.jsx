@@ -6,6 +6,7 @@ import { AppService } from "../../../../services/app.service";
 import LayoutHeader from "../../layouts/layouts.header";
 import LayoutFooter from "../../layouts/layouts.footer";
 import AppLoader from "../../../../utilities/loader";
+import Companies from '../Bot/dataTables'
 import { APP_ENVIRONMENT } from "../../../../environments/environment";
 import "../../../admin/plugins/datatables/dataTables.bootstrap4.min.css";
 import "../../../admin/plugins/datatables/responsive.bootstrap4.min.css";
@@ -14,6 +15,7 @@ import "../../../admin/css/icons.css";
 import "../../../admin/css/bootstrap.min.css";
 import "../../../admin/images/favicon.ico";
 import "../../../admin/css/switch.css";
+import CreateCompanyModal from '../Bot/createCompany';
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
@@ -26,7 +28,7 @@ export default class CompaniesComponent extends Component {
       companies: [],
       switched: false,
       loading: true,
-      notification: { msg: null, type: null }
+      notification: { msg: null, type: null },
     };
 
     this.appService = new AppService();
@@ -63,6 +65,7 @@ export default class CompaniesComponent extends Component {
   loader = () => {
     if (this.state.loading) {
       return (
+
         <tr>
           <td colSpan="7" className="text-center">
             fetching records...
@@ -146,48 +149,43 @@ export default class CompaniesComponent extends Component {
     return (
       <div>
         {/* <!-- Loader --> */}
-
         {/* <Button className=" btn floatBtn">What is this??</Button> */}
+        <div className='header-bg'>
+          <LayoutHeader
+            pageTitle={this.pageTitle}
+            notification={this.state.notification}
+          />
 
-        <LayoutHeader
-          pageTitle={this.pageTitle}
-          notification={this.state.notification}
-        />
+          <div className="container-fluid">
+            {/* <!-- Page-Title --> */}
+            <div className="row">
+              <div className="col-sm-12">
+                <div className="page-title-box">
+                  <form className="float-right app-search">
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      className="form-control"
+                    ></input>
+                    <button type="submit">
+                      <i className="fa fa-search"></i>
+                    </button>
+                  </form>
 
-        <div className="container-fluid">
-          {/* <!-- Page-Title --> */}
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="page-title-box">
-                <form className="float-right app-search">
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="form-control"
-                  ></input>
-                  <button type="submit">
-                    <i className="fa fa-search"></i>
-                  </button>
-                </form>
 
-                <ButtonToolbar>
-                  <Button
-                    className="btn btn-outline-light ml-1 waves-effect waves-light"
-                    variant="primary"
-                    onClick={() => setModalShow(true)}
-                  >
-                    Create User +
-                  </Button>
+
+                  <CreateCompanyModal />
+
                   {/* <CreateUser
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                     updateList={this.updateList}
                   /> */}
-                </ButtonToolbar>
+                </div>
               </div>
             </div>
+            {/* <!-- end page title end breadcrumb --> */}
           </div>
-          {/* <!-- end page title end breadcrumb --> */}
         </div>
 
         <div className="wrapper">
@@ -195,7 +193,9 @@ export default class CompaniesComponent extends Component {
             <div className="row">
               <div className="col-12">
                 <div className="card m-b-20">
+
                   <div className="card-body">
+                    <Companies />
                     {/* <h4 className="mt-0 header-title">Companies</h4>
                                         <p className="text-muted m-b-30 font-14">
                                             DataTables has most features enabled by default, so all
