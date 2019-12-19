@@ -14,7 +14,8 @@ import { Button, ButtonToolbar } from "react-bootstrap";
 import { CreateUser } from "../components/admin/adminDashboard/createUser";
 import AppNotification from "../utilities/notification/app-notification";
 import HeadLayout from "../components/admin/layouts/layouts.header";
-
+import Users from '../components/admin/adminDashboard/Bot/userDatables'
+import { MDBDataTable } from 'mdbreact';
 import UserDialog from "../components/admin/adminDashboard/Bot/userDeleteDialgo";
 import { APP_ENVIRONMENT } from "../environments/environment";
 
@@ -139,7 +140,6 @@ export class UserList extends Component {
             </button>
           </div>
         ) : null} */}
-
         <div className="header-bg">
           {/* <!-- Navigation Bar--> */}
           <HeadLayout />
@@ -188,6 +188,9 @@ export class UserList extends Component {
               <div className="col-12">
                 <div className="card m-b-20">
                   <div className="card-body">
+
+                    <Users users={this.state.clients} confirmDelete={this.confirmDelete} switched={this.state.switched} toggleSwitch={this.toggleSwitch} />
+
                     <h4 className="mt-0 header-title">Active Users</h4>
                     <p className="text-muted m-b-30 font-14">
                       DataTables has most features enabled by default, so all

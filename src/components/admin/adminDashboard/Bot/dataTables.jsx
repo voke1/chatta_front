@@ -49,7 +49,7 @@ const DatatablePage = () => {
                 label: 'Domain Name',
                 field: 'domain',
                 sort: 'asc',
-                width: 270
+                width: 271
             },
             {
                 label: 'Phone',
