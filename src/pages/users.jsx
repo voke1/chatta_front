@@ -189,78 +189,14 @@ export class UserList extends Component {
                 <div className="card m-b-20">
                   <div className="card-body">
 
-                    <Users users={this.state.clients} confirmDelete={this.confirmDelete} switched={this.state.switched} toggleSwitch={this.toggleSwitch} />
-
                     <h4 className="mt-0 header-title">Active Users</h4>
                     <p className="text-muted m-b-30 font-14">
                       DataTables has most features enabled by default, so all
                       you need to do to use it with your own tables is to call
                       the construction function: <code>$().DataTable();</code>.
                     </p>
+                    <Users users={this.state.clients} confirmDelete={this.confirmDelete} switched={this.state.switched} toggleSwitch={this.toggleSwitch} />
 
-                    <table id="datatable" className="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th>Phone</th>
-                          <th>Status</th>
-                          <th>Date created</th>
-                          <th>Option</th>
-                        </tr>
-                      </thead>
-                      {this.state.userDelete ? (
-                        <UserDialog
-                          dialogDelete={this.dialogConfirmDelete}
-                          closeDialog={this.closeDialog}
-                        />
-                      ) : null}
-                      <tbody>
-                        {this.state.clients.map((client, index) => (
-                          <tr>
-                            <td>{client.fullName}</td>
-                            <td>{client.email}</td>
-                            <td>{client.phone}</td>
-                            <td>
-                              <Switch
-                                key={client._id}
-                                onClick={this.toggleSwitch.bind(
-                                  this,
-                                  client._id
-                                )}
-                                on={this.state.clients[index].switched}
-                              />
-                            </td>
-                            <td>2008/12/19</td>
-                            <td>
-                              <div className="button-items">
-                                <Link
-                                  to={`/dashboard/admin/user/${client._id}`}
-                                >
-                                  <button
-                                    type="button"
-                                    className="btn btn-secondary btn-sm waves-effect"
-                                    clientID={client._id}
-                                  >
-                                    Edit &nbsp;
-                                  </button>
-                                </Link>
-
-                                <button
-                                  type="button"
-                                  className="btn btn-secondary btn-sm waves-effect"
-                                  onClick={() => {
-                                    this.confirmDelete(client._id);
-                                  }}
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
                   </div>
                 </div>
               </div>{" "}
