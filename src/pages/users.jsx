@@ -22,6 +22,7 @@ import Footer from '../components/admin/layouts/layouts.footer'
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 export class UserList extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -123,6 +124,12 @@ export class UserList extends Component {
               <div className="spinner"></div>
             </div>
           </div>
+        ) : null}
+        {this.state.userDelete ? (
+          <UserDialog
+            dialogDelete={this.dialogConfirmDelete}
+            closeDialog={this.closeDialog}
+          />
         ) : null}
         {/* {this.state.notification ? (
           <div
