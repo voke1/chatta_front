@@ -5,14 +5,12 @@ import { Link } from 'react-router-dom';
 import "../../../../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 
 
+
+
+
+
+
 const DatatablePage = (props) => {
-    const toggleSwitch = <Switch
-        key
-        onClick={() => { console.log("toggleswitch is clicked") }}
-    />
-    const [switchShow, setSwitchShow] = useState(false);
-
-
 
     const data = {
 
@@ -63,11 +61,12 @@ const DatatablePage = (props) => {
                 userList.name = client.fullName
                 userList.email = client.email
                 userList.status = <Switch key={client._id}
-                    onClick={props.toggleSwitch.bind(
-                        this,
-                        client._id
-                    )}
-                    on={props.users[index]} />
+                    onClick={() => {
+                        props.toggleSwitch(
+                            client._id
+                        )
+                    }}
+                    on={props.users[index].switched} />
                 userList.phone = client.phone || 'Phone Number'
                 userList.date = client.date || 'Date'
 
@@ -78,7 +77,6 @@ const DatatablePage = (props) => {
                         <button
                             type="button"
                             className="btn btn-secondary btn-sm waves-effect"
-                            clientID={client._id}
                         >
                             Edit &nbsp;
                   </button>
