@@ -1,58 +1,52 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MDBDataTable } from 'mdbreact';
 import Switch from "react-toggle-switch";
 import { Link } from 'react-router-dom';
 import "../../../../../node_modules/react-toggle-switch/dist/css/switch.min.css";
-
-
-
-
+import datatableHeader from '../../../../utilities/userDatatableHeaders'
 
 
 
 const DatatablePage = (props) => {
 
+    const getToggleSwitch = (clientId, index) => {
+        return <Switch key={clientId}
+            onClick={() => {
+                props.toggleSwitch(
+                    clientId
+                )
+            }}
+            on={props.users[index].switched} />
+    }
+
+    const getEditAndDeleteButtons = (clientId) => {
+        return <div className="button-items">
+            <Link
+                to={`/dashboard/admin/user/${clientId}`}
+            >
+                <button
+                    type="button"
+                    className="btn btn-secondary btn-sm waves-effect"
+                >
+                    Edit &nbsp;
+                  </button>
+            </Link>
+
+            <button
+                type="button"
+                className="btn btn-secondary btn-sm waves-effect"
+                onClick={() => {
+                    props.confirmDelete(clientId);
+                }}
+            >
+                Delete
+                </button>
+        </div>
+    }
+
     const data = {
 
-        columns: [
-            {
-                label: 'Name',
-                field: 'name',
-                sort: 'asc',
-                width: 150
-            },
-            {
-                label: 'Email',
-                field: 'email',
-                sort: 'asc',
-                width: 271
-            },
-            {
-                label: 'Phone',
-                field: 'phone',
-                sort: 'asc',
-                width: 100
-            },
-            {
-                label: 'Status',
-                field: 'status',
-                sort: 'asc',
-                width: 200
-            },
-            {
-                label: 'Date created',
-                field: 'date',
-                sort: 'asc',
-                width: 150
-            },
-
-            {
-                label: 'Option',
-                field: 'option',
-
-                width: 100
-            }
-        ],
+        columns: datatableHeader,
 
         rows: [
             ...props.users.map((client, index) => {
@@ -60,44 +54,13 @@ const DatatablePage = (props) => {
                 let userList = {}
                 userList.name = client.fullName
                 userList.email = client.email
-                userList.status = <Switch key={client._id}
-                    onClick={() => {
-                        props.toggleSwitch(
-                            client._id
-                        )
-                    }}
-                    on={props.users[index].switched} />
+                userList.status = getToggleSwitch(client._id, index)
                 userList.phone = client.phone || 'Phone Number'
                 userList.date = client.date || 'Date'
-
-                userList.option = <div className="button-items">
-                    <Link
-                        to={`/dashboard/admin/user/${client._id}`}
-                    >
-                        <button
-                            type="button"
-                            className="btn btn-secondary btn-sm waves-effect"
-                        >
-                            Edit &nbsp;
-                  </button>
-                    </Link>
-
-                    <button
-                        type="button"
-                        className="btn btn-secondary btn-sm waves-effect"
-                        onClick={() => {
-                            props.confirmDelete(client._id);
-                        }}
-                    >
-                        Delete
-                </button>
-                </div>
+                userList.option = getEditAndDeleteButtons(client._id)
                 return userList;
 
-
             }),
-
-
         ]
     };
 
