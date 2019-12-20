@@ -24,3 +24,5 @@ yarn-error.log*
 
 /src/components/admin/admin_template(1)/
 /src/components/admin/admin_template.zip/
+/docs
+/custom-jsdoc-template
