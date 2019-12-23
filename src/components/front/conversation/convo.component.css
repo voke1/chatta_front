@@ -1,6 +1,6 @@
 .ith_chat-button {
     cursor: pointer;
-    color: black !important;
+    color: black;
     border: solid 2px rgb(148, 194, 237);
     margin-top: 5px !important;
     margin-right: 5px;

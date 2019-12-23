@@ -128,42 +128,34 @@ class Example extends Component {
       </OverlayTrigger>
     );
   }
-  componentDidMount() {
-    // set fallback options
-    if (this.global.chatTree) {
-      console.log("yes")
-      const fallbackTree = this.global.chatTree.filter(
-        tree => tree.identity === "empty"
+  setOptions(option) {
+    const checkBox = option === "empty" ? "fallback" : "delayprompt";
+    const { chatTree } = this.global;
+    if (
+      chatTree &&
+      chatTree[chatTree.length - 1] &&
+      chatTree[chatTree.length - 2]
+    ) {
+      const optionTree = this.global.chatTree.filter(
+        tree => tree.identity === option
       );
-      const fallBackTreeButtons = fallbackTree[0].response.buttons;
+      const treeButtons = optionTree[0].response.buttons;
       let Keys = [];
-      fallBackTreeButtons.forEach(button => {
+      treeButtons.forEach(button => {
         Keys.push(button.key);
       });
       Keys.forEach(key => {
-        if (key.indexOf(this.props.botKey) > -1) {
-          setTimeout(() => {
-            this.setState({ fallback: true });
-          }, 1);
-        }
-      });
-      // set delay prompt options
-      const delaypromptTree = this.global.chatTree.filter(
-        tree => tree.identity === "delay_prompt"
-      );
-      const delaypromptTreeButtons = delaypromptTree[0].response.buttons;
-      let delayPromptKeys = [];
-      delaypromptTreeButtons.forEach(button => {
-        delayPromptKeys.push(button.key);
-      });
-      delayPromptKeys.forEach(key => {
-        if (key.indexOf(this.props.botKey) > -1) {
-          setTimeout(() => {
-            this.setState({ delayprompt: true });
-          }, 1);
+        if (key === this.props.botKey) {
+          this.setState({ [checkBox]: true });
         }
       });
     }
+  }
+  componentDidMount() {
+    // render delay prompt and fallback options checkboxes
+
+    this.setOptions("empty");
+    this.setOptions("delay_prompt");
   }
 }
 export default Example;
