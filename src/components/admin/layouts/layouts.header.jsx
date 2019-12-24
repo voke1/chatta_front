@@ -30,7 +30,7 @@ export default class LayoutHeader extends Component {
               </div>
               {/* <!-- End Logo container--> */}
 
-              <div className="menu-extras topbar-custom">
+              <div className="menu-extras topbar-custom">  
                 <ul className="list-inline float-right mb-0">
                   {/* <!-- notification--> */}
                   <li className="list-inline-item dropdown notification-list">

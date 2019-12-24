@@ -7,7 +7,9 @@ import "../../../../../node_modules/react-toggle-switch/dist/css/switch.min.css"
 
 
 
-
+/***
+ * @class my class
+ */
 
 
 const DatatablePage = (props) => {
