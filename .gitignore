@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+/docs
+/custom-jsdoc-template
 
 # testing
 /coverage
@@ -26,3 +28,4 @@ yarn-error.log*
 /src/components/admin/admin_template.zip/
 /docs
 /custom-jsdoc-template
+/sendRequest.http

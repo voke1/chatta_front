@@ -8,6 +8,16 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 // import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 
+
+
+/**
+ * @file index.js is the root file for this example app
+ * @author Voke Olomu
+ * @see <a href="https://traversymedia.com">Voke Olomu</a>
+ * @component 
+ */
+
+
 ReactDOM.render(
   <Router>
     <App />

@@ -19,8 +19,18 @@ import { MDBDataTable } from 'mdbreact';
 import UserDialog from "../components/admin/adminDashboard/Bot/userDeleteDialgo";
 import { APP_ENVIRONMENT } from "../environments/environment";
 import Footer from '../components/admin/layouts/layouts.footer'
+import PropTypes from 'prop-types'
+
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
+
+/**
+ * @description class for users
+ * @component
+ * @type {Class}
+ * @property {Function} - CloseDialog function
+ * 
+ */
 export class UserList extends Component {
 
   constructor(props) {
@@ -36,10 +46,21 @@ export class UserList extends Component {
     };
   }
 
+  /**
+   * @description Function to close dialog window
+   * @type { Function }
+   * @returns void
+   * 
+   */
   closeDialog = () => {
     this.setState({ userDelete: false });
   };
 
+  /**
+  * @description Function to open dialog window to delete user
+  * @type { Function }
+  * @returns void
+  */
   dialogConfirmDelete = () => {
     this.setState({ delete: true, userDelete: false });
     // if (this.state.delete) {
@@ -88,6 +109,12 @@ export class UserList extends Component {
       })
       .catch(console.error());
   };
+
+  /**
+   * @description Function to toggleSwitch
+   * @type { Function }
+   * @returns void
+   */
   toggleSwitch = id => {
     fetch(`${BASE_URL}/client/` + id, {
       method: "PATCH",
