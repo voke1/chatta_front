@@ -11,7 +11,9 @@ import botpic from "../../../bot1.jpg";
 import DecodeToken from "../../../utilities/decodeToken";
 import { APP_ENVIRONMENT } from "../../../environments/environment";
 
+
 const BASE_URL = APP_ENVIRONMENT.base_url;
+
 export default class Chat extends Component {
   appService;
   constructor(props) {
@@ -41,9 +43,12 @@ export default class Chat extends Component {
     let { token } = localStorage;
 
     DecodeToken.getUserPayload(token);
+
     return this.state.showChatArea ? (
+
       <div className="slideInUp">
-        <div className="container clearfix">
+
+        <div className="container1 clearfix">
           <div className="chat">
             <div
               className="chat-header clearfix"
@@ -77,7 +82,7 @@ export default class Chat extends Component {
               settings={this.state.settings}
             />
 
-            <div id="input-container" className="chat-message clearfix">
+            <div id="input-container1" className="chat-message clearfix">
               <form onSubmit={this.handleSubmit}>
                 <div className="row">
                   <div className="col-md-12">
@@ -91,13 +96,13 @@ export default class Chat extends Component {
                       onChange={this.handleChange}
                     />
                     <i className="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
-                    <i className="fa fa-file-image-o"></i>
+                  <i className="fa fa-file-image-o"></i>
                   </div>
                   {/* <div className="col-md-1">
-                                        <button id="play-btn" className="" type="submit">
-                                            <i className="fa fa-play fa-2x"></i>
-                                        </button>
-                                    </div> */}
+                                      <button id="play-btn" className="" type="submit">
+                                          <i className="fa fa-play fa-2x"></i>
+                                      </button>
+                                  </div> */}
                 </div>
                 <div className="text-right">
                   <span id="powered_by">Powered by: </span> <b>IT Horizons</b>
@@ -108,16 +113,16 @@ export default class Chat extends Component {
         </div>
       </div>
     ) : (
-      <button
-        id="chat-opener"
-        data-toggle="tooltip"
-        title="Chat with us"
-        style={this.state.btnStyle}
-        onClick={this.toggleChatDisplay}
-      >
-        <i className="far fa-comment-alt fa-2x"></i>
-      </button>
-    );
+        <button
+          id="chat-opener"
+          data-toggle="tooltip"
+          title="Chat with us"
+          style={this.state.btnStyle}
+          onClick={this.toggleChatDisplay}
+        >
+          <i className="far fa-comment-alt fa-2x"></i>
+        </button>
+      );
   }
 
   async componentDidMount() {
@@ -141,7 +146,7 @@ export default class Chat extends Component {
           settings
         });
       }
-    } catch (e) {}
+    } catch (e) { }
 
     // Axios.get(`${BASE_URL}/setting`)
     //   .then(res => {

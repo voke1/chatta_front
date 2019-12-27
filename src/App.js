@@ -14,13 +14,14 @@ import VerifyEmail from "./components/admin/adminDashboard/Authentication/emailV
 import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 // import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 import { CompanySettings } from './components/admin/adminDashboard/Bot/companySettings'
+import FrontPage from './components/front/landing-page/frontPage'
 
 
 function App() {
   return (
     <div>
       <Switch>
-        <Route exact path="/" component={Chat}></Route>
+        <Route exact path="/" component={FrontPage}></Route>
         <Route exact path="/dashboard/admin" component={Dashboard}></Route>
         <Route exact path="/dashboard/admin/bot" component={Bot}></Route>
         <Route
