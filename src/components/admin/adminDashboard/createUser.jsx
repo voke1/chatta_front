@@ -74,6 +74,7 @@ export class CreateUser extends Component {
       <p
         className={this.state.message ? "animated shake" : ""}
         style={{ color: "red" }}
+        animated shake
       >
         {this.state.message}
       </p>
@@ -129,7 +130,7 @@ export class CreateUser extends Component {
             >
               Phone
             </label>
-                         
+
             <input
               className="form-control"
               name="phone"
@@ -146,7 +147,7 @@ export class CreateUser extends Component {
             >
               Password
             </label>
-                         
+
             <input
               className="form-control"
               name="password"
@@ -157,7 +158,7 @@ export class CreateUser extends Component {
               placeholder="Enter a password"
               required
             />
-                                                      
+
           </form>
         </Modal.Body>
         <Modal.Footer>
