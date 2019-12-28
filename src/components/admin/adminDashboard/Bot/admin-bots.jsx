@@ -108,16 +108,7 @@ export class Bot extends Component {
             <div className="row">
               <div className="col-sm-12">
                 <div className="page-title-box">
-                  <form className="float-right app-search">
-                    <input
-                      type="text"
-                      placeholder="Search..."
-                      className="form-control"
-                    ></input>
-                    <button type="submit">
-                      <i className="fa fa-search"></i>
-                    </button>
-                  </form>
+
                   <ModalComponent />
                 </div>
               </div>
