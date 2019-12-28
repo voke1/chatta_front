@@ -1,24 +1,19 @@
 import React, { Component, useState } from "react";
-import { Link } from "react-router-dom";
-import avatar from "../components/admin/images/users/avatar-1.jpg";
+import { Button, ButtonToolbar } from "react-bootstrap";
+import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
+import Users from '../components/admin/adminDashboard/Bot/userDatables';
+import UserDialog from "../components/admin/adminDashboard/Bot/userDeleteDialgo";
+import { CreateUser } from "../components/admin/adminDashboard/createUser";
+import "../components/admin/css/bootstrap.min.css";
+import "../components/admin/css/icons.css";
+import "../components/admin/css/style.css";
+import "../components/admin/css/switch.css";
+import "../components/admin/images/favicon.ico";
+import Footer from '../components/admin/layouts/layouts.footer';
+import HeadLayout from "../components/admin/layouts/layouts.header";
 import "../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
 import "../components/admin/plugins/datatables/responsive.bootstrap4.min.css";
-import "../components/admin/css/style.css";
-import "../components/admin/css/icons.css";
-import "../components/admin/css/bootstrap.min.css";
-import "../components/admin/images/favicon.ico";
-import "../components/admin/css/switch.css";
-import Switch from "react-toggle-switch";
-import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
-import { Button, ButtonToolbar } from "react-bootstrap";
-import { CreateUser } from "../components/admin/adminDashboard/createUser";
-import AppNotification from "../utilities/notification/app-notification";
-import HeadLayout from "../components/admin/layouts/layouts.header";
-import Users from '../components/admin/adminDashboard/Bot/userDatables'
-import { MDBDataTable } from 'mdbreact';
-import UserDialog from "../components/admin/adminDashboard/Bot/userDeleteDialgo";
 import { APP_ENVIRONMENT } from "../environments/environment";
-import Footer from '../components/admin/layouts/layouts.footer'
 import PropTypes from 'prop-types'
 
 
