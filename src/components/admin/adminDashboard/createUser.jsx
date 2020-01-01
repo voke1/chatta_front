@@ -49,7 +49,7 @@ export class CreateUser extends Component {
     };
 
     console.log(user);
-    Axios.post(`${BASE_URL}/client/newclient`, {
+    Axios.post(`${BASE_URL}/client/new`, {
       ...user
     })
       .then(res => {
