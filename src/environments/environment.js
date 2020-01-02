@@ -8,7 +8,7 @@ const environment = {
         base_url_front: 'https://chattang.herokuapp.com'
     },
     production: {
-        base_url: 'http://localhost:9000',
+        base_url: 'https://agile-reef-92956.herokuapp.com',
         base_url_front: 'https://chattang.herokuapp.com'
     }
 

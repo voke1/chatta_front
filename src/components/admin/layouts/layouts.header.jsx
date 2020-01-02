@@ -27,6 +27,7 @@ export default class LayoutHeader extends Component {
       console.log("userDetails:", userDetails)
 
     return (
+
       <div>
         {/* <!-- Navigation Bar--> */}
         
