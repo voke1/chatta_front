@@ -1,17 +1,21 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Switch from "react-toggle-switch";
 import avatar from "../images/users/avatar-1.jpg";
-import AppNotification from "../../../utilities/notification/app-notification";
+import LogoutPopover from '../adminDashboard/Authentication/logoutPopover'
 import "./layouts.style.css";
+import { logout } from '../adminDashboard/Authentication/UserFunctions'
 
 export default class LayoutHeader extends Component {
   constructor(props) {
     super(props);
   }
 
+
   render() {
+
+    const userDetails = JSON.parse(localStorage.getItem('userdetails'))
     return (
+
       <div>
         {/* <!-- Navigation Bar--> */}
         <header id="topnav">
@@ -125,8 +129,8 @@ export default class LayoutHeader extends Component {
                         alt="user"
                         className="rounded-circle"
                       ></img>
-                      <span className="ml-1">
-                        Frank ONeil <i className="mdi mdi-chevron-down"></i>{" "}
+                      <span className="ml-1" onClick={() => { logout() }}>
+                        {userDetails.fullName} <i className="mdi mdi-chevron-down"></i>{" "}
                       </span>
                     </a>
                     <div className="dropdown-menu dropdown-menu-right profile-dropdown ">
@@ -270,3 +274,8 @@ export default class LayoutHeader extends Component {
     );
   }
 }
+
+
+
+
+
