@@ -69,6 +69,8 @@ const DatatablePage = (props) => {
                         )
                     }}
                     on={props.users[index].switched} />
+                // userList.status = getToggleSwitch(client._id, index)
+                userList.role = client.role || 'Role'
                 userList.phone = client.phone || 'Phone Number'
                 userList.date = client.date || 'Date'
 

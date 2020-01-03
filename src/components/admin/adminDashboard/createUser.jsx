@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { Modal, Button } from "react-bootstrap";
-import { MDBRow, MDBBtn } from "mdbreact";
-import { Validation } from "../../../utilities/validations";
 import Axios from "axios";
+import React, { Component } from "react";
+import { Modal } from "react-bootstrap";
+import Select from 'react-select';
 import { APP_ENVIRONMENT } from "../../../environments/environment";
+import { Validation } from "../../../utilities/validations";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
@@ -16,14 +16,17 @@ export class CreateUser extends Component {
       email: "",
       phone: "",
       disabled: true,
-      setValidate: true
+      setValidate: true,
+      role: 'user',
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this)
   }
 
   async handleChange(event) {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
+
     });
 
     const result = await Validation.validateAll(event, this.state.setValidate);
@@ -33,6 +36,13 @@ export class CreateUser extends Component {
       disabled: result.disabled
     });
   }
+
+  handleSelectChange = role => {
+    this.setState(
+      { role },
+    );
+  };
+
 
   /***
    * function to handle submit request of onclick of create user button
@@ -47,6 +57,7 @@ export class CreateUser extends Component {
       phone: this.state.phone,
       isVerified: true,
       isCreated: true,
+      role: this.state.role.value,
     };
 
     console.log(user);
@@ -80,6 +91,12 @@ export class CreateUser extends Component {
         {this.state.message}
       </p>
     );
+
+    const options = [
+      { value: 'user', label: 'User' },
+      { value: 'admin', label: 'Admin' },
+
+    ];
     return (
       <Modal {...this.props}>
         <Modal.Header closeButton style={{ backgroundColor: "#37295C" }}>
@@ -142,6 +159,19 @@ export class CreateUser extends Component {
               placeholder="Enter a phone number"
               required
             />
+            <label
+              htmlFor="defaultFormRegisterConfirmEx2"
+              style={{ marginTop: "3%" }}
+            >
+              Role
+            </label>
+
+
+            <Select onChange={this.handleSelectChange} value={this.state.role} options={options}>
+
+            </Select>
+
+
             <label
               htmlFor="defaultFormRegisterConfirmEx2"
               style={{ marginTop: "3%" }}
