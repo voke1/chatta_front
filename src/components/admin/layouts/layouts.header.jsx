@@ -199,22 +199,22 @@ export default class LayoutHeader extends Component {
                       </a>
                     </Link>
                   </li>
-                  <li className="has-submenu">
+                  {userDetails.role === 'superadmin' ? <li className="has-submenu">
                     <Link to="/dashboard/admin/company">
                       <a>
                         <i className="dripicons-home"></i>Companies
                       </a>
                     </Link>
-                  </li>
+                  </li> : " "}
 
-                  <li className="has-submenu">
+                  {userDetails.role === 'admin' ? <li className="has-submenu">
                     {" "}
                     <Link to="/dashboard/admin/user">
                       <a>
                         <i className="dripicons-suitcase"></i>Users
                       </a>
                     </Link>
-                  </li>
+                  </li> : ""}
 
                   <li className="has-submenu">
                     <a href="#">

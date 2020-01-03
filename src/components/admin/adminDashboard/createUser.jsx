@@ -60,6 +60,7 @@ export class CreateUser extends Component {
       role: this.state.role.value,
     };
 
+    
     console.log(user);
     Axios.post(`${BASE_URL}/client`, {
       ...user
