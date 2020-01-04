@@ -76,8 +76,8 @@ const DatatablePage = () => {
                 width: 150
             },
             {
-                label: 'Option',
-                field: 'option',
+                label: 'Action',
+                field: 'action',
 
                 width: 100
             }
