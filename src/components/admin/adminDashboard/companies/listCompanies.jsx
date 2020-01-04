@@ -78,7 +78,7 @@ export default class CompaniesComponent extends Component {
         </tr>
       );
     }
-    return !this.state.loading && this.state.companies.length == 0 ? (
+    return !this.state.loading && this.state.companies.length === 0 ? (
       <tr>
         <td colSpan="7" className="text-center">
           No records returned
@@ -109,9 +109,9 @@ export default class CompaniesComponent extends Component {
     }
   };
 
-  toggleSwitchf = async id => {
+  toggleSwitch = async id => {
     const company = this.state.companies.filter(company => {
-      return company._id == id;
+      return company._id === id;
     })[0];
     const toggleMsg = company.isEnabled ? "disable" : "enable";
     await this.appService
@@ -138,7 +138,7 @@ export default class CompaniesComponent extends Component {
   updateRowInList = (id, companyResponse, notification = null) => {
     this.setState({
       companies: this.state.companies.map(company => {
-        return company._id == id ? companyResponse : company;
+        return company._id === id ? companyResponse : company;
       }),
       notification: notification
     });
@@ -218,7 +218,7 @@ export default class CompaniesComponent extends Component {
                             <td>
                               <Switch
                                 key={company._id}
-                                onClick={this.toggleSwitchf.bind(
+                                onClick={this.toggleSwitch.bind(
                                   this,
                                   company._id
                                 )}
