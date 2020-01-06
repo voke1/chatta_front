@@ -171,11 +171,7 @@ export default class CompaniesComponent extends Component {
                       <i className="fa fa-search"></i>
                     </button>
                   </form>
-
-
-
                   <CreateCompanyModal />
-
                   {/* <CreateUser
                     show={modalShow}
                     onHide={() => setModalShow(false)}
