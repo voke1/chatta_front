@@ -15,6 +15,13 @@ import { APP_ENVIRONMENT } from "../../../../environments/environment";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
+/**
+ * @description class for chatbots
+ * @component
+ * @type {Class}
+ * @property {Function} - CloseDialog function
+ *
+ */
 export class Bot extends Component {
   constructor(props) {
     super(props);
@@ -39,6 +46,12 @@ export class Bot extends Component {
         console.log("error", e);
       });
   }
+
+  /**
+   * Function to close delete dialog window
+   * @type {Function}
+   * @property {Function} - CloseDialog function
+   */
   closeDialog = () => {
     this.setState({ botDelete: false });
   };
@@ -354,55 +367,55 @@ export class Bot extends Component {
                         <tbody>
                           {this.state.settings
                             ? this.state.settings.map(setting => (
-                                <tr>
-                                  <td>
-                                    {console.log(setting)}
-                                    <img
-                                      src={setting.botImage}
-                                      alt="bot-image"
-                                      className="thumb-sm rounded-circle mr-2"
-                                    />
-                                    {setting.chatbotName}
-                                  </td>
-                                  <td>
-                                    <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
-                                    {setting.welcomeMessage}
-                                  </td>
-                                  <td>
-                                    {setting.fallbackMessage}
-                                    <p className="m-0 text-muted font-14">
-                                      Fallback Message
+                              <tr>
+                                <td>
+                                  {console.log(setting)}
+                                  <img
+                                    src={setting.botImage}
+                                    alt="bot-image"
+                                    className="thumb-sm rounded-circle mr-2"
+                                  />
+                                  {setting.chatbotName}
+                                </td>
+                                <td>
+                                  <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
+                                  {setting.welcomeMessage}
+                                </td>
+                                <td>
+                                  {setting.fallbackMessage}
+                                  <p className="m-0 text-muted font-14">
+                                    Fallback Message
                                     </p>
-                                  </td>
-                                  <td>
-                                    {setting.delayPrompt}
-                                    <p className="m-0 text-muted font-14">
-                                      Delay Prompt
+                                </td>
+                                <td>
+                                  {setting.delayPrompt}
+                                  <p className="m-0 text-muted font-14">
+                                    Delay Prompt
                                     </p>
-                                  </td>
-                                  <td>
-                                    {console.log("settings ID:", setting._id)}
+                                </td>
+                                <td>
+                                  {console.log("settings ID:", setting._id)}
 
-                                    <ButtonToolbar>
-                                      <Link
-                                        to={`/dashboard/admin/bot/${setting._id}`}
-                                      >
-                                        <button className="btn btn-secondary btn-sm waves-effect">
-                                          Manage
+                                  <ButtonToolbar>
+                                    <Link
+                                      to={`/dashboard/admin/bot/${setting._id}`}
+                                    >
+                                      <button className="btn btn-secondary btn-sm waves-effect">
+                                        Manage
                                         </button>
-                                      </Link>
-                                      <button
-                                        className="btn btn-secondary btn-sm waves-effect"
-                                        onClick={() => {
-                                          this.confirmDelete(setting._id);
-                                        }}
-                                      >
-                                        Delete
+                                    </Link>
+                                    <button
+                                      className="btn btn-secondary btn-sm waves-effect"
+                                      onClick={() => {
+                                        this.confirmDelete(setting._id);
+                                      }}
+                                    >
+                                      Delete
                                       </button>
-                                    </ButtonToolbar>
-                                  </td>
-                                </tr>
-                              ))
+                                  </ButtonToolbar>
+                                </td>
+                              </tr>
+                            ))
                             : null}
                         </tbody>
                       </table>

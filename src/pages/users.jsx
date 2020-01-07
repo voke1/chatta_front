@@ -14,12 +14,25 @@ import { Button, ButtonToolbar } from "react-bootstrap";
 import { CreateUser } from "../components/admin/adminDashboard/createUser";
 import AppNotification from "../utilities/notification/app-notification";
 import HeadLayout from "../components/admin/layouts/layouts.header";
-
+import Users from '../components/admin/adminDashboard/Bot/userDatables'
+import { MDBDataTable } from 'mdbreact';
 import UserDialog from "../components/admin/adminDashboard/Bot/userDeleteDialgo";
 import { APP_ENVIRONMENT } from "../environments/environment";
+import Footer from '../components/admin/layouts/layouts.footer'
+import PropTypes from 'prop-types'
+
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
+
+/**
+ * @description class for users
+ * @component
+ * @type {Class}
+ * @property {Function} - CloseDialog function
+ * 
+ */
 export class UserList extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -33,10 +46,21 @@ export class UserList extends Component {
     };
   }
 
+  /**
+   * @description Function to close dialog window
+   * @type { Function }
+   * @returns void
+   * 
+   */
   closeDialog = () => {
     this.setState({ userDelete: false });
   };
 
+  /**
+  * @description Function to open dialog window to delete user
+  * @type { Function }
+  * @returns void
+  */
   dialogConfirmDelete = () => {
     this.setState({ delete: true, userDelete: false });
     // if (this.state.delete) {
@@ -85,6 +109,12 @@ export class UserList extends Component {
       })
       .catch(console.error());
   };
+
+  /**
+   * @description Function to toggleSwitch
+   * @type { Function }
+   * @returns void
+   */
   toggleSwitch = id => {
     fetch(`${BASE_URL}/client/` + id, {
       method: "PATCH",
@@ -113,6 +143,7 @@ export class UserList extends Component {
     const [modalShow, setModalShow] = useState(false);
     return (
       <div>
+
         {/* <!-- Loader --> */}
         {this.state.loading ? (
           <div className="preloader">
@@ -120,6 +151,12 @@ export class UserList extends Component {
               <div className="spinner"></div>
             </div>
           </div>
+        ) : null}
+        {this.state.userDelete ? (
+          <UserDialog
+            dialogDelete={this.dialogConfirmDelete}
+            closeDialog={this.closeDialog}
+          />
         ) : null}
         {/* {this.state.notification ? (
           <div
@@ -138,7 +175,6 @@ export class UserList extends Component {
             </button>
           </div>
         ) : null} */}
-
         <div className="header-bg">
           {/* <!-- Navigation Bar--> */}
           <HeadLayout />
@@ -187,76 +223,15 @@ export class UserList extends Component {
               <div className="col-12">
                 <div className="card m-b-20">
                   <div className="card-body">
+
                     <h4 className="mt-0 header-title">Active Users</h4>
                     <p className="text-muted m-b-30 font-14">
                       DataTables has most features enabled by default, so all
                       you need to do to use it with your own tables is to call
                       the construction function: <code>$().DataTable();</code>.
                     </p>
+                    <Users users={this.state.clients} confirmDelete={this.confirmDelete} switched={this.state.switched} toggleSwitch={this.toggleSwitch} />
 
-                    <table id="datatable" className="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th>Phone</th>
-                          <th>Status</th>
-                          <th>Date created</th>
-                          <th>Option</th>
-                        </tr>
-                      </thead>
-                      {this.state.userDelete ? (
-                        <UserDialog
-                          dialogDelete={this.dialogConfirmDelete}
-                          closeDialog={this.closeDialog}
-                        />
-                      ) : null}
-                      <tbody>
-                        {this.state.clients.map((client, index) => (
-                          <tr>
-                            <td>{client.fullName}</td>
-                            <td>{client.email}</td>
-                            <td>{client.phone}</td>
-                            <td>
-                              <Switch
-                                key={client._id}
-                                onClick={this.toggleSwitch.bind(
-                                  this,
-                                  client._id
-                                )}
-                                on={this.state.clients[index].switched}
-                              />
-                            </td>
-                            <td>2008/12/19</td>
-                            <td>
-                              <div className="button-items">
-                                <Link
-                                  to={`/dashboard/admin/user/${client._id}`}
-                                >
-                                  <button
-                                    type="button"
-                                    className="btn btn-secondary btn-sm waves-effect"
-                                    clientID={client._id}
-                                  >
-                                    Edit &nbsp;
-                                  </button>
-                                </Link>
-
-                                <button
-                                  type="button"
-                                  className="btn btn-secondary btn-sm waves-effect"
-                                  onClick={() => {
-                                    this.confirmDelete(client._id);
-                                  }}
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
                   </div>
                 </div>
               </div>{" "}
@@ -269,17 +244,8 @@ export class UserList extends Component {
         {/* <!-- end wrapper --> */}
 
         {/* <!-- Footer --> */}
-        <footer className="footer">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-12">
-                © 2019 Chatta - Crafted with{" "}
-                <i className="mdi mdi-heart text-danger"></i> by IT Horizons
-                Limited.
-              </div>
-            </div>
-          </div>
-        </footer>
+        <Footer />
+
         {/* <!-- End Footer --> */}
       </div>
     );

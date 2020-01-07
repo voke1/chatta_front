@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import ManagBot from "./manageBot";
 import Users from "./users";
 import UserSettings from "./userSettings";
-import M from "minimatch";
 
 export class Settings extends Component {
   constructor(props) {
