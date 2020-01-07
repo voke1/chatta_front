@@ -6,10 +6,10 @@ import "../landing-page/vendors/animate-css/animate.css";
 import "../landing-page/vendors/owl-carousel/owl.carousel.min.css";
 import '../landing-page/vendors/fontawesome/css/all.min.css';
 import "../landing-page/css/responsive.css";
-import "../landing-page/css/landingPage.css"
-import ChatComponent from '../chat/chat.component'
-import background from './img/banner/home-banner.jpg'
-import imageLogo from './img/logo.png'
+import "../landing-page/css/landingPage.css";
+// import ChatComponent from '../chat/chat.component';
+import background from './img/banner/home-banner.jpg';
+import imageLogo from './img/logo.png';
 import { Link } from 'react-router-dom';
 
 
@@ -17,14 +17,14 @@ function frontPage() {
 
     return (
         <div>
-            <ChatComponent />
+            {/* <ChatComponent /> */}
             {/* <!--================Header Menu Area =================--> */}
             <header className="header_area">
                 <div className="main_menu">
-                    <nav className="navbar navbar-expand-lg navbar-light  fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+                    <nav className="navbar navbar-expand-lg navbar-light  fixenavbar-expand-lg navbar-dark scrolling-navbar">
                         <div className="container">
                             {/* <!-- Brand and toggle get grouped for better mobile display --> */}
-                            <a className="navbar-brand logo_h" href="index.html"><img src={imageLogo} alt=""></img></a>
+                            <a className="navbar-brand logo_h" href="index.html"><span> Chatta</span></a>
                             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
@@ -33,10 +33,9 @@ function frontPage() {
                             {/* <!-- Collect the nav links, forms, and other content for toggling --> */}
                             <div className="collapse navbar-collapse offset" id="navbarSupportedContent">
                                 <ul className="nav navbar-nav menu_nav ml-auto">
-                                    <li className="nav-item"><a className="nav-link" href="index.html">Home</a></li>
-                                    <li className="nav-item"><a className="nav-link" href="feature.html">Features</a></li>
-                                    <li className="nav-item"><a className="nav-link" href="price.html">Price</a></li>
-                                    <li className="nav-item submenu dropdown">
+                                    <li className="nav-item"><a className="nav-link" href="#">Home</a></li>
+                                    <li className="nav-item"><a className="nav-link" href="#">Features</a></li>
+                                    {/* <li className="nav-item submenu dropdown">
                                         <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages</a>
                                         <ul className="dropdown-menu">
                                             <li className="nav-item"><a className="nav-link" href="feature.html">Features</a></li>
@@ -50,8 +49,8 @@ function frontPage() {
                                             <li className="nav-item"><a className="nav-link" href="blog.html">Blog</a></li>
                                             <li className="nav-item"><a className="nav-link" href="single-blog.html">Blog Details</a></li>
                                         </ul>
-                                    </li>
-                                    <li className="nav-item"><a className="nav-link" href="contact.html">Contact</a></li>
+                                    </li> */}
+                                    <li className="nav-item"><a className="nav-link" href="#">Contact</a></li>
                                 </ul>
                             </div>
                             <div className="right-button">
@@ -74,9 +73,9 @@ function frontPage() {
                         <div className="row">
                             <div className="col-lg-6 offset-lg-6 col-xl-5 offset-xl-7">
                                 <div className="banner_content">
-                                    <h3>Build a better<br />business & faster</h3>
+                                    <h3>Build a better<br />business & faster with Chatta</h3>
                                     <p>Subdue creature does face signs evening good sixth foreign gaered one. Fruit. Third every fruitful multiply subdue creature doesn't face signs evening good sixth tyou're.</p>
-                                    <Link to={'/auth/login'}><button className="banner_btn">Begin <i className="ti-arrow-right"></i></button > </Link>
+                                    <Link to={'/auth/login'}><button className="banner_btn">Begin Free Trial<i className="ti-arrow-right"></i></button > </Link>
                                 </div>
                             </div>
 
@@ -84,7 +83,7 @@ function frontPage() {
                     </div>
                 </div>
             </section>
-            {/* <!--================End Home Banner Arebutton=================--> */}
+            {/* <!--================End Home Banner Are button=================--> */}
 
             {/* <!--================Service  Area =================--> */}
             <section className="service-area area-padding">
@@ -126,7 +125,7 @@ function frontPage() {
                                     <i className="ti-headphone-alt"></i>
                                 </div>
                                 <div className="service-content">
-                                    <h5>Customer Support</h5>
+                                    <h5>Real time analytics</h5>
                                     <p>Third don't lights wherein was. bring to build them, seas. Thing gathering answ gaered beast third that heaven after all that living one bank limit</p>
                                     <a href="#">Read More</a>
                                 </div>
@@ -146,8 +145,8 @@ function frontPage() {
 
                         <div className="col-lg-6">
                             <div className="area-heading">
-                                <h4>Form Female From<br></br>Cattle Evening. </h4>
-                                <h6>And appear great open bearing evening dominion vodi </h6>
+                                <h4>Create and customize<br></br>your bot yourself. </h4>
+                                <h6>NO coding skill required...</h6>
 
                                 <p>There earth face earth behold. She'd stars made void two given do and also. Our own grass days.  Greater male Shall There faced earth behold She star</p>
                             </div>
@@ -158,7 +157,7 @@ function frontPage() {
                                             <i className="ti-thought"></i>
                                         </div>
                                         <div className="single-about-content">
-                                            <h5>Cloud Compatibility</h5>
+                                            <h5>Generate leads</h5>
                                             <p>There earth face earth behold. She stars made void two given and also our own grass days. Greater </p>
                                         </div>
                                     </div>
@@ -169,7 +168,7 @@ function frontPage() {
                                             <i className="ti-truck"></i>
                                         </div>
                                         <div className="single-about-content">
-                                            <h5>On Time Delivery</h5>
+                                            <h5>Make faster payment</h5>
                                             <p>There earth face earth behold. She stars made void two given and also our own grass days. Greater </p>
                                         </div>
                                     </div>
@@ -188,7 +187,7 @@ function frontPage() {
 
                         <div className="offset-lg-6 col-lg-6">
                             <div className="area-heading light">
-                                <h4>Easy to Use <br></br>Mobile Application</h4>
+                                <h4>Easy to Use <br></br>Web Application</h4>
                                 <p>There earth face earth behold. She'd stars made void two given do and also. Our own grass days.  Greater male Shall There faced earth behold She star</p>
                             </div>
                             <div className="row">
@@ -235,8 +234,8 @@ function frontPage() {
 
                         <div className="offset-lg-1 col-lg-6">
                             <div className="area-heading">
-                                <h4>Form Female From<br></br>Cattle Evening. </h4>
-                                <h6>And appear great open bearing evening dominion vodi </h6>
+                                <h4>Have unlimited<br></br>and personalised conversation </h4>
+                                <h6>...at scale </h6>
 
                                 <p>There earth face earth behold. She'd stars made void two given do and also. Our own grass days.  Greater male Shall There faced earth behold She star</p>
                             </div>
@@ -420,7 +419,7 @@ function frontPage() {
 
                         <div className="col-lg-3 col-sm-6 mb-4 mb-xl-0 single-footer-widget">
                             <h4>About Us</h4>
-                            <p>Heaven fruitful doesn't over lesser days appear creeping seasons so behold bearing days open</p>
+                            <p> IT Horizons Ltd is a company with diverse talents and skills on existing, recent and upcoming technologies worldwide. </p>
                             <div className="footer-logo">
                                 <img src="img/logo.png" alt=""></img>
                             </div>
@@ -429,10 +428,10 @@ function frontPage() {
                         <div className="col-lg-3 col-sm-6 mb-4 mb-xl-0 single-footer-widget">
                             <h4>Contact Info</h4>
                             <div className="footer-address">
-                                <p>Address :Your address goes
-                        here, your demo address.</p>
-                                <span>Phone : +8880 44338899</span>
-                                <span>Email : info@colorlib.com</span>
+                                <p>9B Akin-Ogunmade Davies Street,
+Gbagada Phase 2, Lagos State.</p>
+                                <span>Phone : +2348189039359</span>
+                                <span>Email : info@ith.com</span>
                             </div>
                         </div>
 
