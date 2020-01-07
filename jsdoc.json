@@ -1,34 +1,24 @@
 {
-    "tags": {
-        "allowUnknownTags": true,
-        "dictionaries": [
-            "jsdoc",
-            "closure"
-        ]
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc", "closure"]
+  },
+  "source": {
+    "include": ["src"],
+    "includePattern": ".jsx$",
+    "exclude": ["node_modules"]
+  },
+  "plugins": ["plugins/markdown"],
+  "templates": {
+    "better-docs": {
+      "name": "My React components"
     },
-    "source": {
-        "include": [
-            "src"
-        ],
-        "includePattern": ".jsx$",
-        "exclude": [
-            "node_modules"
-        ]
-    },
-    "plugins": [
-        "plugins/markdown"
-    ],
-    "templates": {
-        "better-docs": {
-            "name": "My React components"
-        },
-        "cleverLinks": true,
-        "monospaceLinks": true
-    },
-    "opts": {
-        "recurse": true,
-        "destination": "./docs/",
-        "readme": "README.md"
-    }
+    "cleverLinks": true,
+    "monospaceLinks": true
+  },
+  "opts": {
+    "recurse": true,
+    "destination": "./docs/",
+    "readme": "README.md"
+  }
 }
-

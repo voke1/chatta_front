@@ -104,6 +104,10 @@ class CreateIntent extends Component {
               animation: "animated shake",
               disabledButton: this.props.ConvoTree ? true : false
             });
+            apiService
+              .put(`setting/${this.props.settings._id}`, this.props.settings)
+              .then(res => console.log("this is response", res))
+              .catch(error => console.error("this is error", error));
             // this.props.disableHomeTab();
           })
           .catch(err => {

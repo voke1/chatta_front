@@ -4,7 +4,7 @@ console.log("env", env, process.env)
 
 const environment = {
     development: {
-        base_url: 'https://aqueous-thicket-45068.herokuapp.com',
+        base_url: 'https://agile-reef-92956.herokuapp.com',
         base_url_front: 'https://chattang.herokuapp.com'
     },
     production: {
@@ -15,3 +15,5 @@ const environment = {
 }
 
 export const APP_ENVIRONMENT = environment[app_mode];
+
+//base url => https://aqueous-thicket-45068.herokuapp.com

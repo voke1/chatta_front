@@ -10,7 +10,8 @@ import ProgressBar from "../Authentication/progressbar";
 import { storage } from "../../../../firebase/index";
 import Preview from "./preview";
 import { APP_ENVIRONMENT } from "../../../../environments/environment";
-
+import EmbedCode from "./embed-code-dialog";
+import BotUITemplate from "./bot-UI-template-design";
 const BASE_URL = APP_ENVIRONMENT.base_url_front;
 class BotTabs extends Component {
   constructor(props) {
@@ -37,7 +38,8 @@ class BotTabs extends Component {
     secondaryColor: " ",
     file: " Upload bot image",
     settings: {},
-    previewSelected: false
+    previewSelected: false,
+    templateSettings: {}
     // displayState: "none"
   };
   handleChange = event => {
@@ -70,6 +72,7 @@ class BotTabs extends Component {
     apiService
       .post("setting", setting)
       .then(res => {
+        console.log("this is settings res", res);
         this.setState({
           tab: "intent",
           showProgress: false,
@@ -125,10 +128,22 @@ class BotTabs extends Component {
   getTab = tab => {
     return this.state.settingsSaved ? tab : this.state.tab;
   };
+  setTemplateSettings = templateSettings => {
+    const newSettings = { ...this.state.settings };
+    newSettings.templateSettings = templateSettings;
+    this.setState({
+      settings: newSettings
+    });
+  };
   render() {
     return (
-      <div className="container-holder">
+      <div
+        className=""
+        style={{ margin: "auto", width: "99%", marginTop: "20px" }}
+      >
+        <EmbedCode />
         <Tabs
+          style={{ padding: 0 }}
           activekey={this.state.tab}
           id="controlled-tab-example"
           onSelect={tab => this.setState({ tab: this.getTab(tab) })}
@@ -262,6 +277,17 @@ class BotTabs extends Component {
               </div>
             </div>
           </Tab>
+          <Tab
+            eventKey="template"
+            title="Customize"
+            className="open"
+            style={{ padding: "none", margin: "none" }}
+          >
+            <BotUITemplate
+              settings={this.state.settings}
+              setTemplateSettings={this.setTemplateSettings}
+            />
+          </Tab>
           <Tab eventKey="intent" title="Add Intent" className="open">
             <div className="card w-100">
               <div className="card-body">
@@ -287,10 +313,11 @@ class BotTabs extends Component {
   }
   getPreview() {
     return this.state.settingsSaved && this.state.tab === "preview" ? (
-      <Preview orgUrl={`${BASE_URL}/?setting_id=${this.state.settings._id}`} />
+      <Preview settings={this.state.settings} orgUrl={`${BASE_URL}/?setting_id=${this.state.settings._id}`} />
     ) : null;
   }
   componentDidMount() {
+    console.log("mounted");
     this.setGlobal({ getTab: this.getTab });
   }
 }
