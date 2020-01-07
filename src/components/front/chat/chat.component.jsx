@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Axios from "axios";
-import "../conversation/convo.component.css";
+import * as query_string from "query-string";
+
+// import "../conversation/convo.component.css";
 import "./chat.component.css";
 import "../../../utilities/slimscroll/slimscroll.css";
 import $ from "jquery";
@@ -10,6 +12,7 @@ import Convo from "../conversation/convo.component";
 import botpic from "../../../bot1.jpg";
 import DecodeToken from "../../../utilities/decodeToken";
 import { APP_ENVIRONMENT } from "../../../environments/environment";
+import { defaultStyle } from "./defaultStyle";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 export default class Chat extends Component {
@@ -29,7 +32,9 @@ export default class Chat extends Component {
       who: "",
       btnStyle: { backgroundColor: "transparent" },
       settings: {},
-      botImage: ""
+      botImage: "",
+      chat_body: [],
+      defaultStyle: defaultStyle
     };
     this.appService = new AppService();
   }
@@ -44,20 +49,31 @@ export default class Chat extends Component {
     return this.state.showChatArea ? (
       <div className="slideInUp">
         <div className="container clearfix">
-          <div className="chat">
+          <div className="chat" style={this.state.templateStyle}>
             <div
               className="chat-header clearfix"
-              style={{ backgroundColor: this.state.settings.secondaryColor }}
+              style={{
+                backgroundColor: this.state.defaultStyle.headerFillColor
+              }}
             >
               <img
                 src={this.state.botImage}
                 alt="avatar"
                 height="50"
                 width="50"
+                style={{
+                  borderRadius: this.state.defaultStyle.botImageBorderRadius
+                }}
                 className="img img-rounded"
               />
               <div className="chat-about">
-                <div className="chat-with">
+                <div
+                  className="chat-with"
+                  style={{
+                    fontSize: this.state.defaultStyle.botNameFontSize,
+                    color: this.state.defaultStyle.botNameTextColor
+                  }}
+                >
                   {this.state.settings.chatbotName}
                 </div>
                 <div className="chat-num-messages">
@@ -66,7 +82,14 @@ export default class Chat extends Component {
                     : ""}
                 </div>
               </div>
-              <span id="close-chat" onClick={this.toggleChatDisplay}>
+              <span
+                id="close-chat"
+                onClick={this.toggleChatDisplay}
+                style={{
+                  color: this.state.defaultStyle.closeButtonTextColor,
+                  fontSize: this.state.defaultStyle.closeButtonFontSize
+                }}
+              >
                 <i className="fa fa-times fa-2x"></i>
               </span>
             </div>
@@ -75,9 +98,16 @@ export default class Chat extends Component {
               userInput={this.state.userInput}
               getResponder={this.getResponder}
               settings={this.state.settings}
+              chat_body={this.state.chat_body}
             />
 
-            <div id="input-container" className="chat-message clearfix">
+            <div
+              id="input-container"
+              className="chat-message clearfix"
+              style={{
+                backgroundColor: this.state.defaultStyle.botBodyFillColor
+              }}
+            >
               <form onSubmit={this.handleSubmit}>
                 <div className="row">
                   <div className="col-md-12">
@@ -89,6 +119,12 @@ export default class Chat extends Component {
                       placeholder="Type your message"
                       rows="2"
                       onChange={this.handleChange}
+                      style={{
+                        backgroundColor: this.state.defaultStyle.inputFillColor,
+                        color: this.state.defaultStyle.inputTextColor,
+                        borderRadius: this.state.defaultStyle.inputBorderRadius,
+                        border: `${this.state.defaultStyle.inputBorder} solid ${this.state.defaultStyle.inputBorderColor}`
+                      }}
                     />
                     <i className="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
                     <i className="fa fa-file-image-o"></i>
@@ -121,14 +157,17 @@ export default class Chat extends Component {
   }
 
   async componentDidMount() {
-    const appKey = window.location.href;
-    console.log("API", appKey);
+    const params = query_string.parse(this.props.location.search);
     try {
-      const result = await Axios.get(`${BASE_URL}/setting`);
+      const result = await Axios.get(
+        `${BASE_URL}/setting/${params.setting_id}`
+      );
+      console.log("result", result);
       if (result.data) {
-        const settings = result.data[result.data.length - 1];
+        // const settings = result.data[result.data.length - 1];
+        const settings = result.data.findTree.setting_id;
+
         settings.collectUserInfo = true;
-        console.log("settings", settings);
         this.setState({
           btnStyle: {
             backgroundColor:
@@ -138,7 +177,9 @@ export default class Chat extends Component {
           },
           who: settings.chatbotName,
           botImage: settings.botImage,
-          settings
+          settings,
+          chat_body: result.data.findTree.chat_body,
+          defaultStyle: settings.templateSettings
         });
       }
     } catch (e) {}

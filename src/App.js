@@ -12,6 +12,7 @@ import Register from "./components/admin/adminDashboard/Authentication/Register"
 import Login from "./components/admin/adminDashboard/Authentication/Login";
 import VerifyEmail from "./components/admin/adminDashboard/Authentication/emailVerification";
 import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
+import BotUITemplate from './components/admin/adminDashboard/Bot/bot-UI-template-design'
 // import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 import { CompanySettings } from './components/admin/adminDashboard/Bot/companySettings'
 
@@ -44,6 +45,7 @@ function App() {
         <Route exact path="/auth/register" component={Register}></Route>
         <Route exact path="/auth/login" component={Login}></Route>
         <Route exact path="/auth/verify_email" component={VerifyEmail}></Route>
+        <Route exact path="/preview" component={BotUITemplate}></Route>
         <Route component={Error}></Route>
       </Switch>
     </div>

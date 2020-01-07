@@ -25,6 +25,14 @@ button:disabled {
   cursor: not-allowed !important;
 }
 
+#prev_div {
+  background: url(preview_background.jpg) no-repeat;
+  background-size: cover;
+  border-top: 4px dashed #95D3FF;
+  border-left: 4px dashed #95D3FF;
+  border-bottom: 4px dashed #95D3FF;
+}
+
 .floatBtn {
   top: 16% !important;
   right: 0.8%;
