@@ -1,0 +1,13 @@
+.copy-text:hover {
+  background-color: rgb(180, 180, 180) !important;
+}
+.copy-text:hover div {
+color: white !important;
+}
+
+.cancel:hover {
+    background-color: #ffffff !important;
+  }
+  .cancel:hover div {
+  color: grey !important;
+  }

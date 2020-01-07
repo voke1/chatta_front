@@ -7,7 +7,7 @@ import JsonTree from "./convo.json";
 import axios from "axios";
 import BotForm from "../../../components/admin/adminDashboard/Bot/botForm";
 import { APP_ENVIRONMENT } from "../../../environments/environment";
-
+import { defaultStyle } from "../chat/defaultStyle";
 const BASE_URL = APP_ENVIRONMENT.base_url;
 export default class Convo extends Component {
   appService;
@@ -29,6 +29,7 @@ export default class Convo extends Component {
       anything: "xx",
       username: "",
       email: "",
+      defaultStyle: defaultStyle,
       userDetails: {
         name: "",
         email: ""
@@ -68,33 +69,29 @@ export default class Convo extends Component {
   };
   appService = new AppService();
 
-  handleBotFormsubmit = userDetails => {
+  handleBotFormsubmit = async userDetails => {
     this.details = userDetails;
     const userName = userDetails.name;
     const userEmail = userDetails.email;
-    // setUserName(userName);
-    // this.setState({
-    //   collectUserInfo: false,
-    //   userDetails: { name: "emeka", email: "nwodochr@gjg.com"}
-    // });
 
-    setTimeout(() => {
-      this.setState({
-        username: userName,
-        email: userEmail,
-        anything: "yyy",
-        collectUserInfo: false,
-        userIsKnown: true,
-        canListen: true
-      });
-      this.searchTree("start", `Thanks ${this.state.username}`);
-    }, 10);
-    this.setDelayListener(true);
+    await this.setState({
+      username: userName,
+      email: userEmail,
+      anything: "yyy",
+      collectUserInfo: false,
+      userIsKnown: true,
+      canListen: true
+    });
+    this.searchTree("start", `Thanks ${this.state.username}`);
+    this.setDelayListener();
   };
   render() {
     return (
       <div>
-        <div className="chat-history">
+        <div
+          className="chat-history"
+          style={{ backgroundColor: this.state.defaultStyle.botBodyFillColor }}
+        >
           {this.isThinking()}
           <ul id="chat_list">{this.renderConversation()}</ul>
 
@@ -105,10 +102,13 @@ export default class Convo extends Component {
   }
   determineLister() {}
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
+    // console.log("chat body", this.props.chat_body);
+    // console.log("windows location href", window.location.href);
+    // console.log("document referer", document.referrer);
     // this.determineLister()
     if (this.props.settings.collectUserInfo) {
-      this.setState({
+      await this.setState({
         canListen: false,
         collectUserInfo: true,
         chat_body: this.props.chat_body
@@ -123,44 +123,29 @@ export default class Convo extends Component {
       const key = this.searchKeywordsFromUserInput(userInput);
       this.updateConverstion(key, userInput);
     }
+    this.setState({
+      defaultStyle: newProps.settings.templateSettings
+    });
   }
 
   /**\
    * This method get a company's conversation tree by company Id
    */
-  getConversationTree = (companyId = null) => {
+  getConversationTree = async (companyId = null) => {
+    console.log("convo tree", this.state.chat_body);
     /**
      * The companyId is gotten from the domain name. But for now it is not passed
      */
 
     // const convoTree = await this.appService.getConversationTree('tree');  This is your main API function for convo tree
 
-    // axios
-    //   .get(`${BASE_URL}/tree`)
-    //   .then(res => {
-    //     console.log("chat_body:", res.data[res.data.length - 1].chat_body);
-    //     // const convoTree = res.data[res.data.length - 1].chat_body;
-    //     const convoTree = res.data[res.data.length - 1].chat_body;
-    //     console.log("tree", this.state.username);
-    //     // convoTree[0].prompt = `Thanks ${this.state.username} ${convoTree[0].prompt}`;
-    //     // convoTree.prompt =
-    //     setTimeout(() => {
-
-    //     }, 10);
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
-    console.log("chat body", this.props.chat_body);
-    setTimeout(() => {
-      const convoTree = this.state.chat_body;
-      convoTree[0].prompt = `Thanks ${this.state.username} ${convoTree[0].prompt}`;
-      const conversationTree = this.deepCopy(convoTree);
-      this.setState({
-        conversationTree: conversationTree
-      });
-      this.updateConverstion(convoTree[0].identity);
-    }, 10);
+    const convoTree = this.state.chat_body;
+    convoTree[0].prompt = `Thanks ${this.state.username} ${convoTree[0].prompt}`;
+    const conversationTree = this.deepCopy(convoTree);
+    await this.setState({
+      conversationTree: conversationTree
+    });
+    this.updateConverstion(convoTree[0].identity);
   };
 
   handleUserChoice = () => {};
@@ -189,6 +174,12 @@ export default class Convo extends Component {
     return buttons.map(button => {
       return (
         <button
+          style={{
+            backgroundColor: this.state.defaultStyle.optionFillColor,
+            borderRadius: this.state.defaultStyle.optionBorderRadius,
+            border: `${this.state.defaultStyle.optionBorder} solid ${this.state.defaultStyle.optionBorderColor}`,
+            color: this.state.defaultStyle.optionTextColor
+          }}
           key={this.setUniqueKey(button.key, "b")}
           type="button"
           className="ith_chat-button"
@@ -316,17 +307,51 @@ export default class Convo extends Component {
               <div className="bot-div">
                 <div className="message-data">
                   <span className="message-data-name">
-                    <i className="fa fa-circle me"></i>{" "}
-                    {this.props.settings.chatbotName}
+                    <i
+                      className="fa fa-circle"
+                      style={{
+                        color: this.state.defaultStyle.botOnlineFillColor
+                      }}
+                    ></i>{" "}
+                    <span
+                      style={{
+                        color: this.state.defaultStyle.botOnlineNameTextColor
+                      }}
+                    >
+                      {this.props.settings.chatbotName}
+                    </span>
                   </span>
-                  <span className="message-data-time">
+                  <span
+                    className="message-data-time"
+                    style={{
+                      color: this.state.defaultStyle.botOnlineTimeTextColor
+                    }}
+                  >
                     {this.state.times[index] || "Now"}
                   </span>
                 </div>
-                <div className="message other-message" id="chat_box">
+                <div
+                  className="message other-message"
+                  id="chat_box"
+                  style={{
+                    backgroundColor: this.state.defaultStyle
+                      .botMessageFillColor,
+                    borderRadius: this.state.defaultStyle
+                      .botMessageBorderRadius,
+                    border: `${this.state.defaultStyle.botMessageBorder} solid ${this.state.defaultStyle.botMessageBorderColor}`
+                  }}
+                >
                   <div>
-                    <span className="a-triangle"></span>
-                    {convo.prompt}
+                    <div style={{ background: "green" }}>
+                      <span className="a-triangle"></span>
+                    </div>
+                    <span
+                      style={{
+                        color: this.state.defaultStyle.botMessageTextTextColor
+                      }}
+                    >
+                      {convo.prompt}
+                    </span>
                   </div>
                 </div>
                 <div className="button_container">
@@ -338,11 +363,39 @@ export default class Convo extends Component {
             <div className="response-div">
               <div className="message-data">
                 <span className="message-data-name">
-                  <i className="fa fa-circle online"></i> You
+                  <i
+                    className="fa fa-circle online"
+                    style={{
+                      color: this.state.defaultStyle.userOnlineFillColor
+                    }}
+                  ></i>{" "}
+                  <span
+                    style={{
+                      color: this.state.defaultStyle.userOnlineNameTextColor
+                    }}
+                  >
+                    You
+                  </span>
                 </span>
-                <span className="message-data-time">{convo.time}</span>
+                <span
+                  className="message-data-time"
+                  style={{
+                    color: this.state.defaultStyle.userOnlineTimeTextColor
+                  }}
+                >
+                  {convo.time}
+                </span>
               </div>
-              <div className="message  my-message" id="chat_box">
+              <div
+                className="message  my-message"
+                id="chat_box"
+                style={{
+                  backgroundColor: this.state.defaultStyle.userMessageFillColor,
+                  borderRadius: this.state.defaultStyle.userMessageBorderRadius,
+                  border: `${this.state.defaultStyle.userMessageBorder} solid ${this.state.defaultStyle.userMessageBorderColor}`,
+                  color: this.state.defaultStyle.userMessageTextTextColor
+                }}
+              >
                 <div>
                   <span className="b-triangle"></span>
                   <span className="user-choice">{convo.selection}</span>
@@ -443,8 +496,8 @@ export default class Convo extends Component {
    * This method sets the delay listener that checks user activity
    */
 
-  setDelayListener = (listen = null) => {
-    if (this.state.canListen || listen) {
+  setDelayListener = () => {
+    if (this.state.canListen) {
       const typingTimer = setInterval(() => {
         let timer = this.deepCopy(this.state.chatTimer); //get initial delay time
         const refreshTimer =
