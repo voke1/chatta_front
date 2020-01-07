@@ -63,6 +63,10 @@ body {
   color: #92959E;
 }
 
+/***
+TEMPLATE UI SECTION STARTS
+**/
+
 .chat {
   width: 490px;
   background: #F2F5F8;
@@ -71,11 +75,15 @@ body {
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
   color: #434651;
-    bottom: 0;
+   bottom: 0;
 	font-size: 12px;
 	right: 24px;
 	position: fixed;
 }
+
+
+
+
 .chat .chat-header {
   padding: 20px;
   border-bottom: 2px solid white;
@@ -173,7 +181,7 @@ body {
   content: " ";
   border: solid transparent;
   border-width: 15px;
-  border-bottom-color: #94C2ED;
+  border-bottom-color :yellow;
   position: absolute;
   pointer-events: none;
 }

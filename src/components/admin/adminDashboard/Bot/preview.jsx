@@ -1,30 +1,36 @@
-import React, { useState, useEffect } from "reactn";
-import ChatComponent from "../../../front/chat/chat.component";
-import previewBackground from "../../../../preview_background.jpg";
+import React, { useState, useEffect, useGlobal } from "reactn";
+import EmbeddedCodeDialog from "./embed-code-dialog";
 const BotPreview = props => {
   const getEmbedScript = url => {
-    return `<iframe src=${props.orgUrl} style="bottom: 34px;
-        right: 34px;
-        position: fixed;
-        padding: 12px 14px 11px; 
-       color: white;
-       cursor: pointer; 
-        box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 10px 0px;
-        border: none;
-        border-radius: 50%;
-        z-index: 12893128000000000000000000;
-        outline: none;
-        opacity: 1;"></iframe>`;
+    return `<iframe src="${props.orgUrl}" frameborder="0" style="background-color:transparent;
+    position:fixed;
+    z-index:1000000000000000000000000000050000;
+    bottom:2%;
+    height:600px;
+    width:600px;
+    right: 0px !important;"></iframe>`;
   };
 
   const [url, setUrl] = useState("");
+  const [embedeCode, setEmbedCode] = useState(false);
+  const [global, setOpen] = useGlobal();
+
   useEffect(() => {
+    console.log("global", global);
     setUrl(props.orgUrl);
-    console.log("embedded script", getEmbedScript(url));
   }, [props.orgUrl]);
 
+  const showEmbedCode = () => {
+    global.handleOpen(getEmbedScript());
+  };
   return (
     <div>
+      {embedeCode ? (
+        <EmbeddedCodeDialog
+          embedScript={getEmbedScript()}
+          openDialog={embedeCode}
+        />
+      ) : null}
       <div
         className="card "
         style={{ padding: "none", backgroundColor: "#E0F3FD" }}
@@ -38,7 +44,25 @@ const BotPreview = props => {
             height: "100%",
             width: "40%"
           }}
-        ></div>
+        >
+          <div style={{ marginTop: "300px" }}>
+            <button
+              className="btn"
+              style={{
+                backgroundColor: "#65678f",
+                borderRadius: "5px",
+                width: "250px",
+                height: "50px",
+                color: "white",
+                border: "2px solid #f5f5f5",
+                fontStyle: "bold"
+              }}
+              onClick={showEmbedCode}
+            >
+              {"< Copy embedded code />"}
+            </button>
+          </div>
+        </div>
         <iframe
           src={url}
           height="600px"
