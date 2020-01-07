@@ -22,6 +22,7 @@ function App() {
     <div>
       <Switch>
         <Route exact path="/" component={FrontPage}></Route>
+        <Route exact path="/chatbot" component={Chat}></Route>
         <Route exact path="/dashboard/admin" component={Dashboard}></Route>
         <Route exact path="/dashboard/admin/bot" component={Bot}></Route>
         <Route
