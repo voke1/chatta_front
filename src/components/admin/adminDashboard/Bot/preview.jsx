@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useGlobal } from "reactn";
 import EmbeddedCodeDialog from "./embed-code-dialog";
+
 const BotPreview = props => {
   const getEmbedScript = url => {
     return `<iframe src="${props.orgUrl}" frameborder="0" style="background-color:transparent;
