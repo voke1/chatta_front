@@ -45,6 +45,9 @@ const state = {
   optionBorderRadius: "6.4px",
   inputBorderRadius: "0px",
   botImageBorderRadius: "50%",
-  botBodyBorder: "1.28"
+  botBodyBorder: "1.28",
+  showNotification: "no",
+  timeOut: 8000,
+  saveClass: ""
 };
 export default state;
