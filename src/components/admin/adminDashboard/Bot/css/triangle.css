@@ -1,0 +1,12 @@
+.triangle {
+  /* position: absolute; */
+  width: 20px;
+  /* background-color: red; */
+  border-right: 60px solid transparent;
+  /* border-top: 60px solid transparent; */
+  border-left: 60px solid transparent;
+  /* background-color: red; */
+  border-bottom: 60px solid black;
+  /* right: 10rem; */
+  top: 0 auto !important;
+}

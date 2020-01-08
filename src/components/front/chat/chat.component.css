@@ -113,6 +113,7 @@ TEMPLATE UI SECTION STARTS
 .chat .chat-history {
   padding: 30px 30px 20px;
   border-bottom: 2px solid white;
+  overflow-x: hidden;
   overflow-y: scroll;
   height: 375px;
 }
