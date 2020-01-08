@@ -4,6 +4,7 @@ import border from "../../../../border.png";
 import "./css/bot-ui-template.css";
 import State from "./constants/bot-ui-template-state";
 import * as ApiService from "../../../../services/apiservice";
+import Notification from "../../../../utilities/notification/app-notification";
 class BotUITemplate extends Component {
   state = State;
   onSelect = name => {
@@ -22,7 +23,6 @@ class BotUITemplate extends Component {
     this.setState({ styleSelected: name });
   };
   buildTemplate = event => {
-    console.log("state", this.state);
     this.setState({
       [this.state.selected + "" + event.target.name]: event.target.value,
       borderColor:
@@ -50,15 +50,35 @@ class BotUITemplate extends Component {
     });
   };
   saveTemplate = () => {
+    if (this.state.showNotification === "no") {
+    }
+    this.setState({ showNotification: "yes", saveClass: "disable-button" });
     this.props.setTemplateSettings(this.state);
+  };
+  resetNotification = async () => {
+    console.log("notification rest");
+    await this.setState({ showNotification: "no", saveClass: "" });
   };
   setElementHover = (event, name) => {
     event.stopPropagation();
     this.setState({ hovered: name });
   };
+  getBorder = name => {
+    return this.state.selected === name ||
+      this.state.hovered === name ||
+      this.state.styleSelected === name
+      ? "2px solid #4c9ff9"
+      : "2px solid transparent";
+  };
   render() {
     return (
       <div class="m-0 template">
+        <Notification
+          show={this.state.showNotification}
+          type={"success"}
+          msg="Saved"
+          resetNotification={this.resetNotification}
+        />
         <div class="row" style={{ backgroundColor: "white" }}>
           <div
             class="col-md-8 p-0 bot-wrapper "
@@ -70,11 +90,7 @@ class BotUITemplate extends Component {
             <div
               className="p-16"
               style={{
-                border:
-                  this.state.selected === "botBody" ||
-                  this.state.hovered === "botBody"
-                    ? "1.28px solid #4c9ff9"
-                    : "1.28px solid transparent",
+                border: this.getBorder("botBody"),
                 height: "535px",
                 width: "320px",
                 margin: "auto",
@@ -107,11 +123,7 @@ class BotUITemplate extends Component {
                   <div
                     className="container"
                     style={{
-                      border:
-                        this.state.selected === "header" ||
-                        this.state.hovered === "header"
-                          ? "1.28px solid #4c9ff9"
-                          : "1.28px solid transparent"
+                      border: this.getBorder("header")
                     }}
                     onMouseOver={event => {
                       this.setElementHover(event, "header");
@@ -139,11 +151,7 @@ class BotUITemplate extends Component {
                                 margin: "auto",
                                 marginTop: "18%",
                                 width: "fit-content",
-                                border:
-                                  this.state.selected === "botImage" ||
-                                  this.state.hovered === "botImage"
-                                    ? "1.28px solid #4c9ff9"
-                                    : "1.28px solid transparent"
+                                border: this.getBorder("botImage")
                               }}
                               onClick={event => {
                                 event.stopPropagation();
@@ -174,11 +182,7 @@ class BotUITemplate extends Component {
                                 fontWeight: "bold",
                                 marginLeft: 10,
                                 fontSize: this.state.botNameFontSize,
-                                border:
-                                  this.state.selected === "botName" ||
-                                  this.state.hovered === "botName"
-                                    ? "1.28px solid #4c9ff9"
-                                    : "1.28px solid transparent"
+                                border: this.getBorder("botName")
                               }}
                               onClick={event => {
                                 event.stopPropagation();
@@ -201,11 +205,7 @@ class BotUITemplate extends Component {
                             margin: "auto",
                             float: "right",
                             marginTop: "10%",
-                            border:
-                              this.state.selected === "closeButton" ||
-                              this.state.hovered === "closeButton"
-                                ? "1.28px solid #4c9ff9"
-                                : "1.28px solid transparent"
+                            border: this.getBorder("closeButton")
                           }}
                           onClick={event => {
                             event.stopPropagation();
@@ -235,11 +235,7 @@ class BotUITemplate extends Component {
                   <div className="bot name time" style={{ display: "flex" }}>
                     <div
                       style={{
-                        border:
-                          this.state.selected === "botOnline" ||
-                          this.state.hovered === "botOnline"
-                            ? "1.28px solid #4c9ff9"
-                            : "1.28px solid transparent"
+                        border: this.getBorder("botOnline")
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "botOnline");
@@ -263,11 +259,7 @@ class BotUITemplate extends Component {
                     <div
                       style={{
                         marginBottom: 4,
-                        border:
-                          this.state.selected === "botOnlineName" ||
-                          this.state.hovered === "botOnlineName"
-                            ? "1.28px solid #4c9ff9"
-                            : "1.28px solid transparent"
+                        border: this.getBorder("botOnlineName")
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "botOnlineName");
@@ -292,11 +284,7 @@ class BotUITemplate extends Component {
                     </div>
                     <div
                       style={{
-                        border:
-                          this.state.selected === "botOnlineTime" ||
-                          this.state.hovered === "botOnlineTime"
-                            ? "1.28px solid #4c9ff9"
-                            : "1.28px solid transparent",
+                        border: this.getBorder("botOnlineTime"),
                         marginBottom: 4
                       }}
                       onMouseOver={event => {
@@ -325,11 +313,7 @@ class BotUITemplate extends Component {
                   </div>
                   <div
                     style={{
-                      border:
-                        this.state.selected === "botMessage" ||
-                        this.state.hovered === "botMessage"
-                          ? "1.28px solid #4c9ff9"
-                          : "1.28px solid transparent",
+                      border: this.getBorder("botMessage"),
                       width: "90%",
                       float: "right",
                       marginTop: 0.64
@@ -357,11 +341,7 @@ class BotUITemplate extends Component {
                           margin: "auto",
                           width: "90%",
                           color: this.state.botMessageTextTextColor,
-                          border:
-                            this.state.selected === "botMessageText" ||
-                            this.state.hovered === "botMessageText"
-                              ? "1.28px solid #4c9ff9"
-                              : "1.28px solid transparent",
+                          border: this.getBorder("botMessageText"),
                           fontSize: "11px"
                         }}
                         onClick={event => {
@@ -382,11 +362,7 @@ class BotUITemplate extends Component {
                   <div style={{ display: "flex" }}>
                     <div
                       style={{
-                        borderBottom:
-                          this.state.selected === "option" ||
-                          this.state.hovered === "option"
-                            ? "1.28px solid #4c9ff9"
-                            : "1.28px solid transparent"
+                        borderBottom: this.getBorder("option")
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "option");
@@ -414,11 +390,7 @@ class BotUITemplate extends Component {
                     </div>
                     <div
                       style={{
-                        borderBottom:
-                          this.state.selected === "option" ||
-                          this.state.hovered === "option"
-                            ? "1.28px solid #4c9ff9"
-                            : "1.28px solid transparent"
+                        borderBottom: this.getBorder("option")
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "option");
@@ -447,11 +419,7 @@ class BotUITemplate extends Component {
                     </div>
                     <div
                       style={{
-                        borderBottom:
-                          this.state.selected === "option" ||
-                          this.state.hovered === "option"
-                            ? "1.6px solid #4c9ff9"
-                            : "1.6px solid transparent"
+                        borderBottom: this.getBorder("option")
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "option");
@@ -494,11 +462,7 @@ class BotUITemplate extends Component {
                   <div className="bot name time" style={{ display: "flex" }}>
                     <div
                       style={{
-                        border:
-                          this.state.selected === "userOnline" ||
-                          this.state.hovered === "userOnline"
-                            ? "1.6px solid #4c9ff9"
-                            : "1.6px solid transparent"
+                        border: this.getBorder("userOnline")
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "userOnline");
@@ -507,8 +471,8 @@ class BotUITemplate extends Component {
                       <div
                         style={{
                           backgroundColor: this.state.userOnlineFillColor,
-                          height: "10.4px",
-                          width: "10.4px",
+                          height: "8.32px",
+                          width: "8.32px",
                           borderRadius: "50%",
                           marginTop: 4
                         }}
@@ -521,11 +485,7 @@ class BotUITemplate extends Component {
                     <div
                       style={{
                         marginBottom: 4,
-                        border:
-                          this.state.selected === "userOnlineName" ||
-                          this.state.hovered === "userOnlineName"
-                            ? "1.28px solid #4c9ff9"
-                            : "1.28px solid transparent"
+                        border: this.getBorder("userOnlineName")
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "userOnlineName");
@@ -550,11 +510,7 @@ class BotUITemplate extends Component {
                     </div>
                     <div
                       style={{
-                        border:
-                          this.state.selected === "userOnlineTime" ||
-                          this.state.hovered === "userOnlineTime"
-                            ? "1.28px solid #4c9ff9"
-                            : "1.28px solid transparent",
+                        border: this.getBorder("userOnlineTime"),
                         marginBottom: 4
                       }}
                       onMouseOver={event => {
@@ -580,11 +536,7 @@ class BotUITemplate extends Component {
                   </div>
                   <div
                     style={{
-                      border:
-                        this.state.selected === "userMessage" ||
-                        this.state.hovered === "userMessage"
-                          ? "1.28px solid #4c9ff9"
-                          : "1.28px solid transparent",
+                      border: this.getBorder("userMessage"),
                       width: "90%",
                       float: "left",
                       marginTop: 6.4,
@@ -621,11 +573,7 @@ class BotUITemplate extends Component {
                       >
                         <div
                           style={{
-                            border:
-                              this.state.selected === "userMessageText" ||
-                              this.state.hovered === "userMessageText"
-                                ? "1.28px solid #4c9ff9"
-                                : "1.28px solid transparent",
+                            border: this.getBorder("userMessageText"),
                             fontSize: "11px"
                           }}
                           onMouseOver={event => {
@@ -651,11 +599,7 @@ class BotUITemplate extends Component {
                   <div className="bot name time" style={{ display: "flex" }}>
                     <div
                       style={{
-                        border:
-                          this.state.selected === "botOnline" ||
-                          this.state.hovered === "botOnline"
-                            ? "1.28px solid #4c9ff9"
-                            : "1.28px solid transparent"
+                        border: this.getBorder("botOnline")
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "botOnline");
@@ -678,11 +622,7 @@ class BotUITemplate extends Component {
                     <div
                       style={{
                         marginBottom: 4,
-                        border:
-                          this.state.selected === "botOnlineName" ||
-                          this.state.hovered === "botOnlineName"
-                            ? "1.28px solid #4c9ff9"
-                            : "1.28px solid transparent"
+                        border: this.getBorder("botOnlineName")
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "botOnlineName");
@@ -707,11 +647,7 @@ class BotUITemplate extends Component {
                     </div>
                     <div
                       style={{
-                        border:
-                          this.state.selected === "botOnlineTime" ||
-                          this.state.hovered === "botOnlineTime"
-                            ? "1.28px solid #4c9ff9"
-                            : "1.28px solid transparent",
+                        border: this.getBorder("botOnlineTime"),
                         marginBottom: 4
                       }}
                       onMouseOver={event => {
@@ -737,11 +673,7 @@ class BotUITemplate extends Component {
                   </div>
                   <div
                     style={{
-                      border:
-                        this.state.selected === "botMessage" ||
-                        this.state.hovered === "botMessage"
-                          ? "1.28px solid #4c9ff9"
-                          : "1.28px solid transparent",
+                      border: this.getBorder("botMessage"),
                       width: "90%",
                       float: "right",
                       marginTop: 0.64
@@ -769,11 +701,7 @@ class BotUITemplate extends Component {
                           margin: "auto",
                           width: "90%",
                           color: this.state.botMessageTextTextColor,
-                          border:
-                            this.state.selected === "botMessageText" ||
-                            this.state.hovered === "botMessageText"
-                              ? "1.28px solid #4c9ff9"
-                              : "1.28px solid transparent",
+                          border: this.getBorder("botMessageText"),
                           fontSize: "11px"
                         }}
                         onClick={event => {
@@ -793,11 +721,7 @@ class BotUITemplate extends Component {
                   <div style={{ display: "flex" }}>
                     <div
                       style={{
-                        borderBottom:
-                          this.state.selected === "option" ||
-                          this.state.hovered === "option"
-                            ? "1.28px solid #4c9ff9"
-                            : "1.28px solid transparent"
+                        borderBottom: this.getBorder("option")
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "option");
@@ -825,11 +749,7 @@ class BotUITemplate extends Component {
                     </div>
                     <div
                       style={{
-                        borderBottom:
-                          this.state.selected === "option" ||
-                          this.state.hovered === "option"
-                            ? "1.28px solid #4c9ff9"
-                            : "1.28px solid transparent"
+                        borderBottom: this.getBorder("option")
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "option");
@@ -864,11 +784,7 @@ class BotUITemplate extends Component {
                     width: "90%",
                     margin: "auto",
                     marginTop: 435,
-                    border:
-                      this.state.selected === "input" ||
-                      this.state.hovered === "input"
-                        ? "1.28px solid #4c9ff9"
-                        : "1.28px solid transparent"
+                    border: this.getBorder("input")
                   }}
                   onClick={event => {
                     event.stopPropagation();
@@ -933,10 +849,7 @@ class BotUITemplate extends Component {
                     marginLeft: 6.4,
                     fontSize: 11.52,
                     display: "flex",
-                    border:
-                      this.state.styleSelected === "borderRadius"
-                        ? "1.28px solid #4c9ff9"
-                        : "1.28px solid transparent"
+                    border: this.getBorder("borderRadius")
                   }}
                   onClick={event => {
                     this.onSelectStyle("borderRadius");
@@ -965,10 +878,7 @@ class BotUITemplate extends Component {
                     marginLeft: 6.4,
                     fontSize: 11.52,
                     display: "flex",
-                    border:
-                      this.state.styleSelected === "borderColor"
-                        ? "1.28px solid #4c9ff9"
-                        : "1.28px solid transparent"
+                    border: this.getBorder("borderColor")
                   }}
                   onClick={event => {
                     this.onSelectStyle("borderColor");
@@ -1048,10 +958,7 @@ class BotUITemplate extends Component {
                   style={{
                     marginLeft: 6.4,
                     width: 96,
-                    border:
-                      this.state.styleSelected === "fontFamily"
-                        ? "1.28px solid #4c9ff9"
-                        : "1.28px solid transparent"
+                    border: this.getBorder("fontFamily")
                   }}
                 >
                   <select
@@ -1070,10 +977,7 @@ class BotUITemplate extends Component {
                     marginLeft: 6.4,
                     fontSize: 11.52,
                     display: "flex",
-                    border:
-                      this.state.styleSelected === "fontStyle"
-                        ? "1.28px solid #4c9ff9"
-                        : "1.28px solid transparent"
+                    border: this.getBorder("fontStyle")
                   }}
                   onClick={event => {
                     this.onSelectStyle("fontStyle");
@@ -1118,10 +1022,7 @@ class BotUITemplate extends Component {
                     marginLeft: 6.4,
                     fontSize: 11.52,
                     display: "flex",
-                    border:
-                      this.state.styleSelected === "textColor"
-                        ? "1.28px solid #4c9ff9"
-                        : "1.28px solid transparent"
+                    border: this.getBorder("textColor")
                   }}
                   onClick={event => {
                     this.onSelectStyle("textColor");
@@ -1175,10 +1076,7 @@ class BotUITemplate extends Component {
                     marginLeft: 6.4,
                     fontSize: 11.52,
                     display: "flex",
-                    border:
-                      this.state.styleSelected === "fillColor"
-                        ? "1.28px solid #4c9ff9"
-                        : "1.28px solid transparent"
+                    border: this.getBorder("fillColor")
                   }}
                   onClick={event => {
                     this.onSelectStyle("fillColor");
@@ -1253,10 +1151,7 @@ class BotUITemplate extends Component {
                     width: 96,
                     display: "flex",
                     paddingTop: 6.4,
-                    border:
-                      this.state.styleSelected === "effectShadow"
-                        ? "1.28px solid #4c9ff9"
-                        : "1.28px solid transparent"
+                    border: this.getBorder("effectShadow")
                   }}
                   onClick={event => {
                     this.onSelectStyle("effectShadow");
@@ -1301,10 +1196,7 @@ class BotUITemplate extends Component {
                   <div
                     className="row hover selected"
                     style={{
-                      border:
-                        this.state.styleSelected === "effectHover"
-                          ? "1.28px solid #4c9ff9"
-                          : "1.28px solid transparent"
+                      border: this.getBorder("effectHover")
                     }}
                     onClick={event => {
                       this.onSelectStyle("effectHover");
@@ -1384,10 +1276,7 @@ class BotUITemplate extends Component {
                   <div
                     className="row selected"
                     style={{
-                      border:
-                        this.state.styleSelected === "effectClick"
-                          ? "1.28px solid #4c9ff9"
-                          : "1.28px solid transparent"
+                      border: this.getBorder("effectClick")
                     }}
                     onClick={event => {
                       this.onSelectStyle("effectClick");
@@ -1488,7 +1377,7 @@ class BotUITemplate extends Component {
           ></input>
         </div>
         <div className="options">
-          <div style={{ marginRight: "220px" }}>
+          <div style={{ marginRight: "220px" }} className={this.state.saveClass}>
             {" "}
             <i
               class="fas fa-save"

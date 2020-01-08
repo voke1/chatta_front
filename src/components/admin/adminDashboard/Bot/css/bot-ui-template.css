@@ -2,11 +2,11 @@
   overflow-x: hidden;
 }
 .selected {
-  border: 1.28px solid transparent;
+  border: 2px solid transparent;
   padding: 2.56px;
 }
 .selected:hover {
-  border: 1.28px solid #4c9ff9 !important;
+  border: 2px solid #4c9ff9 !important;
 }
 .options {
   position: fixed;
@@ -24,6 +24,10 @@
   justify-content: flex-end;
   height: 64px;
   padding: 0 32px;
+}
+.disable-button {
+  pointer-events: none;
+  opacity: 0.7;
 }
 /* .style-picker {
   overflow-y: scroll;
