@@ -34,8 +34,8 @@ class BotTabs extends Component {
     settingsSaved: false,
     fileUpload: null,
     delayTime: null,
-    primaryColor: " ",
-    secondaryColor: " ",
+    primaryColor: "#000000",
+    secondaryColor: "#000000",
     file: " Upload bot image",
     settings: {},
     previewSelected: false,
@@ -313,7 +313,9 @@ class BotTabs extends Component {
   }
   getPreview() {
     return this.state.settingsSaved && this.state.tab === "preview" ? (
+
       <Preview settings={this.state.settings} orgUrl={`${BASE_URL}/chatbot?setting_id=${this.state.settings._id}`} />
+
     ) : null;
   }
   componentDidMount() {
