@@ -313,7 +313,7 @@ class BotTabs extends Component {
   }
   getPreview() {
     return this.state.settingsSaved && this.state.tab === "preview" ? (
-      <Preview settings={this.state.settings} orgUrl={`${BASE_URL}/?setting_id=${this.state.settings._id}`} />
+      <Preview settings={this.state.settings} orgUrl={`${BASE_URL}/chatbot?setting_id=${this.state.settings._id}`} />
     ) : null;
   }
   componentDidMount() {
