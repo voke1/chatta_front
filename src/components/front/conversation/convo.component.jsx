@@ -8,6 +8,7 @@ import axios from "axios";
 import BotForm from "../../../components/admin/adminDashboard/Bot/botForm";
 import { APP_ENVIRONMENT } from "../../../environments/environment";
 import { defaultStyle } from "../chat/defaultStyle";
+import Triangle from "../../../components/admin/adminDashboard/Bot/triangle";
 const BASE_URL = APP_ENVIRONMENT.base_url;
 export default class Convo extends Component {
   appService;
@@ -330,28 +331,39 @@ export default class Convo extends Component {
                     {this.state.times[index] || "Now"}
                   </span>
                 </div>
-                <div
-                  className="message other-message"
-                  id="chat_box"
-                  style={{
-                    backgroundColor: this.state.defaultStyle
-                      .botMessageFillColor,
-                    borderRadius: this.state.defaultStyle
-                      .botMessageBorderRadius,
-                    border: `${this.state.defaultStyle.botMessageBorder} solid ${this.state.defaultStyle.botMessageBorderColor}`
-                  }}
-                >
-                  <div>
-                    <div style={{ background: "green" }}>
-                      <span className="a-triangle"></span>
+                <div className="content row" style={{}}>
+                  <div
+                    className="col-md-10 message other-message"
+                    id="chat_box"
+                    style={{
+                      backgroundColor: this.state.defaultStyle
+                        .botMessageFillColor,
+                      borderRadius: this.state.defaultStyle
+                        .botMessageBorderRadius,
+                      border: `${this.state.defaultStyle.botMessageBorder} solid ${this.state.defaultStyle.botMessageBorderColor}`,
+                      color: this.state.defaultStyle.botMessageTextTextColor
+                    }}
+                  >
+                    <div>
+                      {/* <div style={{ background: "green" }}>
+                      </div> */}
+                      <span
+                        style={{
+                          color: this.state.defaultStyle.botMessageTextTextColor
+                        }}
+                      >
+                        {convo.prompt}
+                      </span>
                     </div>
-                    <span
-                      style={{
-                        color: this.state.defaultStyle.botMessageTextTextColor
-                      }}
-                    >
-                      {convo.prompt}
-                    </span>
+                  </div>
+                  <div className="col-md-1 triangle-left" style={{}}>
+                    <div style={{ marginTop: "0px" }}>
+                      <Triangle
+                        color={this.state.defaultStyle.botMessageFillColor}
+                        direction="right"
+                        size="35px"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="button_container">
@@ -386,19 +398,32 @@ export default class Convo extends Component {
                   {convo.time}
                 </span>
               </div>
-              <div
-                className="message  my-message"
-                id="chat_box"
-                style={{
-                  backgroundColor: this.state.defaultStyle.userMessageFillColor,
-                  borderRadius: this.state.defaultStyle.userMessageBorderRadius,
-                  border: `${this.state.defaultStyle.userMessageBorder} solid ${this.state.defaultStyle.userMessageBorderColor}`,
-                  color: this.state.defaultStyle.userMessageTextTextColor
-                }}
-              >
-                <div>
-                  <span className="b-triangle"></span>
-                  <span className="user-choice">{convo.selection}</span>
+              <div className="row content">
+                <div className="col-md-1 triangle-left" style={{}}>
+                  <div style={{ marginLeft: "10px", marginTop: "10px" }}>
+                    <Triangle
+                      color={this.state.defaultStyle.userMessageFillColor}
+                      direction="left"
+                      size="15px"
+                    />
+                  </div>
+                </div>
+                <div
+                  className="col-md-10 message  my-message"
+                  id="chat_box"
+                  style={{
+                    backgroundColor: this.state.defaultStyle
+                      .userMessageFillColor,
+                    borderRadius: this.state.defaultStyle
+                      .userMessageBorderRadius,
+                    border: `${this.state.defaultStyle.userMessageBorder} solid ${this.state.defaultStyle.userMessageBorderColor}`,
+                    color: this.state.defaultStyle.userMessageTextTextColor
+                  }}
+                >
+                  <div>
+                    {/* <span className="b-triangle"></span> */}
+                    <span className="user-choice">{convo.selection}</span>
+                  </div>
                 </div>
               </div>
             </div>
