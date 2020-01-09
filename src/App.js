@@ -18,7 +18,6 @@ import { CompanySettings } from './components/admin/adminDashboard/Bot/companySe
 import FrontPage from './components/front/landing-page/frontPage'
 
 
-
 function App() {
   return (
     <div>

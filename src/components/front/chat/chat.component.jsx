@@ -15,6 +15,7 @@ import { APP_ENVIRONMENT } from "../../../environments/environment";
 import { defaultStyle } from "./defaultStyle";
 
 
+
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
 export default class Chat extends Component {
@@ -52,7 +53,7 @@ export default class Chat extends Component {
     return this.state.showChatArea ? (
 
       <div className="slideInUp">
-        <div className="container clearfix">
+        <div className="container1 clearfix">
           <div className="chat" style={this.state.templateStyle}>
             <div
               className="chat-header clearfix"
@@ -106,7 +107,7 @@ export default class Chat extends Component {
             />
 
             <div
-              id="input-container"
+              id="input-container1"
               className="chat-message clearfix"
               style={{
                 backgroundColor: this.state.defaultStyle.botBodyFillColor
