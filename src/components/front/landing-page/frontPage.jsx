@@ -22,7 +22,7 @@ function frontPage() {
             <header className="header_area">
                 <div className="main_menu">
                     <nav className="navbar navbar-expand-lg navbar-light  fixenavbar-expand-lg navbar-dark scrolling-navbar">
-                        <div className="container">
+                        <div className="container1">
                             {/* <!-- Brand and toggle get grouped for better mobile display --> */}
                             <a className="navbar-brand logo_h" href="index.html"><span> Chatta</span></a>
                             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,7 @@ function frontPage() {
             <section className="home_banner_area" style={{ backgroundImage: "url(" + background + ")" }}>
                 <div className="banner_inner d-flex align-items-center">
                     <div className="overlay"></div>
-                    <div className="container">
+                    <div className="container1">
                         <div className="row">
                             <div className="col-lg-6 offset-lg-6 col-xl-5 offset-xl-7">
                                 <div className="banner_content">
@@ -87,7 +87,7 @@ function frontPage() {
 
             {/* <!--================Service  Area =================--> */}
             <section className="service-area area-padding">
-                <div className="container">
+                <div className="container1">
                     <div className="row">
                         {/* <!-- Single service --> */}
                         <div className="col-md-6 col-lg-4">
@@ -140,7 +140,7 @@ function frontPage() {
 
             {/* <!--================About  Area =================--> */}
             <section className="about-area area-padding-bottom">
-                <div className="container">
+                <div className="container1">
                     <div className="row align-items-center">
 
                         <div className="col-lg-6">
@@ -182,7 +182,7 @@ function frontPage() {
 
             {/* <!--================Feature  Area =================--> */}
             <section className="feature-area area-padding bg_one">
-                <div className="container">
+                <div className="container1">
                     <div className="row align-items-center">
 
                         <div className="offset-lg-6 col-lg-6">
@@ -223,7 +223,7 @@ function frontPage() {
 
             {/* <!--================About  Area =================--> */}
             <section className="statics-area area-padding">
-                <div className="container">
+                <div className="container1">
                     <div className="row">
 
                         <div className="col-lg-5">
@@ -264,7 +264,7 @@ function frontPage() {
 
             {/* <!--================ Start Portfolio Area =================--> */}
             <section className="pricing_area area-padding-top">
-                <div className="container">
+                <div className="container1">
                     <div className="row">
                         <div className="col-12">
                             <div className="area-heading">
@@ -363,7 +363,7 @@ function frontPage() {
 
             {/* <!--================ Start Brands Area =================--> */}
             <section className="brands-area area-padding-bottom">
-                <div className="container">
+                <div className="container1">
                     <div className="row justify-content-center">
                         <div className="col-lg-10">
                             <div className="owl-carousel brand-carousel">
@@ -414,7 +414,7 @@ function frontPage() {
 
             {/* <!-- ================ start footer Area ================= --> */}
             <footer className="footer-area">
-                <div className="container">
+                <div className="container1">
                     <div className="row">
 
                         <div className="col-lg-3 col-sm-6 mb-4 mb-xl-0 single-footer-widget">
