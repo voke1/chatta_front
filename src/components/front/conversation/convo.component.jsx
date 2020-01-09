@@ -296,6 +296,7 @@ export default class Convo extends Component {
         <BotForm
           handleBotFormsubmit={this.handleBotFormsubmit}
           settings={this.props.settings}
+          botMessageFillColor={this.state.defaultStyle.botMessageFillColor}
         />
       );
     }
