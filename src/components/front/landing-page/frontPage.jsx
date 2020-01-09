@@ -228,7 +228,7 @@ function frontPage() {
 
                         <div className="col-lg-5">
                             <div className="image-box">
-                                <img src="img/banner/about3.png" alt=""></img>
+                                <img src="img/banner/about3.png" alt="" className="image"></img>
                             </div>
                         </div>
 
@@ -370,37 +370,37 @@ function frontPage() {
                                 {/* <!-- single-brand --> */}
                                 <div className="single-brand-item d-table">
                                     <div className="d-table-cell">
-                                        <img src="img/logo/1.png" alt=""></img>
+                                        <img src="img/logo/1.png" alt="" className="image" ></img>
                                     </div>
                                 </div>
                                 {/* <!-- single-brand --> */}
                                 <div className="single-brand-item d-table">
                                     <div className="d-table-cell">
-                                        <img src="img/logo/2.png" alt=""></img>
+                                        <img src="img/logo/2.png" alt="" className="image" ></img>
                                     </div>
                                 </div>
                                 {/* <!-- single-brand --> */}
                                 <div className="single-brand-item d-table">
                                     <div className="d-table-cell">
-                                        <img src="img/logo/3.png" alt=""></img>
+                                        <img src="img/logo/3.png" alt="" className="image"></img>
                                     </div>
                                 </div>
                                 {/* <!-- single-brand --> */}
                                 <div className="single-brand-item d-table">
                                     <div className="d-table-cell">
-                                        <img src="img/logo/4.png" alt=""></img>
+                                        <img src="img/logo/4.png" alt="" className="image"></img>
                                     </div>
                                 </div>
                                 {/* <!-- single-brand --> */}
                                 <div className="single-brand-item d-table">
                                     <div className="d-table-cell">
-                                        <img src="img/logo/5.png" alt=""></img>
+                                        <img src="img/logo/5.png" alt="" className="image"></img>
                                     </div>
                                 </div>
                                 {/* <!-- single-brand --> */}
                                 <div className="single-brand-item d-table">
                                     <div className="d-table-cell">
-                                        <img src="img/logo/3.png" alt=""></img>
+                                        <img src="img/logo/3.png" alt="" className="image"></img>
                                     </div>
                                 </div>
                             </div>
@@ -421,7 +421,7 @@ function frontPage() {
                             <h4>About Us</h4>
                             <p> IT Horizons Ltd is a company with diverse talents and skills on existing, recent and upcoming technologies worldwide. </p>
                             <div className="footer-logo">
-                                <img src="img/logo.png" alt=""></img>
+                                <img src="img/logo.png" alt="" className="image"></img>
                             </div>
                         </div>
 
