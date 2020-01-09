@@ -45,11 +45,12 @@ export class CreateUser extends Component {
       password: this.state.password,
       email: this.state.email,
       phone: this.state.phone,
-      isVerified: true
+      isVerified: true,
+      isCreated: true,
     };
 
     console.log(user);
-    Axios.post(`${BASE_URL}/client/new`, {
+    Axios.post(`${BASE_URL}/client`, {
       ...user
     })
       .then(res => {
