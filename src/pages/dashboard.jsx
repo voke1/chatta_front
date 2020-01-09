@@ -37,7 +37,7 @@ export class Dashboard extends Component {
 
     return (<div>
 
-      <body>
+     
 
         {/* <!-- Loader --> */}
         {/* <div id="preloader"><div id="status"><div className="spinner"></div></div></div> */}
@@ -331,8 +331,7 @@ export class Dashboard extends Component {
 
 
 
-      </body>
-
+     
 
     </div>);
   };
