@@ -54,7 +54,7 @@ function frontPage() {
                                 </ul>
                             </div>
                             <div className="right-button">
-                                <ul>
+                                <ul className="ul">
                                     <li className="shop-icon"><a href="#"><i className="ti-shopping-cart-full"></i><span>0</span></a></li>
                                     <Link to={'/auth/register'}><li><a className="sign_up" >Sign Up</a></li> </Link>
                                 </ul>
@@ -280,7 +280,7 @@ function frontPage() {
                                 <div className="single-pricing-content">
                                     <h5>Standard</h5>
                                     <h4>$25<span className="currency_line">/</span><span>month</span></h4>
-                                    <ul>
+                                    <ul className="ul">
                                         <li>2GB Bandwidth</li>
                                         <li>Two Account</li>
                                         <li>15GB Storage</li>
@@ -301,7 +301,7 @@ function frontPage() {
                                 <div className="single-pricing-content">
                                     <h5>Business</h5>
                                     <h4>$35<span className="currency_line">/</span><span>month</span></h4>
-                                    <ul>
+                                    <ul className="ul">
                                         <li>2GB Bandwidth</li>
                                         <li>Two Account</li>
                                         <li>15GB Storage</li>
@@ -322,7 +322,7 @@ function frontPage() {
                                 <div className="single-pricing-content">
                                     <h5>Premium</h5>
                                     <h4>$45<span className="currency_line">/</span><span>month</span></h4>
-                                    <ul>
+                                    <ul className="ul">
                                         <li>2GB Bandwidth</li>
                                         <li>Two Account</li>
                                         <li>15GB Storage</li>
@@ -343,7 +343,7 @@ function frontPage() {
                                 <div className="single-pricing-content">
                                     <h5>Ultimate</h5>
                                     <h4>$55<span className="currency_line">/</span><span>month</span></h4>
-                                    <ul>
+                                    <ul className="ul">
                                         <li>2GB Bandwidth</li>
                                         <li>Two Account</li>
                                         <li>15GB Storage</li>
@@ -437,7 +437,7 @@ Gbagada Phase 2, Lagos State.</p>
 
                         <div className="col-lg-3 col-sm-6 mb-4 mb-xl-0 single-footer-widget">
                             <h4>Important Link</h4>
-                            <ul>
+                            <ul className="ul">
                                 <li><a href="#">WHMCS-bridge</a></li>
                                 <li><a href="#">Search Domain</a></li>
                                 <li><a href="#">My Account</a></li>

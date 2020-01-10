@@ -84,7 +84,8 @@ class BotTabs extends Component {
         console.log(err);
       });
   };
-  handleSubmit = event => {
+  handleSubmit = async event => {
+  //  const isInternet =  await this.global.showAlert()
     event.preventDefault();
     const { fileUpload } = this.state;
 
@@ -313,14 +314,18 @@ class BotTabs extends Component {
   }
   getPreview() {
     return this.state.settingsSaved && this.state.tab === "preview" ? (
-
-      <Preview settings={this.state.settings} orgUrl={`${BASE_URL}/chatbot?setting_id=${this.state.settings._id}`} />
-
+      <Preview
+        settings={this.state.settings}
+        orgUrl={`${BASE_URL}/chatbot?setting_id=${this.state.settings._id}`}
+      />
     ) : null;
   }
   componentDidMount() {
     console.log("mounted");
     this.setGlobal({ getTab: this.getTab });
+    window.setInterval(() => {
+      console.log("internet", navigator.onLine);
+    }, 5000);
   }
 }
 export default BotTabs;
