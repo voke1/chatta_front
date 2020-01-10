@@ -14,6 +14,7 @@ import VerifyEmail from "./components/admin/adminDashboard/Authentication/emailV
 import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 import BotUITemplate from './components/admin/adminDashboard/Bot/bot-UI-template-design'
 import Triangle from './components/admin/adminDashboard/Bot/triangle2'
+import InternetCheck from './components/admin/adminDashboard/Bot/internet-check'
 // import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 import { CompanySettings } from './components/admin/adminDashboard/Bot/companySettings'
 import FrontPage from './components/front/landing-page/frontPage'
@@ -49,6 +50,7 @@ function App() {
         <Route exact path="/auth/verify_email" component={VerifyEmail}></Route>
         <Route exact path="/preview" component={BotUITemplate}></Route>
         <Route exact path="/triangle" component={Triangle}></Route>
+        <Route exact path="/internet" component={InternetCheck}></Route>
         <Route component={Error}></Route>
       </Switch>
     </div>
