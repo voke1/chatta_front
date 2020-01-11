@@ -16,8 +16,8 @@ import BotUITemplate from './components/admin/adminDashboard/Bot/bot-UI-template
 import Triangle from './components/admin/adminDashboard/Bot/triangle2'
 // import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 import { CompanySettings } from './components/admin/adminDashboard/Bot/companySettings'
-import FrontPage from './components/front/landing-page/frontPage'
-import ITHAdmin from './components/ithAdmin/ithAdmin'
+import {FrontPage} from './components/front/landing-page/frontPage'
+import {IthAdmin} from './components/ithAdmin/ithAdmin'
 
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={FrontPage}></Route>
         <Route exact path="/chatbot" component={Chat}></Route>
-        <Route exact path="/ithadmin" component={ITHAdmin}></Route>
+        <Route exact path="/ithadmin" component={IthAdmin}></Route>
         <Route exact path="/dashboard/admin" component={Dashboard}></Route>
         <Route exact path="/dashboard/admin/bot" component={Bot}></Route>
         <Route

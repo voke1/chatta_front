@@ -13,7 +13,7 @@ import imageLogo from './img/logo.png';
 import { Link } from 'react-router-dom';
 
 
-function frontPage() {
+export const FrontPage = () => {
 
     return (
         <div>
@@ -490,4 +490,4 @@ Gbagada Phase 2, Lagos State.</p>
     )
 }
 
-export default frontPage
+
