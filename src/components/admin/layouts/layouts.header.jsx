@@ -207,7 +207,7 @@ export default class LayoutHeader extends Component {
                     </Link>
                   </li> : " "}
 
-                  {userDetails.role === 'admin' ? <li className="has-submenu">
+                  {userDetails.role === `admin`||`superadmin` ? <li className="has-submenu">
                     {" "}
                     <Link to="/dashboard/admin/user">
                       <a>
