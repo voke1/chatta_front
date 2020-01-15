@@ -1,14 +1,13 @@
-import React, { Component } from "react";
-import "./convo.component.css";
-import thinker from "../../../thinker.gif";
-import { AppService } from "../../../services/app.service";
-import $ from "jquery";
-import JsonTree from "./convo.json";
 import axios from "axios";
+import React, { Component } from "react";
 import BotForm from "../../../components/admin/adminDashboard/Bot/botForm";
 import { APP_ENVIRONMENT } from "../../../environments/environment";
 import { defaultStyle } from "../chat/defaultStyle";
 import Triangle from "../../../components/admin/adminDashboard/Bot/triangle";
+import { AppService } from "../../../services/app.service";
+import thinker from "../../../thinker.gif";
+import "./convo.component.css";
+
 const BASE_URL = APP_ENVIRONMENT.base_url;
 export default class Convo extends Component {
   appService;
