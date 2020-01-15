@@ -83,6 +83,8 @@ export class CreateUser extends Component {
    * Display modal on create user button click
    */
   render() {
+    const userDetails = JSON.parse(localStorage.getItem('userdetails'))
+
     const displayMessage = (
       <p
         className={this.state.message ? "animated shake" : ""}
@@ -96,6 +98,7 @@ export class CreateUser extends Component {
     const options = [
       { value: 'user', label: 'User' },
       { value: 'admin', label: 'Admin' },
+      userDetails.role === "superadmin" ? { value: 'superadmin', label: 'Super Admin' }:"",
 
     ];
     return (
@@ -105,7 +108,7 @@ export class CreateUser extends Component {
         </Modal.Header>
         <Modal.Body>
           {this.state.isChanged ? displayMessage : ""}
-
+{console.log("state role:", this.state)}
           <form
             className="needs-validation"
             onSubmit={this.handleSubmit}

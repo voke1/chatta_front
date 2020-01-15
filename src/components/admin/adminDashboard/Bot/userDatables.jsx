@@ -42,6 +42,12 @@ const DatatablePage = (props) => {
                 width: 200
             },
             {
+                label: 'Role',
+                field: 'role',
+                sort: 'asc',
+                width: 200
+            },
+            {
                 label: 'Date created',
                 field: 'date',
                 sort: 'asc',
@@ -51,7 +57,6 @@ const DatatablePage = (props) => {
             {
                 label: 'Option',
                 field: 'option',
-
                 width: 100
             }
         ],
