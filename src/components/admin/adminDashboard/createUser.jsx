@@ -11,10 +11,10 @@ export class CreateUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fullName: null,
-      password: null,
-      email: null,
-      phone: null,
+      fullName: "",
+      password: "",
+      email: "",
+      phone: "",
       disabled: true,
       setValidate: true
     };

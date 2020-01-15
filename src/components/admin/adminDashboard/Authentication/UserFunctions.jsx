@@ -45,9 +45,6 @@ export const isAuthenticated = () => {
 
 }
 
-export const logout = ()=> {
-  localStorage.clear()
-}
 
 export const verifyEmail = token => {
 
