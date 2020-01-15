@@ -31,6 +31,14 @@ function App() {
         <ProtectedRoute exact path="/dashboard/admin/bot" component={Bot}></ProtectedRoute>
         <ProtectedRoute exact path="/dashboard/admin" component={Dashboard}></ProtectedRoute>
         <ProtectedRoute exact path="/dashboard/admin/user/:id" component={UserSettings}></ProtectedRoute>
+        <Route exact path="/" component={Chat}></Route>
+        <ProtectedRoute exact path="/dashboard/admin" component={Dashboard}></ProtectedRoute>
+        <ProtectedRoute exact path="/dashboard/admin/bot" component={Bot}></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/dashboard/admin/user/:id"
+          component={UserSettings}
+        ></ProtectedRoute>
         <ProtectedRoute
           exact
           path="/dashboard/admin/bot/:id"

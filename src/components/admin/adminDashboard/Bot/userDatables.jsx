@@ -42,6 +42,12 @@ const DatatablePage = (props) => {
                 width: 200
             },
             {
+                label: 'Role',
+                field: 'role',
+                sort: 'asc',
+                width: 200
+            },
+            {
                 label: 'Date created',
                 field: 'date',
                 sort: 'asc',
@@ -51,7 +57,6 @@ const DatatablePage = (props) => {
             {
                 label: 'Option',
                 field: 'option',
-
                 width: 100
             }
         ],
@@ -69,6 +74,8 @@ const DatatablePage = (props) => {
                         )
                     }}
                     on={props.users[index].switched} />
+                // userList.status = getToggleSwitch(client._id, index)
+                userList.role = client.role || 'Role'
                 userList.phone = client.phone || 'Phone Number'
                 userList.date = client.date || 'Date'
 
