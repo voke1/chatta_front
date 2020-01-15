@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from 'react-router-dom';
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 // import "../components/admin/css/style.css";
 // import "../components/admin/css/icons.css";
@@ -27,16 +28,12 @@ export class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      clients: []
+      clients: [],
     };
   }
 
-
-
   App = () => {
-
     return (<div>
-
       <body>
 
         {/* <!-- Loader --> */}
@@ -44,6 +41,7 @@ export class Dashboard extends Component {
 
         <div className="header-bg">
           {/* <!-- Navigation Bar--> */}
+
           <Header />
           {/* <!-- End Navigation Bar--> */}
 

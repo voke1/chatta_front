@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { register } from "./UserFunctions";
 import { Validation } from "../../../../utilities/validations";
 import ProgressBar from "./progressbar";
+import { Redirect } from 'react-router-dom'
 
 class Register extends Component {
   constructor() {
@@ -71,6 +72,10 @@ class Register extends Component {
     });
   };
   render() {
+    const userdetails = localStorage.getItem('userdetails');
+    if (userdetails) {
+      return <Redirect to={'/dashboard/admin'} />
+    }
     const message = (
       <p
         className={this.state.message ? "animated shake" : ""}

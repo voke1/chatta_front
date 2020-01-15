@@ -12,14 +12,16 @@ class Login extends Component {
       isChanged: false,
       message: "",
       animation: "",
-      redirect: ""
+      redirect: localStorage.getItem('userdetails') ? "/dashboard/admin" : "",
+      userDetails: {},
     };
     this.onChange = this.onChange.bind(this);
   }
+
   async onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
-  onSubmit = e => {
+  onSubmit = async (e) => {
     e.preventDefault();
     this.setState({ message: "", showProgress: true });
     const user = {
@@ -27,36 +29,44 @@ class Login extends Component {
       password: this.state.password,
       disabled: true
     };
-    login(user).then(res => {
-                console.log("this is res", res);
-
-      if (res.data) {
-        if (!res.data.success) {
+    try {
+      const response = await login(user)
+      console.log('this is the response:', response)
+      if (response.data) {
+        if (!response.data.success) {
           this.setState({
             isChanged: true,
-            message: res.data.message,
+            message: response.data.message,
             disabled: false,
             showProgress: false
           });
         }
-        if (res.data.success) {
-          if (!res.data.userDetails.isAdmin) {
+        // if (response.data === 'usertoken') {
+        //   this.setState({ redirect: '/dashboard/admin' })
+        // }
+        if (response.data.success) {
+          if (!response.data.userDetails.isAdmin) {
             this.setState({
-              redirect: "/dashboard/admin"
+              redirect: "/dashboard/admin", userDetails: response.data.userDetails
             });
           } else {
             this.setState({
-              redirect: "/dashboard/admin"
+              redirect: "/dashboard/admin", userDetails: response.data.userDetails
             });
           }
         }
       }
 
-      
-    });
+    } catch (error) {
+      console.log(error)
+    }
+
   };
   renderRedirect = target => {
-    return <Redirect to={target} />;
+    return <Redirect to={{
+      pathname: target,
+      state: { userDetails: this.state.userDetails }
+    }} />;
   };
   render() {
     const message = (
@@ -70,6 +80,7 @@ class Login extends Component {
     const progressBar = <ProgressBar />;
     return (
       <div className="wrapper-page">
+        {console.log('userdETAILS:')}
         {this.state.redirect ? this.renderRedirect(this.state.redirect) : ""}
         <div className="card">
           {this.state.showProgress ? progressBar : ""}

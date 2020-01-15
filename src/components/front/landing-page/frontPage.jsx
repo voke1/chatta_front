@@ -53,6 +53,7 @@ export const FrontPage = () => {
                                         </ul>
                                     </li> */}
                                     <li className="nav-item"><a className="nav-link" href="#">Contact</a></li>
+                                    <Link to={'/ithadmin'}> <li className="nav-item"><a className="nav-link" href="#">Admin</a></li></Link>
                                 </ul>
                             </div>
                             <div className="right-button">
