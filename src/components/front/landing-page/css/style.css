@@ -81,7 +81,7 @@ button:focus {
   margin-top: 25px; }
 
 @media (min-width: 1200px) {
-  .container1 {
+  .containerFront {
     max-width: 1170px; } }
 
 .image {
