@@ -12,7 +12,6 @@
   position: fixed;
   z-index: 1;
   bottom: 0;
-  height: 100px;
   width: 100%;
   background: white;
   border: 1px outset #e0e0e0;
@@ -22,12 +21,12 @@
   flex: 0 0 auto;
   flex-direction: row;
   justify-content: flex-end;
-  height: 64px;
-  padding: 0 32px;
+  height: 50px;
+  padding-right: 32px;
 }
 .disable-button {
   pointer-events: none;
-  opacity: 0.7;
+  opacity: 0.4;
 }
 /* .style-picker {
   overflow-y: scroll;

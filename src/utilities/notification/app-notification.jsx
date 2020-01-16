@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from "reactn";
 import "./app-notification.css";
 
 export default class AppNotification extends Component {
@@ -20,9 +20,12 @@ export default class AppNotification extends Component {
       notificationMessage: props.msg
     });
 
-    this.notificationTimer = setTimeout(() => {
+    this.notificationTimer = setTimeout(async () => {
       this.handleToggle();
-      this.props.resetNotification();
+      if (props.show === "yes") {
+        const tab = await this.global.getTab();
+        if (tab === "template") this.props.resetNotification();
+      }
     }, props.timeOut || 8000);
   }
 
@@ -36,7 +39,10 @@ export default class AppNotification extends Component {
     let msg = "";
     switch (this.state.notificationType.toLowerCase()) {
       case "success":
-        cName = `${cName} alert-success`;
+        cName =
+          this.props.event === "saveTemplate"
+            ? `${cName} alert-info`
+            : `${cName} alert-success`;
         icon = `${icon} fa-check-circle`;
         msg = "Success!";
         break;
