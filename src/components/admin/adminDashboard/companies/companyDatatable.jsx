@@ -3,7 +3,7 @@ import { MDBDataTable } from 'mdbreact';
 import Switch from "react-toggle-switch";
 import { Link } from 'react-router-dom';
 import "../../../../../node_modules/react-toggle-switch/dist/css/switch.min.css";
-import {MDBIcon} from "mdbreact";
+import { MDBIcon } from "mdbreact";
 
 
 
@@ -19,14 +19,14 @@ const DatatablePage = (props) => {
 
         columns: [
             {
-                label: 'Name',
-                field: 'name',
+                label: 'Company',
+                field: 'company_name',
                 sort: 'asc',
                 width: 150
             },
             {
-                label: 'Email',
-                field: 'email',
+                label: 'Domain Name',
+                field: 'domain_name',
                 sort: 'asc',
                 width: 271
             },
@@ -43,12 +43,6 @@ const DatatablePage = (props) => {
                 width: 200
             },
             {
-                label: 'Role',
-                field: 'role',
-                sort: 'asc',
-                width: 200
-            },
-            {
                 label: 'Date created',
                 field: 'date',
                 sort: 'asc',
@@ -61,28 +55,26 @@ const DatatablePage = (props) => {
                 width: 100
             }
         ],
-
         rows: [
-            ...props.users.map((client, index) => {
+            ...props.companies.map((company, index) => {
 
-                let userList = {}
-                userList.name = client.fullName
-                userList.email = client.email
-                userList.status = <Switch key={client._id}
+            let companyList = {}
+                companyList.company_name = company.company_name
+                companyList.domain_name = company.domain_name
+                companyList.status = "Switch" || <Switch key={company._id}
                     onClick={() => {
                         props.toggleSwitch(
-                            client._id
+                            company._id
                         )
                     }}
                     on={props.users[index].switched} />
-                // userList.status = getToggleSwitch(client._id, index)
-                userList.role = client.role || 'Role'
-                userList.phone = client.phone || 'Phone Number'
-                userList.date = client.date || 'Date'
+                // companyList.status = getToggleSwitch(company._id, index)
+                companyList.phone = company.phone || 'Phone Number'
+                companyList.date = company.date || 'Date'
 
-                userList.action = <div className="button-items">
+                companyList.action = <div className="button-items">
                     <Link
-                        to={`/dashboard/admin/user/${client._id}`}
+                        to={`/dashboard/admin/user/${company._id}`}
                     >
                         <button
                             type="button"
@@ -94,15 +86,15 @@ const DatatablePage = (props) => {
 
                     <button
                         type="button"
-                        className="btn btn-red btn-sm waves-effect"
+                        className="btn  btn-red btn-sm waves-effect"
                         onClick={() => {
-                            props.confirmDelete(client._id);
+                            props.confirmDelete(company._id);
                         }}
                     ><MDBIcon icon="trash-alt" />
-                        
-                </button>
+
+                    </button>
                 </div>
-                return userList;
+                return companyList;
 
 
             }),

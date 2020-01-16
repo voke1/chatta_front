@@ -26,7 +26,7 @@ export const FrontPage = () => {
                     <MDBNavbar color="grey" fixed="top" dark expand="md" scrolling transparent  >
                         <div className="containerFront">
                             {/* <!-- Brand and toggle get grouped for better mobile display --> */}
-                            <a className="navbar-brand logo_h" href="index.html"><h3> Chatta</h3></a>
+                            <a className="navbar-brand logo_h" href="index.html"><h3><b> Chatta</b></h3></a>
                             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
