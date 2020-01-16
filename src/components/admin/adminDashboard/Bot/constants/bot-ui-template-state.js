@@ -48,6 +48,9 @@ const state = {
   botBodyBorder: "1.28",
   showNotification: "no",
   timeOut: 8000,
-  saveClass: ""
+  saveClass: "",
+  switchTab: false,
+  setSetDefaultTemplate: false,
+  notificationMessage: ""
 };
 export default state;

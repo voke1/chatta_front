@@ -7,6 +7,7 @@ import * as apiService from "../../../../services/apiservice";
 import ProgressBar from "../Authentication/progressbar";
 import DeletePrompt from "./delete-prompt-modal";
 import EditPrompt from "./response-dialog";
+import Options from "./options";
 class CreateIntent extends Component {
   state = {
     responses: [],
@@ -27,13 +28,17 @@ class CreateIntent extends Component {
     message: "",
     settings: {},
     treeId: "",
-    fetched: false
+    fetched: false,
+    deployed: false,
+    stateChanged: false
   };
   getTree = tree => {
     console.log("this is tree", tree);
-    this.setState({ chatBody: tree });
-
-    this.setButtonText();
+    console.log("getTree Called");
+    this.setState({
+      chatBody: tree,
+      buttonText: this.state.deployed ? "UPDATE" : this.state.buttonText
+    });
   };
   openDeleteDialog = () => {
     this.setState({
@@ -63,20 +68,28 @@ class CreateIntent extends Component {
       response: ""
     });
   };
+  saveSettings = () => {
+    apiService
+      .put(`setting/${this.props.settings._id}`, this.props.settings)
+      .then(res => {
+        this.props.setDeploymentStatus(true);
+        this.setState({ deployed: true });
+        this.props.changeState(false);
+      })
+      .catch(error => console.error("this is error", error));
+  };
   handleSubmit = event => {
     event.preventDefault();
     if (this.state.buttonText === "FINISH") {
       this.props.closeOverlay();
     } else {
       this.setState({ setProgress: true, disabled: true });
-      if (this.props.fetched) {
-        console.log("was saved", this.state.chatBody[0]);
+      if (this.props.fetched || this.state.deployed) {
         apiService
           .patch(`tree/${this.state.treeId}`, {
             chat_body: this.state.chatBody[0]
           })
           .then(res => {
-            console.log("saved tree", res);
             this.setState({
               setProgress: false,
               buttonText: this.props.ConvoTree ? "SAVED" : "FINISH",
@@ -84,30 +97,31 @@ class CreateIntent extends Component {
               animation: "animated shake",
               disabledButton: this.props.ConvoTree ? true : false
             });
-            // this.props.disableHomeTab();
+            this.setState({ deployed: true });
+            this.props.changeState(false);
+            this.saveSettings()
           })
           .catch(err => {
             console.log(err);
           });
       } else {
-        console.log("deployed");
         apiService
           .post("tree", {
             setting_id: this.props.settings._id,
             chat_body: this.state.chatBody[0]
           })
           .then(res => {
+            console.log("chat body", res.chat_body.chat_body);
             this.setState({
               setProgress: false,
               buttonText: this.props.ConvoTree ? "SAVED" : "FINISH",
               buttonColor: "btn-success",
               animation: "animated shake",
-              disabledButton: this.props.ConvoTree ? true : false
+              disabledButton: this.props.ConvoTree ? true : false,
+              treeId: res.chat_body._id,
+              chat_body: res.chat_body.chat_body
             });
-            apiService
-              .put(`setting/${this.props.settings._id}`, this.props.settings)
-              .then(res => console.log("this is response", res))
-              .catch(error => console.error("this is error", error));
+            this.saveSettings();
             // this.props.disableHomeTab();
           })
           .catch(err => {
@@ -116,15 +130,20 @@ class CreateIntent extends Component {
       }
     }
   };
-  setButtonText = () => {
-    this.setState({
-      buttonText: this.props.ConvoTree ? "SAVE" : "DEPLOY",
-      buttonColor: "btn btn-secondary",
-      disabledButton: false
-    });
+  setButtonText = text => {
+    !text
+      ? this.setState({
+          buttonText: this.props.ConvoTree
+            ? "SAVE"
+            : this.state.deployed
+            ? "UPDATE"
+            : "DEPLOY",
+          buttonColor: "btn btn-secondary",
+          disabledButton: false
+        })
+      : this.setState({ buttonText: text });
   };
   enableButton = (fallbackTree, delayPromptTree) => {
-    console.log("called");
     this.setState({
       disabledButton: false,
       message: "",
@@ -226,7 +245,7 @@ class CreateIntent extends Component {
     );
   }
   componentDidMount() {
-    console.log("settings from create intent", this.props.ConvoTree);
+    console.log("component mounted", this.props.ConvoTree);
     this.setState({
       prompt: this.props.ConvoTree ? this.props.ConvoTree[0].prompt : "",
       chatBody: this.props.ConvoTree ? this.props.ConvoTree : [],
@@ -260,8 +279,14 @@ class CreateIntent extends Component {
     });
   }
   componentWillReceiveProps(props) {
-    console.log("receivin props", props);
+    console.log("receiving props", props.stateChanged);
     this.setState({ settings: props.settings });
+    if (props.stateChanged) {
+      this.setState({ buttonText: "UPDATE" });
+    }
+  }
+  componentWillMount() {
+    console.log("unmounted");
   }
 }
 export default CreateIntent;
