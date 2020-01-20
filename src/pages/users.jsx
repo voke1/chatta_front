@@ -14,8 +14,6 @@ import HeadLayout from "../components/admin/layouts/layouts.header";
 import "../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
 import "../components/admin/plugins/datatables/responsive.bootstrap4.min.css";
 import { APP_ENVIRONMENT } from "../environments/environment";
-import PropTypes from 'prop-types'
-
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 

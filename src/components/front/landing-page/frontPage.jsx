@@ -11,20 +11,22 @@ import "../landing-page/css/landingPage.css";
 import background from './img/banner/home-banner.jpg';
 import imageLogo from './img/logo.png';
 import { Link } from 'react-router-dom';
+import { MDBNavbar} from 'mdbreact';
 
 
-function frontPage() {
+
+const FrontPage = () => {
 
     return (
-        <div>
+        <div style={{height: "50rem"}}>
             {/* <ChatComponent /> */}
             {/* <!--================Header Menu Area =================--> */}
-            <header className="header_area">
+            <header className>
                 <div className="main_menu">
-                    <nav className="navbar navbar-expand-lg navbar-light  fixenavbar-expand-lg navbar-dark scrolling-navbar">
-                        <div className="container1">
+                    <MDBNavbar color="grey" fixed="top" dark expand="md" scrolling transparent  >
+                        <div className="containerFront">
                             {/* <!-- Brand and toggle get grouped for better mobile display --> */}
-                            <a className="navbar-brand logo_h" href="index.html"><span> Chatta</span></a>
+                            <a className="navbar-brand logo_h" href="index.html"><h3><b> Chatta</b></h3></a>
                             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
@@ -51,16 +53,17 @@ function frontPage() {
                                         </ul>
                                     </li> */}
                                     <li className="nav-item"><a className="nav-link" href="#">Contact</a></li>
+                                    <Link to={'/ithadmin'}> <li className="nav-item"><a className="nav-link" href="#">Admin</a></li></Link>
                                 </ul>
                             </div>
                             <div className="right-button">
                                 <ul className="ul">
                                     <li className="shop-icon"><a href="#"><i className="ti-shopping-cart-full"></i><span>0</span></a></li>
-                                    <Link to={'/auth/register'}><li><a className="sign_up" >Sign Up</a></li> </Link>
+                                    <Link to={'/auth/login'}><li><a className="sign_up" > Sign In</a></li> </Link>
                                 </ul>
                             </div>
                         </div>
-                    </nav>
+                    </MDBNavbar>
                 </div>
             </header>
             {/* <!--================Header Menu Area =================--> */}
@@ -69,13 +72,13 @@ function frontPage() {
             <section className="home_banner_area" style={{ backgroundImage: "url(" + background + ")" }}>
                 <div className="banner_inner d-flex align-items-center">
                     <div className="overlay"></div>
-                    <div className="container1">
+                    <div className="containerFront">
                         <div className="row">
                             <div className="col-lg-6 offset-lg-6 col-xl-5 offset-xl-7">
                                 <div className="banner_content">
                                     <h3>Build a better<br />business & faster with Chatta</h3>
                                     <p>Subdue creature does face signs evening good sixth foreign gaered one. Fruit. Third every fruitful multiply subdue creature doesn't face signs evening good sixth tyou're.</p>
-                                    <Link to={'/auth/login'}><button className="banner_btn">Begin Free Trial<i className="ti-arrow-right"></i></button > </Link>
+                                    <Link to={'/auth/register'}><button className="banner_btn">Begin Free Trial<i className="ti-arrow-right"></i></button > </Link>
                                 </div>
                             </div>
 
@@ -87,7 +90,7 @@ function frontPage() {
 
             {/* <!--================Service  Area =================--> */}
             <section className="service-area area-padding">
-                <div className="container1">
+                <div className="containerFront">
                     <div className="row">
                         {/* <!-- Single service --> */}
                         <div className="col-md-6 col-lg-4">
@@ -140,7 +143,7 @@ function frontPage() {
 
             {/* <!--================About  Area =================--> */}
             <section className="about-area area-padding-bottom">
-                <div className="container1">
+                <div className="containerFront">
                     <div className="row align-items-center">
 
                         <div className="col-lg-6">
@@ -182,7 +185,7 @@ function frontPage() {
 
             {/* <!--================Feature  Area =================--> */}
             <section className="feature-area area-padding bg_one">
-                <div className="container1">
+                <div className="containerFront">
                     <div className="row align-items-center">
 
                         <div className="offset-lg-6 col-lg-6">
@@ -223,7 +226,7 @@ function frontPage() {
 
             {/* <!--================About  Area =================--> */}
             <section className="statics-area area-padding">
-                <div className="container1">
+                <div className="containerFront">
                     <div className="row">
 
                         <div className="col-lg-5">
@@ -264,7 +267,7 @@ function frontPage() {
 
             {/* <!--================ Start Portfolio Area =================--> */}
             <section className="pricing_area area-padding-top">
-                <div className="container1">
+                <div className="containerFront">
                     <div className="row">
                         <div className="col-12">
                             <div className="area-heading">
@@ -363,7 +366,7 @@ function frontPage() {
 
             {/* <!--================ Start Brands Area =================--> */}
             <section className="brands-area area-padding-bottom">
-                <div className="container1">
+                <div className="containerFront">
                     <div className="row justify-content-center">
                         <div className="col-lg-10">
                             <div className="owl-carousel brand-carousel">
@@ -414,7 +417,7 @@ function frontPage() {
 
             {/* <!-- ================ start footer Area ================= --> */}
             <footer className="footer-area">
-                <div className="container1">
+                <div className="containerFront">
                     <div className="row">
 
                         <div className="col-lg-3 col-sm-6 mb-4 mb-xl-0 single-footer-widget">
@@ -472,8 +475,7 @@ Gbagada Phase 2, Lagos State.</p>
                         </div>
                     </div>
                     <div className="footer-bottom row align-items-center text-center text-lg-left no-gutters">
-                        {/* <p className="footer-text m-0 col-lg-8 col-md-12"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --> */}
-                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i className="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                        
                         {/* <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p> */}
                         <div className="col-lg-4 col-md-12 text-center text-lg-right footer-social">
                             <a href="#"><i className="ti-facebook"></i></a>
@@ -490,4 +492,5 @@ Gbagada Phase 2, Lagos State.</p>
     )
 }
 
-export default frontPage
+
+export default FrontPage

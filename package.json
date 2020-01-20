@@ -27,6 +27,7 @@
     "react-icons": "^3.8.0",
     "react-multistep": "^3.6.14",
     "react-scripts": "^3.3.0",
+    "react-select": "^3.0.8",
     "react-toggle-switch": "^3.0.4",
     "react-tooltip": "^3.11.2",
     "reactn": "^2.2.4",

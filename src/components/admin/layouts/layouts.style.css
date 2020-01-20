@@ -7,3 +7,8 @@
 @import "../css/switch.css";
 @import "../../../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}

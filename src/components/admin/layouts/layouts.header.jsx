@@ -1,20 +1,37 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Switch from "react-toggle-switch";
+// import { logout } from '../adminDashboard/Authentication/UserFunctions';
 import avatar from "../images/users/avatar-1.jpg";
-import AppNotification from "../../../utilities/notification/app-notification";
 import "./layouts.style.css";
+import {Redirect} from "react-router-dom"
 
 export default class LayoutHeader extends Component {
   constructor(props) {
     super(props);
+    this.state={
+      loggedStatus: false
+    }
   }
 
+  logout = () => {
+    console.log("logout is called")
+    localStorage.clear()
+    this.setState({loggedStatus: true})
+
+  }
+  
+
   render() {
+
+      const userDetails = JSON.parse(localStorage.getItem('userdetails'))
+      console.log("userDetails:", userDetails)
+
     return (
+
       <div>
         {/* <!-- Navigation Bar--> */}
-        <header id="topnav">
+        
+        {this.state.loggedStatus?<Redirect to={"/auth/login"}/>:<header id="topnav">
           <div className="topbar-main">
             <div className="container-fluid">
               {/* <!-- Logo container--> */}
@@ -125,17 +142,19 @@ export default class LayoutHeader extends Component {
                         alt="user"
                         className="rounded-circle"
                       ></img>
-                      <span className="ml-1">
-                        Frank ONeil <i className="mdi mdi-chevron-down"></i>{" "}
+                      <span className="ml-1 dropdown">
+                        {userDetails.fullName} <i className="mdi mdi-chevron-down"></i>{" "}
+                      
                       </span>
                     </a>
-                    <div className="dropdown-menu dropdown-menu-right profile-dropdown ">
-                      <a className="dropdown-item" href="#">
+                    <div className="dropdown-content dropdown-menu dropdown-menu-right profile-dropdown ">
+        <Link to={`/dashboard/admin/user/${userDetails.id}`}>
+                    <a className="dropdown-item">
                         <i className="dripicons-user text-muted"></i> Profile
-                      </a>
+                      </a></Link>
                       <div className="dropdown-divider"></div>
-                      <a className="dropdown-item" href="#">
-                        <i className="dripicons-exit text-muted"></i> Logout
+                      <a className="dropdown-item" onClick={() => this.logout()} >
+                        <i className="dripicons-exit text-muted" ></i> Logout
                       </a>
                     </div>
                   </li>
@@ -180,22 +199,22 @@ export default class LayoutHeader extends Component {
                       </a>
                     </Link>
                   </li>
-                  <li className="has-submenu">
+                  {userDetails.role === 'superadmin' ? <li className="has-submenu">
                     <Link to="/dashboard/admin/company">
                       <a>
                         <i className="dripicons-home"></i>Companies
                       </a>
                     </Link>
-                  </li>
+                  </li> : " "}
 
-                  <li className="has-submenu">
+                  {userDetails.role === `admin`||`superadmin` ? <li className="has-submenu">
                     {" "}
                     <Link to="/dashboard/admin/user">
                       <a>
                         <i className="dripicons-suitcase"></i>Users
                       </a>
                     </Link>
-                  </li>
+                  </li> : ""}
 
                   <li className="has-submenu">
                     <a href="#">
@@ -234,7 +253,7 @@ export default class LayoutHeader extends Component {
             {/* <!-- end container --> */}
           </div>{" "}
           {/* <!-- end navbar-custom --> */}
-        </header>
+        </header>}
         {/* <!-- End Navigation Bar--> */}
 
         {/* <div className="container-fluid"> */}
@@ -270,3 +289,8 @@ export default class LayoutHeader extends Component {
     );
   }
 }
+
+
+
+
+
