@@ -3,6 +3,8 @@ import { MDBDataTable } from 'mdbreact';
 import Switch from "react-toggle-switch";
 import { Link } from 'react-router-dom';
 import "../../../../../node_modules/react-toggle-switch/dist/css/switch.min.css";
+import moment from "moment";
+import {MDBIcon} from "mdbreact";
 
 
 
@@ -42,6 +44,12 @@ const DatatablePage = (props) => {
                 width: 200
             },
             {
+                label: 'Role',
+                field: 'role',
+                sort: 'asc',
+                width: 200
+            },
+            {
                 label: 'Date created',
                 field: 'date',
                 sort: 'asc',
@@ -49,9 +57,8 @@ const DatatablePage = (props) => {
             },
 
             {
-                label: 'Option',
-                field: 'option',
-
+                label: 'Action',
+                field: 'action',
                 width: 100
             }
         ],
@@ -69,10 +76,12 @@ const DatatablePage = (props) => {
                         )
                     }}
                     on={props.users[index].switched} />
+                // userList.status = getToggleSwitch(client._id, index)
+                userList.role = client.role || 'Role'
                 userList.phone = client.phone || 'Phone Number'
-                userList.date = client.date || 'Date'
+                userList.date = moment(client.date).format('Do-MMMM-YYYY, LT') || 'Date'
 
-                userList.option = <div className="button-items">
+                userList.action = <div className="button-items">
                     <Link
                         to={`/dashboard/admin/user/${client._id}`}
                     >
@@ -80,18 +89,18 @@ const DatatablePage = (props) => {
                             type="button"
                             className="btn btn-secondary btn-sm waves-effect"
                         >
-                            Edit &nbsp;
+                            <MDBIcon icon="pencil-alt" />&nbsp;
                   </button>
                     </Link>
 
                     <button
                         type="button"
-                        className="btn btn-secondary btn-sm waves-effect"
+                        className="btn btn-red btn-sm waves-effect"
                         onClick={() => {
                             props.confirmDelete(client._id);
                         }}
-                    >
-                        Delete
+                    ><MDBIcon icon="trash-alt" />
+                        
                 </button>
                 </div>
                 return userList;

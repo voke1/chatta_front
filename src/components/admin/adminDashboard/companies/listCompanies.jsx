@@ -16,6 +16,7 @@ import "../../../admin/css/bootstrap.min.css";
 import "../../../admin/images/favicon.ico";
 import "../../../admin/css/switch.css";
 import CreateCompanyModal from '../Bot/createCompany';
+import CompanyDataTable from './companyDatatable';
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
@@ -182,7 +183,8 @@ export default class CompaniesComponent extends Component {
                 <div className="card m-b-20">
 
                   <div className="card-body">
-                    <Companies />
+                  
+                    <CompanyDataTable companies={this.state.companies} />
                     {/* <h4 className="mt-0 header-title">Companies</h4>
                                         <p className="text-muted m-b-30 font-14">
                                             DataTables has most features enabled by default, so all
@@ -190,7 +192,7 @@ export default class CompaniesComponent extends Component {
                       the construction function: <code>$().DataTable();</code>.
                     </p> */}
 
-                    <table id="datatable" className="table table-bordered">
+                    {/* <table id="datatable" className="table table-bordered">
                       <thead>
                         <tr>
                           <th>Company Name</th>
@@ -252,7 +254,7 @@ export default class CompaniesComponent extends Component {
                           </tr>
                         ))}
                       </tbody>
-                    </table>
+                    </table> */}
                   </div>
                 </div>
               </div>{" "}
