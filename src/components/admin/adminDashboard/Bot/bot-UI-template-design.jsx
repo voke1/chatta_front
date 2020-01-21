@@ -2,11 +2,14 @@ import React, { Component } from "reactn";
 import ReactTooltip from "react-tooltip";
 import border from "../../../../border.png";
 import "./css/bot-ui-template.css";
-import State from "./constants/bot-ui-template-state";
+import Template from "./constants/bot-ui-template-state";
 import * as ApiService from "../../../../services/apiservice";
 import Notification from "../../../../utilities/notification/app-notification";
+import Options from "./options";
+import ColorPickerOverlay from "./color-picker-overlay";
+import ProgressBar from "../Authentication/progressbar";
 class BotUITemplate extends Component {
-  state = State;
+  state = Template;
   onSelect = name => {
     this.setState({
       selected: name,
@@ -22,41 +25,39 @@ class BotUITemplate extends Component {
   onSelectStyle = name => {
     this.setState({ styleSelected: name });
   };
-  buildTemplate = event => {
+  buildTemplate = (event, target) => {
+    const name = event ? event.target.name : target.name;
+    const value = event ? event.target.value : target.value;
+    console.log("building template");
     this.setState({
-      [this.state.selected + "" + event.target.name]: event.target.value,
-      borderColor:
-        event.target.name === "BorderColor"
-          ? event.target.value
-          : this.state.borderColor,
-      borderRadius:
-        event.target.name === "BorderRadius"
-          ? event.target.value
-          : this.state.borderRadius,
-      border:
-        event.target.name === "Border" ? event.target.value : this.state.border,
+      [this.state.selected + "" + name]: value,
+      borderColor: name === "BorderColor" ? value : this.state.borderColor,
+      borderRadius: name === "BorderRadius" ? value : this.state.borderRadius,
+      border: name === "Border" ? value : this.state.border,
       fillColor:
-        event.target.name === "FillColor"
-          ? event.target.value
-          : this.state.fillColor,
-      textColor:
-        event.target.name === "TextColor"
-          ? event.target.value
-          : this.state.textColor,
-      fontSize:
-        event.target.name === "FontSize"
-          ? event.target.value
-          : this.state.fontSize
+        name === "FillColor" ? this.state.fillColor : this.state.fillColor,
+      textColor: name === "TextColor" ? value : this.state.textColor,
+      fontSize: name === "FontSize" ? value : this.state.fontSize
     });
   };
-  saveTemplate = () => {
-    if (this.state.showNotification === "no") {
-    }
-    this.setState({ showNotification: "yes", saveClass: "disable-button" });
+  saveTemplate = async () => {
+    console.log("save template called", this.state);
+    this.setState({
+      showNotification: "yes",
+      saveClass: "disable-button",
+      switchTab: true,
+      notificationMessage: "Saved"
+    });
     this.props.setTemplateSettings(this.state);
+    this.props.changeState();
   };
   resetNotification = async () => {
-    console.log("notification rest");
+    if (
+      this.state.showNotification === "yes" &&
+      this.global.getTab() !== "intent"
+    ) {
+      this.global.setTab("intent");
+    }
     await this.setState({ showNotification: "no", saveClass: "" });
   };
   setElementHover = (event, name) => {
@@ -70,16 +71,55 @@ class BotUITemplate extends Component {
       ? "2px solid #4c9ff9"
       : "2px solid transparent";
   };
+  setBusyNotification = async () => {
+    this.setState({
+      showNotification: "yes",
+      notificationMessage: "Applying design"
+    });
+  };
+  componentWillReceiveProps = async props => {
+    if (this.global.setDefaultTemplate) {
+      await this.setState({
+        ...this.global.activeTemplate
+      });
+
+      this.global.showImportOverlay(false);
+      this.setGlobal({
+        setDefaultTemplate: false
+      });
+      this.global.showBusyOverlay(false);
+      this.global.setNotification("yes", "Applied successfully");
+      
+    }
+    
+  };
+  componentDidMount() {
+    this.setGlobal({ setBusyNotification: this.setBusyNotification });
+  }
   render() {
     return (
       <div class="m-0 template">
-        <Notification
-          show={this.state.showNotification}
-          type={"success"}
-          msg="Saved"
-          resetNotification={this.resetNotification}
-        />
-        <div class="row" style={{ backgroundColor: "white" }}>
+        {this.state.showNotification === "yes" ? (
+          <Notification
+            show="yes"
+            type={"success"}
+            msg={this.state.notificationMessage}
+            resetNotification={this.resetNotification}
+            timeOut={4000}
+          />
+        ) : null}
+
+        <div
+          class="row"
+          style={{ backgroundColor: "white" }}
+          onClick={() => {
+            this.global.showImportOverlay(false);
+          }}
+          onMouseOver={event => {
+            event.stopPropagation();
+            this.setElementHover(event, "xx");
+          }}
+        >
           <div
             class="col-md-8 p-0 bot-wrapper "
             onMouseOver={event => {
@@ -94,6 +134,7 @@ class BotUITemplate extends Component {
                 height: "535px",
                 width: "320px",
                 margin: "auto",
+                marginLeft: "750px",
                 marginTop: 32,
                 paddingBottom: "32px"
               }}
@@ -114,10 +155,10 @@ class BotUITemplate extends Component {
                 }}
               >
                 <div
-                  className="card"
+                  className="bot-header"
                   style={{
                     height: "51.2px",
-                    borderRadius: 0
+                    borderRadius: 0,
                   }}
                 >
                   <div
@@ -884,18 +925,11 @@ class BotUITemplate extends Component {
                     this.onSelectStyle("borderColor");
                   }}
                 >
-                  <div
-                    className="borderColor"
-                    onClick={() => {
-                      this.borderColor.click();
-                    }}
-                    style={{
-                      backgroundColor: this.state.borderColor,
-                      height: 12.8,
-                      width: 12.8,
-                      border: "0.64px solid grey"
-                    }}
-                  ></div>
+                  <ColorPickerOverlay
+                    name="BorderColor"
+                    buildTemplate={this.buildTemplate}
+                    defaultColor={this.state.borderColor}
+                  />
                   <input
                     name="borderColorCode"
                     style={{
@@ -1028,18 +1062,11 @@ class BotUITemplate extends Component {
                     this.onSelectStyle("textColor");
                   }}
                 >
-                  <div
-                    className="textColor"
-                    style={{
-                      backgroundColor: this.state.textColor,
-                      height: 12.8,
-                      width: 12.8,
-                      border: "0.64px solid grey"
-                    }}
-                    onClick={event => {
-                      this.textColor.click();
-                    }}
-                  ></div>
+                  <ColorPickerOverlay
+                    name="TextColor"
+                    buildTemplate={this.buildTemplate}
+                    defaultColor={this.state.textColor}
+                  />
                   <input
                     name="textColorCode"
                     style={{
@@ -1082,18 +1109,11 @@ class BotUITemplate extends Component {
                     this.onSelectStyle("fillColor");
                   }}
                 >
-                  <div
-                    className="borderColor"
-                    style={{
-                      backgroundColor: this.state.fillColor,
-                      height: 12.8,
-                      width: 12.8,
-                      border: "1px solid grey"
-                    }}
-                    onClick={() => {
-                      this.fillColor.click();
-                    }}
-                  ></div>
+                  <ColorPickerOverlay
+                    name="FillColor"
+                    buildTemplate={this.buildTemplate}
+                    defaultColor={this.state.fillColor}
+                  />
                   <input
                     name="fillColor"
                     style={{
@@ -1376,18 +1396,27 @@ class BotUITemplate extends Component {
             onChange={this.buildTemplate}
           ></input>
         </div>
-        <div className="options">
-          <div style={{ marginRight: "220px" }} className={this.state.saveClass}>
-            {" "}
-            <i
-              class="fas fa-save"
-              data-tip="Save"
-              style={{ color: "grey", fontSize: "27px", cursor: "pointer" }}
-              onClick={this.saveTemplate}
-            ></i>
-          </div>
-        </div>
-        <ReactTooltip />
+
+        <Options
+          handleNext={this.saveTemplate}
+          handlePrevious={() => {
+            this.global.setTab("home");
+          }}
+          template={this.state}
+          saveClass={this.state.saveClass}
+          disabledButtons={{
+            previous: false,
+            next: false,
+            undo: false,
+            redo: false,
+            preview: true,
+            import: false,
+            export: false,
+            save: false,
+            deploy: true
+          }}
+          importTemplate={this.importTemplate}
+        />
       </div>
     );
   }

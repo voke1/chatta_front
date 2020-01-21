@@ -1,0 +1,17 @@
+.export {
+  height: 130px;
+  width: 100%;
+  background: white;
+  border-radius: 10px;
+}
+.close-button-export {
+  margin: 5px 8px 0px 0px;
+  float: right;
+  color: grey;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: "pointer";
+}
+.close-button-export:hover {
+  color: black !important;
+}

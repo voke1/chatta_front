@@ -20,7 +20,10 @@ export class UserSettings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      client: {},
+      client: {
+        fullName: "",
+      },
+      
       clientId: props.match.params.id,
       updateUser: false,
     };
@@ -33,8 +36,11 @@ export class UserSettings extends Component {
   }
 
   handleChange = event => {
+    const newClient = {...this.state.client}
+    newClient[event.target.name] = event.target.value;
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
+      client: newClient
     });
     console.log("my client again:", this.state.client)
   };
