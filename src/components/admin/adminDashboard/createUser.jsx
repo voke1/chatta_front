@@ -1,9 +1,10 @@
 import Axios from "axios";
 import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
-import Select from 'react-select';
+import Select from "react-select";
 import { APP_ENVIRONMENT } from "../../../environments/environment";
 import { Validation } from "../../../utilities/validations";
+import Loader from "../../front/adminLogin/loader";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
@@ -17,16 +18,16 @@ export class CreateUser extends Component {
       phone: "",
       disabled: true,
       setValidate: true,
-      role: 'user',
+      role: "user",
+      showProgress: ""
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handleSelectChange = this.handleSelectChange.bind(this)
+    this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
   async handleChange(event) {
     this.setState({
-      [event.target.name]: event.target.value,
-
+      [event.target.name]: event.target.value
     });
 
     const result = await Validation.validateAll(event, this.state.setValidate);
@@ -38,18 +39,15 @@ export class CreateUser extends Component {
   }
 
   handleSelectChange = role => {
-    this.setState(
-      { role },
-    );
+    this.setState({ role });
   };
-
 
   /***
    * function to handle submit request of onclick of create user button
    */
   handleSubmit = event => {
     event.preventDefault();
-
+    this.setState({ showProgress: true });
     const user = {
       fullName: this.state.fullName,
       password: this.state.password,
@@ -57,10 +55,9 @@ export class CreateUser extends Component {
       phone: this.state.phone,
       isVerified: true,
       isCreated: true,
-      role: this.state.role.value,
+      role: this.state.role.value
     };
 
-    
     console.log(user);
     Axios.post(`${BASE_URL}/client`, {
       ...user
@@ -68,7 +65,7 @@ export class CreateUser extends Component {
       .then(res => {
         console.log("RES.DATA", res);
         if (res.data.message) {
-          this.setState({ message: res.data.message });
+          this.setState({ message: res.data.message, showProgress: false });
         } else {
           this.props.onHide();
           this.props.updateList();
@@ -76,6 +73,7 @@ export class CreateUser extends Component {
       })
       .catch(err => {
         console.log(err);
+        this.setState({ showProgress: false });
       });
   };
 
@@ -83,23 +81,25 @@ export class CreateUser extends Component {
    * Display modal on create user button click
    */
   render() {
-    const userDetails = JSON.parse(localStorage.getItem('userdetails'))
+    const userDetails = JSON.parse(localStorage.getItem("userdetails"));
 
     const displayMessage = (
       <p
         className={this.state.message ? "animated shake" : ""}
         style={{ color: "red" }}
-        animated shake
+        animated
+        shake
       >
         {this.state.message}
       </p>
     );
 
     const options = [
-      { value: 'user', label: 'User' },
-      { value: 'admin', label: 'Admin' },
-      userDetails.role === "superadmin" ? { value: 'superadmin', label: 'Super Admin' }:"",
-
+      { value: "user", label: "User" },
+      { value: "admin", label: "Admin" },
+      userDetails.role === "superadmin"
+        ? { value: "superadmin", label: "Super Admin" }
+        : ""
     ];
     return (
       <Modal {...this.props}>
@@ -108,7 +108,7 @@ export class CreateUser extends Component {
         </Modal.Header>
         <Modal.Body>
           {this.state.isChanged ? displayMessage : ""}
-{console.log("state role:", this.state)}
+          {console.log("state role:", this.state)}
           <form
             className="needs-validation"
             onSubmit={this.handleSubmit}
@@ -170,11 +170,11 @@ export class CreateUser extends Component {
               Role
             </label>
 
-
-            <Select onChange={this.handleSelectChange} value={this.state.role} options={options}>
-
-            </Select>
-
+            <Select
+              onChange={this.handleSelectChange}
+              value={this.state.role}
+              options={options}
+            ></Select>
 
             <label
               htmlFor="defaultFormRegisterConfirmEx2"
@@ -193,7 +193,6 @@ export class CreateUser extends Component {
               placeholder="Enter a password"
               required
             />
-
           </form>
         </Modal.Body>
         <Modal.Footer>
@@ -204,7 +203,7 @@ export class CreateUser extends Component {
             disabled={this.state.disabled}
             style={{ backgroundColor: "#36295C", color: "white" }}
           >
-            CREATE USER
+            {this.state.showProgress ? <Loader /> : "CREATE USER"}
           </button>
         </Modal.Footer>
       </Modal>

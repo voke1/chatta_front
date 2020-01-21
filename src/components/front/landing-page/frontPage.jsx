@@ -15,7 +15,7 @@ import { MDBNavbar} from 'mdbreact';
 
 
 
-const FrontPage = () => {
+ const FrontPage = () => {
 
     return (
         <div style={{height: "50rem"}}>
@@ -493,4 +493,4 @@ Gbagada Phase 2, Lagos State.</p>
 }
 
 
-export default FrontPage
+export default FrontPage;

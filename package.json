@@ -31,6 +31,7 @@
     "react-toggle-switch": "^3.0.4",
     "react-tooltip": "^3.11.2",
     "reactn": "^2.2.4",
+    "sweetalert2": "^9.6.1",
     "uuid": "^3.3.3"
   },
   "scripts": {

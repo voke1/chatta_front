@@ -88,7 +88,8 @@ class BotUITemplate extends Component {
         setDefaultTemplate: false
       });
       this.global.showBusyOverlay(false);
-      this.global.setNotification(false, "Applied successfully");
+      this.global.setNotification("yes", "Applied successfully");
+      
     }
     
   };
@@ -154,10 +155,10 @@ class BotUITemplate extends Component {
                 }}
               >
                 <div
-                  className="card"
+                  className="bot-header"
                   style={{
                     height: "51.2px",
-                    borderRadius: 0
+                    borderRadius: 0,
                   }}
                 >
                   <div

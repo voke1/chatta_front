@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 // import { logout } from '../adminDashboard/Authentication/UserFunctions';
 import avatar from "../images/users/avatar-1.jpg";
 import "./layouts.style.css";
+import {MDBIcon} from "mdbreact";
 import {Redirect} from "react-router-dom"
 
 export default class LayoutHeader extends Component {
@@ -22,7 +23,7 @@ export default class LayoutHeader extends Component {
   
 
   render() {
-
+    const avatar1 = <MDBIcon far icon="user-circle" size="2x"/>;
       const userDetails = JSON.parse(localStorage.getItem('userdetails'))
       console.log("userDetails:", userDetails)
 
@@ -64,68 +65,6 @@ export default class LayoutHeader extends Component {
                         3
                       </span>
                     </a>
-                    <div className="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg">
-                      {/* <!-- item--> */}
-                      <div className="dropdown-item noti-title">
-                        <h5>Notification (3)</h5>
-                      </div>
-
-                      {/* <!-- item--> */}
-                      <a
-                        href="javascript:void(0);"
-                        className="dropdown-item notify-item active"
-                      >
-                        <div className="notify-icon bg-success">
-                          <i className="mdi mdi-cart-outline"></i>
-                        </div>
-                        <p className="notify-details">
-                          <b>Your order is placed</b>
-                          <small className="text-muted">
-                            Dummy text of the printing and typesetting industry.
-                          </small>
-                        </p>
-                      </a>
-
-                      {/* <!-- item--> */}
-                      <a
-                        href="javascript:void(0);"
-                        className="dropdown-item notify-item"
-                      >
-                        <div className="notify-icon bg-warning">
-                          <i className="mdi mdi-message"></i>
-                        </div>
-                        <p className="notify-details">
-                          <b>New Message received</b>
-                          <small className="text-muted">
-                            You have 87 unread messages
-                          </small>
-                        </p>
-                      </a>
-
-                      {/* <!-- item--> */}
-                      <a
-                        href="javascript:void(0);"
-                        className="dropdown-item notify-item"
-                      >
-                        <div className="notify-icon bg-info">
-                          <i className="mdi mdi-martini"></i>
-                        </div>
-                        <p className="notify-details">
-                          <b>Your item is shipped</b>
-                          <small className="text-muted">
-                            It is a long established fact that a reader will
-                          </small>
-                        </p>
-                      </a>
-
-                      {/* <!-- All--> */}
-                      <a
-                        href="javascript:void(0);"
-                        className="dropdown-item notify-item"
-                      >
-                        View All
-                      </a>
-                    </div>
                   </li>
                   {/* <!-- User--> */}
                   <li className="list-inline-item dropdown notification-list">
@@ -137,11 +76,11 @@ export default class LayoutHeader extends Component {
                       aria-haspopup="false"
                       aria-expanded="false"
                     >
-                      <img
-                        src={avatar}
+                      <span
+                        src={avatar1}
                         alt="user"
                         className="rounded-circle"
-                      ></img>
+                        >{avatar1}</span>
                       <span className="ml-1 dropdown">
                         {userDetails.fullName} <i className="mdi mdi-chevron-down"></i>{" "}
                       

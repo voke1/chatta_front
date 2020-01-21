@@ -192,7 +192,7 @@ class BotTabs extends Component {
     }
   };
   componentDidMount() {
-    this.setGlobal({ setDefaultTemplate: this.setDefaultTemplate });
+    // this.setGlobal({ setDefaultTemplate: this.setDefaultTemplate });
   }
 
   render() {
