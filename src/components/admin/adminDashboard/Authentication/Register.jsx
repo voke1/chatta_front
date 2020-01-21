@@ -37,7 +37,8 @@ class Register extends Component {
     const user = {
       email: this.state.email,
       password: this.state.password,
-      fullName: this.state.fullName
+      fullName: this.state.fullName,
+      role: "admin"
     };
     register(user).then(res => {
       console.log("this is res.data", res.data);

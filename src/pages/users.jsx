@@ -14,6 +14,7 @@ import HeadLayout from "../components/admin/layouts/layouts.header";
 import "../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
 import "../components/admin/plugins/datatables/responsive.bootstrap4.min.css";
 import { APP_ENVIRONMENT } from "../environments/environment";
+import Swal from 'sweetalert2';
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
@@ -45,9 +46,7 @@ export class UserList extends Component {
    * @returns void
    * 
    */
-  closeDialog = () => {
-    this.setState({ userDelete: false });
-  };
+  
 
   /**
   * @description Function to open dialog window to delete user
@@ -61,9 +60,9 @@ export class UserList extends Component {
     // }
   };
 
-  confirmDelete = identity => {
-    this.setState({ userDelete: true, userId: identity });
-  };
+
+  
+  
 
   componentDidMount() {
     fetch(`${BASE_URL}/client`)
@@ -132,8 +131,44 @@ export class UserList extends Component {
     this.setState({ notification: true });
   };
 
+  deleteDialog = (identity) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+    
+    swalWithBootstrapButtons.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'No, cancel!',
+    reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+        this.deleteClient(identity)
+    swalWithBootstrapButtons.fire(
+      'Deleted!',
+      'Your file has been deleted.',
+      'success'
+    )
+  } else {
+    swalWithBootstrapButtons.fire(
+      'Cancelled',
+      'Action is cancelled!',
+      'error'
+    )
+  }
+})}
+
   App = () => {
     const [modalShow, setModalShow] = useState(false);
+    
+
     return (
       <div>
 
@@ -144,12 +179,6 @@ export class UserList extends Component {
               <div className="spinner"></div>
             </div>
           </div>
-        ) : null}
-        {this.state.userDelete ? (
-          <UserDialog
-            dialogDelete={this.dialogConfirmDelete}
-            closeDialog={this.closeDialog}
-          />
         ) : null}
         {/* {this.state.notification ? (
           <div
@@ -207,13 +236,9 @@ export class UserList extends Component {
                 <div className="card m-b-20">
                   <div className="card-body">
 
-                    <h4 className="mt-0 header-title">Active Users</h4>
-                    <p className="text-muted m-b-30 font-14">
-                      DataTables has most features enabled by default, so all
-                      you need to do to use it with your own tables is to call
-                      the construction function: <code>$().DataTable();</code>.
-                    </p>
-                    <Users users={this.state.clients} confirmDelete={this.confirmDelete} switched={this.state.switched} toggleSwitch={this.toggleSwitch} />
+                    <h4 className="mt-0 header-title">Active Users</h4><br></br>
+                    
+                    <Users users={this.state.clients} confirmDelete={this.deleteDialog} switched={this.state.switched} toggleSwitch={this.toggleSwitch} />
 
                   </div>
                 </div>

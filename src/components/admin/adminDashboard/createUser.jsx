@@ -4,6 +4,8 @@ import { Modal } from "react-bootstrap";
 import Select from 'react-select';
 import { APP_ENVIRONMENT } from "../../../environments/environment";
 import { Validation } from "../../../utilities/validations";
+import Loader from "../../front/adminLogin/loader";
+
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
@@ -18,6 +20,7 @@ export class CreateUser extends Component {
       disabled: true,
       setValidate: true,
       role: 'user',
+      showProgress: ""
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this)
@@ -49,7 +52,7 @@ export class CreateUser extends Component {
    */
   handleSubmit = event => {
     event.preventDefault();
-
+this.setState({showProgress: true})
     const user = {
       fullName: this.state.fullName,
       password: this.state.password,
@@ -68,14 +71,15 @@ export class CreateUser extends Component {
       .then(res => {
         console.log("RES.DATA", res);
         if (res.data.message) {
-          this.setState({ message: res.data.message });
+          this.setState({ message: res.data.message, showProgress: false });
         } else {
           this.props.onHide();
           this.props.updateList();
         }
       })
       .catch(err => {
-        console.log(err);
+        console.log(err)
+        this.setState({showProgress: false})
       });
   };
 
@@ -204,7 +208,7 @@ export class CreateUser extends Component {
             disabled={this.state.disabled}
             style={{ backgroundColor: "#36295C", color: "white" }}
           >
-            CREATE USER
+            {this.state.showProgress ? <Loader /> : "CREATE USER"}
           </button>
         </Modal.Footer>
       </Modal>

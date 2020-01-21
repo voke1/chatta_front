@@ -3,6 +3,7 @@ import { MDBDataTable } from 'mdbreact';
 import Switch from "react-toggle-switch";
 import { Link } from 'react-router-dom';
 import "../../../../../node_modules/react-toggle-switch/dist/css/switch.min.css";
+import moment from "moment";
 import {MDBIcon} from "mdbreact";
 
 
@@ -78,7 +79,7 @@ const DatatablePage = (props) => {
                 // userList.status = getToggleSwitch(client._id, index)
                 userList.role = client.role || 'Role'
                 userList.phone = client.phone || 'Phone Number'
-                userList.date = client.date || 'Date'
+                userList.date = moment(client.date).format('Do-MMMM-YYYY, LT') || 'Date'
 
                 userList.action = <div className="button-items">
                     <Link
