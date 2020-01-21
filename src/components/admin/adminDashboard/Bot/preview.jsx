@@ -16,7 +16,6 @@ const BotPreview = props => {
   const [global, setOpen] = useGlobal();
 
   useEffect(() => {
-    console.log("global", global);
     setUrl(props.orgUrl);
   }, [props.orgUrl]);
 

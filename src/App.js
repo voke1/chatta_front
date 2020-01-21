@@ -17,9 +17,10 @@ import Triangle from './components/admin/adminDashboard/Bot/triangle2'
 import InternetCheck from './components/admin/adminDashboard/Bot/internet-check'
 // import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 import { CompanySettings } from './components/admin/adminDashboard/Bot/companySettings'
-import { FrontPage } from './components/front/landing-page/frontPage'
 import { IthAdmin } from './components/ithAdmin/ithAdmin'
 import { ProtectedRoute } from "./components/protectedRoutes"
+import FrontPage from './components/front/landing-page/frontPage'
+import BotBody from './components/admin/adminDashboard/Bot/bot-body'
 
 
 function App() {
@@ -57,7 +58,7 @@ function App() {
         <Route exact path="/auth/verify_email" component={VerifyEmail}></Route>
         <Route exact path="/preview" component={BotUITemplate}></Route>
         <Route exact path="/triangle" component={Triangle}></Route>
-        <Route exact path="/internet" component={InternetCheck}></Route>
+        <Route exact path="/body" component={BotBody}></Route>
         <Route component={Error}></Route>
       </Switch>
     </div>

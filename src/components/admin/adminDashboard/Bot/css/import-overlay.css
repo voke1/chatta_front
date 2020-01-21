@@ -1,0 +1,120 @@
+.show-overlay {
+  height: 670px;
+  width: 700px;
+  border-radius: 1px;
+  position: fixed;
+  z-index: 10000;
+  top: 60px;
+  background-color: #fffafa;
+  overflow-y: hidden;
+  transition: 0.2s;
+  border: 1px solid rgba(179, 179, 179, 0.247);
+  box-shadow: 5px 5px 5px rgba(128, 128, 128, 0.397);
+  padding: 0px;
+  opacity: 0.98;
+}
+.hide-overlay {
+  position: fixed;
+  width: 0;
+  top: 60px;
+  transition: 0.2s;
+  z-index: 1;
+}
+.overlay-content {
+  overflow: hidden;
+  /* background-color: green; */
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+}
+.column {
+  padding: 0px;
+}
+
+.template {
+  /* background-color: yellow; */
+  height: 100%;
+  width: 100%;
+}
+.list {
+  margin: auto;
+  display: block;
+  width: 90%;
+  height: 580px;
+  margin-top: 10px;
+  background-color: white;
+  box-shadow: 1px 1px 5px rgba(128, 128, 128, 0.397);
+  border: 1px solid rgba(179, 179, 179, 0.247);
+  overflow: hidden;
+  overflow-y: scroll;
+}
+.list span {
+  width: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-left: 20px;
+}
+.preview {
+  /* background-color: blue; */
+  height: 100%;
+  width: 100%;
+}
+.title {
+  width: 25%;
+  display: block;
+  margin: auto;
+  padding-top: 10px;
+  color: rgb(177, 168, 168);
+}
+.title span {
+  font-size: 20px;
+  font-weight: 500;
+  color: #9b9898;
+}
+.preview-layout {
+  width: 490px;
+  height: 500px;
+  margin: auto;
+  margin-top: 20px;
+  background-color: rgb(241, 237, 237);
+  box-shadow: 1px 1px 5px rgba(128, 128, 128, 0.397);
+  padding-top: 20px;
+}
+.buttons {
+  margin: auto;
+  width: 350px;
+  margin-top: 10px;
+}
+.close-button:hover {
+  color: black !important;
+  font-size: 22px !important;
+}
+
+.template-title {
+  height: 50px;
+  border-bottom: 1.5px solid rgba(221, 217, 217, 0.459);
+  padding: 0px;
+  padding-top: 10px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+}
+.template-title:hover {
+  background-color: rgb(229, 223, 231);
+}
+.selected-template {
+   height: 50px;
+  border-bottom: 1.5px solid rgba(221, 217, 217, 0.459);
+  padding: 0px;
+  padding-top: 10px;
+  cursor: pointer;
+  background-color: rgb(229, 223, 231);
+  border-left: 3px solid green;
+  color: green;
+  font-weight: 500;
+}
+
+.template-title span {
+  color: rgb(24, 20, 83);
+  font-weight: 400;
+  font-size: 15px !important;
+}
