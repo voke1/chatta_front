@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 // import { logout } from '../adminDashboard/Authentication/UserFunctions';
 import avatar from "../images/users/avatar-1.jpg";
 import "./layouts.style.css";
-import {MDBIcon} from "mdbreact";
-import {Redirect} from "react-router-dom"
+import { MDBIcon } from "mdbreact";
+import { Redirect } from "react-router-dom"
 
 export default class LayoutHeader extends Component {
   constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       loggedStatus: false
     }
   }
@@ -17,22 +17,22 @@ export default class LayoutHeader extends Component {
   logout = () => {
     console.log("logout is called")
     localStorage.clear()
-    this.setState({loggedStatus: true})
+    this.setState({ loggedStatus: true })
 
   }
-  
+
 
   render() {
-    const avatar1 = <MDBIcon far icon="user-circle" size="2x"/>;
-      const userDetails = JSON.parse(localStorage.getItem('userdetails'))
-      console.log("userDetails:", userDetails)
+    const avatar1 = <MDBIcon far icon="user-circle" size="2x" />;
+    const userDetails = JSON.parse(localStorage.getItem('userdetails'))
+    console.log("userDetails:", userDetails)
 
     return (
 
       <div>
         {/* <!-- Navigation Bar--> */}
-        
-        {this.state.loggedStatus?<Redirect to={"/auth/login"}/>:<header id="topnav">
+
+        {this.state.loggedStatus ? <Redirect to={"/auth/login"} /> : <header id="topnav">
           <div className="topbar-main">
             <div className="container-fluid">
               {/* <!-- Logo container--> */}
@@ -48,7 +48,7 @@ export default class LayoutHeader extends Component {
               </div>
               {/* <!-- End Logo container--> */}
 
-              <div className="menu-extras topbar-custom">  
+              <div className="menu-extras topbar-custom">
                 <ul className="list-inline float-right mb-0">
                   {/* <!-- notification--> */}
                   <li className="list-inline-item dropdown notification-list">
@@ -80,16 +80,16 @@ export default class LayoutHeader extends Component {
                         src={avatar1}
                         alt="user"
                         className="rounded-circle"
-                        >{avatar1}</span>
+                      >{avatar1}</span>
                       <span className="ml-1 dropdown">
                         {userDetails.fullName} <i className="mdi mdi-chevron-down"></i>{" "}
-                      
+
                       </span>
                     </a>
                     <div className="dropdown-content dropdown-menu dropdown-menu-right profile-dropdown ">
-        <Link to={`/dashboard/admin/user/${userDetails.id}`}>
-                    <a className="dropdown-item">
-                        <i className="dripicons-user text-muted"></i> Profile
+                      <Link to={`/dashboard/admin/user/${userDetails.id}`}>
+                        <a className="dropdown-item">
+                          <i className="dripicons-user text-muted"></i> Profile
                       </a></Link>
                       <div className="dropdown-divider"></div>
                       <a className="dropdown-item" onClick={() => this.logout()} >
@@ -146,7 +146,7 @@ export default class LayoutHeader extends Component {
                     </Link>
                   </li> : " "}
 
-                  {userDetails.role === `admin`||`superadmin` ? <li className="has-submenu">
+                  {userDetails.role === `admin` || `superadmin` ? <li className="has-submenu">
                     {" "}
                     <Link to="/dashboard/admin/user">
                       <a>
@@ -165,14 +165,6 @@ export default class LayoutHeader extends Component {
                       <i className="dripicons-to-do"></i>Archives
                     </a>
                   </li>
-                  <li className="has-submenu">
-                    <Link to="/dashboard/admin/bot">
-                      <a>
-                        <i className="dripicons-device-desktop"></i>Analytics
-                      </a>
-                    </Link>
-                  </li>
-
                   <li className="has-submenu">
                     <a href="#">
                       <i className="dripicons-trophy"></i>FAQ{" "}
