@@ -101,8 +101,8 @@ export default class CompaniesComponent extends Component {
         .then(res => res.json())
         .then(data => {
           this.setState({
-            companys: [
-              ...this.state.companys.filter(
+            companies: [
+              ...this.state.companies.filter(
                 company => company._id !== companyId
               )
             ]

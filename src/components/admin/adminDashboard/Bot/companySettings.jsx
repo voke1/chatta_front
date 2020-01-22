@@ -1,7 +1,6 @@
 import Axios from "axios";
 import React, { Component } from "react";
 import Swal from "sweetalert2";
-import UserUpdateDialog from "../../../../components/admin/adminDashboard/Bot/userUpdateDialog";
 import "../../../../components/admin/css/bootstrap.min.css";
 import "../../../../components/admin/css/icons.css";
 import "../../../../components/admin/css/style.css";
@@ -12,7 +11,7 @@ import Header from "../../../../components/admin/layouts/layouts.header";
 import "../../../../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
 import "../../../../components/admin/plugins/datatables/responsive.bootstrap4.min.css";
 import { APP_ENVIRONMENT } from "../../../../environments/environment";
-const BASE_URL = APP_ENVIRONMENT.base_url;
+const BASE_URL = APP_ENVIRONMENT.base_url
 export class CompanySettings extends Component {
     constructor(props) {
         super(props);
@@ -23,9 +22,10 @@ export class CompanySettings extends Component {
         };
     }
     async componentDidMount() {
-        const response = await Axios.get(`${BASE_URL}/companies/${this.state.clientId}`)
+        const response = await Axios.get(`${BASE_URL}/companies/${this.state.companyId}`)
         const result = response.data;
         this.setState({ company: result });
+        console.log("COMPANY DETAILS:", this.state.company)
     }
 
     handleChange = event => {
@@ -55,7 +55,7 @@ export class CompanySettings extends Component {
         };
         try {
 
-            const response = await Axios.put(`${BASE_URL}/companies/${this.state.clientId}`, company)
+            const response = await Axios.put(`${BASE_URL}/companies/${this.state.companyId}`, company)
             const result = response.data
         } catch (error) {
             console.log(error)
@@ -107,10 +107,6 @@ export class CompanySettings extends Component {
                                         <h4 className="card-title">Edit Company</h4>
                                     </div>
                                     <div className="card-body">
-                                        {this.state.updateCompany ? (
-                                            <UserUpdateDialog closeDialog={this.closeDialog} />
-                                        ) : null}
-
                                         <form onSubmit={this.handleSubmit}>
                                             <div className="row">
                                                 <div className="col-md-5 pr-1">
@@ -134,7 +130,7 @@ export class CompanySettings extends Component {
                                                             className="form-control"
                                                             name="domain_name"
                                                             onChange={this.handleChange}
-                                                            value={this.state.company.domanin_name}
+                                                            value={this.state.company.domain_name}
                                                         ></input>
                                                     </div>
                                                 </div>
