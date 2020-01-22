@@ -4,6 +4,7 @@ import Switch from "react-toggle-switch";
 import { Link } from 'react-router-dom';
 import "../../../../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 import { MDBIcon } from "mdbreact";
+import moment from "moment";
 
 
 
@@ -61,20 +62,19 @@ const DatatablePage = (props) => {
             let companyList = {}
                 companyList.company_name = company.company_name
                 companyList.domain_name = company.domain_name
-                companyList.status = "Switch" || <Switch key={company._id}
+                companyList.status = <Switch key={company._id}
                     onClick={() => {
                         props.toggleSwitch(
                             company._id
                         )
                     }}
-                    on={props.users[index].switched} />
+                    on={props.companies[index].switched} />
                 // companyList.status = getToggleSwitch(company._id, index)
                 companyList.phone = company.phone || 'Phone Number'
-                companyList.date = company.date || 'Date'
-
+                companyList.date = moment(company.created_at).format('Do-MMMM-YYYY, LT') || 'Date'
                 companyList.action = <div className="button-items">
                     <Link
-                        to={`/dashboard/admin/user/${company._id}`}
+                        to={`/dashboard/admin/company/${company._id}`}
                     >
                         <button
                             type="button"

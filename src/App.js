@@ -14,13 +14,13 @@ import VerifyEmail from "./components/admin/adminDashboard/Authentication/emailV
 import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 import BotUITemplate from './components/admin/adminDashboard/Bot/bot-UI-template-design'
 import Triangle from './components/admin/adminDashboard/Bot/triangle2'
-import InternetCheck from './components/admin/adminDashboard/Bot/internet-check'
+import InternetCheck from './components/admin/adminDashboard/Bot/internet-check';
 // import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
-import { CompanySettings } from './components/admin/adminDashboard/Bot/companySettings'
-import { IthAdmin } from './components/ithAdmin/ithAdmin'
-import { ProtectedRoute } from "./components/protectedRoutes"
-import FrontPage from './components/front/landing-page/frontPage'
-import BotBody from './components/admin/adminDashboard/Bot/bot-body'
+import { CompanySettings } from './components/admin/adminDashboard/Bot/companySettings';
+import { IthAdmin } from './components/ithAdmin/ithAdmin';
+import { ProtectedRoute } from "./components/protectedRoutes";
+import FrontPage from './components/front/landing-page/frontPage';
+import BotBody from './components/admin/adminDashboard/Bot/bot-body';
 
 
 function App() {
@@ -33,6 +33,7 @@ function App() {
         <ProtectedRoute exact path="/dashboard/admin/bot" component={Bot}></ProtectedRoute>
         <ProtectedRoute exact path="/dashboard/admin" component={Dashboard}></ProtectedRoute>
         <ProtectedRoute exact path="/dashboard/admin/user/:id" component={UserSettings}></ProtectedRoute>
+        <ProtectedRoute exact path="/dashboard/admin/company/:id" component={CompanySettings}></ProtectedRoute>
         <Route exact path="/" component={Chat}></Route>
         <ProtectedRoute exact path="/dashboard/admin" component={Dashboard}></ProtectedRoute>
         <ProtectedRoute exact path="/dashboard/admin/bot" component={Bot}></ProtectedRoute>

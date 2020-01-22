@@ -17,6 +17,8 @@ import "../../../admin/images/favicon.ico";
 import "../../../admin/css/switch.css";
 import CreateCompanyModal from '../Bot/createCompany';
 import CompanyDataTable from './companyDatatable';
+import Swal from 'sweetalert2';
+
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
@@ -89,7 +91,6 @@ export default class CompaniesComponent extends Component {
   };
 
   deletecompany = companyId => {
-    if (window.confirm("Are you sure?")) {
       fetch(`${BASE_URL}/company/` + companyId, {
         method: "DELETE",
         header: {
@@ -107,8 +108,44 @@ export default class CompaniesComponent extends Component {
             ]
           });
         });
-    }
+    
   };
+
+  deleteDialog = (identity) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+        this.deletecompany(identity)
+        swalWithBootstrapButtons.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      } else {
+        swalWithBootstrapButtons.fire(
+          'Cancelled',
+          'Action is cancelled!',
+          'error'
+        )
+      }
+    })
+  }
+
 
   toggleSwitch = async id => {
     const company = this.state.companies.filter(company => {
@@ -124,7 +161,14 @@ export default class CompaniesComponent extends Component {
             "Company"} successfully ${toggleMsg}d`
         };
         this.updateRowInList(id, companyResponse, notification);
-      })
+      }).then(this.setState({
+        companies: this.state.companies.map(company => {
+          if (company._id === id) {
+            company.switched = !company.switched;
+          }
+          return company;
+        })
+      }))
       .catch(error => {
         const notification = {
           type: "error",
@@ -184,7 +228,7 @@ export default class CompaniesComponent extends Component {
 
                   <div className="card-body">
                   
-                    <CompanyDataTable companies={this.state.companies} />
+                    <CompanyDataTable companies={this.state.companies} toggleSwitch={this.toggleSwitch} confirmDelete={this.deleteDialog} switched={this.state.switched}/>
                     {/* <h4 className="mt-0 header-title">Companies</h4>
                                         <p className="text-muted m-b-30 font-14">
                                             DataTables has most features enabled by default, so all
