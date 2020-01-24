@@ -1,0 +1,36 @@
+.template {
+  overflow-x: hidden;
+}
+.selected {
+  border: 2px solid transparent;
+  padding: 2.56px;
+}
+.selected:hover {
+  border: 2px solid #4c9ff9 !important;
+}
+.options {
+  position: fixed;
+  z-index: 1;
+  bottom: 0;
+  width: 100%;
+  background: white;
+  border: 1px outset #e0e0e0;
+  align-items: center;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: row;
+  justify-content: flex-end;
+  height: 50px;
+  padding-right: 32px;
+}
+.disable-button {
+  pointer-events: none;
+  opacity: 0.4;
+}
+/* .style-picker {
+  overflow-y: scroll;
+} */
+/* .bot-wrapper {
+    overflow: scroll;
+} */

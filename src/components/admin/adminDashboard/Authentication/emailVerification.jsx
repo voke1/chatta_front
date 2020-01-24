@@ -12,30 +12,35 @@ class EmailVerification extends Component {
       isChanged: false,
       message: "",
       animation: "",
-      redirect: ""
+      redirect: "",
+      userDetails: {}
     };
   }
   async componentDidMount() {
     const params = query_string.parse(this.props.location.search);
     console.log()
-    verifyEmail(params.token)
-      .then(res => {
-        if (res.data.success) {
-          window.localStorage.token = params.token;
-          this.setState({
-            redirect: "/dashboard/admin"
-          });
-        }
-      })
-      .catch(error => {
-        console.log("error response", error);
+    try {
+
+      const result = await verifyEmail(params.token)
+      if (result.success) {
+        window.localStorage.token = params.token;
         this.setState({
-          redirect: "/dashboard/admin"
+          redirect: "/dashboard/admin", userDetails: result.userDetails
         });
+      }
+
+    } catch (error) {
+      console.log("error response", error);
+      this.setState({
+        redirect: "/dashboard/admin"
       });
+    };
   }
   renderRedirect = target => {
-    return <Redirect to={target} />;
+    return <Redirect to={{
+      pathname: target,
+      state: { userDetails: this.state.userDetails }
+    }} />;
   };
   render() {
     return (

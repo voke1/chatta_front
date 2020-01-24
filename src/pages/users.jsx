@@ -1,25 +1,32 @@
 import React, { Component, useState } from "react";
-import { Link } from "react-router-dom";
-import avatar from "../components/admin/images/users/avatar-1.jpg";
+import { Button, ButtonToolbar } from "react-bootstrap";
+import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
+import Users from '../components/admin/adminDashboard/Bot/userDatables';
+import UserDialog from "../components/admin/adminDashboard/Bot/userDeleteDialgo";
+import { CreateUser } from "../components/admin/adminDashboard/createUser";
+import "../components/admin/css/bootstrap.min.css";
+import "../components/admin/css/icons.css";
+import "../components/admin/css/style.css";
+import "../components/admin/css/switch.css";
+import "../components/admin/images/favicon.ico";
+import Footer from '../components/admin/layouts/layouts.footer';
+import HeadLayout from "../components/admin/layouts/layouts.header";
 import "../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
 import "../components/admin/plugins/datatables/responsive.bootstrap4.min.css";
-import "../components/admin/css/style.css";
-import "../components/admin/css/icons.css";
-import "../components/admin/css/bootstrap.min.css";
-import "../components/admin/images/favicon.ico";
-import "../components/admin/css/switch.css";
-import Switch from "react-toggle-switch";
-import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
-import { Button, ButtonToolbar } from "react-bootstrap";
-import { CreateUser } from "../components/admin/adminDashboard/createUser";
-import AppNotification from "../utilities/notification/app-notification";
-import HeadLayout from "../components/admin/layouts/layouts.header";
-
-import UserDialog from "../components/admin/adminDashboard/Bot/userDeleteDialgo";
 import { APP_ENVIRONMENT } from "../environments/environment";
+import Swal from 'sweetalert2';
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
+
+/**
+ * @description class for users
+ * @component
+ * @type {Class}
+ * @property {Function} - CloseDialog function
+ * 
+ */
 export class UserList extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -33,10 +40,19 @@ export class UserList extends Component {
     };
   }
 
-  closeDialog = () => {
-    this.setState({ userDelete: false });
-  };
+  /**
+   * @description Function to close dialog window
+   * @type { Function }
+   * @returns void
+   * 
+   */
+  
 
+  /**
+  * @description Function to open dialog window to delete user
+  * @type { Function }
+  * @returns void
+  */
   dialogConfirmDelete = () => {
     this.setState({ delete: true, userDelete: false });
     // if (this.state.delete) {
@@ -44,9 +60,9 @@ export class UserList extends Component {
     // }
   };
 
-  confirmDelete = identity => {
-    this.setState({ userDelete: true, userId: identity });
-  };
+
+  
+  
 
   componentDidMount() {
     fetch(`${BASE_URL}/client`)
@@ -85,6 +101,12 @@ export class UserList extends Component {
       })
       .catch(console.error());
   };
+
+  /**
+   * @description Function to toggleSwitch
+   * @type { Function }
+   * @returns void
+   */
   toggleSwitch = id => {
     fetch(`${BASE_URL}/client/` + id, {
       method: "PATCH",
@@ -109,10 +131,47 @@ export class UserList extends Component {
     this.setState({ notification: true });
   };
 
+  deleteDialog = (identity) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+    
+    swalWithBootstrapButtons.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'No, cancel!',
+    reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+        this.deleteClient(identity)
+    swalWithBootstrapButtons.fire(
+      'Deleted!',
+      'Your file has been deleted.',
+      'success'
+    )
+  } else {
+    swalWithBootstrapButtons.fire(
+      'Cancelled',
+      'Action is cancelled!',
+      'error'
+    )
+  }
+})}
+
   App = () => {
     const [modalShow, setModalShow] = useState(false);
+    
+
     return (
       <div>
+
         {/* <!-- Loader --> */}
         {this.state.loading ? (
           <div className="preloader">
@@ -138,7 +197,6 @@ export class UserList extends Component {
             </button>
           </div>
         ) : null} */}
-
         <div className="header-bg">
           {/* <!-- Navigation Bar--> */}
           <HeadLayout />
@@ -149,17 +207,7 @@ export class UserList extends Component {
             <div className="row">
               <div className="col-sm-12">
                 <div className="page-title-box">
-                  <form className="float-right app-search">
-                    <input
-                      type="text"
-                      placeholder="Search..."
-                      className="form-control"
-                    ></input>
-                    <button type="submit">
-                      <i className="fa fa-search"></i>
-                    </button>
-                  </form>
-
+                  
                   <ButtonToolbar>
                     <Button
                       className="btn btn-outline-light ml-1 waves-effect waves-light"
@@ -187,76 +235,11 @@ export class UserList extends Component {
               <div className="col-12">
                 <div className="card m-b-20">
                   <div className="card-body">
-                    <h4 className="mt-0 header-title">Active Users</h4>
-                    <p className="text-muted m-b-30 font-14">
-                      DataTables has most features enabled by default, so all
-                      you need to do to use it with your own tables is to call
-                      the construction function: <code>$().DataTable();</code>.
-                    </p>
 
-                    <table id="datatable" className="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th>Phone</th>
-                          <th>Status</th>
-                          <th>Date created</th>
-                          <th>Option</th>
-                        </tr>
-                      </thead>
-                      {this.state.userDelete ? (
-                        <UserDialog
-                          dialogDelete={this.dialogConfirmDelete}
-                          closeDialog={this.closeDialog}
-                        />
-                      ) : null}
-                      <tbody>
-                        {this.state.clients.map((client, index) => (
-                          <tr>
-                            <td>{client.fullName}</td>
-                            <td>{client.email}</td>
-                            <td>{client.phone}</td>
-                            <td>
-                              <Switch
-                                key={client._id}
-                                onClick={this.toggleSwitch.bind(
-                                  this,
-                                  client._id
-                                )}
-                                on={this.state.clients[index].switched}
-                              />
-                            </td>
-                            <td>2008/12/19</td>
-                            <td>
-                              <div className="button-items">
-                                <Link
-                                  to={`/dashboard/admin/user/${client._id}`}
-                                >
-                                  <button
-                                    type="button"
-                                    className="btn btn-secondary btn-sm waves-effect"
-                                    clientID={client._id}
-                                  >
-                                    Edit &nbsp;
-                                  </button>
-                                </Link>
+                    <h4 className="mt-0 header-title">Active Users</h4><br></br>
+                    
+                    <Users users={this.state.clients} confirmDelete={this.deleteDialog} switched={this.state.switched} toggleSwitch={this.toggleSwitch} />
 
-                                <button
-                                  type="button"
-                                  className="btn btn-secondary btn-sm waves-effect"
-                                  onClick={() => {
-                                    this.confirmDelete(client._id);
-                                  }}
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
                   </div>
                 </div>
               </div>{" "}
@@ -269,17 +252,8 @@ export class UserList extends Component {
         {/* <!-- end wrapper --> */}
 
         {/* <!-- Footer --> */}
-        <footer className="footer">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-12">
-                © 2019 Chatta - Crafted with{" "}
-                <i className="mdi mdi-heart text-danger"></i> by IT Horizons
-                Limited.
-              </div>
-            </div>
-          </div>
-        </footer>
+        <Footer />
+
         {/* <!-- End Footer --> */}
       </div>
     );

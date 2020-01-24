@@ -5,8 +5,17 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter as Router } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-// import "bootstrap-css-only/css/bootstrap.min.css";
+import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
+
+
+
+/**
+ * @file index.js 
+ * @author Voke Olomu
+ * @component 
+ */
+
 
 ReactDOM.render(
   <Router>

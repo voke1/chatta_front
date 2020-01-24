@@ -17,16 +17,21 @@
     "popper.js": "^1.16.0",
     "postscribe": "^2.0.8",
     "query-string": "^6.9.0",
+    "radium": "^0.26.0",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.14",
     "react-bootstrap-modal": "^4.2.0",
+    "react-color": "^2.18.0",
     "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.9.0",
     "react-icons": "^3.8.0",
     "react-multistep": "^3.6.14",
-    "react-scripts": "3.1.2",
+    "react-scripts": "^3.3.0",
+    "react-select": "^3.0.8",
     "react-toggle-switch": "^3.0.4",
+    "react-tooltip": "^3.11.2",
     "reactn": "^2.2.4",
+    "sweetalert2": "^9.6.1",
     "uuid": "^3.3.3"
   },
   "scripts": {
@@ -35,7 +40,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "pack-build": "webpack --config webpack.config.js"
+    "pack-build": "webpack --config webpack.config.js",
+    "doc": "jsdoc -c jsdoc.json"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -59,6 +65,7 @@
     "babel-preset-react": "^6.24.1",
     "html-webpack-plugin": "^3.2.0",
     "image-webpack-loader": "^6.0.0",
+    "jsdoc": "^3.6.3",
     "react-inlinesvg": "^1.1.7",
     "svg-inline-loader": "^0.8.0",
     "webpack-cli": "^3.3.9"

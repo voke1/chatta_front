@@ -12,36 +12,54 @@ import Register from "./components/admin/adminDashboard/Authentication/Register"
 import Login from "./components/admin/adminDashboard/Authentication/Login";
 import VerifyEmail from "./components/admin/adminDashboard/Authentication/emailVerification";
 import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
-import EmbedCode from './components/admin/adminDashboard/Bot/embed-code-dialog'
+import BotUITemplate from './components/admin/adminDashboard/Bot/bot-UI-template-design'
+import Triangle from './components/admin/adminDashboard/Bot/triangle2'
+import InternetCheck from './components/admin/adminDashboard/Bot/internet-check';
 // import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
+import { CompanySettings } from './components/admin/adminDashboard/Bot/companySettings';
+import { IthAdmin } from './components/ithAdmin/ithAdmin';
+import { ProtectedRoute } from "./components/protectedRoutes";
+import FrontPage from './components/front/landing-page/frontPage';
+import BotBody from './components/admin/adminDashboard/Bot/bot-body';
+
 
 function App() {
   return (
     <div>
       <Switch>
+        <Route exact path="/" component={FrontPage}></Route>
+        <Route exact path="/chatbot" component={Chat}></Route>
+        <Route exact path="/ithadmin" component={IthAdmin}></Route>
+        <ProtectedRoute exact path="/dashboard/admin/bot" component={Bot}></ProtectedRoute>
+        <ProtectedRoute exact path="/dashboard/admin" component={Dashboard}></ProtectedRoute>
+        <ProtectedRoute exact path="/dashboard/admin/user/:id" component={UserSettings}></ProtectedRoute>
+        <ProtectedRoute exact path="/dashboard/admin/company/:id" component={CompanySettings}></ProtectedRoute>
         <Route exact path="/" component={Chat}></Route>
-        <Route exact path="/dashboard/admin" component={Dashboard}></Route>
-        <Route exact path="/dashboard/admin/bot" component={Bot}></Route>
-        <Route
+        <ProtectedRoute exact path="/dashboard/admin" component={Dashboard}></ProtectedRoute>
+        <ProtectedRoute exact path="/dashboard/admin/bot" component={Bot}></ProtectedRoute>
+        <ProtectedRoute
           exact
           path="/dashboard/admin/user/:id"
           component={UserSettings}
-        ></Route>
-        <Route
+        ></ProtectedRoute>
+        <ProtectedRoute
           exact
           path="/dashboard/admin/bot/:id"
           component={ManageBot}
-        ></Route>
-        <Route exact path="/dashboard/admin/user" component={UserList}></Route>
-        <Route
+        ></ProtectedRoute>
+        <ProtectedRoute exact path="/dashboard/admin/user" component={UserList}></ProtectedRoute>
+        <ProtectedRoute exact path='/dashboard/admin/company/us' component={CompanySettings}></ProtectedRoute>
+        <ProtectedRoute
           exact
           path="/dashboard/admin/company"
           component={CompaniesComponent}
-        ></Route>
+        ></ProtectedRoute>
         <Route exact path="/auth/register" component={Register}></Route>
         <Route exact path="/auth/login" component={Login}></Route>
         <Route exact path="/auth/verify_email" component={VerifyEmail}></Route>
-        <Route exact path="/preview" component={EmbedCode}></Route>
+        <Route exact path="/preview" component={BotUITemplate}></Route>
+        <Route exact path="/triangle" component={Triangle}></Route>
+        <Route exact path="/body" component={BotBody}></Route>
         <Route component={Error}></Route>
       </Switch>
     </div>

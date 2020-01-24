@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./css/botform.css";
+import Triangle from "./triangle";
 
 class BotForm extends Component {
   constructor() {
@@ -20,25 +21,48 @@ class BotForm extends Component {
       email: this.state.email
     });
   };
+
   render() {
     return (
       <div>
         <span className="message-data-name">
-          <i className="fa fa-circle me"></i> {this.props.settings.chatbotName}
+          <i
+            className="fa fa-circle me"
+            style={{
+              color: this.props.settings.templateSettings.botOnlineFillColor
+            }}
+          ></i>{" "}
+          <span style={{color: this.props.settings.templateSettings.botOnlineNameFillColor}}>{this.props.settings.chatbotName}</span>
         </span>
-        <div
-          className="message other-message"
-          id="chat_box"
-          style={{
-            marginBottom: "9px",
-            overflow: "hidden"
-          }}
-        >
-          <div>
-            <span className="a-triangle"></span>
-            {`Hi. my name is ${this.props.settings.chatbotName}. Kindly fill in the form below in case anything goes wrong`}
+        <div className="row">
+          <div
+            className="col-md-10 message other-message"
+            id="chat_box"
+            style={{
+              marginBottom: "9px",
+              overflow: "hidden",
+              backgroundColor: this.props.settings.templateSettings
+                .botMessageFillColor,
+              color: this.props.settings.templateSettings
+                .botMessageTextTextColor
+            }}
+          >
+            <div>
+              {/* <span className="a-triangle"></span> */}
+              {`Hi. my name is ${this.props.settings.chatbotName}. Kindly fill in the form below in case anything goes wrong`}
+            </div>
+          </div>
+          <div className="col-md-1 triangle-left" style={{}}>
+            <div style={{ marginTop: "0px" }}>
+              <Triangle
+                color={this.props.settings.templateSettings.botMessageFillColor}
+                direction="right"
+                size="35px"
+              />
+            </div>
           </div>
         </div>
+
         <div className="">
           <div className="">
             <form className="text-center" onSubmit={this.onSubmit}>

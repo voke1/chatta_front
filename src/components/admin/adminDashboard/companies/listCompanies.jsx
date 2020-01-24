@@ -6,6 +6,7 @@ import { AppService } from "../../../../services/app.service";
 import LayoutHeader from "../../layouts/layouts.header";
 import LayoutFooter from "../../layouts/layouts.footer";
 import AppLoader from "../../../../utilities/loader";
+import Companies from '../Bot/dataTables'
 import { APP_ENVIRONMENT } from "../../../../environments/environment";
 import "../../../admin/plugins/datatables/dataTables.bootstrap4.min.css";
 import "../../../admin/plugins/datatables/responsive.bootstrap4.min.css";
@@ -14,6 +15,10 @@ import "../../../admin/css/icons.css";
 import "../../../admin/css/bootstrap.min.css";
 import "../../../admin/images/favicon.ico";
 import "../../../admin/css/switch.css";
+import CreateCompanyModal from '../Bot/createCompany';
+import CompanyDataTable from './companyDatatable';
+import Swal from 'sweetalert2';
+
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
@@ -26,7 +31,7 @@ export default class CompaniesComponent extends Component {
       companies: [],
       switched: false,
       loading: true,
-      notification: { msg: null, type: null }
+      notification: { msg: null, type: null },
     };
 
     this.appService = new AppService();
@@ -63,6 +68,7 @@ export default class CompaniesComponent extends Component {
   loader = () => {
     if (this.state.loading) {
       return (
+
         <tr>
           <td colSpan="7" className="text-center">
             fetching records...
@@ -75,7 +81,7 @@ export default class CompaniesComponent extends Component {
         </tr>
       );
     }
-    return !this.state.loading && this.state.companies.length == 0 ? (
+    return !this.state.loading && this.state.companies.length === 0 ? (
       <tr>
         <td colSpan="7" className="text-center">
           No records returned
@@ -85,7 +91,6 @@ export default class CompaniesComponent extends Component {
   };
 
   deletecompany = companyId => {
-    if (window.confirm("Are you sure?")) {
       fetch(`${BASE_URL}/company/` + companyId, {
         method: "DELETE",
         header: {
@@ -96,19 +101,55 @@ export default class CompaniesComponent extends Component {
         .then(res => res.json())
         .then(data => {
           this.setState({
-            companys: [
-              ...this.state.companys.filter(
+            companies: [
+              ...this.state.companies.filter(
                 company => company._id !== companyId
               )
             ]
           });
         });
-    }
+    
   };
 
-  toggleSwitchf = async id => {
+  deleteDialog = (identity) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+        this.deletecompany(identity)
+        swalWithBootstrapButtons.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      } else {
+        swalWithBootstrapButtons.fire(
+          'Cancelled',
+          'Action is cancelled!',
+          'error'
+        )
+      }
+    })
+  }
+
+
+  toggleSwitch = async id => {
     const company = this.state.companies.filter(company => {
-      return company._id == id;
+      return company._id === id;
     })[0];
     const toggleMsg = company.isEnabled ? "disable" : "enable";
     await this.appService
@@ -120,7 +161,14 @@ export default class CompaniesComponent extends Component {
             "Company"} successfully ${toggleMsg}d`
         };
         this.updateRowInList(id, companyResponse, notification);
-      })
+      }).then(this.setState({
+        companies: this.state.companies.map(company => {
+          if (company._id === id) {
+            company.switched = !company.switched;
+          }
+          return company;
+        })
+      }))
       .catch(error => {
         const notification = {
           type: "error",
@@ -135,7 +183,7 @@ export default class CompaniesComponent extends Component {
   updateRowInList = (id, companyResponse, notification = null) => {
     this.setState({
       companies: this.state.companies.map(company => {
-        return company._id == id ? companyResponse : company;
+        return company._id === id ? companyResponse : company;
       }),
       notification: notification
     });
@@ -146,48 +194,30 @@ export default class CompaniesComponent extends Component {
     return (
       <div>
         {/* <!-- Loader --> */}
-
         {/* <Button className=" btn floatBtn">What is this??</Button> */}
+        <div className='header-bg'>
+          <LayoutHeader
+            pageTitle={this.pageTitle}
+            notification={this.state.notification}
+          />
 
-        <LayoutHeader
-          pageTitle={this.pageTitle}
-          notification={this.state.notification}
-        />
+          <div className="container-fluid">
+            {/* <!-- Page-Title --> */}
+            <div className="row">
+              <div className="col-sm-12">
+                <div className="page-title-box">
 
-        <div className="container-fluid">
-          {/* <!-- Page-Title --> */}
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="page-title-box">
-                <form className="float-right app-search">
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="form-control"
-                  ></input>
-                  <button type="submit">
-                    <i className="fa fa-search"></i>
-                  </button>
-                </form>
-
-                <ButtonToolbar>
-                  <Button
-                    className="btn btn-outline-light ml-1 waves-effect waves-light"
-                    variant="primary"
-                    onClick={() => setModalShow(true)}
-                  >
-                    Create User +
-                  </Button>
+                  <CreateCompanyModal />
                   {/* <CreateUser
                     show={modalShow}
                     onHide={() => setModalShow(false)}
                     updateList={this.updateList}
                   /> */}
-                </ButtonToolbar>
+                </div>
               </div>
             </div>
+            {/* <!-- end page title end breadcrumb --> */}
           </div>
-          {/* <!-- end page title end breadcrumb --> */}
         </div>
 
         <div className="wrapper">
@@ -195,7 +225,10 @@ export default class CompaniesComponent extends Component {
             <div className="row">
               <div className="col-12">
                 <div className="card m-b-20">
+
                   <div className="card-body">
+                  
+                    <CompanyDataTable companies={this.state.companies} toggleSwitch={this.toggleSwitch} confirmDelete={this.deleteDialog} switched={this.state.switched}/>
                     {/* <h4 className="mt-0 header-title">Companies</h4>
                                         <p className="text-muted m-b-30 font-14">
                                             DataTables has most features enabled by default, so all
@@ -203,7 +236,7 @@ export default class CompaniesComponent extends Component {
                       the construction function: <code>$().DataTable();</code>.
                     </p> */}
 
-                    <table id="datatable" className="table table-bordered">
+                    {/* <table id="datatable" className="table table-bordered">
                       <thead>
                         <tr>
                           <th>Company Name</th>
@@ -231,7 +264,7 @@ export default class CompaniesComponent extends Component {
                             <td>
                               <Switch
                                 key={company._id}
-                                onClick={this.toggleSwitchf.bind(
+                                onClick={this.toggleSwitch.bind(
                                   this,
                                   company._id
                                 )}
@@ -265,7 +298,7 @@ export default class CompaniesComponent extends Component {
                           </tr>
                         ))}
                       </tbody>
-                    </table>
+                    </table> */}
                   </div>
                 </div>
               </div>{" "}

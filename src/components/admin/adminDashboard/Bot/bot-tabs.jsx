@@ -10,7 +10,10 @@ import ProgressBar from "../Authentication/progressbar";
 import { storage } from "../../../../firebase/index";
 import Preview from "./preview";
 import { APP_ENVIRONMENT } from "../../../../environments/environment";
-import EmbedCode from './embed-code-dialog';
+import EmbedCode from "./embed-code-dialog";
+import BotUITemplate from "./bot-UI-template-design";
+import Options from "./options";
+import Template from "./constants/bot-ui-template-state";
 const BASE_URL = APP_ENVIRONMENT.base_url_front;
 class BotTabs extends Component {
   constructor(props) {
@@ -33,17 +36,25 @@ class BotTabs extends Component {
     settingsSaved: false,
     fileUpload: null,
     delayTime: null,
-    primaryColor: " ",
-    secondaryColor: " ",
+    primaryColor: "#000000",
+    secondaryColor: "#000000",
     file: " Upload bot image",
     settings: {},
-    previewSelected: false
+    previewSelected: false,
+    templateSettings: {},
+    deployed: false,
+    stateChanged: false,
+    settings_id: "",
+    template: Template
     // displayState: "none"
   };
   handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     });
+    if (this.state.deployed) {
+      this.setState({ stateChanged: true });
+    }
   };
 
   fileSelectedHandler = event => {
@@ -64,24 +75,57 @@ class BotTabs extends Component {
       botImage: url,
       primaryColor: this.state.primaryColor,
       secondaryColor: this.state.secondaryColor,
-      delayTime: this.state.delayTime
+      delayTime: this.state.delayTime,
+      deployed: false
     };
 
-    apiService
-      .post("setting", setting)
-      .then(res => {
+    /* if users comes back to settings tab to modify the settings
+    Do not create a new settings, rather patch*/
+
+    if (this.state.settingsSaved) {
+      console.log("modified settings", this.state.settings._id);
+      if (this.state.deployed) {
+        console.log("deployed settings");
+        setting["_id"] = this.state.settings._id;
+
+        apiService
+          .put(`setting/${this.state.settings._id}`, setting)
+          .then(res => {
+            console.log("it is settings", res);
+            this.setState({
+              tab: "template",
+              showProgress: false,
+              settingsSaved: true,
+              settings: setting
+            });
+          })
+          .catch(error => console.error("this is error", error));
+      } else {
+        console.log("this is settings with id", setting);
         this.setState({
-          tab: "intent",
-          showProgress: false,
-          settingsSaved: true,
-          settings: res
+          settings: setting,
+          tab: "template",
+          showProgress: false
         });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+      }
+    } else {
+      console.log("new settings");
+      apiService
+        .post("setting", setting)
+        .then(res => {
+          this.setState({
+            tab: "template",
+            showProgress: false,
+            settingsSaved: true,
+            settings: res
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
-  handleSubmit = event => {
+  handleSubmit = async event => {
     event.preventDefault();
     const { fileUpload } = this.state;
 
@@ -120,22 +164,60 @@ class BotTabs extends Component {
     }
   };
 
-  fileUploadHandler = () => {};
-
-  getTab = tab => {
-    return this.state.settingsSaved ? tab : this.state.tab;
+  setTab = tab => {
+    this.setState({ tab });
   };
+  getTab = async tab => {
+    if (this.state.settingsSaved) {
+      return tab || this.state.tab;
+    }
+  };
+  setDefaultTemplate = template => {
+    this.setState({ template: template || this.props.template });
+  };
+  setTemplateSettings = templateSettings => {
+    this.global.showImportOverlay(false);
+    const newSettings = { ...this.state.settings };
+    newSettings.templateSettings = templateSettings;
+
+    console.log("new settings", newSettings);
+
+    this.setState({
+      settings: newSettings
+    });
+  };
+  changeState = (state = true) => {
+    if (this.state.deployed) {
+      this.setState({ stateChanged: state });
+    }
+  };
+  componentDidMount() {
+    // this.setGlobal({ setDefaultTemplate: this.setDefaultTemplate });
+  }
+
   render() {
     return (
-      <div className="container-holder">
-        <EmbedCode/>
+      <div
+        className=""
+        style={{ margin: "auto", width: "99%", marginTop: "20px" }}
+      >
+        <EmbedCode />
         <Tabs
-          activekey={this.state.tab}
+          style={{ padding: 0 }}
+          activeKey={this.state.tab}
           id="controlled-tab-example"
-          onSelect={tab => this.setState({ tab: this.getTab(tab) })}
+          // onSelect={
+          //   async (tab) =>  {
+          //   await this.setState({ tab: this.getTab(tab) })
+          //   }}
         >
           &nbsp;
-          <Tab eventKey="home" title="Create Bot" className>
+          <Tab
+            eventKey="home"
+            title="Create Bot"
+            className
+            disabled={this.state.tab !== "home"}
+          >
             <div className="" style={{ background: "none" }}>
               <div className="card">
                 <div className="card-body px-lg-5">
@@ -261,25 +343,125 @@ class BotTabs extends Component {
                   </form>
                 </div>
               </div>
+              <Options
+                getTab={this.getTab}
+                handleNext={this.handleSubmit}
+                saveTemplate={() => {}}
+                saveClass={() => {}}
+                disabledButtons={{
+                  previous: true,
+                  next: false,
+                  undo: true,
+                  redo: true,
+                  preview: true,
+                  import: true,
+
+                  export: true,
+                  save: true,
+                  deploy: true
+                }}
+              />
             </div>
           </Tab>
-          <Tab eventKey="intent" title="Add Intent" className="open">
+          <Tab
+            eventKey="template"
+            title="Customize"
+            className="open"
+            style={{ padding: "none", margin: "none" }}
+            disabled={this.state.tab !== "template"}
+          >
+            <BotUITemplate
+              settings={this.state.settings}
+              setTemplateSettings={this.setTemplateSettings}
+              getTab={this.getTab}
+              changeState={this.changeState}
+              template={this.state.template}
+              setDefaultTemplate={this.setDefaultTemplate}
+            />
+          </Tab>
+          <Tab
+            eventKey="intent"
+            title="Add Intent"
+            className="open"
+            disabled={this.state.tab !== "intent"}
+          >
+            .
             <div className="card w-100">
               <div className="card-body">
                 <CreateIntent
+                  stateChanged={this.state.stateChanged}
+                  setDeploymentStatus={status => {
+                    this.setState({
+                      deployed: status
+                    });
+                  }}
                   settings={this.state.settings}
                   getTab={() => this.setState({ tab: "intent" })}
                   closeOverlay={this.props.closeOverlay}
                   disableHomeTab={() =>
                     this.setState({ tab: "intent", settingsSaved: false })
                   }
+                  changeState={this.changeState}
                 />
               </div>
             </div>
+            <Options
+              getTab={this.getTab}
+              handleNext={() => {
+                this.global.setTab("preview");
+              }}
+              handlePrevious={() => {
+                this.global.showImportOverlay(false);
+                this.global.setTab("template");
+              }}
+              saveTemplate={() => {}}
+              saveClass={() => {}}
+              disabledButtons={{
+                previous: false,
+                next: false,
+                undo: true,
+                redo: true,
+                preview: true,
+                import: true,
+                export: true,
+                save: true,
+                deploy: true
+              }}
+            />
           </Tab>
-          <Tab eventKey="preview" title="Preview" className="open">
+          <Tab
+            eventKey="preview"
+            title="Preview"
+            className="open"
+            disabled={this.state.tab !== "preview"}
+          >
             <div className="w-100">
-              <div className="card-body">{this.getPreview()}</div>
+              <div className="card-body">
+                {this.getPreview()}
+                <Options
+                  getTab={this.getTab}
+                  handleNext={() => {
+                    this.global.setTab("preview");
+                  }}
+                  handlePrevious={() => {
+                    this.global.showImportOverlay(false);
+                    this.global.setTab("intent");
+                  }}
+                  saveTemplate={() => {}}
+                  saveClass={() => {}}
+                  disabledButtons={{
+                    previous: false,
+                    next: true,
+                    undo: true,
+                    redo: true,
+                    preview: true,
+                    import: true,
+                    export: true,
+                    save: true,
+                    deploy: true
+                  }}
+                />
+              </div>
             </div>
           </Tab>
         </Tabs>
@@ -288,11 +470,17 @@ class BotTabs extends Component {
   }
   getPreview() {
     return this.state.settingsSaved && this.state.tab === "preview" ? (
-      <Preview orgUrl={`${BASE_URL}/?setting_id=${this.state.settings._id}`} />
+      <Preview
+        settings={this.state.settings}
+        orgUrl={`${BASE_URL}/chatbot?setting_id=${this.state.settings._id}`}
+      />
     ) : null;
   }
   componentDidMount() {
-    this.setGlobal({ getTab: this.getTab });
+    this.setGlobal({ getTab: this.getTab, setTab: this.setTab });
+    window.setInterval(() => {
+      console.log("internet", navigator.onLine);
+    }, 5000);
   }
 }
 export default BotTabs;
