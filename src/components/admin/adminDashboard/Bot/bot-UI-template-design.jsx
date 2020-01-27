@@ -34,8 +34,7 @@ class BotUITemplate extends Component {
       borderColor: name === "BorderColor" ? value : this.state.borderColor,
       borderRadius: name === "BorderRadius" ? value : this.state.borderRadius,
       border: name === "Border" ? value : this.state.border,
-      fillColor:
-        name === "FillColor" ? this.state.fillColor : this.state.fillColor,
+      fillColor: name === "FillColor" ? value : this.state.fillColor,
       textColor: name === "TextColor" ? value : this.state.textColor,
       fontSize: name === "FontSize" ? value : this.state.fontSize
     });
@@ -89,9 +88,7 @@ class BotUITemplate extends Component {
       });
       this.global.showBusyOverlay(false);
       this.global.setNotification("yes", "Applied successfully");
-      
     }
-    
   };
   componentDidMount() {
     this.setGlobal({ setBusyNotification: this.setBusyNotification });
@@ -128,15 +125,16 @@ class BotUITemplate extends Component {
             }}
           >
             <div
-              className="p-16"
+              className="p-20"
               style={{
                 border: this.getBorder("botBody"),
-                height: "535px",
-                width: "320px",
+                height: "85%",
+                width: "300px",
                 margin: "auto",
-                marginLeft: "750px",
-                marginTop: 32,
-                paddingBottom: "32px"
+                marginLeft: "600px",
+                marginTop: "1%",
+                paddingBottom: 0,
+                height: "75%"
               }}
               onMouseOver={event => {
                 this.setElementHover(event, "botBody");
@@ -147,7 +145,7 @@ class BotUITemplate extends Component {
                   backgroundColor: this.state.botBodyFillColor,
                   border: `${this.state.botBodyBorder} solid ${this.state.botBodyBorderColor}`,
                   borderRadius: this.state.botBodyBorderRadius,
-                  height: "531.2px"
+                  height: "100%"
                 }}
                 onClick={event => {
                   event.stopPropagation();
@@ -157,14 +155,15 @@ class BotUITemplate extends Component {
                 <div
                   className="bot-header"
                   style={{
-                    height: "51.2px",
-                    borderRadius: 0,
+                    height: "15%",
+                    borderRadius: 0
                   }}
                 >
                   <div
                     className="container"
                     style={{
-                      border: this.getBorder("header")
+                      border: this.getBorder("header"),
+                      height: "100%"
                     }}
                     onMouseOver={event => {
                       this.setElementHover(event, "header");
@@ -177,14 +176,15 @@ class BotUITemplate extends Component {
                       className="row header"
                       style={{
                         backgroundColor: this.state.headerFillColor,
-                        border: `${this.state.headerBorder} solid ${this.state.headerBorderColor}`
+                        border: `${this.state.headerBorder} solid ${this.state.headerBorderColor}`,
+                        height: "100%"
                       }}
                       onClick={event => {
                         event.stopPropagation();
                         this.onSelect("header");
                       }}
                     >
-                      <div className="col-sm-8" style={{ height: "64px" }}>
+                      <div className="col-sm-8" style={{ height: "100%" }}>
                         <div className="row">
                           <div className="col-sm-3">
                             <div
@@ -267,9 +267,9 @@ class BotUITemplate extends Component {
                   className="botResponse"
                   style={{
                     width: "80%",
-                    height: "140.8px",
+                    height: "25%",
                     float: "right",
-                    marginTop: 25.6,
+                    marginTop: "4%",
                     marginRight: 19.2
                   }}
                 >
@@ -326,7 +326,7 @@ class BotUITemplate extends Component {
                     <div
                       style={{
                         border: this.getBorder("botOnlineTime"),
-                        marginBottom: 4
+                        marginBottom: "1%"
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "botOnlineTime");
@@ -334,7 +334,7 @@ class BotUITemplate extends Component {
                     >
                       <span
                         style={{
-                          marginTop: 1.92,
+                          marginTop: 8,
                           marginLeft: 5.44,
                           color: this.state.botOnlineTimeTextColor,
                           cursor: "pointer",
@@ -357,7 +357,8 @@ class BotUITemplate extends Component {
                       border: this.getBorder("botMessage"),
                       width: "90%",
                       float: "right",
-                      marginTop: 0.64
+                      marginTop: "0.1%",
+                      height: "39%"
                     }}
                     onMouseOver={event => {
                       this.setElementHover(event, "botMessage");
@@ -366,7 +367,7 @@ class BotUITemplate extends Component {
                     <div
                       className=" card message"
                       style={{
-                        height: 64,
+                        height: "100%",
 
                         backgroundColor: this.state.botMessageFillColor,
                         border: `${this.state.botMessageBorder} solid ${this.state.botMessageBorderColor}`,
@@ -383,7 +384,7 @@ class BotUITemplate extends Component {
                           width: "90%",
                           color: this.state.botMessageTextTextColor,
                           border: this.getBorder("botMessageText"),
-                          fontSize: "11px"
+                          fontSize: "10px"
                         }}
                         onClick={event => {
                           event.stopPropagation();
@@ -403,7 +404,8 @@ class BotUITemplate extends Component {
                   <div style={{ display: "flex" }}>
                     <div
                       style={{
-                        borderBottom: this.getBorder("option")
+                        borderBottom: this.getBorder("option"),
+                        marginTop: "10%"
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "option");
@@ -412,8 +414,8 @@ class BotUITemplate extends Component {
                       <div
                         className="cardd"
                         style={{
-                          marginTop: 83.2,
-                          padding: 6.4,
+                          marginTop: "100%",
+                          padding: 5,
                           backgroundColor: this.state.optionFillColor,
                           color: this.state.optionTextColor,
                           cursor: "pointer",
@@ -431,7 +433,9 @@ class BotUITemplate extends Component {
                     </div>
                     <div
                       style={{
-                        borderBottom: this.getBorder("option")
+                        borderBottom: this.getBorder("option"),
+                        marginTop: "15%",
+                        marginLeft: 9.6
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "option");
@@ -440,13 +444,12 @@ class BotUITemplate extends Component {
                       <div
                         className="cardd"
                         style={{
-                          marginTop: 83.2,
-                          padding: 6.4,
+                          marginTop: "100%",
+                          padding: 5,
                           backgroundColor: this.state.optionFillColor,
                           color: this.state.optionTextColor,
                           cursor: "pointer",
                           border: `${this.state.optionBorder} solid ${this.state.optionBorderColor}`,
-                          marginLeft: 9.6,
                           borderRadius: this.state.optionBorderRadius,
                           fontSize: 10
                         }}
@@ -460,7 +463,9 @@ class BotUITemplate extends Component {
                     </div>
                     <div
                       style={{
-                        borderBottom: this.getBorder("option")
+                        borderBottom: this.getBorder("option"),
+                        marginTop: "43%"
+                        // marginLeft: 9.6
                       }}
                       onMouseOver={event => {
                         this.setElementHover(event, "option");
@@ -469,7 +474,7 @@ class BotUITemplate extends Component {
                       <div
                         className="cardd"
                         style={{
-                          marginTop: 83.2,
+                          marginTop: "100%",
                           padding: 6.4,
                           backgroundColor: this.state.optionFillColor,
                           color: this.state.optionTextColor,
@@ -580,8 +585,9 @@ class BotUITemplate extends Component {
                       border: this.getBorder("userMessage"),
                       width: "90%",
                       float: "left",
-                      marginTop: 6.4,
-                      marginLeft: 0
+                      marginTop: "0.1%",
+                      marginLeft: 0,
+                      height: "50%"
                     }}
                     onMouseOver={event => {
                       this.setElementHover(event, "userMessage");
@@ -590,7 +596,7 @@ class BotUITemplate extends Component {
                     <div
                       className=" card message"
                       style={{
-                        height: 51.2,
+                        height: "100%",
 
                         backgroundColor: this.state.userMessageFillColor,
                         border: `${this.state.userMessageBorder} solid ${this.state.userMessageBorderColor}`,
@@ -631,9 +637,9 @@ class BotUITemplate extends Component {
                   className="botResponse"
                   style={{
                     width: "80%",
-                    height: "140px",
+                    height: "17%",
                     float: "right",
-                    marginTop: 25.6,
+                    marginTop: "1%",
                     marginRight: 19.2
                   }}
                 >
@@ -717,7 +723,8 @@ class BotUITemplate extends Component {
                       border: this.getBorder("botMessage"),
                       width: "90%",
                       float: "right",
-                      marginTop: 0.64
+                      marginTop: 0.64,
+                      height: "60%"
                     }}
                     onMouseOver={event => {
                       this.setElementHover(event, "botMessage");
@@ -726,7 +733,7 @@ class BotUITemplate extends Component {
                     <div
                       className=" card message"
                       style={{
-                        height: 64,
+                        height: "100%",
 
                         backgroundColor: this.state.botMessageFillColor,
                         border: `${this.state.botMessageBorder} solid ${this.state.botMessageBorderColor}`,
@@ -771,8 +778,8 @@ class BotUITemplate extends Component {
                       <div
                         className="cardd"
                         style={{
-                          marginTop: 83.2,
-                          padding: 6.4,
+                          marginTop: "70%",
+                          padding: 5,
                           backgroundColor: this.state.optionFillColor,
                           color: this.state.optionTextColor,
                           cursor: "pointer",
@@ -799,8 +806,8 @@ class BotUITemplate extends Component {
                       <div
                         className="cardd"
                         style={{
-                          marginTop: 83.2,
-                          padding: 6.4,
+                          marginTop: "90%",
+                          padding: 5,
                           backgroundColor: this.state.optionFillColor,
                           color: this.state.optionTextColor,
                           cursor: "pointer",
@@ -824,7 +831,7 @@ class BotUITemplate extends Component {
                   style={{
                     width: "90%",
                     margin: "auto",
-                    marginTop: 435,
+                    marginTop: "115%",
                     border: this.getBorder("input")
                   }}
                   onClick={event => {
@@ -853,7 +860,7 @@ class BotUITemplate extends Component {
               </div>
             </div>
           </div>
-          <div class="col-md-4 " style={{ padding: "none" }}>
+          <div class="col-md-4 " style={{ padding: "none", overflowY: "scroll" }}>
             <div
               className="card style-picker"
               style={{
@@ -862,8 +869,7 @@ class BotUITemplate extends Component {
                 border: "none",
                 width: "224px",
                 float: "right",
-                borderRadius: 0,
-                marginRight: "0px"
+                borderRadius: 0
               }}
             >
               <div
@@ -941,7 +947,11 @@ class BotUITemplate extends Component {
                     }}
                     value={this.state.borderColor}
                     onChange={event => {
-                      this.setState({ borderColor: event.target.value });
+                      this.setState({
+                        borderColor: event.target.value,
+                        [`${this.state.selected}BorderColor`]: event.target
+                          .value
+                      });
                     }}
                   ></input>
                   <div
@@ -974,7 +984,7 @@ class BotUITemplate extends Component {
               {/* Text */}
               <div
                 className=""
-                style={{ height: 200, borderBottom: "0.64px solid #EEEEEE" }}
+                style={{ height: 180, borderBottom: "0.64px solid #EEEEEE" }}
               >
                 <div
                   className=""
@@ -1007,7 +1017,7 @@ class BotUITemplate extends Component {
                 <div
                   className="selected"
                   style={{
-                    marginTop: 6.4,
+                    marginTop: 1,
                     marginLeft: 6.4,
                     fontSize: 11.52,
                     display: "flex",
@@ -1018,7 +1028,7 @@ class BotUITemplate extends Component {
                   }}
                 >
                   <div
-                    class="form-group "
+                    class="form-groupp"
                     style={{
                       marginLeft: 0,
                       width: 96
@@ -1044,7 +1054,6 @@ class BotUITemplate extends Component {
                       width: 40,
                       border: "none",
                       color: "#655353",
-                      marginBottom: 10
                     }}
                     onChange={this.buildTemplate}
                   ></input>
@@ -1078,7 +1087,10 @@ class BotUITemplate extends Component {
                     }}
                     value={this.state.textColor}
                     onChange={event => {
-                      this.setState({ textColor: event.target.value });
+                      this.setState({
+                        textColor: event.target.value,
+                        [`${this.state.selected}TextColor`]: event.target.value
+                      });
                     }}
                   ></input>
                 </div>
@@ -1086,10 +1098,10 @@ class BotUITemplate extends Component {
               {/* Fill */}
               <div
                 className="fill"
-                style={{ height: 88, borderBottom: "0.64px solid #EEEEEE" }}
+                style={{ height: 80, borderBottom: "0.64px solid #EEEEEE" }}
               >
                 <div
-                  style={{ marginTop: 32, marginLeft: 6.4, fontSize: 11.52 }}
+                  style={{ marginTop: 10, marginLeft: 6.4, fontSize: 11.52 }}
                 >
                   <span style={{ color: "#9D8B8B", fontWeight: "bold" }}>
                     Fill
@@ -1125,7 +1137,10 @@ class BotUITemplate extends Component {
                     }}
                     value={this.state.fillColor}
                     onChange={event => {
-                      this.setState({ fillColor: event.target.value });
+                      this.setState({
+                        fillColor: event.target.value,
+                        [`${this.state.selected}FillColor`]: event.target.value
+                      });
                     }}
                   ></input>
                   <div
@@ -1155,7 +1170,7 @@ class BotUITemplate extends Component {
               {/* Effects */}
               <div
                 className=""
-                style={{ height: 210, borderBottom: "0.64px solid #EEEEEE" }}
+                style={{ height: 180, borderBottom: "0.64px solid #EEEEEE" }}
               >
                 <div
                   style={{ marginTop: 9.6, marginLeft: 6.4, fontSize: 11.52 }}
@@ -1209,7 +1224,7 @@ class BotUITemplate extends Component {
                   style={{
                     margin: "auto",
                     width: "90%",
-                    height: 128,
+                    height: 115,
                     borderTop: "0.64px solid #EEEEEE"
                   }}
                 >

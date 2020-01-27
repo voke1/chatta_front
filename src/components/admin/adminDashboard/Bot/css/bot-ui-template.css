@@ -1,5 +1,5 @@
 .template {
-  overflow-x: hidden;
+  overflow: hidden;
 }
 .selected {
   border: 2px solid transparent;

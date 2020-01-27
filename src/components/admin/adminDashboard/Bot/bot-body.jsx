@@ -85,7 +85,6 @@ class BotBody extends Component {
           width: "256px",
           margin: "auto",
           marginTop: 25.6,
-          paddingBottom: "25.6px"
         }}
         onMouseOver={event => {
           this.setElementHover(event, "botBody");
@@ -133,7 +132,7 @@ class BotBody extends Component {
                   this.onSelect("header");
                 }}
               >
-                <div className="col-sm-8" style={{ height: "40.96px" }}>
+                <div className="col-sm-8" style={{ height: "45px" }}>
                   <div className="row">
                     <div className="col-sm-3">
                       <div
@@ -171,7 +170,7 @@ class BotBody extends Component {
                           float: "left",
                           marginTop: "20%",
                           fontWeight: "bold",
-                          marginLeft: 1.5,
+                          marginLeft: "5px",
                           fontSize: this.state.template.botNameFontSize,
                           border: this.getBorder("botName")
                         }}

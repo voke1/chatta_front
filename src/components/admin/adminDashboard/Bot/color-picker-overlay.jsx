@@ -4,12 +4,12 @@ import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 const ColorPickerOverlay = props => {
-  const [color, setColor] = useState("fff");
+  const [color, setColor] = useState(props.defaultColor);
   
 
   const handleChangeComplete = color => {
-    setColor(color.hsl);
-    console.log("color", color)
+    console.log("changing", color)
+    setColor(color.hex);
     props.buildTemplate(null, { name: props.name, value: color.hex, });
   };
 

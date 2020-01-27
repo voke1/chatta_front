@@ -24,17 +24,17 @@ const ImportOverlay = props => {
   const importTemplate = () => {
     ApiService.get("template")
       .then(res => {
-        console.log("template id", res[0]._id)
+        console.log("template id", res[0]._id);
         setActiveTemplate(res[0].template);
-        setSelected(res[0]._id)
+        setSelected(res[0]._id);
         setTemplates(res);
       })
       .catch(err => console.log(err.message));
-  }
+  };
   useEffect(() => {
-    importTemplate()
+    importTemplate();
   }, []);
- 
+
   setGlobal({ showImportOverlay: showOverlay, setTemplates, importTemplate });
 
   return (
@@ -47,11 +47,15 @@ const ImportOverlay = props => {
                 {templates.map(template => (
                   <div
                     key={template._id}
-                    className={` ${selected === template._id ? "selected-template": "template-title"}`}
+                    className={` ${
+                      selected === template._id
+                        ? "selected-template"
+                        : "template-title"
+                    }`}
                     onClick={() => {
                       setActiveTemplate(template.template);
                       setAnimate(true);
-                      setSelected(template._id)
+                      setSelected(template._id);
                     }}
                   >
                     <span key={template._id}> {template.templateName}</span>
@@ -69,7 +73,6 @@ const ImportOverlay = props => {
                 fontSize: "20px",
                 fontWeight: "bold",
                 cursor: "pointer",
-                margin: "0px"
               }}
               onClick={() => {
                 showOverlay(false);
@@ -78,22 +81,16 @@ const ImportOverlay = props => {
               <i class="fas fa-times"></i>
             </div>
             <div className="preview">
-              <div className="title">
-                <span>
-                  {templates.length ? "PREVIEW" : "You have no saved templates"}
-                </span>
-              </div>
-              <div className="preview-layout animated slideInLeft">
+              
                 <BotBody
                   animate={animate}
                   setAnimate={setAnimate}
                   activeTemplate={activeTemplate}
                 />
-              </div>
               <div className="buttons">
                 <div style={{ float: "left" }}>
                   <button
-                    className="btn btn-md"
+                    className="btn btn-sm"
                     style={{
                       background: "grey",
                       color: "white",
@@ -109,7 +106,7 @@ const ImportOverlay = props => {
                 </div>
                 <div style={{ float: "right" }}>
                   <button
-                    className="btn btn-md"
+                    className="btn btn-sm"
                     style={{
                       background: "#297260",
                       color: "white",
