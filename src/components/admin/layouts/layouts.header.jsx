@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 // import { logout } from '../adminDashboard/Authentication/UserFunctions';
 import avatar from "../images/users/avatar-1.jpg";
+import CompanyModal from "../adminDashboard/Bot/createCompany"
 import "./layouts.style.css";
 import { MDBIcon } from "mdbreact";
 import { Redirect } from "react-router-dom"
@@ -35,6 +36,7 @@ export default class LayoutHeader extends Component {
         {this.state.loggedStatus ? <Redirect to={"/auth/login"} /> : <header id="topnav">
           <div className="topbar-main">
             <div className="container-fluid">
+
               {/* <!-- Logo container--> */}
               <div className="logo">
                 {/* <!-- Text Logo --> */}

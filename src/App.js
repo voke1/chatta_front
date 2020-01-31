@@ -21,6 +21,7 @@ import { IthAdmin } from './components/ithAdmin/ithAdmin';
 import { ProtectedRoute } from "./components/protectedRoutes";
 import FrontPage from './components/front/landing-page/frontPage';
 import BotBody from './components/admin/adminDashboard/Bot/bot-body';
+import PaymentPage from './pages/checkout/cardForm';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={FrontPage}></Route>
         <Route exact path="/chatbot" component={Chat}></Route>
+        <Route exact path="/payment" component={PaymentPage}></Route>
         <Route exact path="/ithadmin" component={IthAdmin}></Route>
         <ProtectedRoute exact path="/dashboard/admin/bot" component={Bot}></ProtectedRoute>
         <ProtectedRoute exact path="/dashboard/admin" component={Dashboard}></ProtectedRoute>

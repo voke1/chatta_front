@@ -18,21 +18,23 @@ import Header from '../components/admin/layouts/layouts.header';
 import "../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
 import "../components/admin/plugins/datatables/responsive.bootstrap4.min.css";
 import "../components/admin/plugins/morris/morris.css";
+import CompanyModal from "../components/admin/adminDashboard/Bot/createCompany";
+import CompanyModalForm from "../components/admin/adminDashboard/Bot/createCompanyForm"
 
-
-
-// assets/images/users/avatar-1.jpg
-// "assets/images/users/avatar-2.jpg"
 
 export class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
       clients: [],
+      // isRegistered: true,
     };
   }
 
   App = () => {
+
+    const userDetails = JSON.parse(localStorage.getItem('userdetails'))
+
     return (<div>
       <body>
 
@@ -74,6 +76,8 @@ export class Dashboard extends Component {
 
         <div className="wrapper">
           <div className="container-fluid">
+            {/* {userDetails.isRegistered ? <CompanyModal isRegistered={userDetails.isRegistered} /> : ""} */}
+
 
             <div className="row">
               <div className="col-md-6 col-xl-3">

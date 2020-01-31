@@ -8,7 +8,8 @@ export const register = newUser => {
     .post(`${BASE_URL}/client`, {
       fullName: newUser.fullName,
       email: newUser.email,
-      password: newUser.password
+      password: newUser.password,
+      isRegistered: true,
     })
     .then(res => {
       console.log(res)
