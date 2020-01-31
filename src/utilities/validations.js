@@ -47,7 +47,7 @@ export class Validation {
       email: this.validateEmail,
       password: this.validatePassword,
       fullName: this.validateFullName,
-      phone: this.validatePhone
+      phone: this.validatePhone,
     };
     const validated = e.target.name;
     const result = await validate[validated](e.target.value);

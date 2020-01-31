@@ -1,144 +1,157 @@
 import React from "react";
-import { MDBRow, MDBCol, MDBBtn } from "mdbreact";
+import Axios from "axios";
+import { MDBRow, MDBCol, MDBIcon, MDBBtn } from "mdbreact";
+import Loader from "../../../front/adminLogin/loader"
+import { APP_ENVIRONMENT } from "../../../../environments/environment";
+import { Validation } from "../../../../utilities/validations";
+const BASE_URL = APP_ENVIRONMENT.base_url;
+
 
 class FormsPage extends React.Component {
-    state = {
-        fname: "Microsoft",
-        lname: "Gbagada Phase 2, 9B Akin-Ogunmade Davies Street, Bariga, Lagos",
-        email: "",
-        city: "",
-        state: "",
-        zip: ""
+    constructor(props){
+        super(props);
+        this.state = {
+            company_name: "Microsoft",
+            contact_address: "Gbagada Phase 2, 9B Akin-Ogunmade Davies Street, Bariga, Lagos",
+            industry: "",
+            domain_name: "",
+            address: "",
+            zip: "",
+            message: "",
+        };
+    }
+    
+
+    handleChange = event => {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+
+        // const result = await Validation.validateAll(event, this.state.setValidate);
+        this.setState({
+            isChanged: true,
+            // message: result.message,
+            // disabled: result.disabled
+        });
+    }   
+
+    handleSubmit = event => {
+    event.preventDefault();
+    this.setState({ showProgress: true });
+    const companies = {
+      company_name: this.state.company_name,
+      domain_name: this.state.domain_name,
+      contact_address: this.state.contact_address,
+      phone: this.state.industry,
     };
 
-    submitHandler = event => {
-        event.preventDefault();
-        event.target.className += " was-validated";
-    };
+    console.log(companies);
+    Axios.post(`${BASE_URL}/companies`, {
+      ...companies
+    })
+      .then(res => {
+        console.log("RES.DATA", res);
+        if (res.data.message) {
+          this.setState({ message: res.data.message, showProgress: false });
+        } else {
+          this.props.onHide();
+          this.props.updateList();
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ showProgress: false });
+      });
+  };
 
-    changeHandler = event => {
-        this.setState({ [event.target.name]: event.target.value });
-    };
 
     render() {
+
         return (
             <div>
                 <form
                     className="needs-validation"
-                    onSubmit={this.submitHandler}
+                    onSubmit={this.handleSubmit}
                     noValidate
-                    style={{ margin: "5%" }}
+                    style={{ margin: "2%" }}
                 >
-                    <MDBRow>
-                        <MDBCol md="4" className="mb-3">
-                            <label
-                                htmlFor="defaultFormRegisterNameEx"
-                                className="grey-text"
-                            >
-                                Company Name
-              </label>
-                            <input
-                                value={this.state.fname}
-                                name="fname"
-                                onChange={this.changeHandler}
-                                type="text"
-                                id="defaultFormRegisterNameEx"
-                                className="form-control"
-                                placeholder="First name"
-                                required
-                            />
-                            <div className="valid-feedback">Looks good!</div>
-                        </MDBCol>
-                        <MDBCol md="4" className="mb-3">
-                            <label
-                                htmlFor="defaultFormRegisterEmailEx2"
-                                className="grey-text"
-                            >
-                                Company Address
-              </label>
-                            <input
-                                value={this.state.lname}
-                                name="lname"
-                                onChange={this.changeHandler}
-                                type="text"
-                                id="defaultFormRegisterEmailEx2"
-                                className="form-control"
-                                placeholder="Last name"
-                                required
-                            />
-                            <div className="valid-feedback">Looks good!</div>
-                        </MDBCol>
-                        <MDBCol md="4" className="mb-3">
-                            <label
-                                htmlFor="defaultFormRegisterConfirmEx3"
-                                className="grey-text"
-                            >
-                                Domain name
-              </label>
-                            <input
-                                value={this.state.email}
-                                onChange={this.changeHandler}
-                                type="email"
-                                id="defaultFormRegisterConfirmEx3"
-                                className="form-control"
-                                name="email"
-                                placeholder="Your Domain name"
-                            />
-                            <small id="emailHelp" className="form-text text-muted">
-                                We'll never share your email with anyone else.
-              </small>
-                        </MDBCol>
-                    </MDBRow>
-                    <MDBRow>
-                        <MDBCol md="4" className="mb-3">
-                            <label
-                                htmlFor="defaultFormRegisterPasswordEx4"
-                                className="grey-text"
-                            >
-                                Phone Number
-              </label>
-                            <input
-                                value={this.state.city}
-                                onChange={this.changeHandler}
-                                type="number"
-                                id="defaultFormRegisterPasswordEx4"
-                                className="form-control"
-                                name="city"
-                                placeholder="City"
-                                required
-                            />
-                            <div className="invalid-feedback">
-                                Please provide a valid city.
-              </div>
-                            <div className="valid-feedback">Looks good!</div>
-                        </MDBCol>
-                        <MDBCol md="4" className="mb-3">
-                            <label
-                                htmlFor="defaultFormRegisterPasswordEx4"
-                                className="grey-text"
-                            >
-                                State
-              </label>
-                            <input
-                                value={this.state.state}
-                                onChange={this.changeHandler}
-                                type="text"
-                                id="defaultFormRegisterPasswordEx4"
-                                className="form-control"
-                                name="state"
-                                placeholder="State"
-                                required
-                            />
-                            <div className="invalid-feedback">
-                                Please provide a valid state.
-              </div>
-                            <div className="valid-feedback">Looks good!</div>
-                        </MDBCol>
+                    <p style={{color: 'green'}}>You are almost done, please take a momment to complete the form below</p>
 
-                    </MDBRow>
-                    {"   "}
-                    <MDBBtn style={{ color: "white", marginLeft: "83%", backgroundColor: "#3C2B61" }} type="submit" color="variant">
-                        Create
+                    <p>{this.state.message}</p>
+                    <label
+                        htmlFor="defaultFormRegisterNameEx"
+                        className="grey-text"
+                        style={{color: "green"}}
+                    >
+                        Business name
+              </label>
+                    <input
+                        value={this.state.company_name}
+                        name="company_name"
+                        onChange={this.handleChange}
+                        type="text"
+                        id="defaultFormRegisterNameEx"
+                        className="form-control"
+                        placeholder="First name"
+                        required
+                    />
+
+                    <label style={{ marginTop: "1rem" }}
+                        htmlFor="defaultFormRegisterEmailEx2"
+                        className="grey-text"
+                    >
+                        Business physical address
+              </label>
+                    <input
+                        value={this.state.contact_address}
+                        name="contact_address"
+                        onChange={this.handleChange}
+                        type="text"
+                        id="defaultFormRegisterEmailEx2"
+                        className="form-control"
+                        placeholder="Last name"
+                        required
+                    />
+                    <label
+                        htmlFor="defaultFormRegisterConfirmEx3"
+                        className="grey-text"
+                        style={{ marginTop: "1rem" }}
+                    >
+                        Domain name
+              </label>
+                    <input
+                        value={this.state.domain_name}
+                        onChange={this.handleChange}
+                        type="email"
+                        id="defaultFormRegisterConfirmEx3"
+                        className="form-control"
+                        name="domain_name"
+                        placeholder="Your Domain name"
+                    />
+                    <small id="emailHelp" className="form-text text-muted">
+                    </small>
+
+                    <label style={{ marginTop: "1rem" }}
+                        htmlFor="defaultFormRegisterPasswordEx4"
+                        className="grey-text"
+                    >
+                         Industry
+              </label>
+                    <input
+                        value={this.state.industry}
+                        onChange={this.handleChange}
+                        type="text"
+                        id="defaultFormRegisterPasswordEx4"
+                        className="form-control"
+                        name="industry"
+                        placeholder="Information communication technology"
+                        required
+                    />
+           
+
+                    <br></br>
+                    <MDBBtn style={{ marginLeft: "83%" }} type="submit" color="purple" outline onClick={this.handleSubmit}>
+                        {this.state.showProgress ? <Loader /> : "Create"}
           </MDBBtn>
                 </form>
             </div>
