@@ -1,0 +1,192 @@
+.show-conversation-overlay {
+  height: 90%;
+  width: 100%;
+  border-radius: 6px;
+  position: fixed;
+  z-index: 100000;
+  top: 0px;
+  background-color: rgba(0, 0, 0, 0.658);
+  transition: 0.2s;
+  height: 100vh;
+}
+.hide-busy-overlay {
+  position: fixed;
+  width: 0;
+  height: 0;
+  top: 0px;
+  z-index: 0;
+}
+.overlay-container {
+  display: block;
+  margin: auto;
+  width: 90%;
+  height: 90%;
+  margin-top: 20px;
+  background-color: rgb(248, 247, 247);
+}
+.overlay-header {
+  height: 40px;
+  width: 100%;
+  background-color: white;
+  box-shadow: 1px 1px 1px rgba(128, 41, 41, 0.397);
+}
+.overlay-title {
+  float: left;
+  padding: 5px;
+  margin-left: 10px;
+  font-weight: 500;
+  color: rgb(103, 94, 112);
+}
+.overlay-close-btn {
+  float: right;
+  padding: 5px;
+  font-size: 20px;
+  padding-right: 10px;
+}
+.overlay-close-btn :hover {
+  color: grey;
+}
+.overlay-left {
+  float: left;
+  width: 35%;
+  height: 533px;
+  padding-left: 10px;
+  border-right: 2px solid rgb(240, 238, 238);
+}
+.overlay-right {
+  float: left;
+  width: 65%;
+  height: 533px;
+}
+
+/* Clear floats after the columns */
+
+.overlay-row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+[name="select-range"] {
+  margin-top: 10px;
+  font-size: 15px;
+  color: rgb(107, 107, 107);
+  border: 1px solid transparent;
+  background-color: transparent;
+  width: 130;
+}
+.overlay-table {
+  margin-top: 10px;
+  background-color: white;
+  width: 95%;
+  max-height: 390px;
+  padding: 20px;
+  overflow-y: scroll;
+}
+
+.overlay-table table {
+  cursor: pointer;
+}
+.conversation-title {
+  margin: auto;
+  width: 60%;
+  margin-top: 15px;
+}
+.conversations {
+  width: 300px;
+  margin: auto;
+  height: 450px;
+  margin-top: 10px;
+  background-color: rgb(231, 224, 224);
+  border-radius: 5px;
+  box-shadow: 0 0 2px rgba(128, 128, 128, 0.397);
+}
+
+.conversation-header {
+  height: 45px;
+  width: 100%;
+  background-color: rgb(90, 52, 52);
+  box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.397);
+}
+.conversation-bot {
+  float: right;
+  width: 90%;
+  margin-top: 15px;
+}
+
+.conversation-user {
+  float: left;
+  width: 90%;
+  margin-top: 15px;
+  margin-left: 10px;
+}
+
+.time-stamp {
+  font-size: 11px;
+}
+.time-stamp span:nth-child(1) {
+  font-weight: 400;
+}
+.time-stamp span:nth-child(2) {
+  color: grey;
+}
+.message-box {
+  background-color: white;
+  margin: 5px 15px 5px 5px;
+  font-size: 13px;
+  padding: 8px;
+  border-radius: 2px;
+}
+.user-box {
+  background-color: rgb(107, 80, 80);
+  color: white;
+}
+.buttons {
+  width: 100%;
+}
+.buttons button {
+  border: 1px solid blue;
+  font-size: 12px;
+  background-color: white;
+  border-radius: 2px;
+  padding: 3px 4px 3px 4px;
+  margin-left: 5px;
+  font-weight: 400;
+  margin-top: 5px;
+}
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+.conversation-body {
+  overflow-y: scroll;
+  height: 405px;
+  padding-bottom: 20px;
+}
+.conversation-location {
+  margin-left: 10px;
+}
+.conversation-location span {
+  display: block;
+}
+.bot-column {
+  background: white;
+}
+.row-small-data {
+  margin-top: 10px;
+  border-radius: 5px !important;
+  background: white !important;
+
+  box-shadow: 2px 2px 2px rgba(163, 157, 157, 0.397);
+
+  
+}
+.analysis {
+  float: left;
+  width: 33.33%;
+  height: 60px;
+}
+.row-small-data::after {
+  content: "";
+  display: table;
+  clear: both;
+}

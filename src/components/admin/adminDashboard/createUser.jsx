@@ -46,6 +46,8 @@ export class CreateUser extends Component {
    * function to handle submit request of onclick of create user button
    */
   handleSubmit = event => {
+    const clientId = JSON.parse(localStorage.getItem("userdetails")).id;
+
     event.preventDefault();
     this.setState({ showProgress: true });
     const user = {
@@ -60,7 +62,7 @@ export class CreateUser extends Component {
 
     console.log(user);
     Axios.post(`${BASE_URL}/client`, {
-      ...user
+      ...user, clientId :clientId
     })
       .then(res => {
         console.log("RES.DATA", res);

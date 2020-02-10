@@ -65,7 +65,9 @@ export class UserList extends Component {
   
 
   componentDidMount() {
-    fetch(`${BASE_URL}/client`)
+    const clientId = JSON.parse(localStorage.getItem("userdetails")).id;
+
+    fetch(`${BASE_URL}/client/all/${clientId}`)
       .then(res => res.json())
       .then(data => {
         if (data) {

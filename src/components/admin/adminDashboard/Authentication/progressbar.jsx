@@ -50,20 +50,20 @@ function FacebookProgress(props) {
 
   return (
     <div className={classes.root}>
-      <CircularProgress
+      {/* <CircularProgress
         variant="determinate"
         value={100}
         className={classes.top}
         size={24}
         thickness={4}
         {...props}
-      />
+      /> */}
       <CircularProgress
         variant="indeterminate"
         disableShrink
         className={classes.bottom}
-        size={24}
-        thickness={4}
+        size={props.size || 50}
+        thickness={props.thickness || 4}
         {...props}
       />
     </div>
@@ -87,4 +87,7 @@ export default function CustomizedProgressBars() {
       <ColorLinearProgress />
     </div>
   );
+}
+export {
+  FacebookProgress,
 }

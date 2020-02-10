@@ -6,7 +6,7 @@ class BusyOverlay extends Component {
     action: "hide-busy-overlay"
   };
   showOverlay = show => {
-    if (show) {
+    if (show || this.props.show) {
       this.setState({
         action: "show-busy-overlay"
       });
@@ -20,13 +20,17 @@ class BusyOverlay extends Component {
     return (
       <div>
         <div className={this.state.action}>
-          <ProgressBar/>
+          <ProgressBar />
         </div>
       </div>
     );
   }
+  componentWillReceiveProps(props) {
+    this.showOverlay()
+  }
   componentDidMount() {
     console.log("overlay mounted");
+    this.showOverlay()
     this.setGlobal({
       showBusyOverlay: this.showOverlay
     });

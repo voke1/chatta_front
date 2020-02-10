@@ -79,6 +79,8 @@ class CreateIntent extends Component {
       .catch(error => console.error("this is error", error));
   };
   handleSubmit = event => {
+    const clientId = JSON.parse(localStorage.getItem("userdetails")).id;
+
     event.preventDefault();
     if (this.state.buttonText === "FINISH") {
       this.props.closeOverlay();
@@ -108,7 +110,8 @@ class CreateIntent extends Component {
         apiService
           .post("tree", {
             setting_id: this.props.settings._id,
-            chat_body: this.state.chatBody[0]
+            chat_body: this.state.chatBody[0],
+            clientId
           })
           .then(res => {
             console.log("chat body", res.chat_body.chat_body);

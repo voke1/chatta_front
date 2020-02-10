@@ -1,20 +1,35 @@
 import axios from "axios";
-import React, { Component } from "react";
+import React, { Component } from "reactn";
 import BotForm from "../../../components/admin/adminDashboard/Bot/botForm";
 import { APP_ENVIRONMENT } from "../../../environments/environment";
 import { defaultStyle } from "../chat/defaultStyle";
 import Triangle from "../../../components/admin/adminDashboard/Bot/triangle";
 import { AppService } from "../../../services/app.service";
+import * as apiService from "../../../services/apiservice";
 import thinker from "../../../thinker.gif";
 import "./convo.component.css";
-
-const BASE_URL = APP_ENVIRONMENT.base_url;
+import {
+  BrowserView,
+  MobileView,
+  isBrowser,
+  isMobile,
+  isChrome,
+  isFirefox,
+  isEdge,
+  isOpera,
+  isIE,
+  isSafari
+} from "react-device-detect";
 export default class Convo extends Component {
   appService;
   static userName;
   constructor(props) {
     super(props);
     this.state = {
+      conversations: [],
+      browser: "",
+      visitor: "",
+      online: false,
       conversationTree: [],
       chatTimer: 1,
       typingTimer: null,
@@ -29,11 +44,9 @@ export default class Convo extends Component {
       anything: "xx",
       username: "",
       email: "",
+      fetchUserInfo: true,
       defaultStyle: defaultStyle,
-      userDetails: {
-        name: "",
-        email: ""
-      },
+      userDetails: {},
       empty: {
         identity: "empty",
         prompt:
@@ -70,11 +83,13 @@ export default class Convo extends Component {
   appService = new AppService();
 
   handleBotFormsubmit = async userDetails => {
+    this.sendOnlineStatus(userDetails);
     this.details = userDetails;
     const userName = userDetails.name;
     const userEmail = userDetails.email;
 
     await this.setState({
+      userDetails,
       username: userName,
       email: userEmail,
       anything: "yyy",
@@ -102,7 +117,35 @@ export default class Convo extends Component {
   }
   determineLister() {}
 
+  getBrowser = () => {
+    let browser = "";
+    switch ("true") {
+      case isChrome.toString():
+        browser = "Chrome";
+        break;
+      case isFirefox.toString():
+        browser = "Firefox";
+        break;
+      case isOpera.toString():
+        browser = "Opera";
+        break;
+      case isIE.toString():
+        browser = "IE";
+        break;
+      case isEdge.toString():
+        browser = "Edge";
+        break;
+      default:
+        browser = "Safari";
+        break;
+    }
+    console.log("browser:", browser);
+    this.setState({ browser });
+  };
+
   componentDidMount = async () => {
+    this.getBrowser();
+    console.log("bot id", this.props.settings._id);
     // console.log("chat body", this.props.chat_body);
     // console.log("windows location href", window.location.href);
     // console.log("document referer", document.referrer);
@@ -154,7 +197,46 @@ export default class Convo extends Component {
    * This method searches the conversation tree
    * to match  bot response, but returns a default message if match fails;
    */
+  sendOnlineStatus = userDetails => {
+    console.log("lead", userDetails);
+    const leads = { ...userDetails };
+    leads.location = this.state.visitor.city;
+    if (!this.state.online) {
+      this.props.socketIo.emit("msgToServer", {
+        visitor: this.state.visitor,
+        botId: this.props.botId,
+        lead: leads,
+        conversations: this.state.conversations
+      });
+      console.log("settingss", this.props.botId);
+      // this.props.socketIo.on("msgToClient", message => {});
+      this.setState({ online: true });
+    }
+  };
+
+  getDate = () => {
+    const time = new Date();
+    return `${time.getMonth() +
+      1}/${time.getDate()}/${time.getFullYear()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+  };
   searchTree = (key, info = null) => {
+    if (this.state.fetchUserInfo) {
+      fetch(
+        "http://api.ipstack.com/197.210.47.58?access_key=8b9d64d8dc53ce80c405b22daf7fe5a5&format=1"
+      )
+        .then(data => data.json())
+        .then(visitor => {
+          this.setState({ fetchUserInfo: false });
+          visitor.time = this.getDate();
+          visitor.browser = this.state.browser;
+          this.setState({ fetchUserInfo: false, visitor });
+          console.log("visitor:", visitor);
+        })
+        .catch(error => {
+          console.log("request error", error);
+        });
+    }
+
     const result = this.state.conversationTree.filter((node, index) => {
       if (info && index === 0) {
         node.prompt = `${info} ${node.prompt}`;
@@ -183,12 +265,21 @@ export default class Convo extends Component {
           key={this.setUniqueKey(button.key, "b")}
           type="button"
           className="ith_chat-button"
-          onClick={() => this.updateConverstion(button.key, button.val)}
+          onClick={() => {
+            this.updateConverstion(button.key, button.val);
+            this.sendOnlineStatus();
+          }}
         >
           {button.val}
         </button>
       );
     });
+  };
+  conversations = [];
+  saveConversation = content => {
+      
+    this.conversations.push(content);
+    this.props.socketIo.emit("updateConversation", this.conversations);
   };
 
   /**
@@ -197,13 +288,20 @@ export default class Convo extends Component {
 
   updateConverstion = (key, val = null) => {
     const choices = this.deepCopy(this.state.responses);
-
+    console.log("time of cht", this.setTimeOfChat());
     if (val) {
       const userChoice = {
         selection: val,
         time: this.setTimeOfChat()
       };
       choices.push(userChoice);
+      
+      this.saveConversation({
+        from: "user",
+        timeStamp: this.setTimeOfChat(),
+        name: "You",
+        message: val
+      });
     }
 
     this.setState({
@@ -230,6 +328,13 @@ export default class Convo extends Component {
     const searchResult = this.searchTree(key, info);
     responses.push(searchResult);
     console.log("refreshing result", searchResult);
+    this.saveConversation({
+      from: "bot",
+      name: this.props.settings.chatbotName,
+      message: searchResult.prompt,
+      buttons: searchResult.response.buttons,
+      timeStamp: this.setTimeOfChat()
+    });
     this.restartTimer();
     const timeOutTime = this.delayChat(searchResult.prompt);
     setTimeout(() => {

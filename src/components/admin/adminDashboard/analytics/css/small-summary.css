@@ -1,0 +1,23 @@
+.total-visit-count {
+    width:40%;
+    margin: auto;
+    margin-top: 10px;
+}
+.total-visit-count span {
+    font-size: 16px;
+    font-weight: bold;
+}
+.total-visit-title {
+    width:70%;
+    margin: auto;
+    margin-top: 1px;
+    
+}
+.total-visit-title span {
+    font-size: 11px;
+    color: grey;
+    margin: auto;
+    text-align: center;
+        display: block;
+
+}

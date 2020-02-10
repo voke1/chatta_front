@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { Component } from "reactn";
 import Axios from "axios";
 import * as query_string from "query-string";
-
+import socket from "socket.io-client";
 // import "../conversation/convo.component.css";
 import "./chat.component.css";
 import "../../../utilities/slimscroll/slimscroll.css";
@@ -13,10 +13,10 @@ import botpic from "../../../bot1.jpg";
 import DecodeToken from "../../../utilities/decodeToken";
 import { APP_ENVIRONMENT } from "../../../environments/environment";
 import { defaultStyle } from "./defaultStyle";
-
+import * as apiService from "../../../services/apiservice";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
-
+const io = socket(BASE_URL);
 export default class Chat extends Component {
   appService;
   constructor(props) {
@@ -36,7 +36,8 @@ export default class Chat extends Component {
       settings: {},
       botImage: "",
       chat_body: [],
-      defaultStyle: defaultStyle
+      defaultStyle: defaultStyle,
+      botId: ""
     };
     this.appService = new AppService();
   }
@@ -50,7 +51,6 @@ export default class Chat extends Component {
     DecodeToken.getUserPayload(token);
 
     return this.state.showChatArea ? (
-
       <div className="slideInUp">
         <div className="container clearfix">
           <div className="chat" style={this.state.templateStyle}>
@@ -88,7 +88,9 @@ export default class Chat extends Component {
               </div>
               <span
                 id="close-chat"
-                onClick={this.toggleChatDisplay}
+                onClick={() => {
+                  this.toggleChatDisplay();
+                }}
                 style={{
                   color: this.state.defaultStyle.closeButtonTextColor,
                   fontSize: this.state.defaultStyle.closeButtonFontSize
@@ -103,6 +105,8 @@ export default class Chat extends Component {
               getResponder={this.getResponder}
               settings={this.state.settings}
               chat_body={this.state.chat_body}
+              socketIo={io}
+              botId={this.state.botId}
             />
 
             <div
@@ -131,7 +135,7 @@ export default class Chat extends Component {
                       }}
                     />
                     <i className="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
-                  <i className="fa fa-file-image-o"></i>
+                    <i className="fa fa-file-image-o"></i>
                   </div>
                   {/* <div className="col-md-1">
                                       <button id="play-btn" className="" type="submit">
@@ -148,18 +152,39 @@ export default class Chat extends Component {
         </div>
       </div>
     ) : (
-        <button
-          id="chat-opener"
-          data-toggle="tooltip"
-          title="Chat with us"
-          style={this.state.btnStyle}
-          onClick={this.toggleChatDisplay}
-        >
-          <i className="far fa-comment-alt fa-2x"></i>
-        </button>
-      );
+      <button
+        id="chat-opener"
+        data-toggle="tooltip"
+        title="Chat with us"
+        style={this.state.btnStyle}
+        onClick={this.toggleChatDisplay}
+      >
+        <i className="far fa-comment-alt fa-2x"></i>
+      </button>
+    );
   }
-
+  // deleteVisit = () => {
+  //   apiService
+  //     .del(`activeusers/${this.global.visitorId}`)
+  //     .then(res => {
+  //       console.log("deleted", res);
+  //     })
+  //     .catch(error => console.log(error.message));
+  // }
+  // onChatClose = () => {
+  //   window.addEventListener("beforeunload", event => {
+  //     event.preventDefault();
+  //     this.deleteVisit();
+  //   });
+  //   window.addEventListener("onbeforeunload", ev => {
+  //     ev.preventDefault();
+  //     this.deleteVisit()
+  //     // return (ev.returnValue = "Are you sure you want to close?");
+  //   });
+  // };
+  componentWillUnmount() {
+    // this.deleteVisit()
+  }
   async componentDidMount() {
     const params = query_string.parse(this.props.location.search);
     try {
@@ -183,10 +208,11 @@ export default class Chat extends Component {
           botImage: settings.botImage,
           settings,
           chat_body: result.data.findTree.chat_body,
+          botId: result.data.findTree._id,
           defaultStyle: settings.templateSettings
         });
       }
-    } catch (e) { }
+    } catch (e) {}
 
     // Axios.get(`${BASE_URL}/setting`)
     //   .then(res => {
@@ -216,9 +242,11 @@ export default class Chat extends Component {
   }
 
   toggleChatDisplay = () => {
+    this.state.showChatArea ? io.disconnect() : io.connect();
     this.setState({
       showChatArea: !this.state.showChatArea
     });
+    // this.deleteVisit()
   };
 
   handleSubmit = event => {
@@ -239,5 +267,3 @@ export default class Chat extends Component {
     });
   };
 }
-
-

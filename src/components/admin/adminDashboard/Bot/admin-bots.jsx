@@ -15,7 +15,7 @@ import Header from "../../layouts/layouts.header";
 import Footer from "../../layouts/layouts.footer";
 import { APP_ENVIRONMENT } from "../../../../environments/environment";
 import Notification from "../../../../utilities/notification/app-notification";
-import ExportOverlay from '../Bot/export-overlay'
+import ExportOverlay from "../Bot/export-overlay";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
@@ -32,25 +32,30 @@ export class Bot extends Component {
 
     this.state = {
       settings: [],
-      loading: true,
+      loading: false,
       botDelete: false,
       delete: false,
       settingsId: null,
-      notification: "no"
+      notification: "no",
+      error: ""
     };
   }
   setNotification = (status, message) => {
     this.setState({ notification: status, message });
   };
-  componentDidMount() {
+  async componentDidMount() {
+    this.setState({ loading: true })
+    const clientId = await JSON.parse(localStorage.getItem("userdetails")).id;
+    console.log("client id", clientId);
     this.setGlobal({ setNotification: this.setNotification });
-    fetch(`${BASE_URL}/setting`)
+    fetch(`${BASE_URL}/setting/all/${clientId}`)
       .then(res => res.json())
       .then(data => {
-        this.setState({ settings: data });
+        this.setState({ settings: data, error: "", loading: false });
       })
       .catch(e => {
         console.log("error", e);
+        this.setState({ error: e.message, loading: false });
       });
   }
 
@@ -96,22 +101,16 @@ export class Bot extends Component {
   render() {
     return (
       <div>
-        <ExportOverlay/>
+        <ExportOverlay />
         <Notification
           show={this.state.notification}
           type={"success"}
           msg={this.state.message}
           timeOut={4000}
           event="saveTemplate"
-          resetNotification={() => {}}
+          resetNotification={() => { }}
         />
-        {this.state.loading ? (
-          <div className="preloader">
-            <div id="status">
-              <div className="spinner"></div>
-            </div>
-          </div>
-        ) : null}
+
         <div className="header-bg">
           {/* <!-- Navigation Bar--> */}
           <Header />
@@ -139,6 +138,7 @@ export class Bot extends Component {
                     <h4 className="mt-0 m-b-30 header-title">CHAT BOTS</h4>
 
                     <div className="table-responsive">
+
                       <table className="table m-t-20 mb-0 table-vertical">
                         {this.state.botDelete ? (
                           <BotDeleteDialog
@@ -147,61 +147,70 @@ export class Bot extends Component {
                           />
                         ) : null}
                         <tbody>
-                          {this.state.settings
-                            ? this.state.settings.map(setting => (
-                                <tr>
-                                  <td>
-                                    {console.log(setting)}
-                                    <img
-                                      src={setting.botImage}
-                                      alt="bot-image"
-                                      className="thumb-sm rounded-circle mr-2"
-                                    />
-                                    {setting.chatbotName}
-                                  </td>
-                                  <td>
-                                    <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
-                                    {setting.welcomeMessage}
-                                  </td>
-                                  <td>
-                                    {setting.fallbackMessage}
-                                    <p className="m-0 text-muted font-14">
-                                      Fallback Message
-                                    </p>
-                                  </td>
-                                  <td>
-                                    {setting.delayPrompt}
-                                    <p className="m-0 text-muted font-14">
-                                      Delay Prompt
-                                    </p>
-                                  </td>
-                                  <td>
-                                    {console.log("settings ID:", setting._id)}
+                          {this.state.settings.length && !this.state.error ? (
+                            this.state.settings.map(setting => (
+                              <tr>
+                                <td>
+                                  <img
+                                    src={setting.botImage}
+                                    alt="bot-image"
+                                    className="thumb-sm rounded-circle mr-2"
+                                  />
+                                  {setting.chatbotName}
+                                </td>
+                                <td>
+                                  <i className="mdi mdi-checkbox-blank-circle text-success"></i>{" "}
+                                  {setting.welcomeMessage}
+                                </td>
+                                <td>
+                                  {setting.fallbackMessage}
+                                  <p className="m-0 text-muted font-14">
+                                    Fallback Message
+                                  </p>
+                                </td>
+                                <td>
+                                  {setting.delayPrompt}
+                                  <p className="m-0 text-muted font-14">
+                                    Delay Prompt
+                                  </p>
+                                </td>
+                                <td>
+                                  {console.log("settings ID:", setting._id)}
 
-                                    <ButtonToolbar>
-                                      <Link
-                                        to={`/dashboard/admin/bot/${setting._id}`}
-                                      >
-                                        <button className="btn btn-secondary btn-sm waves-effect">
-                                          Manage
-                                        </button>
-                                      </Link>
-                                      <button
-                                        className="btn btn-secondary btn-sm waves-effect"
-                                        onClick={() => {
-                                          this.confirmDelete(setting._id);
-                                        }}
-                                      >
-                                        Delete
+                                  <ButtonToolbar>
+                                    <Link
+                                      to={`/dashboard/admin/bot/${setting._id}`}
+                                    >
+                                      <button className="btn btn-secondary btn-sm waves-effect">
+                                        Manage
                                       </button>
-                                    </ButtonToolbar>
-                                  </td>
-                                </tr>
-                              ))
-                            : null}
+                                    </Link>
+                                    <button
+                                      className="btn btn-secondary btn-sm waves-effect"
+                                      onClick={() => {
+                                        this.confirmDelete(setting._id);
+                                      }}
+                                    >
+                                      Delete
+                                    </button>
+                                  </ButtonToolbar>
+                                </td>
+                              </tr>
+                            ))
+                          ) : this.state.error ? (
+                            <div>{this.state.error}{this.state.loading ? (
+                              <div className="preloader" style={{ marginTop: 100 }}>
+                                <div id="status">
+                                  <div className="spinner"></div>
+                                </div>
+                              </div>
+                            ) : null}</div>
+                          ) : !this.state.settings.length && !this.state.loading ? <div>No records found</div> : null}
                         </tbody>
                       </table>
+
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -217,6 +226,13 @@ export class Bot extends Component {
         <Footer />
 
         {/* <!-- End Footer --> */}
+        {this.state.loading ? (
+          <div className="preloader" style={{}}>
+            <div id="status">
+              <div className="spinner"></div>
+            </div>
+          </div>
+        ) : null}
       </div>
     );
   }

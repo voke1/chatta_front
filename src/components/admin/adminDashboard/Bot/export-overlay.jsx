@@ -27,13 +27,15 @@ const ExportOverlay = () => {
   };
 
   const handleSubmit = event => {
+    const clientId = JSON.parse(localStorage.getItem("userdetails")).id;
+    console.log("client id", clientId)
     event.preventDefault();
     setNotification("yes", "Exporting...");
     showBusyOverlay(true);
     handleClose();
     // setTemplates(template);
     apiService
-      .post("template", { templateName, template })
+      .post("template", { templateName, template, clientId })
       .then(res => {
         importTemplate();
         setTimeout(() => {

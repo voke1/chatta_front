@@ -11,7 +11,7 @@ export const register = newUser => {
       password: newUser.password
     })
     .then(res => {
-      console.log(res)
+      console.log(res);
       return res;
     })
     .catch(err => {
@@ -26,7 +26,7 @@ export const login = user => {
       password: user.password
     })
     .then(res => {
-      console.log('this is tokrdetailsen res:', res)
+      console.log("this is tokrdetailsen res:", res);
       localStorage.setItem("userdetails", JSON.stringify(res.data.userDetails));
       return res;
     })
@@ -36,25 +36,21 @@ export const login = user => {
 };
 
 export const isAuthenticated = () => {
-
-  if (localStorage.getItem('userdetails')) {
+  if (localStorage.getItem("userdetails")) {
     return true;
   } else {
     return false;
   }
-
-}
-
+};
 
 export const verifyEmail = token => {
-
   return axios
     .get(`${BASE_URL}/auth/verify_email?token=${token}`)
     .then(res => {
-      console.log("Res ", res)
+      console.log("Res ", res);
       return res.data;
     })
     .catch(err => {
-      return err
+      return err;
     });
 };

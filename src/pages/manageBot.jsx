@@ -45,6 +45,7 @@ export class ManageBot extends Component {
     Axios.get(`${BASE_URL}/setting/${this.state.settingId}`)
       .then(res => {
         const result = res.data;
+        console.log("hey", result)
         const settings = result.findTree.setting_id;
         this.setState({
           settings,
