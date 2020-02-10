@@ -1,7 +1,7 @@
 import React, { useState, useEffect, setGlobal, useGlobal } from "reactn";
 import "./css/import-overlay.css";
 import BotBody from "./bot-body";
-import Template from "./constants/templates";
+import Template from "../../../../constants/templates";
 import * as ApiService from "../../../../services/apiservice";
 
 const ImportOverlay = props => {

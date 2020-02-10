@@ -2,7 +2,7 @@ import React, { Component } from "reactn";
 import ReactTooltip from "react-tooltip";
 import border from "../../../../border.png";
 import "./css/bot-ui-template.css";
-import Template from "./constants/bot-ui-template-state";
+import Template from "../../../../constants/bot-ui-template-state";
 import * as ApiService from "../../../../services/apiservice";
 import Notification from "../../../../utilities/notification/app-notification";
 import Options from "./options";

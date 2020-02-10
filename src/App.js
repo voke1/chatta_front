@@ -20,7 +20,11 @@ import { CompanySettings } from './components/admin/adminDashboard/Bot/companySe
 import { IthAdmin } from './components/ithAdmin/ithAdmin';
 import { ProtectedRoute } from "./components/protectedRoutes";
 import FrontPage from './components/front/landing-page/frontPage';
-import BotBody from './components/admin/adminDashboard/Bot/bot-body';
+import Charts from './components/admin/adminDashboard/analytics/chart';
+import Visits from './components/admin/adminDashboard/analytics/visits'
+import TopLocation from "./components/admin/adminDashboard/analytics/top-locations";
+
+
 
 
 function App() {
@@ -30,13 +34,37 @@ function App() {
         <Route exact path="/" component={FrontPage}></Route>
         <Route exact path="/chatbot" component={Chat}></Route>
         <Route exact path="/ithadmin" component={IthAdmin}></Route>
-        <ProtectedRoute exact path="/dashboard/admin/bot" component={Bot}></ProtectedRoute>
-        <ProtectedRoute exact path="/dashboard/admin" component={Dashboard}></ProtectedRoute>
-        <ProtectedRoute exact path="/dashboard/admin/user/:id" component={UserSettings}></ProtectedRoute>
-        <ProtectedRoute exact path="/dashboard/admin/company/:id" component={CompanySettings}></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/dashboard/admin/bot"
+          component={Bot}
+        ></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/dashboard/admin"
+          component={Dashboard}
+        ></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/dashboard/admin/user/:id"
+          component={UserSettings}
+        ></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/dashboard/admin/company/:id"
+          component={CompanySettings}
+        ></ProtectedRoute>
         <Route exact path="/" component={Chat}></Route>
-        <ProtectedRoute exact path="/dashboard/admin" component={Dashboard}></ProtectedRoute>
-        <ProtectedRoute exact path="/dashboard/admin/bot" component={Bot}></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/dashboard/admin"
+          component={Dashboard}
+        ></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/dashboard/admin/bot"
+          component={Bot}
+        ></ProtectedRoute>
         <ProtectedRoute
           exact
           path="/dashboard/admin/user/:id"
@@ -47,8 +75,16 @@ function App() {
           path="/dashboard/admin/bot/:id"
           component={ManageBot}
         ></ProtectedRoute>
-        <ProtectedRoute exact path="/dashboard/admin/user" component={UserList}></ProtectedRoute>
-        <ProtectedRoute exact path='/dashboard/admin/company/us' component={CompanySettings}></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/dashboard/admin/user"
+          component={UserList}
+        ></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/dashboard/admin/company/us"
+          component={CompanySettings}
+        ></ProtectedRoute>
         <ProtectedRoute
           exact
           path="/dashboard/admin/company"
@@ -58,8 +94,9 @@ function App() {
         <Route exact path="/auth/login" component={Login}></Route>
         <Route exact path="/auth/verify_email" component={VerifyEmail}></Route>
         <Route exact path="/preview" component={BotUITemplate}></Route>
-        <Route exact path="/triangle" component={Triangle}></Route>
-        <Route exact path="/body" component={BotBody}></Route>
+        <Route exact path="/chart" component={Charts}></Route>
+        <Route exact path="/visits" component={Visits}></Route>
+        <Route exact path="/location" component={TopLocation}></Route>
         <Route component={Error}></Route>
       </Switch>
     </div>

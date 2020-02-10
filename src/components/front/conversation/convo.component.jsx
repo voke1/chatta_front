@@ -1,10 +1,11 @@
 import axios from "axios";
-import React, { Component } from "react";
+import React, { Component } from "reactn";
 import BotForm from "../../../components/admin/adminDashboard/Bot/botForm";
 import { APP_ENVIRONMENT } from "../../../environments/environment";
 import { defaultStyle } from "../chat/defaultStyle";
 import Triangle from "../../../components/admin/adminDashboard/Bot/triangle";
 import { AppService } from "../../../services/app.service";
+import * as apiService from "../../../services/apiservice";
 import thinker from "../../../thinker.gif";
 import "./convo.component.css";
 
@@ -29,6 +30,7 @@ export default class Convo extends Component {
       anything: "xx",
       username: "",
       email: "",
+      fetchUserInfo: true,
       defaultStyle: defaultStyle,
       userDetails: {
         name: "",
@@ -155,6 +157,54 @@ export default class Convo extends Component {
    * to match  bot response, but returns a default message if match fails;
    */
   searchTree = (key, info = null) => {
+    const getDate = () => {
+      const time = new Date();
+      const timeString = time.toLocaleString("en-US", {
+        hour: "numeric",
+        hour12: true
+      });
+      const aMpM = timeString.indexOf("AM") > -1 ? "AM" : "PM";
+
+      return `${time.getMonth() +
+        1}/${time.getDate()}/${time.getFullYear()}, ${time.getHours()}:${
+        time.getMinutes().toString().length === 1
+          ? "0" + time.getMinutes()
+          : time.getMinutes()
+      } ${aMpM}`;
+    };
+
+    if (this.state.fetchUserInfo) {
+      fetch(
+        "http://api.ipstack.com/217.14.85.222?access_key=83596c7572d496259fb7c41f56e08f7f"
+      )
+        .then(data => data.json())
+        .then(visitor => {
+          this.setState({ fetchUserInfo: false });
+          visitor.time = getDate();
+          apiService
+            .post("activeusers", visitor)
+            .then(res => {
+              this.setGlobal({ visitorId: res.data._id });
+              console.log("visit count", res.data);
+            })
+            .catch(error => {
+              console.log(error.message);
+            });
+
+          apiService
+            .post("visitors", visitor)
+            .then(res => {
+              console.log("visitors response", res);
+            })
+            .catch(err => {
+              console.log(err.message);
+            });
+        })
+        .catch(error => {
+          console.log("request error", error);
+        });
+    }
+
     const result = this.state.conversationTree.filter((node, index) => {
       if (info && index === 0) {
         node.prompt = `${info} ${node.prompt}`;

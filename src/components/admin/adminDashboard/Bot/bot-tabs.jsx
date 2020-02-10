@@ -13,7 +13,7 @@ import { APP_ENVIRONMENT } from "../../../../environments/environment";
 import EmbedCode from "./embed-code-dialog";
 import BotUITemplate from "./bot-UI-template-design";
 import Options from "./options";
-import Template from "./constants/bot-ui-template-state";
+import Template from "../../../../constants/bot-ui-template-state";
 const BASE_URL = APP_ENVIRONMENT.base_url_front;
 class BotTabs extends Component {
   constructor(props) {
@@ -32,7 +32,7 @@ class BotTabs extends Component {
     fallbackMessage: "",
     delayPrompt: "",
     botImage: " ",
-    tab: "template",
+    tab: "home",
     settingsSaved: false,
     fileUpload: null,
     delayTime: null,
@@ -83,15 +83,12 @@ class BotTabs extends Component {
     Do not create a new settings, rather patch*/
 
     if (this.state.settingsSaved) {
-      console.log("modified settings", this.state.settings._id);
       if (this.state.deployed) {
-        console.log("deployed settings");
         setting["_id"] = this.state.settings._id;
 
         apiService
           .put(`setting/${this.state.settings._id}`, setting)
           .then(res => {
-            console.log("it is settings", res);
             this.setState({
               tab: "template",
               showProgress: false,
@@ -477,10 +474,9 @@ class BotTabs extends Component {
     ) : null;
   }
   componentDidMount() {
+    console.log("component mounted!");
+    
     this.setGlobal({ getTab: this.getTab, setTab: this.setTab });
-    window.setInterval(() => {
-      console.log("internet", navigator.onLine);
-    }, 5000);
   }
 }
 export default BotTabs;

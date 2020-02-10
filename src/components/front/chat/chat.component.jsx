@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { Component } from "reactn";
 import Axios from "axios";
 import * as query_string from "query-string";
-
+import socket from "socket.io-client"
 // import "../conversation/convo.component.css";
 import "./chat.component.css";
 import "../../../utilities/slimscroll/slimscroll.css";
@@ -13,7 +13,7 @@ import botpic from "../../../bot1.jpg";
 import DecodeToken from "../../../utilities/decodeToken";
 import { APP_ENVIRONMENT } from "../../../environments/environment";
 import { defaultStyle } from "./defaultStyle";
-
+import * as apiService from "../../../services/apiservice";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
@@ -50,7 +50,6 @@ export default class Chat extends Component {
     DecodeToken.getUserPayload(token);
 
     return this.state.showChatArea ? (
-
       <div className="slideInUp">
         <div className="container clearfix">
           <div className="chat" style={this.state.templateStyle}>
@@ -131,7 +130,7 @@ export default class Chat extends Component {
                       }}
                     />
                     <i className="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
-                  <i className="fa fa-file-image-o"></i>
+                    <i className="fa fa-file-image-o"></i>
                   </div>
                   {/* <div className="col-md-1">
                                       <button id="play-btn" className="" type="submit">
@@ -148,19 +147,46 @@ export default class Chat extends Component {
         </div>
       </div>
     ) : (
-        <button
-          id="chat-opener"
-          data-toggle="tooltip"
-          title="Chat with us"
-          style={this.state.btnStyle}
-          onClick={this.toggleChatDisplay}
-        >
-          <i className="far fa-comment-alt fa-2x"></i>
-        </button>
-      );
+      <button
+        id="chat-opener"
+        data-toggle="tooltip"
+        title="Chat with us"
+        style={this.state.btnStyle}
+        onClick={this.toggleChatDisplay}
+      >
+        <i className="far fa-comment-alt fa-2x"></i>
+      </button>
+    );
   }
-
+  deleteVisit = () => {
+    apiService
+      .del(`activeusers/${this.global.visitorId}`)
+      .then(res => {
+        console.log("deleted", res);
+      })
+      .catch(error => console.log(error.message));
+  }
+  onChatClose = () => {
+    window.addEventListener("beforeunload", event => {
+      event.preventDefault();
+      this.deleteVisit();
+    });
+    window.addEventListener("onbeforeunload", ev => {
+      ev.preventDefault();
+      this.deleteVisit()
+      // return (ev.returnValue = "Are you sure you want to close?");
+    });
+  };
+componentWillUnmount() {
+  this.deleteVisit()
+}
   async componentDidMount() {
+    const io = socket()
+    io.emit("client message", "messageeee")
+    io.on("server message", (message) => {
+      console.log("hello", message)
+    })
+    this.onChatClose();
     const params = query_string.parse(this.props.location.search);
     try {
       const result = await Axios.get(
@@ -186,7 +212,7 @@ export default class Chat extends Component {
           defaultStyle: settings.templateSettings
         });
       }
-    } catch (e) { }
+    } catch (e) {}
 
     // Axios.get(`${BASE_URL}/setting`)
     //   .then(res => {
@@ -219,6 +245,7 @@ export default class Chat extends Component {
     this.setState({
       showChatArea: !this.state.showChatArea
     });
+    this.deleteVisit()
   };
 
   handleSubmit = event => {
@@ -239,5 +266,3 @@ export default class Chat extends Component {
     });
   };
 }
-
-
