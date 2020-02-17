@@ -217,7 +217,7 @@ export default function VerticalLinearStepper(props) {
             case 0:
                 return form;
             case 1:
-                return` An amount of NGN ${price*12} will be made upon successful transaction. Kindly proceed to make payment.`;
+                return <p style={{color: "green"}}>An amount of NGN {price*12} will be made upon successful transaction. Kindly proceed to make payment.</p>;
 
             default:
                 return 'Unknown step';
@@ -231,15 +231,17 @@ export default function VerticalLinearStepper(props) {
   
     const handleNext = (index) => {
         try{
-setLoading(true)
+            setLoading(true)
             if (index === 0) {
                 if(confirmPassword !== userDetails.password){
                     setIsChanged(true)
                     setMessage("Passwords do no match")
                     return setLoading(false)
                 }
+
                 register(userDetails, price===0?false:true).then(res => {
                     console.log("THIS IS RES:,", res)
+                   
                     if (res) {
                         if (!res.data.success) {
 
@@ -248,23 +250,29 @@ setLoading(true)
                             setLoading(false)
                         }
                     }
+                    try {
+                        if (res.status === 200) {
 
-                    if (res.status === 200) {
+                            // setSuccessMessage(res.data.message)
+                            if (price === 0) {
+                                setActiveStep(prevActiveStep => prevActiveStep + 2);
+                                setIsChange(true);
+                                setLoading(false)
+                                setSuccessMessage("Congratulations! An email has been sent to your email address, please check your email to complete registration")
 
-                        // setSuccessMessage(res.data.message)
-                        if(price === 0){
-                            setActiveStep(prevActiveStep => prevActiveStep + 2);
-                            setIsChange(true);
-                            setLoading(false)
-                            setSuccessMessage("Congratulations! An email has been sent to your email address, please check your email to complete registration")
+                            } else {
 
-                        }else{
-
-                            setActiveStep(prevActiveStep => prevActiveStep + 1);
-                            setLoading(false)
+                                setActiveStep(prevActiveStep => prevActiveStep + 1);
+                                setLoading(false)
+                            }
+                            // payWithPaystack()
                         }
-                        // payWithPaystack()
+                        
+                    } catch (error) {
+                        setMessage(error)
+                        
                     }
+                    
                 });
                 // setActiveStep(prevActiveStep => prevActiveStep + 1);
  
@@ -364,9 +372,17 @@ setLoading(true)
                                                             <Typography>{getStepContent(index)}</Typography>
                                                             <div className={classes.actionsContainer}>
                                                                 <div>
+                                                                    <Button
+                                                                        disabled={activeStep === 0}
+                                                                        onClick={handleBack}
+                                                                        className={classes.button}
+                                                                    >
+                                                                        Back
+                  </Button>
                                             
                                                                     <Button
-                                                                        variant="contained"
+                                                                        variant="outlined"
+                                                                        
                                                                         color="primary"
                                                                         onClick={()=> handleNext(index)}
                                                                         className={classes.button}
