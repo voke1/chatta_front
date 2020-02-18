@@ -60,10 +60,6 @@ export class UserList extends Component {
     // }
   };
 
-
-  
-  
-
   componentDidMount() {
     fetch(`${BASE_URL}/client`)
       .then(res => res.json())

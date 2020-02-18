@@ -7,16 +7,15 @@ import Stepper from '@material-ui/core/Stepper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { MDBIcon } from 'mdbreact';
-import { Card, Transaction } from 'paystack-js';
 import React, { useEffect, useState } from 'react';
 import PaystackButton from 'react-paystack';
+// import mastercardImage'./img/MasterCard_Logo.svg.png';
+import Loader from "../.././components/front/adminLogin/loader";
 import { register } from "../../components/admin/adminDashboard/Authentication/UserFunctions";
 import { APP_ENVIRONMENT } from "../../environments/environment";
 import { Validation } from "../../utilities/validations";
 import './css/main.min.css';
 import './dist/font-awesome/css/font-awesome.min.css';
-// import mastercardImage'./img/MasterCard_Logo.svg.png';
-import Loader from "../.././components/front/adminLogin/loader";
 
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
@@ -27,27 +26,21 @@ export default function VerticalLinearStepper(props) {
  
     const [price, setPrice] = useState(0);
     const [plan, setPlan] = useState("");
-    const [userDetails, setUserDetails] = useState({ fullName: '', email: "", password: "", phone: "", lastName: "" })
+    const [userDetails, setUserDetails] = useState({ fullName: '', email: "", password: "", phone: "" })
     const [isChanged, setIsChanged] = useState(false);
     const [isChange, setIsChange] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
-
-
-
-
-
-
-
     const [message, setMessage] = useState("");
-    const [key, setKey] = useState("pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975")
+    const [key, setKey] = useState("pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975");
+
+
     const callback = (response) => {
-        console.log("this is the response:,",response); // card charged successfully, get reference here
+        console.log("this is the response:,", response); // card charged successfully, get reference here
         if(response.status === "success"){
             register(userDetails).then(res => {
                 console.log("this is RES:", res)
                 if (res) {
-
                     if (!res.data.success) {
 
                         setIsChanged(true)
@@ -97,15 +90,6 @@ export default function VerticalLinearStepper(props) {
         
     }, [])
     
-    
-    const [cardDetails, setCardDetails] = useState({ number: '', cvc: "", expiry: "", name: ""})
-    const handleChange = (e) => {
-        const { name, value } = e.target
-        setCardDetails({ ...cardDetails, [name]: value })
-
-    }
-    
-
     const useStyles = makeStyles(theme => ({
         root: {
             width: '100%',
@@ -129,7 +113,6 @@ export default function VerticalLinearStepper(props) {
         setUserDetails({ ...userDetails, [name]: value })
 
         const result = await Validation.validateAll(e);
-        console.log("RESULTTT:", result)
         setIsChanged(true);
         setMessage(result.message)
      
@@ -146,17 +129,6 @@ export default function VerticalLinearStepper(props) {
 
         }
     }
-
-    const user = {
-        fullName: userDetails.fullName,
-        password: userDetails.password,
-        email: userDetails.email,
-        phone: userDetails.phone,
-        isVerified: true,
-        isCreated: true,
-        role: "admin"
-    };
-
     
     function getSteps() {
         return ['Account details', price===0?"":'Payment'];
@@ -167,9 +139,7 @@ export default function VerticalLinearStepper(props) {
                         <div className=" mb-3">
                             <label for="firstName">Full name</label>
                             <input type="text" className="form-control" id="fullName" placeholder="Voke Olomu" name="fullName"value={userDetails.fullName} required onChange={handleInputChange} />
-                            <div className="invalid-feedback">
-                                Valid first name is required.
-                                    </div>
+                            
                         </div>
                        
                     
@@ -178,25 +148,19 @@ export default function VerticalLinearStepper(props) {
     
                     </label>
             <input type="email" className="form-control" id="email" name="email" value={userDetails.email}placeholder="you@example.com" onChange={handleInputChange}/>
-                        <div className="invalid-feedback">
-                            Please enter a valid email phone for shipping updates.
-                                </div>
+                       
                     </div>
 
                     <div className="mb-3">
                         <label for="phone">Phone</label>
             <input type="text" className="form-control" id="phone" name="phone" value={userDetails.phone} placeholder="08033333333" required onChange={handleInputChange}/>
-                        <div className="invalid-feedback">
-                            Please enter your shipping phone.
-                                </div>
+                        
                     </div>
                     <div className="mb-3">
                         <label for="username">Password</label>
                         <div className="input-group">
-                <input type="password" className="form-control" id="username" value={userDetails.password} name="password" placeholder="Password" required onChange={handleInputChange} />
-                            <div className="invalid-feedback" style={{ width: "100%;" }}>
-                                Your username is required.
-                                    </div>
+                <input type="password" className="form-control" id="password" value={userDetails.password} name="password" placeholder="Password" required onChange={handleInputChange} />
+                           
                         </div>
           
                     </div>
@@ -204,9 +168,7 @@ export default function VerticalLinearStepper(props) {
             <label for="username">Confirm password</label>
             <div className="input-group">
                 <input type="password" className="form-control" value={confirmPassword} name="confirmPassword" placeholder="Password" required onChange={handleConfirmPasswordChange} />
-                <div className="invalid-feedback" style={{ width: "100%;" }}>
-                    Your username is required.
-                                    </div>
+                
             </div>
 
         </div>
@@ -235,7 +197,7 @@ export default function VerticalLinearStepper(props) {
             if (index === 0) {
                 if(confirmPassword !== userDetails.password){
                     setIsChanged(true)
-                    setMessage("Passwords do no match")
+                    setMessage("Passwords do not match")
                     return setLoading(false)
                 }
 
