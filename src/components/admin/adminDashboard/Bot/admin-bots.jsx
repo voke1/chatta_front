@@ -15,6 +15,7 @@ import Header from "../../layouts/layouts.header";
 import Footer from "../../layouts/layouts.footer";
 import { APP_ENVIRONMENT } from "../../../../environments/environment";
 import Notification from "../../../../utilities/notification/app-notification";
+import {MDBIcon} from "mdbreact";
 import ExportOverlay from '../Bot/export-overlay'
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
@@ -151,7 +152,6 @@ export class Bot extends Component {
                             ? this.state.settings.map(setting => (
                                 <tr>
                                   <td>
-                                    {console.log(setting)}
                                     <img
                                       src={setting.botImage}
                                       alt="bot-image"
@@ -176,25 +176,26 @@ export class Bot extends Component {
                                     </p>
                                   </td>
                                   <td>
-                                    {console.log("settings ID:", setting._id)}
 
-                                    <ButtonToolbar>
+                                    
                                       <Link
                                         to={`/dashboard/admin/bot/${setting._id}`}
                                       >
-                                        <button className="btn btn-secondary btn-sm waves-effect">
-                                          Manage
+                                      <button className="btn btn-secondary btn-sm waves-effect" 
+>
+                                        <MDBIcon icon="cog" />
                                         </button>
                                       </Link>
                                       <button
-                                        className="btn btn-secondary btn-sm waves-effect"
+                                        className="btn btn-red btn-sm waves-effect"
                                         onClick={() => {
                                           this.confirmDelete(setting._id);
                                         }}
+                                        
                                       >
-                                        Delete
+                                      <MDBIcon  icon="trash-alt" />
                                       </button>
-                                    </ButtonToolbar>
+                                    
                                   </td>
                                 </tr>
                               ))
