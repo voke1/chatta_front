@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Redirect } from 'react-router-dom';
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 // import "../components/admin/css/style.css";
 // import "../components/admin/css/icons.css";
@@ -18,8 +17,6 @@ import Header from '../components/admin/layouts/layouts.header';
 import "../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
 import "../components/admin/plugins/datatables/responsive.bootstrap4.min.css";
 import "../components/admin/plugins/morris/morris.css";
-import CompanyModal from "../components/admin/adminDashboard/Bot/createCompany";
-import CompanyModalForm from "../components/admin/adminDashboard/Bot/createCompanyForm"
 
 
 export class Dashboard extends Component {

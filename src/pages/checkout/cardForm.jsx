@@ -9,14 +9,13 @@ import Typography from '@material-ui/core/Typography';
 import { MDBIcon } from 'mdbreact';
 import React, { useEffect, useState } from 'react';
 import PaystackButton from 'react-paystack';
-// import mastercardImage'./img/MasterCard_Logo.svg.png';
 import Loader from "../.././components/front/adminLogin/loader";
 import { register } from "../../components/admin/adminDashboard/Authentication/UserFunctions";
 import { APP_ENVIRONMENT } from "../../environments/environment";
 import { Validation } from "../../utilities/validations";
 import './css/main.min.css';
 import './dist/font-awesome/css/font-awesome.min.css';
-
+import {Redirect} from 'react-router-dom'
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
@@ -33,10 +32,15 @@ export default function VerticalLinearStepper(props) {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
     const [key, setKey] = useState("pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975");
+    const [newPrice, setNewPrice] = useState("")
 
+
+    // const updatedPrice = price * 12;
+    // console.log("THIS IS NEWPRICE", price)
+    const updatedPrice = ((price*12).toString().slice(0, 3) + "," + (price*12).toString().slice(3, 6) + ".00")
+  
 
     const callback = (response) => {
-        console.log("this is the response:,", response); // card charged successfully, get reference here
         if(response.status === "success"){
             register(userDetails).then(res => {
                 console.log("this is RES:", res)
@@ -61,14 +65,13 @@ export default function VerticalLinearStepper(props) {
         else{
             setIsChange(true);
             setSuccessMessage("Sorry, there was an error processing payment, please try again!")
-
         }
        
     }
 
     const close = () => {
         setIsChange(true);
-        setSuccessMessage("Sorry, there was an error processing payment, please try again!")
+        setSuccessMessage("Sorry, there was an error processing payment, please try again!");
     }
 
     const getReference = () => {
@@ -82,14 +85,18 @@ export default function VerticalLinearStepper(props) {
         return text;
     }
 
-    
     useEffect(() => {
         // code to run on component mount
+        if(!props.location.state){
+            return <Redirect to="/"/>
+        }
         setPrice(props.location.state.price);
-        setPlan(props.location.state.plan)
-        
+        setPlan(props.location.state.plan);
+
+       
     }, [])
     
+    console.log("another price,", price)
     const useStyles = makeStyles(theme => ({
         root: {
             width: '100%',
@@ -106,8 +113,6 @@ export default function VerticalLinearStepper(props) {
         },
     }));
    
-
-
     const handleInputChange = async e => {
         const { name, value } = e.target
         setUserDetails({ ...userDetails, [name]: value })
@@ -201,9 +206,7 @@ export default function VerticalLinearStepper(props) {
                     return setLoading(false)
                 }
 
-                register(userDetails, price===0?false:true).then(res => {
-                    console.log("THIS IS RES:,", res)
-                   
+                register(userDetails, price===0?false:true).then(res => {                   
                     if (res) {
                         if (!res.data.success) {
 
@@ -233,12 +236,9 @@ export default function VerticalLinearStepper(props) {
                     } catch (error) {
                         setMessage(error)
                         
-                    }
-                    
+                    }   
                 });
-                // setActiveStep(prevActiveStep => prevActiveStep + 1);
- 
-               
+                // setActiveStep(prevActiveStep => prevActiveStep + 1);   
             }
             if(index === 1){
                 // submitFunction()
@@ -254,8 +254,9 @@ export default function VerticalLinearStepper(props) {
     };
     
     const { email, password, fullName, phone } = userDetails
-
+    
     return (
+      
         <div style={{ height: "50rem"}}>
             <body>
                 {/* <div className="loader"></div> */}
@@ -297,7 +298,9 @@ export default function VerticalLinearStepper(props) {
 
                                         <li className="list-group-item d-flex justify-content-between">
                                             <span>Total (₦)</span>
-                                            <strong>{ (price === 0 ? "Free" : `₦`+ price*12)}</strong>
+                                            
+    
+                                            <strong>{ (price === 0 ? "Free" : `₦`+ " "+ updatedPrice)}</strong>
                                         </li>
                                     </ul>
 
@@ -383,8 +386,6 @@ export default function VerticalLinearStepper(props) {
                             </div>
                         </div>
                     </section>
-
-
                 </main>
                 {/* <!-- Footer --> */}
                 <footer id="footerpayment">
