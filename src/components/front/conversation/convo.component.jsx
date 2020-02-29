@@ -220,6 +220,7 @@ export default class Convo extends Component {
       1}/${time.getDate()}/${time.getFullYear()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
   };
   searchTree = (key, info = null) => {
+    if(key ==="empty") this.error += 1;
     if (this.state.fetchUserInfo) {
       fetch(
         "http://api.ipstack.com/197.210.47.58?access_key=8b9d64d8dc53ce80c405b22daf7fe5a5&format=1"
@@ -276,8 +277,9 @@ export default class Convo extends Component {
     });
   };
   conversations = [];
+  error = 0;
   saveConversation = content => {
-      
+    content.error = this.error;
     this.conversations.push(content);
     this.props.socketIo.emit("updateConversation", this.conversations);
   };
@@ -295,7 +297,7 @@ export default class Convo extends Component {
         time: this.setTimeOfChat()
       };
       choices.push(userChoice);
-      
+
       this.saveConversation({
         from: "user",
         timeStamp: this.setTimeOfChat(),

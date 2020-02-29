@@ -24,13 +24,17 @@ const BusyOverlay = props => {
   const [scrolled, setScrolled] = useState(false);
   const [message, setMessage] = useState("");
   const [ago, setDaysAgo] = useState(0);
-  const [averageSession, setAverageSession] = useState(0)
+  const [averageSession, setAverageSession] = useState(0);
+  const [averageAccuracy, setAverageAccuracy] = useState(0);
+  const [averageErrors, setAverageError] = useState(0);
+  const [averageBounceRate, setBounceRate] = useState(0);
   const fetchMoreData = async visits => {
-
     // a fake async api call like which sends
     // 10 more records in 1.5 secs
     setTimeout(() => {
       const moreVisits = visits.slice(0, end);
+      console.log("conversation", moreVisits);
+
       setVisitsForTable(moreVisits);
       setEnd(end + pageOffset);
     }, 1500);
@@ -41,7 +45,14 @@ const BusyOverlay = props => {
       setAverageMessage(
         Math.round(allVisits.messages / allVisits.visits.length)
       );
+      setAverageError(Math.round(allVisits.errors / allVisits.visits.length));
+      const accuracy = Math.round(
+        100 - (allVisits.errors / allVisits.messages) * 100
+      );
+      setAverageAccuracy(accuracy);
+      console.log("accuracy", accuracy);
       setVisits(allVisits.visits);
+
       await fetchMoreData(allVisits.visits);
       setConversations(allVisits.visits[0].conversations);
       setBackground(0);
@@ -69,6 +80,10 @@ const BusyOverlay = props => {
         const conversationVisits = await props.analyticsHelper.extractConversations(
           data
         );
+        const bounceRate =
+          100 -
+          Math.round((conversationVisits.visits.length / data.length) * 100);
+        setBounceRate(bounceRate);
         const sessionArray = await props.analyticsHelper.extractAndFormatData(
           data,
           "ipv4"
@@ -97,7 +112,6 @@ const BusyOverlay = props => {
       setConversations(visits[conversationId].conversations);
       setProgress(false);
     }, 2000);
-
   };
   const handleSelect = async event => {
     const day = parseInt(event.target.value, 10);
@@ -188,6 +202,7 @@ const BusyOverlay = props => {
                           <th scope="col">Continent</th>
                           <th scope="col">Country</th>
                           <th scope="col">Messages</th>
+                          <th scope="col">Errors</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -214,6 +229,12 @@ const BusyOverlay = props => {
                                   <td>{visitsForTable[index].country_name}</td>
                                   <td>
                                     {visitsForTable[index].conversations.length}
+                                  </td>
+                                  <td>
+                                    {visitsForTable[index].conversations[
+                                      visitsForTable[index].conversations
+                                        .length - 1
+                                    ].error - 1 || 0}
                                   </td>
                                 </tr>
                               </React.Fragment>
@@ -372,6 +393,54 @@ const BusyOverlay = props => {
                       </div>
                       <div style={{ marginLeft: "5px" }}>
                         <span>Duration (Avg)</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="row-small-data">
+                    <div className="analysis">
+                      <div
+                        style={{
+                          fontSize: "20px",
+                          color: "grey",
+                          fontWeight: 500,
+                          marginLeft: "5px"
+                        }}
+                      >
+                        <span>{`${averageAccuracy}%`}</span>
+                      </div>
+                      <div style={{ marginLeft: "5px" }}>
+                        <span>Accuracy (Avg)</span>
+                      </div>
+                    </div>
+                    <div className="analysis">
+                      <div
+                        style={{
+                          fontSize: "20px",
+                          color: "grey",
+                          fontWeight: 500,
+                          marginLeft: "5px"
+                        }}
+                      >
+                        <span>{averageErrors}</span>
+                      </div>
+                      <div style={{ marginLeft: "5px" }}>
+                        <span>Errors (Avg)</span>
+                      </div>
+                    </div>
+                    <div className="analysis">
+                      <div
+                        style={{
+                          fontSize: "20px",
+                          color: "grey",
+                          fontWeight: 500,
+                          marginLeft: "5px"
+                        }}
+                      >
+                        <span>{`${averageBounceRate}%`}</span>
+                      </div>
+                      <div style={{ marginLeft: "5px" }}>
+                        <span>Bounce rate (Avg)</span>
                       </div>
                     </div>
                   </div>

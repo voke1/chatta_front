@@ -108,7 +108,7 @@ export class Bot extends Component {
           msg={this.state.message}
           timeOut={4000}
           event="saveTemplate"
-          resetNotification={() => { }}
+          resetNotification={() => {}}
         />
 
         <div className="header-bg">
@@ -138,7 +138,6 @@ export class Bot extends Component {
                     <h4 className="mt-0 m-b-30 header-title">CHAT BOTS</h4>
 
                     <div className="table-responsive">
-
                       <table className="table m-t-20 mb-0 table-vertical">
                         {this.state.botDelete ? (
                           <BotDeleteDialog
@@ -163,16 +162,33 @@ export class Bot extends Component {
                                   {setting.welcomeMessage}
                                 </td>
                                 <td>
-                                  {setting.fallbackMessage}
-                                  <p className="m-0 text-muted font-14">
+                                  <span className="m-0 text-muted font-14">
                                     Fallback Message
-                                  </p>
+                                  </span>
+
+                                  <span
+                                    style={{
+                                      marginTop: "12px",
+                                      display: "block",
+                                      lineHeight: "20px"
+                                    }}
+                                  >
+                                    {setting.fallbackMessage}
+                                  </span>
                                 </td>
                                 <td>
-                                  {setting.delayPrompt}
                                   <p className="m-0 text-muted font-14">
                                     Delay Prompt
                                   </p>
+                                  <span
+                                    style={{
+                                      marginTop: "12px",
+                                      display: "block",
+                                      lineHeight: "20px"
+                                    }}
+                                  >
+                                    {setting.delayPrompt}
+                                  </span>
                                 </td>
                                 <td>
                                   {console.log("settings ID:", setting._id)}
@@ -198,19 +214,26 @@ export class Bot extends Component {
                               </tr>
                             ))
                           ) : this.state.error ? (
-                            <div>{this.state.error}{this.state.loading ? (
-                              <div className="preloader" style={{ marginTop: 100 }}>
-                                <div id="status">
-                                  <div className="spinner"></div>
+                            <div>
+                              {this.state.error}
+                              {this.state.loading ? (
+                                <div
+                                  className="preloader"
+                                  style={{ marginTop: 100 }}
+                                >
+                                  <div id="status">
+                                    <div className="spinner"></div>
+                                  </div>
                                 </div>
-                              </div>
-                            ) : null}</div>
-                          ) : !this.state.settings.length && !this.state.loading ? <div>No records found</div> : null}
+                              ) : null}
+                            </div>
+                          ) : !this.state.settings.length &&
+                            !this.state.loading ? (
+                            <div>No records found</div>
+                          ) : null}
                         </tbody>
                       </table>
-
                     </div>
-
                   </div>
                 </div>
               </div>

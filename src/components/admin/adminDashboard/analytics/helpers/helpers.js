@@ -375,13 +375,20 @@ export default class AnalyticsHelper {
 
   extractConversations = async allVisits => {
     let messages = 0;
+    let errors = 0;
     const visits = allVisits.filter(visit => visit.conversations);
     visits.forEach(visit => {
       messages += visit.conversations.length;
+      const convoIndex = visit.conversations.length - 1;
+      const error = visit.conversations[convoIndex].error;
+      
+      if (error) errors += parseInt(error, 10);
     });
+    console.log("total errors", errors);
     return {
       visits,
-      messages
+      messages,
+      errors
     };
   };
   /**

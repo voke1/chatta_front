@@ -281,8 +281,8 @@ import { MDBNavbar} from 'mdbreact';
                                     <i className="ti-home"></i>
                                 </div>
                                 <div className="single-pricing-content">
-                                    <h5>Standard</h5>
-                                    <h4>$25<span className="currency_line">/</span><span>month</span></h4>
+                                    <h5>Free Trial</h5>
+                                    <h4>₦ 0.00</h4>
                                     <ul className="ul">
                                         <li>2GB Bandwidth</li>
                                         <li>Two Account</li>
@@ -291,7 +291,7 @@ import { MDBNavbar} from 'mdbreact';
                                         <li>3 Host Domain</li>
                                         <li>24/7 Support</li>
                                     </ul>
-                                    <a href="#">Purchase Now</a>
+                                    <Link to={{pathname: "/payment", state: {price: 0, plan: "Free Trial"}}}><a>Purchase Now</a></Link>
                                 </div>
                             </div>
                         </div>
@@ -302,8 +302,8 @@ import { MDBNavbar} from 'mdbreact';
                                     <i className="ti-bag"></i>
                                 </div>
                                 <div className="single-pricing-content">
-                                    <h5>Business</h5>
-                                    <h4>$35<span className="currency_line">/</span><span>month</span></h4>
+                                    <h5>Standard</h5>
+                                    <h4>₦ 35,000.00<span className="currency_line">/</span><span>month</span></h4>
                                     <ul className="ul">
                                         <li>2GB Bandwidth</li>
                                         <li>Two Account</li>
@@ -312,8 +312,7 @@ import { MDBNavbar} from 'mdbreact';
                                         <li>3 Host Domain</li>
                                         <li>24/7 Support</li>
                                     </ul>
-                                    <a href="#">Purchase Now</a>
-                                </div>
+                                    <Link to={{ pathname: "/payment", state: { price: "35000", plan: "Standard" } }}><a>Purchase Now</a></Link>                                </div>
                             </div>
                         </div>
 
@@ -323,8 +322,8 @@ import { MDBNavbar} from 'mdbreact';
                                     <i className="ti-car"></i>
                                 </div>
                                 <div className="single-pricing-content">
-                                    <h5>Premium</h5>
-                                    <h4>$45<span className="currency_line">/</span><span>month</span></h4>
+                                    <h5>Business</h5>
+                                    <h4>₦ 25,000.00<span className="currency_line">/</span><span>month</span></h4>
                                     <ul className="ul">
                                         <li>2GB Bandwidth</li>
                                         <li>Two Account</li>
@@ -333,8 +332,7 @@ import { MDBNavbar} from 'mdbreact';
                                         <li>3 Host Domain</li>
                                         <li>24/7 Support</li>
                                     </ul>
-                                    <a href="#">Purchase Now</a>
-                                </div>
+                                    <Link to={{ pathname: "/payment", state: { price: "25000", plan: "Business" } }}><a>Purchase Now</a></Link>                                </div>
                             </div>
                         </div>
 
@@ -344,8 +342,8 @@ import { MDBNavbar} from 'mdbreact';
                                     <i className="ti-gift"></i>
                                 </div>
                                 <div className="single-pricing-content">
-                                    <h5>Ultimate</h5>
-                                    <h4>$55<span className="currency_line">/</span><span>month</span></h4>
+                                    <h5>Premium</h5>
+                                    <h4>₦ 20,000.00<span className="currency_line">/</span><span>month</span></h4>
                                     <ul className="ul">
                                         <li>2GB Bandwidth</li>
                                         <li>Two Account</li>
@@ -354,8 +352,7 @@ import { MDBNavbar} from 'mdbreact';
                                         <li>3 Host Domain</li>
                                         <li>24/7 Support</li>
                                     </ul>
-                                    <a href="#">Purchase Now</a>
-                                </div>
+                                    <Link to={{ pathname: "/payment", state: { price: "20000", plan: "Premium" } }}><a>Purchase Now</a></Link>                                </div>
                             </div>
                         </div>
                     </div>

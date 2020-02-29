@@ -24,6 +24,8 @@ import Charts from './components/admin/adminDashboard/analytics/chart';
 import Visits from './components/admin/adminDashboard/analytics/visits'
 import COnversationOverlay from './components/admin/adminDashboard/analytics/visit-conversation-leads-overlay'
 
+import BotBody from './components/admin/adminDashboard/Bot/bot-body';
+import PaymentPage from './pages/checkout/cardForm';
 
 
 function App() {
@@ -32,6 +34,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={FrontPage}></Route>
         <Route exact path="/chatbot" component={Chat}></Route>
+        <Route exact path="/payment" component={PaymentPage}></Route>
         <Route exact path="/ithadmin" component={IthAdmin}></Route>
         <ProtectedRoute
           exact
@@ -41,7 +44,7 @@ function App() {
         <ProtectedRoute
           exact
           path="/dashboard/admin"
-          component={Dashboard}
+          component={Visits}
         ></ProtectedRoute>
         <ProtectedRoute
           exact

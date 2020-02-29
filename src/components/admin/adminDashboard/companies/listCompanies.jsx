@@ -1,3 +1,4 @@
+
 import React, { Component, useState } from "react";
 import { Link } from "react-router-dom";
 import Switch from "react-toggle-switch";
@@ -91,7 +92,7 @@ export default class CompaniesComponent extends Component {
   };
 
   deletecompany = companyId => {
-      fetch(`${BASE_URL}/company/` + companyId, {
+      fetch(`${BASE_URL}/companies/` + companyId, {
         method: "DELETE",
         header: {
           Accept: "application/json",
@@ -107,7 +108,7 @@ export default class CompaniesComponent extends Component {
               )
             ]
           });
-        });
+        }).catch(console.error());
     
   };
 
