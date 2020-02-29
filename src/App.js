@@ -23,7 +23,9 @@ import FrontPage from './components/front/landing-page/frontPage';
 import Charts from './components/admin/adminDashboard/analytics/chart';
 import Visits from './components/admin/adminDashboard/analytics/visits'
 import COnversationOverlay from './components/admin/adminDashboard/analytics/visit-conversation-leads-overlay'
-
+import DatePicker from '../src/components/admin/adminDashboard/analytics/dates'
+import BotBody from './components/admin/adminDashboard/Bot/bot-body';
+import PaymentPage from './pages/checkout/cardForm';
 
 
 function App() {
@@ -32,6 +34,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={FrontPage}></Route>
         <Route exact path="/chatbot" component={Chat}></Route>
+        <Route exact path="/payment" component={PaymentPage}></Route>
         <Route exact path="/ithadmin" component={IthAdmin}></Route>
         <ProtectedRoute
           exact
@@ -41,7 +44,7 @@ function App() {
         <ProtectedRoute
           exact
           path="/dashboard/admin"
-          component={Dashboard}
+          component={Visits}
         ></ProtectedRoute>
         <ProtectedRoute
           exact
@@ -93,7 +96,7 @@ function App() {
         <Route exact path="/auth/login" component={Login}></Route>
         <Route exact path="/auth/verify_email" component={VerifyEmail}></Route>
         <Route exact path="/preview" component={BotUITemplate}></Route>
-        <Route exact path="/chart" component={Charts}></Route>
+        <Route exact path="/date" component={DatePicker}></Route>
         <Route exact path="/visits" component={Visits}></Route>
         <Route exact path="/conversation" component={COnversationOverlay}></Route>
 

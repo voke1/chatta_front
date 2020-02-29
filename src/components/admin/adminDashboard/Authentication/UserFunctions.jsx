@@ -3,12 +3,14 @@ import { APP_ENVIRONMENT } from "../../../../environments/environment";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
-export const register = newUser => {
+export const register = (newUser, isChecked) => {
   return axios
     .post(`${BASE_URL}/client`, {
       fullName: newUser.fullName,
       email: newUser.email,
-      password: newUser.password
+      password: newUser.password,
+      isRegistered: true,
+      isChecked: isChecked
     })
     .then(res => {
       console.log(res);

@@ -60,10 +60,6 @@ export class UserList extends Component {
     // }
   };
 
-
-  
-  
-
   componentDidMount() {
     const clientId = JSON.parse(localStorage.getItem("userdetails")).id;
 

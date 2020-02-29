@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Redirect } from 'react-router-dom';
 import "../../node_modules/react-toggle-switch/dist/css/switch.min.css";
 // import "../components/admin/css/style.css";
 // import "../components/admin/css/icons.css";
@@ -20,19 +19,19 @@ import "../components/admin/plugins/datatables/responsive.bootstrap4.min.css";
 import "../components/admin/plugins/morris/morris.css";
 
 
-
-// assets/images/users/avatar-1.jpg
-// "assets/images/users/avatar-2.jpg"
-
 export class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
       clients: [],
+      // isRegistered: true,
     };
   }
 
   App = () => {
+
+    const userDetails = JSON.parse(localStorage.getItem('userdetails'))
+
     return (<div>
       <body>
 
@@ -74,6 +73,8 @@ export class Dashboard extends Component {
 
         <div className="wrapper">
           <div className="container-fluid">
+            {/* {userDetails.isRegistered ? <CompanyModal isRegistered={userDetails.isRegistered} /> : ""} */}
+
 
             <div className="row">
               <div className="col-md-6 col-xl-3">

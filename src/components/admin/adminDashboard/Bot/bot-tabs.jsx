@@ -389,7 +389,10 @@ class BotTabs extends Component {
             disabled={this.state.tab !== "intent"}
           >
             .
-            <div className="card w-100">
+            <div
+              className="card w-100"
+              style={{ height: "450px", overflowY: "scroll" }}
+            >
               <div className="card-body">
                 <CreateIntent
                   stateChanged={this.state.stateChanged}

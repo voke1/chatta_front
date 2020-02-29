@@ -48,8 +48,6 @@ export default class Chat extends Component {
   render() {
     let { token } = localStorage;
 
-    DecodeToken.getUserPayload(token);
-
     return this.state.showChatArea ? (
       <div className="slideInUp">
         <div className="container clearfix">

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 // import { logout } from '../adminDashboard/Authentication/UserFunctions';
 import avatar from "../images/users/avatar-1.jpg";
+import CompanyModal from "../adminDashboard/Bot/createCompany"
 import "./layouts.style.css";
 import { MDBIcon } from "mdbreact";
 import { Redirect } from "react-router-dom";
