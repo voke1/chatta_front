@@ -11,6 +11,53 @@ class Accordion extends Component {
     newHeight: "0px",
     pay: false,
   };
+
+
+  paymentForm = <div className="option-box">
+    <div
+      style={{
+        marginLeft: "40px",
+        marginRight: "100px",
+        marginTop: "15px"
+      }}
+      className="form-group"
+    >
+      <input
+        className="form-control border-top-0 border-right-0 border-left-0"
+        placeholder="Paystack key"
+        name="prompt"
+        value={this.state.prompt}
+        onChange={this.onChange}
+        style={{ width: "300px" }}
+      ></input>
+      
+      <div className="form-inline">
+        <input
+          className="form-control border-top-0 border-right-0 border-left-0"
+          placeholder="Price"
+          name="response"
+          value={this.state.response}
+          onChange={this.onChange}
+          style={{ width: "300px" }}
+          disabled={this.state.noOption}
+        ></input>
+        <div style={{ width: "10%" }}>
+          <button
+            type="button"
+            className="btn btn-sm"
+            onClick={() =>
+              this.onClick({ response: this.state.response })
+            }
+            style={{ backgroundColor: "#ededed", color: "#5b616b" }}
+            disabled={!this.state.validated}
+          >
+            Add
+                </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   syncHeight = height => {
     const number = parseInt(this.state.height.match(/(\d+)/)[0], 10);
     console.log(this.state.init);
@@ -71,7 +118,7 @@ class Accordion extends Component {
           style={{ maxHeight: `${this.state.height}` }}
           className="accordion_content"
         >
-          {this.state.pay ? <p style={{color: "black"}}><OptionBox/></p>:<OptionBox
+          {this.state.pay ? this.paymentForm:<OptionBox
             res={this.props.res}
             key={this.props.botKey}
             botKey={this.props.botKey}

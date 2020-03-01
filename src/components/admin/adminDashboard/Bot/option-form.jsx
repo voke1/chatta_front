@@ -23,12 +23,15 @@ const OptionBox = props => {
   const [buttonText, setButtonText] = useGlobal("setButtonText");
   const [rendered, setRendered] = useState(false);
   const [settings, setSettings] = useState(props.settings);
+  // const [payKey, setPayKey] = useState("")
 
   // runs when components mounts
   useEffect(() => {
     if (props.chatTree) {
       identities = props.chatTree.slice(1, props.chatTree.length - 2);
+      console.log("identitiesss", props.chatTree.slice(1, props.chatTree.length - 2))
       initialTree = props.chatTree[0];
+      console.log("initialTreees", props.chatTree[0])
       fallbackTree = props.chatTree[props.chatTree.length - 2];
       DelayPromptTree = props.chatTree[props.chatTree.length - 1];
 
@@ -39,6 +42,7 @@ const OptionBox = props => {
           val: button.val,
           identity: props.chatTree[0].identity
         };
+        console.log("initialResponsesss", initialResponses)
         if (!initialResponses.indexOf(body) > -1) {
           initialResponses.push(body);
         }
@@ -225,6 +229,7 @@ const OptionBox = props => {
         const index = identities.indexOf(isFound[0]);
         if (option) {
           identities[index].response.buttons = tree.response.buttons;
+          console.log("lookingbuttons",tree.response.buttons )
           if (option.action === "delete") {
             findAndDelete(option.botId);
           }
@@ -235,19 +240,27 @@ const OptionBox = props => {
           identities[index].response.buttons.push(
             tree.response.buttons[tree.response.buttons.length - 1]
           );
+          console.log("what is this",tree.response.buttons[tree.response.buttons.length - 1])
+          // if(payment){
+          //   identities[index].response.buttons.push(
+          //     tree.response.buttons[tree.response.buttons.length - 1]
+          //   );
+
+          // }
         }
       } else {
         identities.push(tree);
+        console.log("treesearch", tree)
       }
     }
     newTreeArray = [initialTree, ...identities, fallbackTree, DelayPromptTree,];
+    console.log("newTreeArray", newTreeArray);
+    console.log("InitalTree", initialTree)
     if(payment) {
       newTreeArray =  newTreeArray.push({
         buttonKey: "fkdhuhkjdf",
         cost: 500,
         service: "Airtime",
-        form: `<div><Form></Form></div>`
-
       })
     }
     props.tree([newTreeArray]);
@@ -360,12 +373,12 @@ const OptionBox = props => {
       identity,
       prompt: props.prompt,
       response: {
-        buttons: [{ key, val: response }],
+        buttons: [{ key, val: response, payment: { "paystack:": "paystackey" }}],
         text: ""
       }
     };
     if (initialTree) {
-      initialTree.response.buttons.push({ key, val: response });
+      initialTree.response.buttons.push({ key, val: response, payment: {"paystack:": "paystackey"} });
     } else {
       initialTree = botTree;
     }
@@ -401,7 +414,6 @@ const OptionBox = props => {
           value={inputVal}
           style={{ width: "40%" }}
         ></input>
-
         <div style={{ marginLeft: "3px" }}>
           <button
             className="btn btn-sm"

@@ -1,4 +1,5 @@
 import React, { Component } from "reactn";
+
 import "../../css/intent.css";
 import Response from "./response";
 import OptionForm from "./option-form";
@@ -218,6 +219,7 @@ class CreateIntent extends Component {
           </div>
 
           <hr className="mt-3"></hr>
+          {/* {console.log("chattreeee",)} */}
           <OptionForm
             tree={this.getTree}
             prompt={this.state.prompt}

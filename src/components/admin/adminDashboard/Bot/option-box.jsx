@@ -47,7 +47,8 @@ class OptionBox extends Component {
         console.log("pushing")
         this.initialResponses.push({
           key: uuid(),
-          val: this.state.response
+          val: this.state.response,
+          payment: {paystack: "paystackkey"}
         });
       }
     }

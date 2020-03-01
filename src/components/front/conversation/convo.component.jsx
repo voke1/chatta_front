@@ -20,6 +20,10 @@ import {
   isIE,
   isSafari
 } from "react-device-detect";
+import PaystackButton from 'react-paystack';
+
+
+const BASE_URL = APP_ENVIRONMENT.base_url;
 export default class Convo extends Component {
   appService;
   static userName;
@@ -43,6 +47,7 @@ export default class Convo extends Component {
       userIsKnown: false,
       anything: "xx",
       username: "",
+      pay: false,
       email: "",
       fetchUserInfo: true,
       defaultStyle: defaultStyle,
@@ -273,6 +278,7 @@ export default class Convo extends Component {
    */
   renderChatButtons = buttons => {
     return buttons.map(button => {
+      {console.log("searchbutton:", button)}
       return (
         <button
           style={{
@@ -306,14 +312,16 @@ export default class Convo extends Component {
    * This method updates the UI converstion
    */
 
-  updateConverstion = (key, val = null) => {
+  updateConverstion = (key, val = null, payment) => {
     const choices = this.deepCopy(this.state.responses);
+    console.log("time of cht", this.setTimeOfChat());
+    console.log("choices", choices);
 
-    console.log("rez", choices, "find key", key);
     if (val) {
       const userChoice = {
         selection: val,
-        time: this.setTimeOfChat()
+        time: this.setTimeOfChat(),
+        
       };
       choices.push(userChoice);
 
@@ -323,6 +331,11 @@ export default class Convo extends Component {
         name: "You",
         message: val
       });
+      if(payment){
+        this.setState({pay: true})
+      }else if(!payment){
+        this.setState({pay: false})
+      }
     }
 
     this.setState({
@@ -347,6 +360,7 @@ export default class Convo extends Component {
       info = `Thanks ${this.state.username}`;
     }
     const searchResult = this.searchTree(key, info);
+    console.log("searchResult", searchResult);
     responses.push(searchResult);
     console.log("refreshing result", searchResult);
     this.saveConversation({
@@ -358,6 +372,7 @@ export default class Convo extends Component {
     });
     this.restartTimer();
     const timeOutTime = this.delayChat(searchResult.prompt);
+    console.log("Responses", responses)
     setTimeout(() => {
       this.setState({
         responses: responses,
@@ -444,6 +459,7 @@ export default class Convo extends Component {
     let time = now.getTime();
 
     return this.state.responses.map((convo, index) => {
+      // {console.log("CONVOSEARCH", convo.response.buttons[index].payment)}
       return (
         <li key={this.setUniqueKey(convo.id)}>
           {!convo.selection ? (
@@ -495,7 +511,18 @@ export default class Convo extends Component {
                           color: this.state.defaultStyle.botMessageTextTextColor
                         }}
                       >
-                        {convo.prompt}
+                        {console.log("convo buttons", convo.response.buttons)}
+                        {this.state.pay? <PaystackButton
+                          text="make payment"
+                          class="payButton"
+                          // callback={callback}
+                          // close={close}
+                          email="vokeolomu01@gmail.com"
+                          amount="500"
+                          paystackkey="pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975"
+                          tag="button"
+                        // embed={true}
+                        /> :convo.prompt}
                       </span>
                     </div>
                   </div>

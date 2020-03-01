@@ -191,7 +191,7 @@ export default class Chat extends Component {
       const result = await Axios.get(
         `${BASE_URL}/setting/${params.setting_id}`
       );
-      console.log("result", result);
+      console.log("unique result", result);
       if (result.data) {
         // const settings = result.data[result.data.length - 1];
         const settings = result.data.findTree.setting_id;
