@@ -8,7 +8,8 @@ class Accordion extends Component {
     height: "0px",
     active: "",
     init: "0px",
-    newHeight: "0px"
+    newHeight: "0px",
+    pay: false,
   };
   syncHeight = height => {
     const number = parseInt(this.state.height.match(/(\d+)/)[0], 10);
@@ -20,14 +21,24 @@ class Accordion extends Component {
     });
   };
 
-  toggleAccordion = () => {
+  toggleAccordion = (payment) => {
     this.setState({
       active: this.state.active === "" ? "active" : "",
       height:
         this.state.active === "active"
           ? "0px"
-          : this.state.init + this.divElement.clientHeight + "px"
+          : this.state.init + this.divElement.clientHeight + "px",
+
     });
+    if(payment){
+      this.setState({pay: true})
+      console.log("payment is true")
+      if(this.state.active === 'active'){
+        this.setState({pay: false})
+      }
+    }
+    console.log("checking active and init", this.state.active, "and", this.state.init)
+    
   };
   setActive = () => (this.state.active === "" ? "active" : "");
   render() {
@@ -60,7 +71,7 @@ class Accordion extends Component {
           style={{ maxHeight: `${this.state.height}` }}
           className="accordion_content"
         >
-          <OptionBox
+          {this.state.pay ? <p style={{color: "black"}}><OptionBox/></p>:<OptionBox
             res={this.props.res}
             key={this.props.botKey}
             botKey={this.props.botKey}
@@ -70,7 +81,7 @@ class Accordion extends Component {
             prompt={this.props.prompt}
             chatTree={this.props.chatTree}
             modifyOption={this.props.modifyOption}
-          />
+          />} 
         </div>
       </div>
     );
@@ -78,7 +89,7 @@ class Accordion extends Component {
   componentDidMount() {
     this.setGlobal({ toggleAccordion: this.toggleAccordion });
     const height = this.divElement.clientHeight;
-    this.setState({ init: height });
+    this.setState({ init: height, pay: false});
     // collapse chat tree as default after fetching and rendering
 
     setTimeout(() => {

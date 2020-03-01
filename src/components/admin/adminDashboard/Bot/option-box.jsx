@@ -5,7 +5,9 @@ import Accordion from "./accordion";
 import uuid from "uuid/v1";
 import ConvoTree from "../../../front/conversation/convo.json";
 const identity = uuid();
+
 class OptionBox extends Component {
+
   state = {
     responses: [],
     response: "",
@@ -16,6 +18,7 @@ class OptionBox extends Component {
     message: "",
     noOption: false
   };
+
   initialResponses = [];
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value, validated: false });
@@ -76,6 +79,7 @@ class OptionBox extends Component {
       }
     }
   };
+
   checkDuplicate = event => {
     const isFound = this.initialResponses.filter(
       response =>

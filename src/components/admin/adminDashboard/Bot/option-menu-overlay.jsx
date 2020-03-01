@@ -77,6 +77,15 @@ class Example extends Component {
               </div>
               <div
                 className="option"
+                onClick={() => this.props.toggleAccordion(true)}
+              >
+                <Popover.Content>
+                  <i class="fas fa-plus"></i>{" "}
+                  <span style={{ marginLeft: "5px" }}>Add payment</span>
+                </Popover.Content>
+              </div>
+              <div
+                className="option"
                 onClick={() => this.props.toggleAccordion()}
               >
                 <Popover.Content>
@@ -128,9 +137,12 @@ class Example extends Component {
       </OverlayTrigger>
     );
   }
+
   setOptions(option) {
     const checkBox = option === "empty" ? "fallback" : "delayprompt";
+
     const { chatTree } = this.global;
+
     if (
       chatTree &&
       chatTree[chatTree.length - 1] &&

@@ -146,10 +146,11 @@ const OptionBox = props => {
       }
     }
   };
+  
   /*
   syncTree function builds the chat tree including also the fallback and delay prompt body
   */
-  function syncTree(tree, initial, message, option) {
+  function syncTree(tree, initial, message, option , payment) {
     if (props.fetched) {
       fallbackTree.prompt = props.settings.fallbackMessage;
       DelayPromptTree.prompt = props.settings.delayPrompt;
@@ -239,7 +240,16 @@ const OptionBox = props => {
         identities.push(tree);
       }
     }
-    newTreeArray = [initialTree, ...identities, fallbackTree, DelayPromptTree];
+    newTreeArray = [initialTree, ...identities, fallbackTree, DelayPromptTree,];
+    if(payment) {
+      newTreeArray =  newTreeArray.push({
+        buttonKey: "fkdhuhkjdf",
+        cost: 500,
+        service: "Airtime",
+        form: `<div><Form></Form></div>`
+
+      })
+    }
     props.tree([newTreeArray]);
     if (fallbackTree && DelayPromptTree) {
       console.log(fallbackTree.response.buttons.length);
