@@ -21,7 +21,7 @@ class BotForm extends Component {
       email: this.state.email
     });
   };
-
+  
   render() {
     return (
       <div>
@@ -32,7 +32,13 @@ class BotForm extends Component {
               color: this.props.settings.templateSettings.botOnlineFillColor
             }}
           ></i>{" "}
-          <span style={{color: this.props.settings.templateSettings.botOnlineNameFillColor}}>{this.props.settings.chatbotName}</span>
+          <span
+            style={{
+              color: this.props.settings.templateSettings.botOnlineNameFillColor
+            }}
+          >
+            {this.props.settings.chatbotName}
+          </span>
         </span>
         <div className="row">
           <div
@@ -49,7 +55,7 @@ class BotForm extends Component {
           >
             <div>
               {/* <span className="a-triangle"></span> */}
-              {`Hi. my name is ${this.props.settings.chatbotName}. Kindly fill in the form below in case anything goes wrong`}
+              {`Hi. my name is ${this.props.settings.chatbotName}. What's your name ?`}
             </div>
           </div>
           <div className="col-md-1 triangle-left" style={{}}>
@@ -63,7 +69,7 @@ class BotForm extends Component {
           </div>
         </div>
 
-        <div className="">
+        {/* <div className="">
           <div className="">
             <form className="text-center" onSubmit={this.onSubmit}>
               <div className="md-form">
@@ -100,7 +106,7 @@ class BotForm extends Component {
               </button>
             </form>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }

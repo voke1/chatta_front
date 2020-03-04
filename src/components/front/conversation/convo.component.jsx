@@ -105,7 +105,9 @@ export default class Convo extends Component {
       <div>
         <div
           className="chat-history"
-          style={{ backgroundColor: this.state.defaultStyle.botBodyFillColor }}
+          style={{
+            backgroundColor: this.state.defaultStyle.botBodyFillColor
+          }}
         >
           {this.isThinking()}
           <ul id="chat_list">{this.renderConversation()}</ul>
@@ -160,11 +162,14 @@ export default class Convo extends Component {
     this.getConversationTree();
   };
 
-  componentWillReceiveProps(newProps) {
+  async componentWillReceiveProps(newProps) {
     const userInput = newProps.userInput;
     if (userInput && userInput !== this.props.userInput) {
       const key = this.searchKeywordsFromUserInput(userInput);
-      this.updateConverstion(key, userInput);
+
+      const find_key = await this.setUserDetails(userInput);
+
+      this.updateConverstion(find_key, userInput);
     }
     this.setState({
       defaultStyle: newProps.settings.templateSettings
@@ -183,10 +188,18 @@ export default class Convo extends Component {
     // const convoTree = await this.appService.getConversationTree('tree');  This is your main API function for convo tree
 
     const convoTree = this.state.chat_body;
+    const firstConvo = convoTree[0];
+
     convoTree[0].prompt = `Thanks ${this.state.username} ${convoTree[0].prompt}`;
     const conversationTree = this.deepCopy(convoTree);
+    console.log("rez3", conversationTree);
+    if (this.count === 0) {
+      conversationTree[0].prompt = `Hi my name is ${this.props.settings.chatbotName}. What's your name?`;
+      conversationTree[0].response.buttons = [];
+    }
     await this.setState({
-      conversationTree: conversationTree
+      conversationTree: conversationTree,
+      firstConvo
     });
     this.updateConverstion(convoTree[0].identity);
   };
@@ -220,7 +233,7 @@ export default class Convo extends Component {
       1}/${time.getDate()}/${time.getFullYear()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
   };
   searchTree = (key, info = null) => {
-    if(key ==="empty") this.error += 1;
+    if (key === "empty") this.error += 1;
     if (this.state.fetchUserInfo) {
       fetch(
         "http://api.ipstack.com/197.210.47.58?access_key=8b9d64d8dc53ce80c405b22daf7fe5a5&format=1"
@@ -245,6 +258,11 @@ export default class Convo extends Component {
       // console.log("Serach tree Calling::", this.state.username);
       return node.identity === key;
     });
+
+    // if (this.count === 1) {
+    //   result[0].prompt = `Thanks ${this.state.userDetails.name}... and your email address ?`;
+    //   result[0].response.buttons = [];
+    // }
 
     return result.length > 0 ? result[0] : this.searchTree("empty");
   };
@@ -290,7 +308,8 @@ export default class Convo extends Component {
 
   updateConverstion = (key, val = null) => {
     const choices = this.deepCopy(this.state.responses);
-    console.log("time of cht", this.setTimeOfChat());
+
+    console.log("rez", choices, "find key", key);
     if (val) {
       const userChoice = {
         selection: val,
@@ -392,20 +411,37 @@ export default class Convo extends Component {
   /**
    * This method renders the UI converstion
    */
+
+  count = 0;
+  setUserDetails = async value => {
+    const identity = this.state.conversationTree[0].identity;
+    const userDetails = {
+      ...this.state.userDetails
+    };
+    const type = this.count === 0 ? "name" : "email";
+    const kyObject = this.getKYCDetails(type, value);
+    const conversationTree = [...this.state.conversationTree];
+    conversationTree.push(kyObject);
+    conversationTree.unshift(this.state.firstConvo)
+    const find_key = type === "name" ? `kyc_${type}` : identity;
+    console.log("kyc_object", find_key, kyObject, conversationTree);
+
+    userDetails[type] = value;
+    this.count += 1;
+    await this.setState({
+      userDetails,
+      collectUserInfo: false,
+      conversationTree,
+      userIsKnown:true
+    });
+    return find_key;
+    
+  };
   renderConversation = () => {
+    console.log("responses", this.state.responses);
     // console.log("Render Calling::", this.state.username, "ggdgd");
     let now = new Date();
     let time = now.getTime();
-
-    if (this.state.collectUserInfo) {
-      return (
-        <BotForm
-          handleBotFormsubmit={this.handleBotFormsubmit}
-          settings={this.props.settings}
-          botMessageFillColor={this.state.defaultStyle.botMessageFillColor}
-        />
-      );
-    }
 
     return this.state.responses.map((convo, index) => {
       return (
@@ -507,7 +543,12 @@ export default class Convo extends Component {
               </div>
               <div className="row content">
                 <div className="col-md-1 triangle-left" style={{}}>
-                  <div style={{ marginLeft: "10px", marginTop: "10px" }}>
+                  <div
+                    style={{
+                      marginLeft: "10px",
+                      marginTop: "10px"
+                    }}
+                  >
                     <Triangle
                       color={this.state.defaultStyle.userMessageFillColor}
                       direction="left"
@@ -570,6 +611,7 @@ export default class Convo extends Component {
    *
    */
   updateScrollbar = () => {
+    console.log("known", this.state.userIsKnown)
     const scrollBar = document.getElementById("chat_bottom");
     if (scrollBar && this.state.userIsKnown) {
       scrollBar.scrollIntoView({ behavior: "smooth" });
@@ -643,5 +685,26 @@ export default class Convo extends Component {
         typingTimer: typingTimer
       });
     }
+  };
+  getKYCDetails = (key, value) => {
+    const kycDetails = {
+      email: {
+        identity: "kyc_email",
+        prompt: "your mail is bal.balaj",
+        response: {
+          buttons: [],
+          text: ""
+        }
+      },
+      name: {
+        identity: "kyc_name",
+        prompt: `Thanks ${value}. Can I get your email ?`,
+        response: {
+          buttons: [],
+          text: ""
+        }
+      }
+    };
+    return kycDetails[key];
   };
 }

@@ -96,9 +96,10 @@ export default function VerticalLinearStepper(props) {
           console.log(e);
         }
     }
-  const callback =  response => {
+  const callback = async response => {
     if (response.status === "success" && registrationSuccess) {
-      setSuccessMessage(
+        console.log("paid")
+      await setSuccessMessage(
         "Congratulations! An email has been sent to your email address, please check your email to complete registration"
       );
     } else {
