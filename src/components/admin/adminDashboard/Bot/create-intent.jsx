@@ -54,6 +54,7 @@ class CreateIntent extends Component {
     this.setState({ openEditDialog: true });
   };
   closeEditDialog = () => {
+    console.log("closed")
     this.setState({ openEditDialog: false });
   };
   onChange = e => {

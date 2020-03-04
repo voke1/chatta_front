@@ -23,6 +23,7 @@ export default class Chat extends Component {
     super(props);
     this.state = {
       data: [],
+      count: 0,
       loading: [],
       isOpen: false,
       category_name: "",
@@ -120,7 +121,7 @@ export default class Chat extends Component {
                 <div className="row">
                   <div className="col-md-12">
                     <input
-                      type="text"
+                      type={this.state.count === 1 && !this.state.settings.trainingMode? "email" : "text"}
                       className="form-control"
                       value={this.state.textValue}
                       id="message-to-send"
@@ -197,6 +198,8 @@ export default class Chat extends Component {
         const settings = result.data.findTree.setting_id;
 
         settings.collectUserInfo = true;
+        settings.trainingMode = true;
+
         this.setState({
           btnStyle: {
             backgroundColor:
@@ -244,7 +247,8 @@ export default class Chat extends Component {
   toggleChatDisplay = () => {
     this.state.showChatArea ? io.disconnect() : io.connect();
     this.setState({
-      showChatArea: !this.state.showChatArea
+      showChatArea: !this.state.showChatArea,
+      count: 0
     });
     // this.deleteVisit()
   };
@@ -259,6 +263,7 @@ export default class Chat extends Component {
         textValue: ""
       });
     }, 10);
+    this.setState({ count: this.state.count + 1 });
   };
 
   handleChange = event => {
