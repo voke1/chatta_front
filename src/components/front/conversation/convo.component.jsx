@@ -5,7 +5,12 @@ import { APP_ENVIRONMENT } from "../../../environments/environment";
 import { defaultStyle } from "../chat/defaultStyle";
 import Triangle from "../../../components/admin/adminDashboard/Bot/triangle";
 import { AppService } from "../../../services/app.service";
+import Nerify from "../chat/Nerify";
+import randomizeResponse from "../chat/randomizeResponse";
+import trainingTree from "../conversation/train";
+import ProgressBar from "../../admin/adminDashboard/Authentication/progressbar";
 import * as apiService from "../../../services/apiservice";
+
 import thinker from "../../../thinker.gif";
 import "./convo.component.css";
 import {
@@ -20,12 +25,18 @@ import {
   isIE,
   isSafari
 } from "react-device-detect";
+const BASE_URL = APP_ENVIRONMENT.base_url;
 export default class Convo extends Component {
   appService;
   static userName;
   constructor(props) {
     super(props);
     this.state = {
+      trainingType: "",
+      entityType: "",
+      showProgress: false,
+      currentKey: "",
+      closeChat: false,
       conversations: [],
       browser: "",
       visitor: "",
@@ -105,7 +116,9 @@ export default class Convo extends Component {
       <div>
         <div
           className="chat-history"
-          style={{ backgroundColor: this.state.defaultStyle.botBodyFillColor }}
+          style={{
+            backgroundColor: this.state.defaultStyle.botBodyFillColor
+          }}
         >
           {this.isThinking()}
           <ul id="chat_list">{this.renderConversation()}</ul>
@@ -144,27 +157,36 @@ export default class Convo extends Component {
   };
 
   componentDidMount = async () => {
-    this.getBrowser();
-    console.log("bot id", this.props.settings._id);
+    console.log("training", this.props.settings.trainingCode);
+    await this.getBrowser();
+    await this.getUserData();
+    this.setState({ training: this.props.training });
     // console.log("chat body", this.props.chat_body);
     // console.log("windows location href", window.location.href);
     // console.log("document referer", document.referrer);
     // this.determineLister()
-    if (this.props.settings.collectUserInfo) {
+    if (this.props.settings.trainingMode) {
       await this.setState({
-        canListen: false,
+        canListen: true,
         collectUserInfo: true,
+        chat_body: trainingTree
+      });
+    } else {
+      this.setState({
         chat_body: this.props.chat_body
       });
     }
     this.getConversationTree();
   };
 
-  componentWillReceiveProps(newProps) {
+  async componentWillReceiveProps(newProps) {
     const userInput = newProps.userInput;
     if (userInput && userInput !== this.props.userInput) {
       const key = this.searchKeywordsFromUserInput(userInput);
-      this.updateConverstion(key, userInput);
+
+      const find_key = (await this.setUserDetails(userInput)) || key;
+
+      this.updateConverstion(find_key, userInput);
     }
     this.setState({
       defaultStyle: newProps.settings.templateSettings
@@ -183,10 +205,22 @@ export default class Convo extends Component {
     // const convoTree = await this.appService.getConversationTree('tree');  This is your main API function for convo tree
 
     const convoTree = this.state.chat_body;
-    convoTree[0].prompt = `Thanks ${this.state.username} ${convoTree[0].prompt}`;
+    const firstConvo = convoTree[0];
+    if (!this.props.settings.trainingMode) {
+      convoTree[0].prompt = `Thanks ${this.state.username} ${convoTree[0].prompt}`;
+    }
     const conversationTree = this.deepCopy(convoTree);
+    console.log("rez3", conversationTree);
+    if (!this.props.settings.trainingMode) {
+      if (this.count === 0) {
+        conversationTree[0].prompt = `Hi my name is ${this.props.settings.chatbotName}. What's your name?`;
+        conversationTree[0].response.buttons = [];
+      }
+    }
+
     await this.setState({
-      conversationTree: conversationTree
+      conversationTree: conversationTree,
+      firstConvo
     });
     this.updateConverstion(convoTree[0].identity);
   };
@@ -197,20 +231,23 @@ export default class Convo extends Component {
    * This method searches the conversation tree
    * to match  bot response, but returns a default message if match fails;
    */
-  sendOnlineStatus = userDetails => {
+  sendOnlineStatus = (userDetails, visitor) => {
     console.log("lead", userDetails);
     const leads = { ...userDetails };
     leads.location = this.state.visitor.city;
     if (!this.state.online) {
       this.props.socketIo.emit("msgToServer", {
-        visitor: this.state.visitor,
+        visitor,
         botId: this.props.botId,
         lead: leads,
         conversations: this.state.conversations
       });
       console.log("settingss", this.props.botId);
       // this.props.socketIo.on("msgToClient", message => {});
-      this.setState({ online: true });
+      this.setState({
+        online: true,
+        showProgress: this.props.settings.trainingMode ? true : false
+      });
     }
   };
 
@@ -219,25 +256,28 @@ export default class Convo extends Component {
     return `${time.getMonth() +
       1}/${time.getDate()}/${time.getFullYear()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
   };
-  searchTree = (key, info = null) => {
-    if(key ==="empty") this.error += 1;
+  getUserData = () => {
     if (this.state.fetchUserInfo) {
       fetch(
-        "http://api.ipstack.com/197.210.47.58?access_key=8b9d64d8dc53ce80c405b22daf7fe5a5&format=1"
+        "http://api.ipstack.com/197.210.227.104?access_key=b1a656a166707d7810e3dc4229cda8ec&format=1"
       )
         .then(data => data.json())
         .then(visitor => {
+          console.log("hahahaha", visitor);
           this.setState({ fetchUserInfo: false });
           visitor.time = this.getDate();
           visitor.browser = this.state.browser;
           this.setState({ fetchUserInfo: false, visitor });
+          this.sendOnlineStatus({}, visitor);
           console.log("visitor:", visitor);
         })
         .catch(error => {
           console.log("request error", error);
         });
     }
-
+  };
+  searchTree = (key, info = null) => {
+    if (key === "empty") this.error += 1;
     const result = this.state.conversationTree.filter((node, index) => {
       if (info && index === 0) {
         node.prompt = `${info} ${node.prompt}`;
@@ -245,6 +285,11 @@ export default class Convo extends Component {
       // console.log("Serach tree Calling::", this.state.username);
       return node.identity === key;
     });
+
+    // if (this.count === 1) {
+    //   result[0].prompt = `Thanks ${this.state.userDetails.name}... and your email address ?`;
+    //   result[0].response.buttons = [];
+    // }
 
     return result.length > 0 ? result[0] : this.searchTree("empty");
   };
@@ -269,6 +314,7 @@ export default class Convo extends Component {
           onClick={() => {
             this.updateConverstion(button.key, button.val);
             this.sendOnlineStatus();
+            this.closeChatCount = 0;
           }}
         >
           {button.val}
@@ -290,7 +336,7 @@ export default class Convo extends Component {
 
   updateConverstion = (key, val = null) => {
     const choices = this.deepCopy(this.state.responses);
-    console.log("time of cht", this.setTimeOfChat());
+    console.log("choices", choices);
     if (val) {
       const userChoice = {
         selection: val,
@@ -315,40 +361,149 @@ export default class Convo extends Component {
     setTimeout(() => {
       this.updateScrollbar();
     }, 10);
-
-    this.refreshConvo(key, choices);
+    this.refreshConvo(this.state.currentKey || key, choices);
   };
 
-  refreshConvo = (key, choices) => {
-    const responses = this.deepCopy(choices);
-    const times = this.deepCopy(this.state.times);
-    times.push(this.setTimeOfChat());
-    let info = null;
-    if (this.state.username) {
-      info = `Thanks ${this.state.username}`;
+  closeChatCount = 0;
+  newTrainingData = {};
+  entity = "";
+  entityType = "";
+  sentence = "";
+  value = "";
+  trainingData = [];
+  buildTrainingData = async (searchResult, choices) => {
+    const { type } = searchResult.response;
+    const index = choices.length - 1;
+    const value = choices.length ? choices[index].selection : null;
+    if (type === "sentence") {
+      this.entityType = value;
+      this.setState({ entityType: value });
+      if (value === "Add More") this.entityType = this.state.entityType;
     }
-    const searchResult = this.searchTree(key, info);
-    responses.push(searchResult);
-    console.log("refreshing result", searchResult);
-    this.saveConversation({
-      from: "bot",
-      name: this.props.settings.chatbotName,
-      message: searchResult.prompt,
-      buttons: searchResult.response.buttons,
-      timeStamp: this.setTimeOfChat()
-    });
-    this.restartTimer();
-    const timeOutTime = this.delayChat(searchResult.prompt);
-    setTimeout(() => {
-      this.setState({
-        responses: responses,
-        times: times,
-        thinking: false
-      });
-      this.props.getResponder(false);
+    if (type === "value") {
+      this.sentence = value;
+      console.log("sentence", value);
+    }
+    if (type === "success") {
+      this.newTrainingData[this.entityType] = value;
+      this.newTrainingData["sentence"] = this.sentence;
+      this.trainingData.push(this.newTrainingData);
+      this.newTrainingData = {};
+      console.log("training", this.trainingData);
+    }
+    if (value === "Save globally" || value === "Save locally") {
+      const nerify = new Nerify();
+      const training = {
+        trainingData: this.state.training.training.trainingData.concat(
+          this.trainingData
+        )
+      };
+      nerify.save(
+        training,
+        "patch",
+        `${BASE_URL}/training/${this.props.botId}`
+      );
+    }
+  };
+  refreshConvo = (key, choices) => {
+    this.setState({ showProgress: true });
+    if (!this.state.closeChat) {
+      const responses = this.deepCopy(choices);
 
-      this.updateScrollbar();
-    }, timeOutTime);
+      const times = this.deepCopy(this.state.times);
+      times.push(this.setTimeOfChat());
+      let info = null;
+      if (this.state.username) {
+        info = `Thanks ${this.state.username}`;
+      }
+      const searchResult = this.searchTree(key, info);
+
+      console.log("search result", searchResult);
+      const index = searchResult.length - 1;
+      if (!this.props.settings.trainingMode) {
+        const { userDetails } = this.state;
+        if (searchResult.prompt && key === "delay_prompt") {
+          if (this.count < 2) {
+            if (this.count === 0) {
+              searchResult.prompt = randomizeResponse(key, "name", userDetails);
+              searchResult.response.buttons = [];
+              this.closeChatCount += 1;
+            }
+            if (this.count === 1) {
+              searchResult.prompt = randomizeResponse(
+                key,
+                "email",
+                userDetails
+              );
+              searchResult.response.buttons = [];
+              this.closeChatCount += 1;
+            }
+            if (this.closeChatCount === 3) {
+              const name = this.state.userDetails.name;
+              searchResult.prompt = randomizeResponse(
+                key,
+                "offline",
+                userDetails
+              );
+              searchResult.response.buttons = [];
+              this.setState({ closeChat: true });
+            }
+          } else {
+            if (this.closeChatCount < 3) {
+              searchResult.prompt = randomizeResponse(
+                key,
+                "random",
+                userDetails
+              );
+              searchResult.response.buttons = [];
+              this.closeChatCount += 1;
+            } else {
+              if (this.closeChatCount === 3) {
+                searchResult.prompt = randomizeResponse(
+                  key,
+                  "offline",
+                  userDetails
+                );
+                searchResult.response.buttons = [];
+                this.setState({ closeChat: true });
+              }
+            }
+          }
+        }
+      } else {
+        console.log("search result", searchResult);
+        this.buildTrainingData(searchResult, choices);
+        this.setState({ currentKey: searchResult.response.text });
+      }
+
+      responses.push(searchResult);
+      console.log("refreshing result", searchResult);
+      if (searchResult.response.type === "sentence") {
+        searchResult.prompt = `Enter a sentence containing a ${this.entityType} whose pattern you want the bot to be able to recognize ${this.entityType} in`;
+      }
+      if (searchResult.response.type === "value") {
+        searchResult.prompt = `Now enter the ${this.entityType} contained in the sentence above`;
+      }
+        this.saveConversation({
+          from: "bot",
+          name: this.props.settings.chatbotName,
+          message: searchResult.prompt,
+          buttons: searchResult.response.buttons,
+          timeStamp: this.setTimeOfChat()
+        });
+      this.restartTimer();
+      const timeOutTime = this.delayChat(searchResult.prompt);
+      setTimeout(() => {
+        this.setState({
+          responses: responses,
+          times: times,
+          thinking: false
+        });
+        this.props.getResponder(false);
+
+        this.updateScrollbar();
+      }, timeOutTime);
+    }
   };
 
   /**
@@ -387,25 +542,61 @@ export default class Convo extends Component {
     const time = noOfWords * 250;
     const delayTime = time > 10000 ? 10000 : time;
 
-    return delayTime;
+    return !this.props.settings.trainingMode ? delayTime : 1000;
   };
   /**
    * This method renders the UI converstion
    */
+
+  count = 0;
+  setUserDetails = async value => {
+    if (!this.props.settings.trainingMode) {
+      const nerify = new Nerify();
+      const pattern = await nerify.process(
+        this.state.training.training.trainingData,
+        "name"
+      );
+      const learnedData = await nerify.learn(pattern);
+
+      if (this.count < 2) {
+        const identity = this.state.conversationTree[0].identity;
+        const userDetails = {
+          ...this.state.userDetails
+        };
+        const type = this.count === 0 ? "name" : "email";
+        const output = await nerify.identify(learnedData, value, "name");
+        const kyObject = this.getKYCDetails(type, output.result[type]);
+        const conversationTree = [...this.state.conversationTree];
+        conversationTree.push(kyObject);
+        conversationTree.unshift(this.state.firstConvo);
+        const find_key = type === "name" ? `kyc_${type}` : identity;
+        console.log("kyc_object", find_key, kyObject, conversationTree);
+
+        console.log("output", output);
+        userDetails[type] = output.result.name;
+        this.count += 1;
+        this.closeChatCount = 0;
+        await this.setState({
+          userDetails,
+          collectUserInfo: false,
+          conversationTree,
+          userIsKnown: true
+        });
+
+        if (this.count === 2) {
+          const leads = this.state.userDetails;
+          leads.location = this.state.visitor.city;
+          this.props.socketIo.emit("updateLeads", leads);
+        }
+        return find_key;
+      }
+    }
+    
+    return null;
+  };
   renderConversation = () => {
-    // console.log("Render Calling::", this.state.username, "ggdgd");
     let now = new Date();
     let time = now.getTime();
-
-    if (this.state.collectUserInfo) {
-      return (
-        <BotForm
-          handleBotFormsubmit={this.handleBotFormsubmit}
-          settings={this.props.settings}
-          botMessageFillColor={this.state.defaultStyle.botMessageFillColor}
-        />
-      );
-    }
 
     return this.state.responses.map((convo, index) => {
       return (
@@ -507,7 +698,12 @@ export default class Convo extends Component {
               </div>
               <div className="row content">
                 <div className="col-md-1 triangle-left" style={{}}>
-                  <div style={{ marginLeft: "10px", marginTop: "10px" }}>
+                  <div
+                    style={{
+                      marginLeft: "10px",
+                      marginTop: "10px"
+                    }}
+                  >
                     <Triangle
                       color={this.state.defaultStyle.userMessageFillColor}
                       direction="left"
@@ -570,6 +766,7 @@ export default class Convo extends Component {
    *
    */
   updateScrollbar = () => {
+    console.log("known", this.state.userIsKnown);
     const scrollBar = document.getElementById("chat_bottom");
     if (scrollBar && this.state.userIsKnown) {
       scrollBar.scrollIntoView({ behavior: "smooth" });
@@ -578,7 +775,8 @@ export default class Convo extends Component {
 
   isThinking = () => {
     return this.state.thinking ? (
-      <img src={thinker} className="thinker loader" />
+      // <img src={thinker} className="thinker loader" />
+      <div></div>
     ) : null;
   };
 
@@ -629,7 +827,7 @@ export default class Convo extends Component {
    */
 
   setDelayListener = () => {
-    if (this.state.canListen) {
+    if (this.state.canListen && !this.props.settings.trainingMode) {
       const typingTimer = setInterval(() => {
         let timer = this.deepCopy(this.state.chatTimer); //get initial delay time
         const refreshTimer =
@@ -643,5 +841,26 @@ export default class Convo extends Component {
         typingTimer: typingTimer
       });
     }
+  };
+  getKYCDetails = (key, value) => {
+    const kycDetails = {
+      email: {
+        identity: "kyc_email",
+        prompt: "your mail is bal.balaj",
+        response: {
+          buttons: [],
+          text: ""
+        }
+      },
+      name: {
+        identity: "kyc_name",
+        prompt: `Thanks ${value}. Can I get your email ?`,
+        response: {
+          buttons: [],
+          text: ""
+        }
+      }
+    };
+    return kycDetails[key];
   };
 }

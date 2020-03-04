@@ -1,5 +1,7 @@
 import React, { Component } from "reactn";
 import { Link } from "react-router-dom";
+import uuid from "uuid/v1";
+
 import avatar from "../components/admin/images/users/avatar-1.jpg";
 import "../components/admin/plugins/datatables/dataTables.bootstrap4.min.css";
 import "../components/admin/plugins/datatables/responsive.bootstrap4.min.css";
@@ -36,7 +38,9 @@ export class ManageBot extends Component {
       loading: true,
       updateSettings: false,
       chatTree: [],
-      treeId: ""
+      treeId: "",
+      trainingMode: false,
+      trainingCode: null
     };
     this.inputRef = React.createRef();
   }
@@ -45,7 +49,7 @@ export class ManageBot extends Component {
     Axios.get(`${BASE_URL}/setting/${this.state.settingId}`)
       .then(res => {
         const result = res.data;
-        console.log("hey", result)
+        console.log("hey", result);
         const settings = result.findTree.setting_id;
         this.setState({
           settings,
@@ -58,7 +62,9 @@ export class ManageBot extends Component {
           delayTime: settings.delayTime,
           primaryColor: settings.primaryColor,
           secondaryColor: settings.secondaryColor,
-          botImage: settings.botImage
+          botImage: settings.botImage,
+          trainingCode: settings.trainingCode,
+          trainingMode: settings.trainingMode
         });
       })
       .catch(err => {});
@@ -84,7 +90,10 @@ export class ManageBot extends Component {
     if (e.target.files[0]) {
       let reader = new FileReader();
       let image = e.target.files[0];
-
+      const fileInput = e.target.files[0];
+      this.setState({
+        file: fileInput.name
+      });
       reader.onloadend = () => {
         this.setState({
           fileUpload: image,
@@ -130,7 +139,23 @@ export class ManageBot extends Component {
       );
     }
   };
-
+  handleCheck = () => {
+    const mode = !this.state.trainingMode;
+    this.setState({
+      trainingMode: mode,
+      trainingCode: uuid()
+    });
+    
+      Axios.put(`${BASE_URL}/setting/${this.state.settingId}`, {
+        trainingCode: this.state.trainingCode,
+        trainingMode: mode
+      })
+        .then(res => {})
+        .catch(err => {
+          console.log(err);
+        });
+    
+  };
   handleSubmit = event => {
     event.preventDefault();
     this.setState({ updateSettings: true });
@@ -146,7 +171,9 @@ export class ManageBot extends Component {
       primaryColor: this.state.primaryColor,
       secondaryColor: this.state.secondaryColor,
       delayTime: this.state.delayTime,
-      botImage: this.state.botImage
+      botImage: this.state.botImage,
+      trainingCode: this.state.trainingCode,
+      trainingMode: this.state.trainingMode
     };
 
     Axios.put(`${BASE_URL}/setting/${this.state.settingId}`, bot)
@@ -409,7 +436,7 @@ export class ManageBot extends Component {
           <div className="content">
             <div className="container-fluid" style={{ marginTop: "25px" }}>
               <div className="row">
-                <div className="col-md-8 mt-20">
+                <div className="col-md-12 mt-20">
                   <div className="card ">
                     {this.state.updateSettings ? (
                       <BotUpdateAlertDialog closeDialog={this.closeDialog} />
@@ -529,7 +556,57 @@ export class ManageBot extends Component {
                                     </div>
                                   </div>
                                 </div>
+                                <div
+                                  className="card"
+                                  style={{ width: "fit-content", margin: 10 }}
+                                >
+                                  <img
+                                    style={{ width: 70, height: 70 }}
+                                    src={this.state.botImage}
+                                    alt=""
+                                  />
+                                </div>
+                                <div class="custom-file">
+                                  <input
+                                    type="file"
+                                    class="custom-file-input"
+                                    id="customFileLang"
+                                    lang="en"
+                                    onChange={this.handleImageChange}
+                                  />
+                                  <label
+                                    class="custom-file-label"
+                                    for="customFileLang"
+                                  >
+                                    {this.state.file}
+                                  </label>
+                                </div>
 
+                                <input
+                                  type="file"
+                                  onChange={this.handleImageChange}
+                                  ref={this.inputRef}
+                                  style={{ display: "none" }}
+                                />
+                                <div style={{ marginTop: 20 }}>
+                                  <span style={{ marginRight: "10px" }}>
+                                    Training mode
+                                  </span>
+
+                                  <label class="switch">
+                                    <input
+                                      type="checkbox"
+                                      checked={this.state.trainingMode}
+                                      onChange={this.handleCheck}
+                                    ></input>
+                                    <span class="slider round"></span>
+                                  </label>
+                                  {this.state.trainingMode ? (
+                                    <span style={{ marginLeft: "15px" }}>
+                                      {this.state.trainingCode}
+                                    </span>
+                                  ) : null}
+                                </div>
                                 <button
                                   type="submit"
                                   className="btn btn-secondary btn-fill waves-effect pull-right"
@@ -563,30 +640,6 @@ export class ManageBot extends Component {
                         </div>
                       </Tab>
                     </Tabs>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="card card-user">
-                    <Card style={{ width: "30rem%", height: "100%" }}>
-                      <Card.Img
-                        variant="top"
-                        src={this.state.botImage}
-                        style={{ height: "20rem" }}
-                        onClick={this.getImage}
-                      />
-                      <Card.Body>
-                        <Card.Title> {this.state.chatbotName}</Card.Title>
-                      </Card.Body>
-                    </Card>
-
-                    <div>
-                      <input
-                        type="file"
-                        onChange={this.handleImageChange}
-                        ref={this.inputRef}
-                        style={{ display: "none" }}
-                      />
-                    </div>
                   </div>
                 </div>
               </div>

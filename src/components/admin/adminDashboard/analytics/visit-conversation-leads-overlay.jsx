@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useGlobal } from "reactn";
 import InfiniteScroll from "react-infinite-scroll-component";
+import DatePicker from "./dates";
 import ProgressBar from "../Authentication/progressbar";
 import { FacebookProgress } from "../Authentication/progressbar";
 import LineChart from "./chart";
@@ -28,15 +29,17 @@ const BusyOverlay = props => {
   const [averageAccuracy, setAverageAccuracy] = useState(0);
   const [averageErrors, setAverageError] = useState(0);
   const [averageBounceRate, setBounceRate] = useState(0);
-  const fetchMoreData = async visits => {
-    // a fake async api call like which sends
-    // 10 more records in 1.5 secs
+  const [dateOptions, setDateOptions] = useState(false);
+  const [pickedDate, setPickedDate] = useState("");
+  const [dateType, setDateType] = useState("");
+
+  const fetchMoreData = async (visits) => {
     setTimeout(() => {
       const moreVisits = visits.slice(0, end);
-      console.log("conversation", moreVisits);
-
+      console.log("more visits", moreVisits);
       setVisitsForTable(moreVisits);
       setEnd(end + pageOffset);
+      setScrolled(false)
     }, 1500);
   };
 
@@ -63,18 +66,24 @@ const BusyOverlay = props => {
       }, 2000);
     }
   };
-  const getRecords = async daysAgo => {
-    console.log("ago", daysAgo);
+  const getRecords = async (daysAgo, date) => {
     if (props.show && botId !== props.botId) {
+      let data = [];
+      if (date) {
+        data = await props.analyticsHelper.getTodayData(props.botId, date);
+      } else {
+        const daysAgoDate = await props.analyticsHelper.getDaysAgo(daysAgo);
+        data = await props.analyticsHelper.getTodayData(
+          props.botId,
+          daysAgoDate
+        );
+      }
       await setBotId(props.botId);
       await setVisitsForTable([]);
+      await setVisits([]);
       await setScrolled(false);
-      setMessage("");
-      const daysAgoDate = await props.analyticsHelper.getDaysAgo(daysAgo);
-      const data = await props.analyticsHelper.getTodayData(
-        props.botId,
-        daysAgoDate
-      );
+      await setScrolled(false);
+      await setMessage("");
       if (data.length) {
         setShowProgress(false);
         const conversationVisits = await props.analyticsHelper.extractConversations(
@@ -90,16 +99,18 @@ const BusyOverlay = props => {
         );
         setAverageSession(sessionArray.averageSession[0]);
         await getVisits(conversationVisits);
-        await setDaysAgo(0);
       } else {
-        await setDaysAgo(0);
+        await setDaysAgo(null);
+        await setVisitsForTable([]);
+        await setVisits([]);
+        await setScrolled(false);
         setTimeout(() => {
           setMessage("No conversations found");
         }, 2000);
       }
     }
   };
-  getRecords(ago);
+  getRecords(ago, pickedDate);
   useEffect(async () => {}, []);
 
   const handleClick = conversationId => {
@@ -114,12 +125,22 @@ const BusyOverlay = props => {
     }, 2000);
   };
   const handleSelect = async event => {
-    const day = parseInt(event.target.value, 10);
-    await setDaysAgo(day);
-    await setBotId("");
-    await setVisitsForTable([]);
-    await setScrolled(false);
-    getRecords(day);
+    const day = event.target.value;
+
+    if (day === "choose" || day === "range" || day === "single") {
+      await setDateType(day);
+      await setDateOptions(true);
+      console.log("event");
+    } else {
+      setDateOptions(false);
+      await setDaysAgo(parseInt(day, 10));
+      await setBotId("");
+      await setVisitsForTable([]);
+      await setScrolled(false);
+      await setDateType("");
+
+      getRecords(day);
+    }
   };
 
   const selectOptions = (
@@ -162,7 +183,78 @@ const BusyOverlay = props => {
           </div>
           <div className="overlay-row">
             <div className="overlay-left">
-              {selectOptions}
+              <div style={{ display: "inline", float: "left" }}>
+                {selectOptions}
+              </div>
+              {dateOptions ? (
+                <div style={{ display: "inline", float: "left" }}>
+                  <select
+                    name="select-range"
+                    id=""
+                    onChange={handleSelect}
+                    style={{ width: "fit-content" }}
+                  >
+                    <option value="single">Single date</option>
+                    <option value="range">Range</option>
+                  </select>
+                </div>
+              ) : null}
+
+              <div
+                style={{ display: "inline", float: "left", marginTop: "10px" }}
+              >
+                {dateType === "single" ||
+                dateType === "range" ||
+                dateType === "choose" ? (
+                  <DatePicker
+                    setBotId={setBotId}
+                    getRecords={getRecords}
+                    setPickedDate={setPickedDate}
+                    setVisitsForTable={setVisitsForTable}
+                    setScrolled={setScrolled}
+                  />
+                ) : null}
+              </div>
+              {dateType === "range" ? (
+                <React.Fragment>
+                  <div
+                    style={{
+                      display: "inline",
+                      float: "left",
+                      marginTop: "10px"
+                    }}
+                  >
+                    <span
+                      style={{
+                        margin: "10px 5px 0px 5px",
+                        fontWeight: "400px",
+                        color: "grey"
+                      }}
+                    >
+                      TO
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      display: "inline",
+                      float: "left",
+                      marginTop: "10px",
+                      marginLeft: "5px",
+                      marginRight: "5px"
+                    }}
+                  >
+                    {" "}
+                    <DatePicker
+                      setBotId={setBotId}
+                      getRecords={getRecords}
+                      setPickedDate={setPickedDate}
+                      setVisitsForTable={setVisitsForTable}
+                      setScrolled={setScrolled}
+                    />
+                  </div>
+                </React.Fragment>
+              ) : null}
+
               {visitsForTable.length ? (
                 <div
                   className="overlay-table"
@@ -171,13 +263,23 @@ const BusyOverlay = props => {
                 >
                   <InfiniteScroll
                     scrollableTarget="scroll"
-                    dataLength={pageOffset} //This is important field to render the next data
+                    dataLength={1000} //This is important field to render the next data
                     next={() => {
                       fetchMoreData(visits);
                       setScrolled(true);
                     }}
-                    hasMore={visitsForTable.length < visits.length}
-                    loader={<span>Loading...</span>}
+                    hasMore={visitsForTable.length < 1000}
+                    loader={
+                      <div>
+                        {scrolled ? (
+                          <div style={{ width: "fit-content", margin: "auto" }}>
+                            {<FacebookProgress size={20} />}
+                          </div>
+                        ) : null}
+
+                        <span>.</span>
+                      </div>
+                    }
                     endMessage={
                       scrolled ? (
                         <p style={{ textAlign: "center" }}>
@@ -198,7 +300,7 @@ const BusyOverlay = props => {
                     <table class="table table-hover">
                       <thead>
                         <tr>
-                          <th scope="col">#</th>
+                          <th scope="col">Time</th>
                           <th scope="col">Continent</th>
                           <th scope="col">Country</th>
                           <th scope="col">Messages</th>
@@ -221,8 +323,19 @@ const BusyOverlay = props => {
                                       : {}
                                   }
                                 >
-                                  <td>{`${index + 1 < 10 ? 0 : ""}${index +
-                                    1}`}</td>
+                                  <td>
+                                    <span style={{ display: "block" }}>
+                                      {visitsForTable[index].time.split(" ")[0]}
+                                    </span>
+                                    <span
+                                      style={{
+                                        display: "block",
+                                        marginTop: "15px"
+                                      }}
+                                    >
+                                      {visitsForTable[index].time.split(" ")[1]}
+                                    </span>
+                                  </td>
                                   <td>
                                     {visitsForTable[index].continent_name}
                                   </td>
@@ -234,7 +347,12 @@ const BusyOverlay = props => {
                                     {visitsForTable[index].conversations[
                                       visitsForTable[index].conversations
                                         .length - 1
-                                    ].error - 1 || 0}
+                                    ]
+                                      ? visitsForTable[index].conversations[
+                                          visitsForTable[index].conversations
+                                            .length - 1
+                                        ].error || 0
+                                      : 0}
                                   </td>
                                 </tr>
                               </React.Fragment>
@@ -359,7 +477,7 @@ const BusyOverlay = props => {
                           marginLeft: "5px"
                         }}
                       >
-                        <span>{visits.length}</span>
+                        <span>{visitsForTable.length}</span>
                       </div>
                       <div style={{ marginLeft: "5px" }}>
                         <span>Conversations</span>

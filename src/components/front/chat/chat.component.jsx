@@ -23,6 +23,7 @@ export default class Chat extends Component {
     super(props);
     this.state = {
       data: [],
+      count: 0,
       loading: [],
       isOpen: false,
       category_name: "",
@@ -37,7 +38,8 @@ export default class Chat extends Component {
       botImage: "",
       chat_body: [],
       defaultStyle: defaultStyle,
-      botId: ""
+      botId: "",
+      training: {}
     };
     this.appService = new AppService();
   }
@@ -107,6 +109,7 @@ export default class Chat extends Component {
               chat_body={this.state.chat_body}
               socketIo={io}
               botId={this.state.botId}
+              training={this.state.training}
             />
 
             <div
@@ -120,7 +123,7 @@ export default class Chat extends Component {
                 <div className="row">
                   <div className="col-md-12">
                     <input
-                      type="text"
+                      type={this.state.count === 1 && !this.state.settings.trainingMode? "email" : "text"}
                       className="form-control"
                       value={this.state.textValue}
                       id="message-to-send"
@@ -163,25 +166,7 @@ export default class Chat extends Component {
       </button>
     );
   }
-  // deleteVisit = () => {
-  //   apiService
-  //     .del(`activeusers/${this.global.visitorId}`)
-  //     .then(res => {
-  //       console.log("deleted", res);
-  //     })
-  //     .catch(error => console.log(error.message));
-  // }
-  // onChatClose = () => {
-  //   window.addEventListener("beforeunload", event => {
-  //     event.preventDefault();
-  //     this.deleteVisit();
-  //   });
-  //   window.addEventListener("onbeforeunload", ev => {
-  //     ev.preventDefault();
-  //     this.deleteVisit()
-  //     // return (ev.returnValue = "Are you sure you want to close?");
-  //   });
-  // };
+ 
   componentWillUnmount() {
     // this.deleteVisit()
   }
@@ -197,6 +182,7 @@ export default class Chat extends Component {
         const settings = result.data.findTree.setting_id;
 
         settings.collectUserInfo = true;
+
         this.setState({
           btnStyle: {
             backgroundColor:
@@ -212,6 +198,11 @@ export default class Chat extends Component {
           defaultStyle: settings.templateSettings
         });
       }
+      const data = await Axios.get(
+        `${BASE_URL}/training/`
+      ).then(res => {
+        this.setState({training: res.data})
+      });
     } catch (e) {}
 
     // Axios.get(`${BASE_URL}/setting`)
@@ -244,7 +235,8 @@ export default class Chat extends Component {
   toggleChatDisplay = () => {
     this.state.showChatArea ? io.disconnect() : io.connect();
     this.setState({
-      showChatArea: !this.state.showChatArea
+      showChatArea: !this.state.showChatArea,
+      count: 0
     });
     // this.deleteVisit()
   };
@@ -259,6 +251,7 @@ export default class Chat extends Component {
         textValue: ""
       });
     }, 10);
+    this.setState({ count: this.state.count + 1 });
   };
 
   handleChange = event => {
