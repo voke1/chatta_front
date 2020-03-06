@@ -230,7 +230,7 @@ export default class AnalyticsHelper {
   getLocalTimezone = async () => {
     let timezone;
     await fetch(
-      "http://api.ipstack.com/197.210.47.58?access_key=8b9d64d8dc53ce80c405b22daf7fe5a5&format=1"
+      "http://api.ipstack.com/197.210.227.104?access_key=b1a656a166707d7810e3dc4229cda8ec&format=1"
     )
       .then(data => data.json())
       .then(visitor => {
@@ -379,7 +379,7 @@ export default class AnalyticsHelper {
     }
     let messages = 0;
     let errors = 0;
-    const visits = allVisits.filter(visit => visit.conversations);
+    const visits = allVisits.filter(visit => visit.conversations.length);
     visits.forEach(visit => {
       messages += visit.conversations.length;
       const convoIndex = visit.conversations.length - 1;
