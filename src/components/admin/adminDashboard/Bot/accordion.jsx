@@ -2,6 +2,7 @@ import React, { Component } from "reactn";
 import "./css/accordion.css";
 import CardView from "./card-view";
 import OptionBox from "./option-box";
+import PaymentForm from "./payment-form"
 
 class Accordion extends Component {
   state = {
@@ -10,54 +11,21 @@ class Accordion extends Component {
     init: "0px",
     newHeight: "0px",
     pay: false,
+    keyy: "",
+    amount: "",
   };
 
 
-  // paymentForm = <div className="option-box">
-  //   <div
-  //     style={{
-  //       marginLeft: "40px",
-  //       marginRight: "100px",
-  //       marginTop: "15px"
-  //     }}
-  //     className="form-group"
-  //   >
-  //     <input
-  //       className="form-control border-top-0 border-right-0 border-left-0"
-  //       placeholder="Paystack key"
-  //       name="pKey"
-  //       value={this.state.prompt}
-  //       onChange={this.onChange}
-  //       style={{ width: "300px" }}
-  //     ></input>
-      
-  //     <div className="form-inline">
-  //       <input
-  //         className="form-control border-top-0 border-right-0 border-left-0"
-  //         placeholder="Price"
-  //         name="response"
-  //         value={this.state.response}
-  //         onChange={this.onChange}
-  //         style={{ width: "300px" }}
-  //         disabled={this.state.noOption}
-  //       ></input>
-  //       <div style={{ width: "10%" }}>
-  //         <button
-  //           type="button"
-  //           className="btn btn-sm"
-  //           onClick={() =>
-  //             this.onClick({ response: this.state.response })
-  //           }
-  //           style={{ backgroundColor: "#ededed", color: "#5b616b" }}
-  //           disabled={!this.state.validated}
-  //         >
-  //           Add
-  //               </button>
-  //       </div>
-  //     </div>
-  //   </div>
-  // </div>
+  getData = (key, price)=>{
 
+    this.setState({keyy: key, amount: price})
+    console.log("get Data is called, key is ", key, "price is", price);
+  let action ={"type": "edit", "key": key, "amount": price}
+    
+     this.global.modifyOption(this.props.botKey, action )
+
+  }
+  
   syncHeight = height => {
     const number = parseInt(this.state.height.match(/(\d+)/)[0], 10);
     console.log(this.state.init);
@@ -78,11 +46,11 @@ class Accordion extends Component {
 
     });
     if(payment){
-      this.setState({pay: !this.state.pay})
-      console.log("payment is true")
-      // if(this.state.active === 'active'){
-      //   this.setState({pay: false})
-      // }
+      this.setState({pay: true});
+      console.log("payment is true");
+      if(this.state.active === 'active'){
+        this.setState({pay: false});
+      }
     }
     console.log("checking active and init", this.state.active, "and", this.state.init)
     
@@ -97,7 +65,7 @@ class Accordion extends Component {
           marginLeft: "50px",
           marginBottom: "10px",
           marginTop: "10px",
-          transition: "max-width 0.6s ease"
+          transition: "max-width 0.6s ease",
         }}
       >
         <CardView
@@ -118,7 +86,7 @@ class Accordion extends Component {
           style={{ maxHeight: `${this.state.height}` }}
           className="accordion_content"
         >
-          {<OptionBox
+          {this.state.pay?<PaymentForm getData={this.getData}/>:<OptionBox
             res={this.props.res}
             key={this.props.botKey}
             botKey={this.props.botKey}
@@ -129,6 +97,9 @@ class Accordion extends Component {
             chatTree={this.props.chatTree}
             modifyOption={this.props.modifyOption}
             pay={this.state.pay}
+            amount={this.state.amount}
+            keyy={this.state.keyy}
+
           />} 
         </div>
       </div>

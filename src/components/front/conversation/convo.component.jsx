@@ -18,18 +18,20 @@ import {
   isEdge,
   isOpera,
   isIE,
-  isSafari
+  isSafari,
 } from "react-device-detect";
 import PaystackButton from 'react-paystack';
 
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
+
 export default class Convo extends Component {
   appService;
   static userName;
   constructor(props) {
     super(props);
     this.state = {
+      closeChat: false,
       conversations: [],
       browser: "",
       visitor: "",
@@ -151,7 +153,9 @@ export default class Convo extends Component {
   };
 
   componentDidMount = async () => {
-    this.getBrowser();
+    await this.getBrowser();
+    await this.getUserData();
+
     console.log("bot id", this.props.settings._id);
     // console.log("chat body", this.props.chat_body);
     // console.log("windows location href", window.location.href);
@@ -159,7 +163,7 @@ export default class Convo extends Component {
     // this.determineLister()
     if (this.props.settings.collectUserInfo) {
       await this.setState({
-        canListen: false,
+        canListen: true,
         collectUserInfo: true,
         chat_body: this.props.chat_body
       });
@@ -168,11 +172,13 @@ export default class Convo extends Component {
   };
 
   async componentWillReceiveProps(newProps) {
+    console.log("comporecieveprops called, newProps is: ", newProps)
     const userInput = newProps.userInput;
+    console.log("newuserinput:", userInput)
     if (userInput && userInput !== this.props.userInput) {
       const key = this.searchKeywordsFromUserInput(userInput);
 
-      const find_key = await this.setUserDetails(userInput);
+      const find_key = (await this.setUserDetails(userInput)) || key;
 
       this.updateConverstion(find_key, userInput);
     }
@@ -207,6 +213,8 @@ export default class Convo extends Component {
       firstConvo
     });
     this.updateConverstion(convoTree[0].identity);
+    console.log("TREE:", convoTree[0].identity, )
+    
   };
 
   handleUserChoice = () => {};
@@ -215,13 +223,13 @@ export default class Convo extends Component {
    * This method searches the conversation tree
    * to match  bot response, but returns a default message if match fails;
    */
-  sendOnlineStatus = userDetails => {
+  sendOnlineStatus = (userDetails, visitor) => {
     console.log("lead", userDetails);
     const leads = { ...userDetails };
     leads.location = this.state.visitor.city;
     if (!this.state.online) {
       this.props.socketIo.emit("msgToServer", {
-        visitor: this.state.visitor,
+        visitor,
         botId: this.props.botId,
         lead: leads,
         conversations: this.state.conversations
@@ -237,11 +245,10 @@ export default class Convo extends Component {
     return `${time.getMonth() +
       1}/${time.getDate()}/${time.getFullYear()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
   };
-  searchTree = (key, info = null) => {
-    if (key === "empty") this.error += 1;
+  getUserData = () => {
     if (this.state.fetchUserInfo) {
       fetch(
-        "http://api.ipstack.com/197.210.47.58?access_key=8b9d64d8dc53ce80c405b22daf7fe5a5&format=1"
+        "http://api.ipstack.com/197.210.227.104?access_key=b1a656a166707d7810e3dc4229cda8ec&format=1"
       )
         .then(data => data.json())
         .then(visitor => {
@@ -249,13 +256,16 @@ export default class Convo extends Component {
           visitor.time = this.getDate();
           visitor.browser = this.state.browser;
           this.setState({ fetchUserInfo: false, visitor });
+          this.sendOnlineStatus({}, visitor);
           console.log("visitor:", visitor);
         })
         .catch(error => {
           console.log("request error", error);
         });
     }
-
+  };
+  searchTree = (key, info = null, payment) => {
+    if (key === "empty") this.error += 1;
     const result = this.state.conversationTree.filter((node, index) => {
       if (info && index === 0) {
         node.prompt = `${info} ${node.prompt}`;
@@ -293,6 +303,7 @@ export default class Convo extends Component {
           onClick={() => {
             this.updateConverstion(button.key, button.val, button.payment);
             this.sendOnlineStatus();
+            this.closeChatCount = 0;
           }}
         >
           {button.val}
@@ -316,7 +327,7 @@ export default class Convo extends Component {
     const choices = this.deepCopy(this.state.responses);
     console.log("time of cht", this.setTimeOfChat());
     console.log("choices", choices);
-    console.log("THIS IS PAYMENTCHECK", payment)
+    console.log("THIS IS PAYMENTCHECK", payment);
 
     if (val) {
       const userChoice = {
@@ -343,47 +354,185 @@ export default class Convo extends Component {
       thinking: true,
       responses: choices
     });
+
+    console.log("responder:", this.state.response)
     this.props.getResponder(true);
     //this set timeout forces the  update scrollbar function
     setTimeout(() => {
       this.updateScrollbar();
     }, 10);
 
-    this.refreshConvo(key, choices);
+    this.refreshConvo(key, choices, payment);
   };
-
-  refreshConvo = (key, choices) => {
-    const responses = this.deepCopy(choices);
-    const times = this.deepCopy(this.state.times);
-    times.push(this.setTimeOfChat());
-    let info = null;
-    if (this.state.username) {
-      info = `Thanks ${this.state.username}`;
+  randomizeResponse = (key, type) => {
+    const index = Math.floor(Math.random() * 4);
+    const name = this.state.userDetails.name;
+    const responses = {
+      delay_prompt: {
+        name: [
+          "Hello ? Could you type your name below ?",
+          "I haven't got your name yet. Could you leave your name below ?",
+          "I am yet to get your name. Kindly enter your name below",
+          "Are you there ? Please tell me your name",
+          "Hello there. What's your name ?"
+        ],
+        email: [
+          `Hello ${name ? name : "there"}. What's your email address ?`,
+          ` ${name ? name : ""} Are you there ? Your email address please ?`,
+          `I haven't got your email ${name ? name : ""}. Kindly type it below`,
+          `Hi ${
+            name ? name : ""
+          }...You haven't been responsive. I will need your email address so we can proceed`,
+          `Hi ${name ? name : "there"}. Kindly respond with your email`
+        ],
+        random: [
+          `Hello ${name ? name : "there"}. Are you there ?`,
+          ` ${name ? name : ""} Are you still online ?`,
+          `I haven't got any response ${name ? name : ""}. Are you there ?`,
+          `Hi ${name ? name : ""}. Are you with me ?`,
+          `Hi ${name ? name : "there"}. You there ?`
+        ],
+        offline: {
+          withEmail: [
+            `Hello ${
+              name ? name : "there"
+            }. We noticed you've been away for a while.
+          One of our agents will contact you shortly via the email address you provided. Kindly leave us a feedback below`,
+            `Hi ${
+              name ? name : "there"
+            }. We have sent you an email via the address you provided us. If you have further questions, kindly reply to the email we sent you`,
+            `Hi ${
+              name ? name : "there"
+            }. It seems you've been offline for a while. Kindly check your inbox for a follow-up mail we just sent you. Have a nice day`,
+            `Hello ${
+              name ? name : "there"
+            }. You've been away for a while. Your concerns mean a lot to us and we just sent you a mail just in case you'd want to contact one of our agents at your convenience. Thank you !`
+          ],
+          withoutEmail: [
+            `Hello ${
+              name ? name : "there"
+            }. We noticed you've been away for a while. Since you didn't provide your email address, we'd like you to contact us via admin@ith.com for further enquiries. Have a nice day`,
+            `Hello ${
+              name ? name : "there"
+            }. It seems you've been away. If you have further enquiries, kindly reach us via admin@ith.com. Have a good day!`,
+            `Hi ${
+              name ? name : "there"
+            }. You've not been responding. Your concerns mean a lot to us. In case you'd like to reach us via mail, kindly send us a mail via amin@ith.com`,
+            `Hi ${
+              name ? name : "there"
+            }. I haven't gotten any response from you. Feel free to reach us at admin@ith.com if you have more enquiries. Thanks and enjoy the rest of your day`
+          ]
+        }
+      }
+    };
+    if (type === "offline") {
+      if (this.state.userDetails.email) {
+        return responses[key][type].withEmail[index];
+      } else {
+        return responses[key][type].withoutEmail[index];
+      }
     }
-    const searchResult = this.searchTree(key, info);
-    console.log("searchResult", searchResult);
-    responses.push(searchResult);
-    console.log("refreshing result", searchResult);
-    this.saveConversation({
-      from: "bot",
-      name: this.props.settings.chatbotName,
-      message: searchResult.prompt,
-      buttons: searchResult.response.buttons,
-      timeStamp: this.setTimeOfChat()
-    });
-    this.restartTimer();
-    const timeOutTime = this.delayChat(searchResult.prompt);
-    console.log("Responses", responses)
-    setTimeout(() => {
-      this.setState({
-        responses: responses,
-        times: times,
-        thinking: false
-      });
-      this.props.getResponder(false);
+    return responses[key][type][index];
+  };
+  closeChatCount = 0;
+  refreshConvo = (key, choices, payment) => {
+    if (!this.state.closeChat) {
+      const responses = this.deepCopy(choices);
 
-      this.updateScrollbar();
-    }, timeOutTime);
+      const times = this.deepCopy(this.state.times);
+      times.push(this.setTimeOfChat());
+      let info = null;
+      if (this.state.username) {
+        info = `Thanks ${this.state.username}`;
+      }
+      
+      let searchResult = this.searchTree(key, info, payment);
+      
+
+      console.log("refreshConvo called,"+"searchResult is:", searchResult)
+      const index = searchResult.length - 1;
+      if (searchResult.prompt && key === "delay_prompt") {
+        if (this.count < 2) {
+          if (this.count === 0) {
+            searchResult.prompt = this.randomizeResponse(key, "name");
+            searchResult.response.buttons = [];
+            this.closeChatCount += 1;
+          }
+          if (this.count === 1) {
+            searchResult.prompt = this.randomizeResponse(key, "email");
+            searchResult.response.buttons = [];
+            this.closeChatCount += 1;
+          }
+          if (this.closeChatCount === 3) {
+            const name = this.state.userDetails.name;
+            searchResult.prompt = this.randomizeResponse(key, "offline");
+            searchResult.response.buttons = [];
+            this.closeChatCount += 1;
+            this.setState({ closeChat: true });
+          }
+        } else {
+          if (this.closeChatCount < 3) {
+            searchResult.prompt = this.randomizeResponse(key, "random");
+            searchResult.response.buttons = [];
+            this.closeChatCount += 1;
+          } else {
+            if (this.closeChatCount === 3) {
+              searchResult.prompt = this.randomizeResponse(key, "offline");
+              searchResult.response.buttons = [];
+              this.closeChatCount += 1;
+              this.setState({ closeChat: true });
+            }
+          }
+        }
+      }
+      if (searchResult.prompt && key !== "delay_prompt" && payment) {
+
+        if(key !== "empty"){
+
+          searchResult = {
+            identity: "payment",
+            prompt: <PaystackButton
+              text="Please click here to make payment"
+              class="payButton"
+              // callback={callback}
+              // close={close}
+              email={"vokeolomu@yahoo.com"}
+              amount={"400"}
+              paystackkey={"pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975"}
+              tag="a"
+            // embed={true}
+            />,
+            response: {
+              buttons: [],
+              text: ""
+            }
+          }
+        }
+
+      }
+      responses.push(searchResult);
+      console.log("newresponse:", responses)
+      console.log("refreshing result", searchResult);
+      this.saveConversation({
+        from: "bot",
+        name: this.props.settings.chatbotName,
+        message: searchResult.prompt,
+        buttons: searchResult.response.buttons,
+        timeStamp: this.setTimeOfChat()
+      });
+      this.restartTimer();
+      const timeOutTime = this.delayChat(searchResult.prompt, payment);
+      setTimeout(() => {
+        this.setState({
+          responses: responses,
+          times: times,
+          thinking: false
+        });
+        this.props.getResponder(false);
+
+        this.updateScrollbar();
+      }, timeOutTime);
+    }
   };
 
   /**
@@ -417,10 +566,14 @@ export default class Convo extends Component {
    * This method sets delay for bot response
    */
 
-  delayChat = prompt => {
+  delayChat = (prompt, payment) => {
+    if(payment){
+      return 
+    }
     const noOfWords = prompt.split(" ").length;
     const time = noOfWords * 250;
     const delayTime = time > 10000 ? 10000 : time;
+    
 
     return delayTime;
   };
@@ -430,35 +583,43 @@ export default class Convo extends Component {
 
   count = 0;
   setUserDetails = async value => {
-    const identity = this.state.conversationTree[0].identity;
-    const userDetails = {
-      ...this.state.userDetails
-    };
-    const type = this.count === 0 ? "name" : "email";
-    const kyObject = this.getKYCDetails(type, value);
-    const conversationTree = [...this.state.conversationTree];
-    conversationTree.push(kyObject);
-    conversationTree.unshift(this.state.firstConvo)
-    const find_key = type === "name" ? `kyc_${type}` : identity;
-    console.log("kyc_object", find_key, kyObject, conversationTree);
+    if (this.count < 2) {
+      const identity = this.state.conversationTree[0].identity;
+      const userDetails = {
+        ...this.state.userDetails
+      };
+      const type = this.count === 0 ? "name" : "email";
+      const kyObject = this.getKYCDetails(type, value);
+      console.log('kycobject', kyObject)
+      const conversationTree = [...this.state.conversationTree];
+      conversationTree.push(kyObject);
+      conversationTree.unshift(this.state.firstConvo);
+      const find_key = type === "name" ? `kyc_${type}` : identity;
+      console.log("kyc_object", find_key, kyObject, conversationTree);
 
-    userDetails[type] = value;
-    this.count += 1;
-    await this.setState({
-      userDetails,
-      collectUserInfo: false,
-      conversationTree,
-      userIsKnown:true
-    });
-    return find_key;
-    
+      userDetails[type] = value;
+      this.count += 1;
+      this.closeChatCount = 0;
+      await this.setState({
+        userDetails,
+        collectUserInfo: false,
+        conversationTree,
+        userIsKnown: true
+      });
+
+      if (this.count === 2) {
+        const leads = this.state.userDetails;
+        leads.location = this.state.visitor.city;
+        this.props.socketIo.emit("updateLeads", leads);
+      }
+      return find_key;
+    }
+    return null;
   };
   renderConversation = () => {
-    console.log("responses", this.state.responses);
-    // console.log("Render Calling::", this.state.username, "ggdgd");
     let now = new Date();
     let time = now.getTime();
-
+console.log("consoleResponse:", this.state.responses)
     return this.state.responses.map((convo, index) => {
       // {console.log("CONVOSEARCH", convo.response.buttons[index].payment)}
       return (
@@ -512,18 +673,7 @@ export default class Convo extends Component {
                           color: this.state.defaultStyle.botMessageTextTextColor
                         }}
                       >
-                        {console.log("convo buttons", convo.response.buttons)}
-                        {this.state.pay ? <PaystackButton
-                          text="Please click here to make payment"
-                          class="payButton"
-                          // callback={callback}
-                          // close={close}
-                          email="vokeolomu01@gmail.com"
-                          amount="500"
-                          paystackkey="pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975"
-                          tag="button"
-                        // embed={true}
-                        /> :convo.prompt}
+                        {convo.prompt}
                       </span>
                     </div>
                   </div>
@@ -538,7 +688,7 @@ export default class Convo extends Component {
                   </div>
                 </div>
                 <div className="button_container">
-                  {this.state.pay?"":this.renderChatButtons(convo.response.buttons)}
+                  {this.renderChatButtons(convo.response.buttons)}
                 </div>
               </div>
             </React.Fragment>
@@ -609,6 +759,29 @@ export default class Convo extends Component {
     });
   };
 
+
+  getPrompt = (convo , index)=>{
+    console.log("CONVO:", convo, "INDEX:", index);
+    console.log("CONVO.PROMPT", convo.prompt);
+
+    if(this.state.pay) return this.state.responses[index] = <PaystackButton
+      text="Please click here to make payment"
+      class="payButton"
+      // callback={callback}
+      // close={close}
+      email="vokeolomu01@gmail.com"
+      amount="500"
+      paystackkey="pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975"
+      tag="button"
+    // embed={true}
+    /> 
+    
+    else{
+      return convo.prompt
+    }
+
+  }
+
   /**
    * This method set's time of  choice
    *
@@ -639,7 +812,7 @@ export default class Convo extends Component {
    *
    */
   updateScrollbar = () => {
-    console.log("known", this.state.userIsKnown)
+    console.log("known", this.state.userIsKnown);
     const scrollBar = document.getElementById("chat_bottom");
     if (scrollBar && this.state.userIsKnown) {
       scrollBar.scrollIntoView({ behavior: "smooth" });
@@ -648,7 +821,8 @@ export default class Convo extends Component {
 
   isThinking = () => {
     return this.state.thinking ? (
-      <img src={thinker} className="thinker loader" />
+      // <img src={thinker} className="thinker loader" />
+      <div></div>
     ) : null;
   };
 
