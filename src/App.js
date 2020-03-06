@@ -26,6 +26,7 @@ import COnversationOverlay from './components/admin/adminDashboard/analytics/vis
 import DatePicker from '../src/components/admin/adminDashboard/analytics/dates'
 import BotBody from './components/admin/adminDashboard/Bot/bot-body';
 import PaymentPage from './pages/checkout/cardForm';
+import PaymentDashboardPage from './components/admin/adminDashboard/Bot/dashboardPage1'
 
 
 function App() {
@@ -91,6 +92,11 @@ function App() {
           exact
           path="/dashboard/admin/company"
           component={CompaniesComponent}
+        ></ProtectedRoute>
+        <ProtectedRoute
+          exact
+          path="/dashboard/payment"
+          component={PaymentDashboardPage}
         ></ProtectedRoute>
         <Route exact path="/auth/register" component={Register}></Route>
         <Route exact path="/auth/login" component={Login}></Route>
