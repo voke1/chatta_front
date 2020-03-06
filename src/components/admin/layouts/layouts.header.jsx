@@ -181,6 +181,13 @@ export default class LayoutHeader extends Component {
                         <i className="dripicons-to-do"></i>Archives
                       </a>
                     </li>
+                      <li className="has-submenu">
+                        <Link to="/dashboard/payment">
+                          <a>
+                            <i className="dripicons-suitcase"></i>Payments
+                        </a>
+                        </Link>
+                      </li>
                     <li className="has-submenu">
                       <a href="#">
                         <i className="dripicons-trophy"></i>FAQ{" "}
