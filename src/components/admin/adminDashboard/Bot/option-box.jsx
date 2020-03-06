@@ -16,7 +16,9 @@ class OptionBox extends Component {
     prompt: "",
     validated: false,
     message: "",
-    noOption: false
+    noOption: false,
+    keyy: this.props.keyy,
+    amount: this.props.amount,
   };
 
   initialResponses = [];
@@ -25,7 +27,7 @@ class OptionBox extends Component {
     const validated = this.checkDuplicate(e);
     this.setState({
       validated: validated.success,
-      message: validated.message
+      message: validated.message,
     });
     if (
       e.target.name === "prompt" &&
@@ -38,25 +40,28 @@ class OptionBox extends Component {
     }
   };
 
+  getResponse = (tree)=>{
+    if (!tree.botId && this.props.keyy && this.props.amount) {
+      console.log("pushing");
+      return this.initialResponses.push({
+        key: uuid(),
+        val: this.state.response,
+        payment: { "paystackkey": this.state.keyy, "price": this.state.amount }
+      });
+    } else if (!tree.botId) {
+      this.initialResponses.push({
+        key: uuid(),
+        val: this.state.response,
+      });
+    }
+  }
   onClick = tree => {
-    console.log("it is..", tree);
+    console.log("tree of life", tree);
+    console.log("key", this.state.keyy, "amount", this.state.amount)
     if (tree.val) {
       this.initialResponses.push(tree);
     } else {
-      if (!tree.botId && this.props.pay) {
-        console.log("pushing")
-        this.initialResponses.push({
-          key: uuid(),
-          val: this.state.response,
-          payment: {"paystackkey":"key", "price": "price"}
-        });
-      }if(!tree.botId){
-        this.initialResponses.push({
-          key: uuid(),
-          val: this.state.response,
-        });
-
-      }
+      this.getResponse(tree)
     }
 
     this.props.syncHeight(this.state.height + this.divElement.clientHeight);
@@ -142,7 +147,7 @@ class OptionBox extends Component {
           >
             <input
               className="form-control border-top-0 border-right-0 border-left-0"
-              placeholder={this.props.pay?"paystackey":"New prompt"}
+              placeholder={"New prompt"}
               name="prompt"
               value={this.state.prompt}
               onChange={this.onChange}
@@ -203,7 +208,7 @@ class OptionBox extends Component {
   }
   componentDidMount() {
     const height = this.divElement.clientHeight;
-    this.setState({ height: height, identity: this.props.botKey });
+    this.setState({ height: height, identity: this.props.botKey , keyy: this.props.keyy, amount: this.props.amount});
     if (this.props.chatTree) {
       this.props.chatTree.forEach(tree => {
         if (tree.identity === this.props.botKey) {

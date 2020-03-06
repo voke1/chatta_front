@@ -50,7 +50,8 @@ class Example extends Component {
       key: this.props.botKey,
       options: {
         type: "edit",
-        text: this.props.res
+        text: this.props.res,
+      
       }
     });
   };

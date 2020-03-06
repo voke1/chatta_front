@@ -32,13 +32,14 @@ const BusyOverlay = props => {
   const [dateOptions, setDateOptions] = useState(false);
   const [pickedDate, setPickedDate] = useState("");
   const [dateType, setDateType] = useState("");
-  const fetchMoreData = async visits => {
-    await setScrolled(false);
+
+  const fetchMoreData = async (visits) => {
     setTimeout(() => {
       const moreVisits = visits.slice(0, end);
-
+      console.log("more visits", moreVisits);
       setVisitsForTable(moreVisits);
       setEnd(end + pageOffset);
+      setScrolled(false)
     }, 1500);
   };
 
@@ -126,7 +127,7 @@ const BusyOverlay = props => {
   const handleSelect = async event => {
     const day = event.target.value;
 
-    if (day === "choose" ||day === "range" ||day === "single") {
+    if (day === "choose" || day === "range" || day === "single") {
       await setDateType(day);
       await setDateOptions(true);
       console.log("event");
@@ -187,7 +188,12 @@ const BusyOverlay = props => {
               </div>
               {dateOptions ? (
                 <div style={{ display: "inline", float: "left" }}>
-                  <select name="select-range" id="" onChange={handleSelect} style={{width:"fit-content"}}>
+                  <select
+                    name="select-range"
+                    id=""
+                    onChange={handleSelect}
+                    style={{ width: "fit-content" }}
+                  >
                     <option value="single">Single date</option>
                     <option value="range">Range</option>
                   </select>
@@ -257,12 +263,12 @@ const BusyOverlay = props => {
                 >
                   <InfiniteScroll
                     scrollableTarget="scroll"
-                    dataLength={pageOffset} //This is important field to render the next data
+                    dataLength={1000} //This is important field to render the next data
                     next={() => {
                       fetchMoreData(visits);
                       setScrolled(true);
                     }}
-                    hasMore={visitsForTable.length < visits.length}
+                    hasMore={visitsForTable.length < 1000}
                     loader={
                       <div>
                         {scrolled ? (
@@ -345,7 +351,7 @@ const BusyOverlay = props => {
                                       ? visitsForTable[index].conversations[
                                           visitsForTable[index].conversations
                                             .length - 1
-                                        ].error - 1 || 0
+                                        ].error || 0
                                       : 0}
                                   </td>
                                 </tr>
