@@ -13,50 +13,50 @@ class Accordion extends Component {
   };
 
 
-  paymentForm = <div className="option-box">
-    <div
-      style={{
-        marginLeft: "40px",
-        marginRight: "100px",
-        marginTop: "15px"
-      }}
-      className="form-group"
-    >
-      <input
-        className="form-control border-top-0 border-right-0 border-left-0"
-        placeholder="Paystack key"
-        name="prompt"
-        value={this.state.prompt}
-        onChange={this.onChange}
-        style={{ width: "300px" }}
-      ></input>
+  // paymentForm = <div className="option-box">
+  //   <div
+  //     style={{
+  //       marginLeft: "40px",
+  //       marginRight: "100px",
+  //       marginTop: "15px"
+  //     }}
+  //     className="form-group"
+  //   >
+  //     <input
+  //       className="form-control border-top-0 border-right-0 border-left-0"
+  //       placeholder="Paystack key"
+  //       name="pKey"
+  //       value={this.state.prompt}
+  //       onChange={this.onChange}
+  //       style={{ width: "300px" }}
+  //     ></input>
       
-      <div className="form-inline">
-        <input
-          className="form-control border-top-0 border-right-0 border-left-0"
-          placeholder="Price"
-          name="response"
-          value={this.state.response}
-          onChange={this.onChange}
-          style={{ width: "300px" }}
-          disabled={this.state.noOption}
-        ></input>
-        <div style={{ width: "10%" }}>
-          <button
-            type="button"
-            className="btn btn-sm"
-            onClick={() =>
-              this.onClick({ response: this.state.response })
-            }
-            style={{ backgroundColor: "#ededed", color: "#5b616b" }}
-            disabled={!this.state.validated}
-          >
-            Add
-                </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  //     <div className="form-inline">
+  //       <input
+  //         className="form-control border-top-0 border-right-0 border-left-0"
+  //         placeholder="Price"
+  //         name="response"
+  //         value={this.state.response}
+  //         onChange={this.onChange}
+  //         style={{ width: "300px" }}
+  //         disabled={this.state.noOption}
+  //       ></input>
+  //       <div style={{ width: "10%" }}>
+  //         <button
+  //           type="button"
+  //           className="btn btn-sm"
+  //           onClick={() =>
+  //             this.onClick({ response: this.state.response })
+  //           }
+  //           style={{ backgroundColor: "#ededed", color: "#5b616b" }}
+  //           disabled={!this.state.validated}
+  //         >
+  //           Add
+  //               </button>
+  //       </div>
+  //     </div>
+  //   </div>
+  // </div>
 
   syncHeight = height => {
     const number = parseInt(this.state.height.match(/(\d+)/)[0], 10);
@@ -78,11 +78,11 @@ class Accordion extends Component {
 
     });
     if(payment){
-      this.setState({pay: true})
+      this.setState({pay: !this.state.pay})
       console.log("payment is true")
-      if(this.state.active === 'active'){
-        this.setState({pay: false})
-      }
+      // if(this.state.active === 'active'){
+      //   this.setState({pay: false})
+      // }
     }
     console.log("checking active and init", this.state.active, "and", this.state.init)
     
@@ -118,7 +118,7 @@ class Accordion extends Component {
           style={{ maxHeight: `${this.state.height}` }}
           className="accordion_content"
         >
-          {this.state.pay ? this.paymentForm:<OptionBox
+          {<OptionBox
             res={this.props.res}
             key={this.props.botKey}
             botKey={this.props.botKey}
@@ -128,6 +128,7 @@ class Accordion extends Component {
             prompt={this.props.prompt}
             chatTree={this.props.chatTree}
             modifyOption={this.props.modifyOption}
+            pay={this.state.pay}
           />} 
         </div>
       </div>

@@ -43,13 +43,19 @@ class OptionBox extends Component {
     if (tree.val) {
       this.initialResponses.push(tree);
     } else {
-      if (!tree.botId) {
+      if (!tree.botId && this.props.pay) {
         console.log("pushing")
         this.initialResponses.push({
           key: uuid(),
           val: this.state.response,
-          payment: {paystack: "paystackkey"}
+          payment: {"paystackkey":"key", "price": "price"}
         });
+      }if(!tree.botId){
+        this.initialResponses.push({
+          key: uuid(),
+          val: this.state.response,
+        });
+
       }
     }
 
@@ -136,7 +142,7 @@ class OptionBox extends Component {
           >
             <input
               className="form-control border-top-0 border-right-0 border-left-0"
-              placeholder="New prompt"
+              placeholder={this.props.pay?"paystackey":"New prompt"}
               name="prompt"
               value={this.state.prompt}
               onChange={this.onChange}

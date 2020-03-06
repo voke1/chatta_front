@@ -291,7 +291,7 @@ export default class Convo extends Component {
           type="button"
           className="ith_chat-button"
           onClick={() => {
-            this.updateConverstion(button.key, button.val);
+            this.updateConverstion(button.key, button.val, button.payment);
             this.sendOnlineStatus();
           }}
         >
@@ -316,6 +316,7 @@ export default class Convo extends Component {
     const choices = this.deepCopy(this.state.responses);
     console.log("time of cht", this.setTimeOfChat());
     console.log("choices", choices);
+    console.log("THIS IS PAYMENTCHECK", payment)
 
     if (val) {
       const userChoice = {
@@ -512,8 +513,8 @@ export default class Convo extends Component {
                         }}
                       >
                         {console.log("convo buttons", convo.response.buttons)}
-                        {this.state.pay? <PaystackButton
-                          text="make payment"
+                        {this.state.pay ? <PaystackButton
+                          text="Please click here to make payment"
                           class="payButton"
                           // callback={callback}
                           // close={close}
@@ -537,7 +538,7 @@ export default class Convo extends Component {
                   </div>
                 </div>
                 <div className="button_container">
-                  {this.renderChatButtons(convo.response.buttons)}
+                  {this.state.pay?"":this.renderChatButtons(convo.response.buttons)}
                 </div>
               </div>
             </React.Fragment>
