@@ -54,6 +54,7 @@ export default class Convo extends Component {
       fetchUserInfo: true,
       defaultStyle: defaultStyle,
       userDetails: {},
+      paymentDetails: {},
       empty: {
         identity: "empty",
         prompt:
@@ -172,15 +173,16 @@ export default class Convo extends Component {
   };
 
   async componentWillReceiveProps(newProps) {
-    console.log("comporecieveprops called, newProps is: ", newProps)
     const userInput = newProps.userInput;
     console.log("newuserinput:", userInput)
     if (userInput && userInput !== this.props.userInput) {
       const key = this.searchKeywordsFromUserInput(userInput);
-
+      
       const find_key = (await this.setUserDetails(userInput)) || key;
-
+      
+      console.log("comporecieveprops called, newProps is: ", newProps, "and find_key is:", find_key)
       this.updateConverstion(find_key, userInput);
+      console.log("called after updateconversation")
     }
     this.setState({
       defaultStyle: newProps.settings.templateSettings
@@ -326,7 +328,7 @@ export default class Convo extends Component {
   updateConverstion = (key, val = null, payment) => {
     const choices = this.deepCopy(this.state.responses);
     console.log("time of cht", this.setTimeOfChat());
-    console.log("choices", choices);
+    console.log("choices", choices, "responses is:", this.state.responses);
     console.log("THIS IS PAYMENTCHECK", payment);
 
     if (val) {
@@ -343,16 +345,12 @@ export default class Convo extends Component {
         name: "You",
         message: val
       });
-      if(payment){
-        this.setState({pay: true})
-      }else if(!payment){
-        this.setState({pay: false})
-      }
     }
 
     this.setState({
       thinking: true,
-      responses: choices
+      responses: choices,
+      paymentDetails: payment
     });
 
     console.log("responder:", this.state.response)
@@ -491,17 +489,7 @@ export default class Convo extends Component {
 
           searchResult = {
             identity: "payment",
-            prompt: <PaystackButton
-              text="Please click here to make payment"
-              class="payButton"
-              // callback={callback}
-              // close={close}
-              email={"vokeolomu@yahoo.com"}
-              amount={"400"}
-              paystackkey={"pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975"}
-              tag="a"
-            // embed={true}
-            />,
+            prompt: "payment",
             response: {
               buttons: [],
               text: ""
@@ -535,6 +523,9 @@ export default class Convo extends Component {
     }
   };
 
+  getRes = ()=>{
+    return <button style={{backgroundColor: "blue"}}>THis is me</button>
+  }
   /**
    * This method restarts the delay timer
    */
@@ -668,13 +659,25 @@ console.log("consoleResponse:", this.state.responses)
                     <div>
                       {/* <div style={{ background: "green" }}>
                       </div> */}
-                      <span
+                      {console.log("email details: ", this.state.email)}
+                      {convo.prompt === "payment" ?<a>Please click {" "}<a style={{color: "blue"}}><PaystackButton
+                        text="here"
+                        class="payButton"
+                        // callback={callback}
+                        // close={close}
+                        email={this.state.email|| "vokeolomu01@gmail.com"}
+                        amount={this.state.paymentDetails.amount || "500"}
+                        paystackkey={this.state.paymentDetails.paystack ||"pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975"}
+                        tag="a"
+                      // embed={true}
+                      /></a> to make payment</a>: <span
                         style={{
                           color: this.state.defaultStyle.botMessageTextTextColor
                         }}
                       >
                         {convo.prompt}
-                      </span>
+                      </span>}
+                      
                     </div>
                   </div>
                   <div className="col-md-1 triangle-left" style={{}}>

@@ -27,6 +27,7 @@ class OptionBox extends Component {
     const validated = this.checkDuplicate(e);
     this.setState({
       validated: validated.success,
+      
       message: validated.message,
     });
     if (
@@ -115,7 +116,7 @@ class OptionBox extends Component {
     };
   };
   modifyOption = (botId, action) => {
-    console.log("this is global", this.global);
+
     if (action.type === "delete") {
       const button = this.initialResponses.filter(
         button => button.key === botId
@@ -128,6 +129,7 @@ class OptionBox extends Component {
         button => button.key === botId
       );
       button[0].val = action.text;
+      button[0].payment = { "paystackkey": action.key, "amount": action.amount };
       this.onClick({ botId, action });
       this.global.findAndEdit(botId, action.text);
     }
@@ -163,7 +165,6 @@ class OptionBox extends Component {
                   syncTree={this.props.syncTree}
                   prompt={this.state.prompt}
                   chatTree={this.props.chatTree}
-                  modifyOption={this.modifyOption}
                 />
               );
             })}

@@ -23,8 +23,8 @@ class Accordion extends Component {
   let action ={"type": "edit", "key": key, "amount": price}
     console.log("action", action, "key", this.props.botKey)
      this.global.modifyOption(this.props.botKey, action )
-
   }
+  
   
   syncHeight = height => {
     const number = parseInt(this.state.height.match(/(\d+)/)[0], 10);
