@@ -128,7 +128,11 @@ const OptionBox = props => {
     }
   };
 
+<<<<<<< HEAD
   const findAndEdit = (botId, text) => {
+=======
+  const findAndEdit = (botId, text, key, amount) => {
+>>>>>>> 04c6e0eabd3a3689a0f02ec2e443d716ea763ea5
     console.log("treearray:", newTreeArray)
 
     if (newTreeArray[newTreeArray.length - 2]) {
