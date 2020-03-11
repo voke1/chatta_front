@@ -42,14 +42,7 @@ class OptionBox extends Component {
   };
 
   getResponse = (tree)=>{
-    if (!tree.botId && this.props.keyy && this.props.amount) {
-      console.log("pushing");
-      return this.initialResponses.push({
-        key: uuid(),
-        val: this.state.response,
-        payment: { "paystackkey": this.state.keyy, "price": this.state.amount }
-      });
-    } else if (!tree.botId) {
+   if (!tree.botId) {
       this.initialResponses.push({
         key: uuid(),
         val: this.state.response,
@@ -129,7 +122,6 @@ class OptionBox extends Component {
         button => button.key === botId
       );
       button[0].val = action.text;
-      button[0].payment = { "paystackkey": action.key, "amount": action.amount };
       this.onClick({ botId, action });
       this.global.findAndEdit(botId, action.text);
     }
@@ -143,7 +135,7 @@ class OptionBox extends Component {
             style={{
               marginLeft: "40px",
               marginRight: "100px",
-              marginTop: "15px"
+              marginTop: "15px",
             }}
             className="form-group"
           >

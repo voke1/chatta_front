@@ -90,6 +90,11 @@ export default class Convo extends Component {
   };
   appService = new AppService();
 
+  paystackCallback = (response) => {
+    console.log("myresponse", response); // card charged successfully, get reference here
+    this.refreshConvo()
+  }
+
   handleBotFormsubmit = async userDetails => {
     this.sendOnlineStatus(userDetails);
     this.details = userDetails;
@@ -327,10 +332,6 @@ export default class Convo extends Component {
 
   updateConverstion = (key, val = null, payment) => {
     const choices = this.deepCopy(this.state.responses);
-    console.log("time of cht", this.setTimeOfChat());
-    console.log("choices", choices, "responses is:", this.state.responses);
-    console.log("THIS IS PAYMENTCHECK", payment);
-
     if (val) {
       const userChoice = {
         selection: val,
@@ -434,9 +435,11 @@ export default class Convo extends Component {
   };
   closeChatCount = 0;
   refreshConvo = (key, choices, payment) => {
+    let searchResult;
     if (!this.state.closeChat) {
+      
       const responses = this.deepCopy(choices);
-
+      
       const times = this.deepCopy(this.state.times);
       times.push(this.setTimeOfChat());
       let info = null;
@@ -444,11 +447,16 @@ export default class Convo extends Component {
         info = `Thanks ${this.state.username}`;
       }
       
-      let searchResult = this.searchTree(key, info, payment);
-      
+      if(key && choices){
 
-      console.log("refreshConvo called,"+"searchResult is:", searchResult)
+        searchResult = this.searchTree(key, info, payment);
+      }
+      
+      console.log("refreshConvo called,"+"searchResult is:");
+      console.log("key is:", key, "choices", choices,"payment is:", payment)
+      
       const index = searchResult.length - 1;
+      
       if (searchResult.prompt && key === "delay_prompt") {
         if (this.count < 2) {
           if (this.count === 0) {
@@ -498,6 +506,18 @@ export default class Convo extends Component {
         }
 
       }
+      if(!key && !choices && !payment){
+        console.log("if statement reached")
+        searchResult = {
+          identity: "payment",
+          prompt: "Congratulations!! payment is successfull. A payment receipt has been sent to your email",
+          response: {
+            buttons: [],
+            text: ""
+          }
+        }
+
+      }
       responses.push(searchResult);
       console.log("newresponse:", responses)
       console.log("refreshing result", searchResult);
@@ -523,9 +543,7 @@ export default class Convo extends Component {
     }
   };
 
-  getRes = ()=>{
-    return <button style={{backgroundColor: "blue"}}>THis is me</button>
-  }
+  
   /**
    * This method restarts the delay timer
    */
@@ -663,10 +681,10 @@ console.log("consoleResponse:", this.state.responses)
                       {convo.prompt === "payment" ?<a>Please click {" "}<a style={{color: "blue"}}><PaystackButton
                         text="here"
                         class="payButton"
-                        // callback={callback}
+                        callback={this.paystackCallback}
                         // close={close}
                         email={this.state.email|| "vokeolomu01@gmail.com"}
-                        amount={this.state.paymentDetails.amount || "500"}
+                        amount={"500"}
                         paystackkey={this.state.paymentDetails.paystack ||"pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975"}
                         tag="a"
                       // embed={true}
@@ -763,28 +781,7 @@ console.log("consoleResponse:", this.state.responses)
   };
 
 
-  getPrompt = (convo , index)=>{
-    console.log("CONVO:", convo, "INDEX:", index);
-    console.log("CONVO.PROMPT", convo.prompt);
-
-    if(this.state.pay) return this.state.responses[index] = <PaystackButton
-      text="Please click here to make payment"
-      class="payButton"
-      // callback={callback}
-      // close={close}
-      email="vokeolomu01@gmail.com"
-      amount="500"
-      paystackkey="pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975"
-      tag="button"
-    // embed={true}
-    /> 
-    
-    else{
-      return convo.prompt
-    }
-
-  }
-
+ 
   /**
    * This method set's time of  choice
    *
