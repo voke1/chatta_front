@@ -177,7 +177,7 @@ class CreateIntent extends Component {
   };
   render() {
     return (
-      <div className="container" style={{ background: "none", width: "90%" }}>
+      <div className="container" style={{ background: "none", width: "90%", backgroundColor: "green"}}>
         <div style={{ color: "#595855", fontSize: "15px" }}>
           <i class={this.state.fallbackClass}></i>{" "}
           <span>Fallback option set ({this.state.fallbackCount})</span>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { setGlobal, useGlobal } from "reactn";
 import Accordion from "./accordion";
 import uuid from "uuid/v1";
-import { ConsoleView } from "react-device-detect";
 
 let initialResponses = [];
 let identities = [];
@@ -24,15 +23,12 @@ const OptionBox = props => {
   const [buttonText, setButtonText] = useGlobal("setButtonText");
   const [rendered, setRendered] = useState(false);
   const [settings, setSettings] = useState(props.settings);
-  // const [payKey, setPayKey] = useState("")
 
   // runs when components mounts
   useEffect(() => {
     if (props.chatTree) {
       identities = props.chatTree.slice(1, props.chatTree.length - 2);
-      console.log("identitiesss", props.chatTree.slice(1, props.chatTree.length - 2))
       initialTree = props.chatTree[0];
-      console.log("initialTreees", props.chatTree[0])
       fallbackTree = props.chatTree[props.chatTree.length - 2];
       DelayPromptTree = props.chatTree[props.chatTree.length - 1];
 
@@ -43,7 +39,6 @@ const OptionBox = props => {
           val: button.val,
           identity: props.chatTree[0].identity
         };
-        console.log("initialResponsesss", initialResponses)
         if (!initialResponses.indexOf(body) > -1) {
           initialResponses.push(body);
         }
@@ -128,19 +123,12 @@ const OptionBox = props => {
     }
   };
 
-
   const findAndEdit = (botId, text) => {
-
-    console.log("treearray:", newTreeArray)
-
     if (newTreeArray[newTreeArray.length - 2]) {
       const fallbackButtons =
         newTreeArray[newTreeArray.length - 2].response.buttons;
-      console.log("findAndedit called", botId, text)
-
       for (let index = 0; index < fallbackButtons.length; index++) {
         if (fallbackButtons[index].key === botId) {
-          
           fallbackButtons[index].val = text;
           break;
         }
@@ -158,7 +146,6 @@ const OptionBox = props => {
       }
     }
   };
-
   /*
   syncTree function builds the chat tree including also the fallback and delay prompt body
   */
@@ -237,7 +224,6 @@ const OptionBox = props => {
         const index = identities.indexOf(isFound[0]);
         if (option) {
           identities[index].response.buttons = tree.response.buttons;
-          console.log("lookingbuttons", tree.response.buttons)
           if (option.action === "delete") {
             findAndDelete(option.botId);
           }
@@ -248,29 +234,13 @@ const OptionBox = props => {
           identities[index].response.buttons.push(
             tree.response.buttons[tree.response.buttons.length - 1]
           );
-          console.log("what is this", tree.response.buttons[tree.response.buttons.length - 1])
-          // if(payment){
-          //   identities[index].response.buttons.push(
-          //     tree.response.buttons[tree.response.buttons.length - 1]
-          //   );
-
-          // }
         }
       } else {
         identities.push(tree);
-        console.log("treesearch", tree)
       }
     }
-    newTreeArray = [initialTree, ...identities, fallbackTree, DelayPromptTree,];
-    console.log("newTreeArray", newTreeArray);
-    console.log("InitalTree", initialTree)
-    // if(payment) {
-    //   newTreeArray =  newTreeArray.push({
-    //     buttonKey: "fkdhuhkjdf",
-    //     cost: 500,
-    //     service: "Airtime",
-    //   })
-    // }
+    newTreeArray = [initialTree, ...identities, fallbackTree, DelayPromptTree];
+    console.log("newTree:", newTreeArray)
     props.tree([newTreeArray]);
     if (fallbackTree && DelayPromptTree) {
       console.log(fallbackTree.response.buttons.length);
@@ -286,7 +256,6 @@ const OptionBox = props => {
   }
 
   const modifyOption = async (botId, action) => {
-    console.log("modifyoption is called");
     if (action.type === "delete") {
       const convoButtons = newTreeArray[0].response.buttons;
       for (let index = 0; index < convoButtons.length; index++) {
@@ -308,30 +277,33 @@ const OptionBox = props => {
       for (let index = 0; index < convoButtons.length; index++) {
         if (convoButtons[index].key === botId) {
 
-          if (action.key && action.amount) {
-            convoButtons[index].payment = { "paystackkey": action.key, "amount": action.amount };
+          if(action.key && action.amount){
 
-          } else {
-            convoButtons[index].val = action.text;
-            findAndEdit(botId, action.text);
-            // update UI
-            const responseArray = initialResponses.filter(
-              response => response.key === botId
-            );
-            responseArray[0].val = action.text;
-            setResponses(initialResponses);
-            break;
-
+            convoButtons[index].payment ={"paystack": action.key, "amount":action.amount}
+            
           }
-
+          else{
+            convoButtons[index].val = action.text;
+            break;
+          }
         }
       }
+      if(!action.amount){
 
+        findAndEdit(botId, action.text);
+        // update UI
+        const responseArray = initialResponses.filter(
+          response => response.key === botId
+        );
+        responseArray[0].val = action.text;
+      }
+      setResponses(initialResponses);
     }
     if (!props.chatTree) {
       props.getTab();
     }
     newTreeArray = [initialTree, ...identities, fallbackTree, DelayPromptTree];
+    console.log("newTree:", newTreeArray)
     setGlobal({ chatTree: newTreeArray });
     props.tree([newTreeArray]);
   };
@@ -364,6 +336,7 @@ const OptionBox = props => {
       };
     }
   };
+  
   const handleChange = e => {
     setResponse(e.target.value);
     setInputVal(e.target.value);
@@ -391,7 +364,7 @@ const OptionBox = props => {
       identity,
       prompt: props.prompt,
       response: {
-        buttons: [{ key, val: response, }],
+        buttons: [{ key, val: response }],
         text: ""
       }
     };
@@ -407,7 +380,7 @@ const OptionBox = props => {
     <div
       style={{
         marginLeft: !props.marginLeft ? "40px" : props.marginLeft,
-        marginRight: "100px",
+        marginRight: "100px"
       }}
       className="form-group"
     >
@@ -420,7 +393,6 @@ const OptionBox = props => {
           identity={res.identity}
           modifyOption={modifyOption}
           chatTree={props.chatTree}
-          findAndEdit={findAndEdit}
         />
       ))}
 
@@ -433,6 +405,7 @@ const OptionBox = props => {
           value={inputVal}
           style={{ width: "40%" }}
         ></input>
+
         <div style={{ marginLeft: "3px" }}>
           <button
             className="btn btn-sm"
@@ -453,8 +426,8 @@ const OptionBox = props => {
           <p>{message}</p>
         </div>
       ) : (
-          ""
-        )}
+        ""
+      )}
     </div>
   );
 };

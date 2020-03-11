@@ -20,9 +20,9 @@ class Accordion extends Component {
 
     this.setState({keyy: key, amount: price})
     console.log("get Data is called, key is ", key, "price is", price);
-  let action ={"type": "edit", "key": key, "amount": price}
+    let action ={"type": "edit", "key": key, "amount": price}
     console.log("action", action, "key", this.props.botKey)
-     this.global.modifyOption(this.props.botKey, action )
+     this.global.modifyOption(this.props.botKey, action );
   }
   
   
@@ -35,6 +35,7 @@ class Accordion extends Component {
       height: newHeight + this.divElement.clientHeight + "px"
     });
   };
+  
 
   toggleAccordion = (payment) => {
     this.setState({
@@ -66,6 +67,7 @@ class Accordion extends Component {
           marginBottom: "10px",
           marginTop: "10px",
           transition: "max-width 0.6s ease",
+          backgroundColor: "blue"
         }}
       >
         <CardView

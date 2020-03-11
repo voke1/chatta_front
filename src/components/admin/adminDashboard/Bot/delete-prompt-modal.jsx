@@ -19,7 +19,6 @@ class DialogBox extends Component {
     this.global.closeDialog();
   };
   handleDelete = () => {
-    console.log("called");
     this.global.modify(this.global.key, this.global.options);
     this.global.closeDialog();
     setTimeout(() => {
