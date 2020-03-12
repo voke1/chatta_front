@@ -23,6 +23,7 @@ class Accordion extends Component {
     let action ={"type": "edit", "key": key, "amount": price}
     console.log("action", action, "key", this.props.botKey)
      this.global.modifyOption(this.props.botKey, action );
+
   }
   
   
@@ -67,7 +68,6 @@ class Accordion extends Component {
           marginBottom: "10px",
           marginTop: "10px",
           transition: "max-width 0.6s ease",
-          backgroundColor: "blue"
         }}
       >
         <CardView
