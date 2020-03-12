@@ -136,7 +136,6 @@ class OptionBox extends Component {
               marginLeft: "40px",
               marginRight: "100px",
               marginTop: "15px",
-              backgroundColor: "yellow"
             }}
             className="form-group"
           >
