@@ -32,7 +32,7 @@ class BotTabs extends Component {
     fallbackMessage: "",
     delayPrompt: "",
     botImage: " ",
-    tab: "intent",
+    tab: "home",
     settingsSaved: false,
     fileUpload: null,
     delayTime: null,
