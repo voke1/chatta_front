@@ -197,6 +197,7 @@ class CreateIntent extends Component {
         ) : (
           ""
         )} */}
+        {console.log("openstate:", this.state.openEditDialog, "globalresponse:", this.global.response)}
         {this.state.openDialog ? <DeletePrompt /> : ""}
         {this.state.openEditDialog ? (
           <EditPrompt response={this.global.response} />
