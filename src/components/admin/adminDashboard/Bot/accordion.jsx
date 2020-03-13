@@ -22,7 +22,7 @@ class Accordion extends Component {
     console.log("get Data is called, key is ", key, "price is", price);
     let action ={"type": "edit", "key": key, "amount": price}
     console.log("action", action, "key", this.props.botKey)
-     this.global.modifyOption(this.props.botKey, action );
+     this.props.modifyOption(this.props.botKey, action );
 
   }
   
@@ -97,7 +97,7 @@ class Accordion extends Component {
             identity={this.props.identity}
             prompt={this.props.prompt}
             chatTree={this.props.chatTree}
-            modifyOption={this.props.modifyOption}
+            // modifyOption={this.global.modifyOption}
             pay={this.state.pay}
             amount={this.state.amount}
             keyy={this.state.keyy}

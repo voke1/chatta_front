@@ -273,8 +273,11 @@ const OptionBox = props => {
       setResponses(initialResponses);
     }
     if (action.type === "edit") {
+      console.log("modifyedit is called")
+
       const convoButtons = newTreeArray[0].response.buttons;
       for (let index = 0; index < convoButtons.length; index++) {
+        console.log("convobuttons:", convoButtons)
         if (convoButtons[index].key === botId) {
 
           if(action.key && action.amount){

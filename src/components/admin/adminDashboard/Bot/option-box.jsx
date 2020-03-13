@@ -121,9 +121,15 @@ class OptionBox extends Component {
       const button = this.initialResponses.filter(
         button => button.key === botId
       );
-      button[0].val = action.text;
-      this.onClick({ botId, action });
-      this.global.findAndEdit(botId, action.text);
+      if(action.amount){
+        button[0].payment = {"paystack": action.key, "amount": action.amount}
+
+      }
+      if(!action.amount){
+        button[0].val = action.text;
+        this.onClick({ botId, action });
+        this.global.findAndEdit(botId, action.text);
+      }
     }
   };
 
@@ -157,6 +163,8 @@ class OptionBox extends Component {
                   syncTree={this.props.syncTree}
                   prompt={this.state.prompt}
                   chatTree={this.props.chatTree}
+                  modifyOption={this.modifyOption}
+
                 />
               );
             })}

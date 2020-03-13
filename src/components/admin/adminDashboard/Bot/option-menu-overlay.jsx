@@ -32,6 +32,7 @@ class Example extends Component {
       });
     }
   };
+
   handleDelete = () => {
     this.global.openDialog();
     this.setGlobal({
@@ -42,6 +43,7 @@ class Example extends Component {
       }
     });
   };
+
   handleEdit = () => {
     this.global.openEditDialog();
     this.setGlobal({
@@ -51,10 +53,11 @@ class Example extends Component {
       options: {
         type: "edit",
         text: this.props.res,
-      
       }
+      
     });
   };
+
   render() {
     return (
       <OverlayTrigger
