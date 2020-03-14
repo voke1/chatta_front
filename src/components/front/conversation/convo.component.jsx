@@ -157,7 +157,7 @@ export default class Convo extends Component {
   };
 
   componentDidMount = async () => {
-    console.log("training", this.props.settings.trainingCode);
+    console.log("training", this.props.chat_body);
     await this.getBrowser();
     await this.getUserData();
     this.setState({ training: this.props.training });
@@ -165,25 +165,28 @@ export default class Convo extends Component {
     // console.log("windows location href", window.location.href);
     // console.log("document referer", document.referrer);
     // this.determineLister()
-    if (this.props.settings.trainingMode) {
       await this.setState({
         canListen: true,
         collectUserInfo: true,
-        chat_body: trainingTree
-      });
-    } else {
-      this.setState({
         chat_body: this.props.chat_body
       });
-    }
-    this.getConversationTree();
+        this.getConversationTree();
   };
 
   async componentWillReceiveProps(newProps) {
     const userInput = newProps.userInput;
     if (userInput && userInput !== this.props.userInput) {
+      if(this.props.settings.trainingCode === userInput && !this.state.trainingMode) {
+        await this.setState({
+          chat_body: trainingTree,
+          currentKey: "95bebaa0-0de8-11ea-ad77-e78eca50f5f34",
+          trainingMode: true,
+          userIsKnown: true
+        });
+        this.getConversationTree();
+      }
       const key = this.searchKeywordsFromUserInput(userInput);
-
+       
       const find_key = (await this.setUserDetails(userInput)) || key;
 
       this.updateConverstion(find_key, userInput);
@@ -206,12 +209,12 @@ export default class Convo extends Component {
 
     const convoTree = this.state.chat_body;
     const firstConvo = convoTree[0];
-    if (!this.props.settings.trainingMode) {
+    if (!this.state.trainingMode) {
       convoTree[0].prompt = `Thanks ${this.state.username} ${convoTree[0].prompt}`;
     }
     const conversationTree = this.deepCopy(convoTree);
     console.log("rez3", conversationTree);
-    if (!this.props.settings.trainingMode) {
+    if (!this.state.trainingMode) {
       if (this.count === 0) {
         conversationTree[0].prompt = `Hi my name is ${this.props.settings.chatbotName}. What's your name?`;
         conversationTree[0].response.buttons = [];
@@ -246,7 +249,7 @@ export default class Convo extends Component {
       // this.props.socketIo.on("msgToClient", message => {});
       this.setState({
         online: true,
-        showProgress: this.props.settings.trainingMode ? true : false
+        showProgress: this.state.trainingMode ? true : false
       });
     }
   };
@@ -420,7 +423,7 @@ export default class Convo extends Component {
 
       console.log("search result", searchResult);
       const index = searchResult.length - 1;
-      if (!this.props.settings.trainingMode) {
+      if (!this.state.trainingMode) {
         const { userDetails } = this.state;
         if (searchResult.prompt && key === "delay_prompt") {
           if (this.count < 2) {
@@ -542,7 +545,7 @@ export default class Convo extends Component {
     const time = noOfWords * 250;
     const delayTime = time > 10000 ? 10000 : time;
 
-    return !this.props.settings.trainingMode ? delayTime : 1000;
+    return !this.state.trainingMode ? delayTime : 1000;
   };
   /**
    * This method renders the UI converstion
@@ -550,7 +553,7 @@ export default class Convo extends Component {
 
   count = 0;
   setUserDetails = async value => {
-    if (!this.props.settings.trainingMode) {
+    if (!this.state.trainingMode) {
       const nerify = new Nerify();
       const pattern = await nerify.process(
         this.state.training.training.trainingData,
@@ -827,7 +830,7 @@ export default class Convo extends Component {
    */
 
   setDelayListener = () => {
-    if (this.state.canListen && !this.props.settings.trainingMode) {
+    if (this.state.canListen && !this.state.trainingMode) {
       const typingTimer = setInterval(() => {
         let timer = this.deepCopy(this.state.chatTimer); //get initial delay time
         const refreshTimer =

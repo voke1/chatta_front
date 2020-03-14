@@ -140,17 +140,30 @@ export class ManageBot extends Component {
     }
   };
   handleCheck = () => {
+    
     const mode = !this.state.trainingMode;
+    const code = uuid();
+    const bot = {
+      welcomeMessage: this.state.welcomeMessage,
+      fallbackMessage: this.state.fallbackMessage,
+      delayPrompt: this.state.delayPrompt,
+      chatbotName: this.state.chatbotName,
+      primaryColor: this.state.primaryColor,
+      secondaryColor: this.state.secondaryColor,
+      delayTime: this.state.delayTime,
+      botImage: this.state.botImage,
+      trainingCode: code,
+      trainingMode: mode
+    };
     this.setState({
       trainingMode: mode,
-      trainingCode: uuid()
+      trainingCode: code
     });
     
-      Axios.put(`${BASE_URL}/setting/${this.state.settingId}`, {
-        trainingCode: this.state.trainingCode,
-        trainingMode: mode
-      })
-        .then(res => {})
+      Axios.put(`${BASE_URL}/setting/${this.state.settingId}`, bot)
+        .then(res => {
+          console.log("update", res)
+        })
         .catch(err => {
           console.log(err);
         });
