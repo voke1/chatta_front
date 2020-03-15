@@ -16,7 +16,7 @@ import { defaultStyle } from "./defaultStyle";
 import * as apiService from "../../../services/apiservice";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
-const io = socket(BASE_URL);
+const io = socket(BASE_URL, {transports: ["websocket"]});
 export default class Chat extends Component {
   appService;
   constructor(props) {
@@ -123,7 +123,12 @@ export default class Chat extends Component {
                 <div className="row">
                   <div className="col-md-12">
                     <input
-                      type={this.state.count === 1 && !this.state.settings.trainingMode? "email" : "text"}
+                      type={
+                        this.state.count === 1 &&
+                        !this.state.settings.trainingMode
+                          ? "email"
+                          : "text"
+                      }
                       className="form-control"
                       value={this.state.textValue}
                       id="message-to-send"
@@ -166,7 +171,7 @@ export default class Chat extends Component {
       </button>
     );
   }
- 
+
   componentWillUnmount() {
     // this.deleteVisit()
   }
@@ -198,10 +203,8 @@ export default class Chat extends Component {
           defaultStyle: settings.templateSettings
         });
       }
-      const data = await Axios.get(
-        `${BASE_URL}/training/`
-      ).then(res => {
-        this.setState({training: res.data})
+      const data = await Axios.get(`${BASE_URL}/training/`).then(res => {
+        this.setState({ training: res.data });
       });
     } catch (e) {}
 

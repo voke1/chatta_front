@@ -26,6 +26,7 @@ import {
   isSafari
 } from "react-device-detect";
 const BASE_URL = APP_ENVIRONMENT.base_url;
+
 export default class Convo extends Component {
   appService;
   static userName;
@@ -155,12 +156,12 @@ export default class Convo extends Component {
     }
     console.log("browser:", browser);
     this.setState({ browser });
+    this.getUserData();
   };
 
   componentDidMount = async () => {
     console.log("training", this.props.chat_body);
     await this.getBrowser();
-    await this.getUserData();
     this.setState({ training: this.props.training });
     // console.log("chat body", this.props.chat_body);
     // console.log("windows location href", window.location.href);
@@ -237,7 +238,7 @@ export default class Convo extends Component {
    * to match  bot response, but returns a default message if match fails;
    */
   sendOnlineStatus = (userDetails, visitor) => {
-    console.log("lead", userDetails);
+    console.log("user details", userDetails);
     const leads = { ...userDetails };
     leads.location = this.state.visitor.city;
     if (!this.state.online) {
@@ -261,24 +262,49 @@ export default class Convo extends Component {
     return `${time.getMonth() +
       1}/${time.getDate()}/${time.getFullYear()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
   };
-  getUserData = () => {
+  getUserData = async () => {
+    const continentCodes = {
+      AS: "Asia",
+      AF: "Africa",
+      AN: "Antarctica",
+      NA: "North America",
+      EU: "Europe",
+      OC: "Ocenia",
+      SA: "South America"
+    };
     if (this.state.fetchUserInfo) {
-      fetch(
-        "http://api.ipstack.com/197.210.227.104?access_key=b1a656a166707d7810e3dc4229cda8ec&format=1"
-      )
-        .then(data => data.json())
-        .then(visitor => {
-          console.log("hahahaha", visitor);
-          this.setState({ fetchUserInfo: false });
-          visitor.time = this.getDate();
-          visitor.browser = this.state.browser;
-          this.setState({ fetchUserInfo: false, visitor });
-          this.sendOnlineStatus({}, visitor);
-          console.log("visitor:", visitor);
-        })
-        .catch(error => {
-          console.log("request error", error);
-        });
+      try {
+            const result = await axios.get("https://ipapi.co/json/");
+
+            const visitor = result.data;
+            visitor.continent_name = continentCodes[visitor.continent_code];
+            visitor.time = this.getDate();
+            visitor.browser = this.state.browser;
+            visitor.region_name=visitor.region
+            visitor.type="ipv4"
+            console.log("na result2", visitor);
+
+            await this.sendOnlineStatus({ name: "", email: "" }, visitor);
+            this.setState({ fetchUserInfo: false, visitor });
+          } catch (error) {
+        console.log("request error", error);
+      }
+      // fetch(
+      //   "http://api.ipstack.com/197.210.47.226?access_key=23268208337b6bbc5715ba4cfe9cad1e&format=1"
+      // )
+      //   .then(data => data.json())
+      //   .then(async visitor => {
+      //     console.log("hahahaha", visitor);
+      //     this.setState({ fetchUserInfo: false });
+      //     visitor.time = this.getDate();
+      //     visitor.browser = this.state.browser;
+      //     this.setState({ fetchUserInfo: false, visitor });
+      //     await this.sendOnlineStatus({ name: "", email: "" }, visitor);
+      //     console.log("visitor:", visitor);
+      //   })
+      //   .catch(error => {
+      //     console.log("request error", error);
+      //   });
     }
   };
   searchTree = (key, info = null) => {
@@ -413,16 +439,15 @@ export default class Convo extends Component {
       const convoTree = this.props.chat_body;
       const firstConvo = convoTree[0];
       console.log("convo tree", firstConvo);
-       this.setState({
+      this.setState({
         canListen: true,
         chat_body: convoTree,
         currentKey: convoTree[0].identity,
         resetConvo: true,
-        trainingMode:false
+        trainingMode: false
       });
       setTimeout(() => {
-      this.getConversationTree();
-        
+        this.getConversationTree();
       }, 100);
     }
   };
@@ -486,7 +511,7 @@ export default class Convo extends Component {
                   userDetails
                 );
                 searchResult.response.buttons = [];
-                this.setState({ closeChat: true });
+                this.setState({ closeChat: true, userIsKnown: false });
               }
             }
           }

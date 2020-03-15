@@ -1,0 +1,127 @@
+.show-conversation-overlay {
+  height: 90%;
+  width: 100%;
+  position: fixed;
+  z-index: 100000;
+  top: 0px;
+  background-color: rgba(0, 0, 0, 0.658);
+  transition: 0.2s;
+  height: 100vh;
+  display: block;
+}
+.tag-overlay-content {
+  width: 600px;
+  height: 310px;
+  border-radius: 3px;
+  background-color: #ffffff;
+  margin: auto;
+  margin-top: 100px;
+}
+.tag-overlay-content i {
+  float: right;
+  font-size: 25px;
+  margin: 10px;
+  color: grey;
+}
+.tag-overlay-content i:hover {
+  color: black;
+  display: block;
+}
+.tag-input {
+  width: 80%;
+  height: 90px;
+  display: block;
+  margin: auto;
+  margin-top: 100px;
+  padding-top: 10px;
+}
+.tag-form {
+  width: fit-content;
+  margin: auto;
+}
+
+.tag-input form input {
+  width: 250px;
+  height: 40px;
+  background-color: #E8F0FE;
+  padding-left: 20px;
+  float: left;
+  margin-top: 10px;
+}
+.tag-input form {
+  top: 100px;
+}
+.tag-form button {
+  float: left;
+}
+.tag-form button i {
+  font-size: 30px;
+}
+
+.all-tags {
+  width: 90%;
+  min-height: 50px;
+  height: fit-content;
+  height: 150px;
+  overflow-y: scroll;
+  margin: auto;
+  margin-top: 15px;
+  border: 0px;
+}
+.one-tag {
+  width: fit-content;
+  margin-right: 10px;
+  margin-top: 10px;
+  border: 1px solid #c6b6b6;
+  border-radius: 5px;
+  height: 35px;
+  padding-top: 3px;
+  padding-bottom: 20px;
+  float: left;
+}
+.one-tag span {
+  margin-left: 10px;
+}
+.one-tag i {
+  color: grey;
+  font-size: 10px;
+  display: inline;
+}
+.option-buttons {
+  width: 100%;
+  margin-top: 15px;
+}
+.option-buttons .save-tag {
+  border: 1.5px solid #2c214d;
+  width: 100px;
+  height: 28px;
+  float: right;
+  margin-right: 20px;
+  box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.397);
+}
+
+.option-buttons .save-tag:hover {
+  background-color: rgb(124, 108, 108);
+  color: white;
+}
+.save-tag i {
+  float: left;
+  font-size: 10px;
+}
+.save-tag i:hover {
+  color: white;
+}
+.option-buttons .save-tag {
+  border: 1.5px solid #2c214d;
+  width: 100px;
+  height: 28px;
+  float: right;
+  margin-right: 20px;
+  cursor: pointer;
+  box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.397);
+}
+.save-tag span {
+  font-size: 14px;
+  margin-top: 10px;
+  margin-left: 7px;
+}

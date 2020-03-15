@@ -12,21 +12,21 @@ import Register from "./components/admin/adminDashboard/Authentication/Register"
 import Login from "./components/admin/adminDashboard/Authentication/Login";
 import VerifyEmail from "./components/admin/adminDashboard/Authentication/emailVerification";
 import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
-import BotUITemplate from './components/admin/adminDashboard/Bot/bot-UI-template-design'
-import Triangle from './components/admin/adminDashboard/Bot/triangle2'
-import InternetCheck from './components/admin/adminDashboard/Bot/internet-check';
+import BotUITemplate from "./components/admin/adminDashboard/Bot/bot-UI-template-design";
+import Triangle from "./components/admin/adminDashboard/Bot/triangle2";
+import InternetCheck from "./components/admin/adminDashboard/Bot/internet-check";
 // import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
-import { CompanySettings } from './components/admin/adminDashboard/Bot/companySettings';
-import { IthAdmin } from './components/ithAdmin/ithAdmin';
+import { CompanySettings } from "./components/admin/adminDashboard/Bot/companySettings";
+import { IthAdmin } from "./components/ithAdmin/ithAdmin";
 import { ProtectedRoute } from "./components/protectedRoutes";
-import FrontPage from './components/front/landing-page/frontPage';
-import Charts from './components/admin/adminDashboard/analytics/chart';
-import Visits from './components/admin/adminDashboard/analytics/visits'
-import COnversationOverlay from './components/admin/adminDashboard/analytics/visit-conversation-leads-overlay'
-import DatePicker from '../src/components/admin/adminDashboard/analytics/dates'
-import BotBody from './components/admin/adminDashboard/Bot/bot-body';
-import PaymentPage from './pages/checkout/cardForm';
-
+import FrontPage from "./components/front/landing-page/frontPage";
+import Charts from "./components/admin/adminDashboard/analytics/chart";
+import Visits from "./components/admin/adminDashboard/analytics/visits";
+import COnversationOverlay from "./components/admin/adminDashboard/analytics/visit-conversation-leads-overlay";
+import DatePicker from "../src/components/admin/adminDashboard/analytics/dates";
+import BotBody from "./components/admin/adminDashboard/Bot/bot-body";
+import PaymentPage from "./pages/checkout/cardForm";
+import Tags from "./components/admin/adminDashboard/Bot/tag-overlay";
 
 function App() {
   return (
@@ -98,7 +98,12 @@ function App() {
         <Route exact path="/preview" component={BotUITemplate}></Route>
         <Route exact path="/date" component={DatePicker}></Route>
         <Route exact path="/visits" component={Visits}></Route>
-        <Route exact path="/conversation" component={COnversationOverlay}></Route>
+        <Route
+          exact
+          path="/conversation"
+          component={COnversationOverlay}
+        ></Route>
+        <Route exact path="/tags" component={Tags}></Route>
 
         <Route component={Error}></Route>
       </Switch>

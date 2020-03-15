@@ -1,5 +1,6 @@
 import React, { Component } from "reactn";
 import { Link } from "react-router-dom";
+import { FacebookProgress } from "../components/admin/adminDashboard/Authentication/progressbar";
 import uuid from "uuid/v1";
 
 import avatar from "../components/admin/images/users/avatar-1.jpg";
@@ -24,6 +25,8 @@ export class ManageBot extends Component {
     super(props);
     this.state = {
       settings: {},
+      switchClassName:"switch",
+      showProgress: false,
       settingId: props.match.params.id,
       welcomeMessage: null,
       fallbackMessage: null,
@@ -140,7 +143,6 @@ export class ManageBot extends Component {
     }
   };
   handleCheck = () => {
-    
     const mode = !this.state.trainingMode;
     const code = uuid();
     const bot = {
@@ -157,17 +159,19 @@ export class ManageBot extends Component {
     };
     this.setState({
       trainingMode: mode,
-      trainingCode: code
+      trainingCode: "",
+      showProgress: true,switchClassName:"switch disabled"
     });
-    
-      Axios.put(`${BASE_URL}/setting/${this.state.settingId}`, bot)
-        .then(res => {
-          console.log("update", res)
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    
+
+    Axios.put(`${BASE_URL}/setting/${this.state.settingId}`, bot)
+      .then(res => {
+        console.log("update", res);
+        this.setState({ showProgress: false,switchClassName:"switch", trainingCode:code });
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ showProgress: false, switchClassName:"switch" });
+      });
   };
   handleSubmit = event => {
     event.preventDefault();
@@ -606,19 +610,27 @@ export class ManageBot extends Component {
                                     Training mode
                                   </span>
 
-                                  <label class="switch">
+                                  <label class={this.state.switchClassName}>
                                     <input
+                                      className=""
                                       type="checkbox"
                                       checked={this.state.trainingMode}
                                       onChange={this.handleCheck}
+                                      check
                                     ></input>
-                                    <span class="slider round"></span>
+                                    <span class="slider round "></span>
                                   </label>
+
                                   {this.state.trainingMode ? (
                                     <span style={{ marginLeft: "15px" }}>
                                       {this.state.trainingCode}
                                     </span>
                                   ) : null}
+                                  <div style={{ display: "in-line" }}>
+                                    {this.state.showProgress ? (
+                                      <FacebookProgress size={20} />
+                                    ) : null}
+                                  </div>
                                 </div>
                                 <button
                                   type="submit"

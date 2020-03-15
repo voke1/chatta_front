@@ -1,4 +1,6 @@
-import axios from 'axios'
+import axios from "axios";
+import words from "../conversation/dictionary.json";
+
 // a program that finds the degree of match between two sentences
 export default class Nerify {
   async process(trainingData, namedEntity) {
@@ -32,6 +34,16 @@ export default class Nerify {
     }
     return patterns;
   }
+  getPartsOfSpeech = word => {
+    const partsOfSpeech = [];
+    const { definitions } = words[word] ? words[word] : [];
+    if (definitions && definitions.length) {
+      definitions.forEach(definition =>
+        partsOfSpeech.push(definition.part_of_speech)
+      );
+    }
+    return partsOfSpeech;
+  };
   learn = patterns => {
     const pattern1 = [...patterns];
     const pattern2 = [...patterns];
@@ -59,13 +71,65 @@ export default class Nerify {
         pattern1[index].score = count;
       }
     }
-    console.log("patterns", patterns);
 
     return output;
   };
+  firstLetterToUpperCase = wordArray => {
+    let result = "";
+    wordArray.forEach((word, index) => {
+      result += !result.length
+        ? `${word.charAt(0).toUpperCase()}${word.slice(1)}`
+        : ` ${word.charAt(0).toUpperCase()}${word.slice(1)}`;
+    });
+    console.log("resultss", result);
+    return result;
+  };
+
+  getName = sentenceArray => {
+    let names = [];
+    for (let index = 0; index < sentenceArray.length; index += 1) {
+      const partOfSpeech = this.getPartsOfSpeech(sentenceArray[index]);
+      if (
+        (partOfSpeech.includes("noun") || partOfSpeech.length === 0) &&
+        !partOfSpeech.includes("preposition") &&
+        !partOfSpeech.includes("verb") &&
+        !partOfSpeech.includes("adverb") &&
+        !partOfSpeech.includes("conjunction")
+      ) {
+        names.push(sentenceArray[index]);
+      } else {
+        break;
+      }
+    }
+    return names;
+    // const names = sentenceArray.filter(sentenceWord => {
+    //   const partOfSpeech = this.getPartsOfSpeech(sentenceWord.toLowerCase());
+    //   console.log("parts", partOfSpeech);
+    //   if (
+    //     (partOfSpeech.includes("noun") || partOfSpeech.length === 0) &&
+    //     !partOfSpeech.includes("preposition") &&
+    //     !partOfSpeech.includes("verb") &&
+    //     !partOfSpeech.includes("adverb") &&
+    //     !partOfSpeech.includes("conjunction")
+    //   ) {
+    //     return sentenceWord;
+    //   }
+    // });
+    // console.log("sentence array", names);
+
+    // return names;
+  };
   async identify(learnedData, sentence, entity) {
-    let matchedResult = { wordsBefore: "", wordsAfter: "", degreeOfMatch: 0 };
+    let matchedResult = {
+      wordsBefore: "",
+      wordsAfter: "",
+      degreeOfMatch: 0
+    };
     let pattern = {};
+    let randomGuess = "";
+
+    let wordsBeforeMatch = { wordsBefore: "" };
+    let wordsAfterMatch = { wordsAfter: "" };
 
     for (let index = 0; index < learnedData.length; index += 1) {
       if (learnedData[index]) {
@@ -84,7 +148,61 @@ export default class Nerify {
           console.log(error);
         }
       }
+
+      if (
+        learnedData[index].wordsBefore.length &&
+        sentence
+          .toLowerCase()
+          .includes(learnedData[index].wordsBefore.toLowerCase())
+      ) {
+        if (
+          learnedData[index].wordsBefore.length >
+          wordsBeforeMatch.wordsBefore.length
+        )
+          wordsBeforeMatch = learnedData[index];
+      }
+      if (
+        learnedData[index].wordsAfter.length &&
+        sentence
+          .toLowerCase()
+          .includes(learnedData[index].wordsAfter.toLowerCase())
+      ) {
+        if (
+          learnedData[index].wordsAfter.length >
+          wordsAfterMatch.wordsAfter.length
+        )
+          wordsAfterMatch = learnedData[index];
+      }
     }
+
+    const sentenceArray = sentence.split(" ");
+    if (wordsBeforeMatch.wordsBefore.length) {
+      sentenceArray.splice(
+        0,
+        sentenceArray.indexOf(
+          wordsBeforeMatch.wordsBefore.split(" ")[
+            wordsBeforeMatch.wordsBefore.split(" ").length - 1
+          ]
+        ) + 1
+      );
+    }
+
+    if (wordsAfterMatch.wordsAfter.length) {
+      sentenceArray.splice(
+        sentenceArray.indexOf(wordsAfterMatch.wordsAfter.split(" ")[0]),
+        sentenceArray.length
+      );
+    }
+    if (!wordsBeforeMatch.length) {
+      const names = this.getName(sentenceArray);
+      randomGuess = this.firstLetterToUpperCase(names);
+    }
+
+    if (!wordsAfterMatch.length) {
+      const names = this.getName(sentenceArray);
+      randomGuess = this.firstLetterToUpperCase(names);
+    }
+    console.log("sentence", randomGuess);
     if (matchedResult.wordsBefore === "" && matchedResult.wordsAfter === "") {
       matchedResult.degreeOfMatch = 100;
       pattern.recognizedPattern = entity.toUpperCase();
@@ -103,15 +221,13 @@ export default class Nerify {
         }
       };
     }
-    let result = "";
     if (!matchedResult.wrongWords && matchedResult.wrongWords.length) {
       return false;
     }
-    matchedResult.wrongWords.forEach((word, index) => {
-      result += !result.length
-        ? `${word.charAt(0).toUpperCase()}${word.slice(1)}`
-        : ` ${word.charAt(0).toUpperCase()}${word.slice(1)}`;
-    });
+    const result =
+      matchedResult.wrongWords.length <= 2
+        ? this.firstLetterToUpperCase(matchedResult.wrongWords)
+        : this.firstLetterToUpperCase(randomGuess.split(" "));
     return {
       match: matchedResult,
       pattern,
@@ -161,11 +277,13 @@ export default class Nerify {
   };
   // saves the learned or training data
   save = async (data, method, api) => {
-    axios[method](api, method !== "get"? data: null).then(res => {
-      console.log("training response", res)
-    }).catch(error => {
-      console.log("training error",error)
-    })
+    axios[method](api, method !== "get" ? data : null)
+      .then(res => {
+        console.log("training response", res);
+      })
+      .catch(error => {
+        console.log("training error", error);
+      });
   };
 }
 

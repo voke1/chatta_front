@@ -1,11 +1,12 @@
 import moment from "moment-timezone";
 import socket from "socket.io-client";
+import axios from "axios";
 import { APP_ENVIRONMENT } from "../../../../../environments/environment";
 
 import milliToTime from "../../../../../utilities/milli-time";
 import * as apiService from "../../../../../services/apiservice";
 const BASE_URL = APP_ENVIRONMENT.base_url;
-const io = socket(BASE_URL);
+const io = socket(BASE_URL, { transports: ["websocket"] });
 export default class AnalyticsHelper {
   constructor(callbacks, state) {
     this.callbacks = callbacks;
@@ -160,6 +161,7 @@ export default class AnalyticsHelper {
       "visitors",
       `${new Date(dates[0])}*${new Date(dates[1])}/${botId}`
     );
+    console.log("data for paginate", dates)
     dataForPaginate.forEach(visit => visitsInRange.push(visit.visitors));
     return visitsInRange;
   };
@@ -228,22 +230,38 @@ export default class AnalyticsHelper {
    */
 
   getLocalTimezone = async () => {
+    const continentCodes = {
+      AS: "Asia",
+      AF: "Africa",
+      AN: "Antarctica",
+      NA: "North America",
+      EU: "Europe",
+      OC: "Ocenia",
+      SA: "South America"
+    };
     let timezone;
-    await fetch(
-      "http://api.ipstack.com/197.210.227.104?access_key=b1a656a166707d7810e3dc4229cda8ec&format=1"
-    )
-      .then(data => data.json())
-      .then(visitor => {
-        let regionName = visitor.region_name
-          .toString()
-          .split(" ")
-          .join("_");
+    try {
+      const result = await axios.get("https://ipapi.co/json/");
 
-        timezone = `${visitor.continent_name}/${regionName}`;
-      })
-      .catch(error => {
-        console.log("request error", error);
+      const visitor = result.data;
+      const { region } = visitor;
+      visitor.continent_name = continentCodes[visitor.continent_code];
+      visitor.region_name = region;
+      this.setState({
+        regionName: region,
+        continentName: continentCodes[visitor.continent_code]
       });
+      const regionName = region
+        .toString()
+        .split(" ")
+        .join("_");
+      console.log("visitorz", visitor);
+      timezone = `${this.state.continentName || visitor.continent_name}/${this
+        .state.regionName || regionName}`;
+    } catch (error) {
+      console.log("request error", error);
+    }
+
     return timezone;
   };
 
@@ -348,6 +366,7 @@ export default class AnalyticsHelper {
     }
     const sessionArray = await this.extractAndFormatData(allVisits, "ipv4");
     this.callbacks.setAverageSession(sessionArray.averageSession[0]);
+    console.log("all visits", allVisits)
     return allVisits;
   };
   getDaysInMonth = (month, year) => {

@@ -106,3 +106,8 @@ input:checked + .slider:before {
   border: 0.1px solid grey;
 
 }
+
+.disabled-switch {
+  background-color: white;
+  color: white;
+}
