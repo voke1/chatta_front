@@ -92,7 +92,15 @@ export default class Convo extends Component {
 
   paystackCallback = (response) => {
     console.log("myresponse", response); // card charged successfully, get reference here
-    this.refreshConvo()
+    const paymentObject = {
+      "name": this.state.username,
+      "email": this.state.email,
+      "amount": this.state.amount,
+      "message": response.message,
+      "reference": response.reference,
+      
+    }
+    // this.refreshConvo()
   }
 
   handleBotFormsubmit = async userDetails => {
@@ -187,7 +195,7 @@ export default class Convo extends Component {
       
       console.log("comporecieveprops called, newProps is: ", newProps, "and find_key is:", find_key)
       this.updateConverstion(find_key, userInput);
-      console.log("called after updateconversation")
+      console.log("called after updateconversation");
     }
     this.setState({
       defaultStyle: newProps.settings.templateSettings
@@ -684,7 +692,7 @@ console.log("consoleResponse:", this.state.responses)
                         callback={this.paystackCallback}
                         // close={close}
                         email={this.state.email|| "vokeolomu01@gmail.com"}
-                        amount={"500"}
+                        amount={this.state.amount || "500"}
                         paystackkey={this.state.paymentDetails.paystack ||"pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975"}
                         tag="a"
                       // embed={true}
