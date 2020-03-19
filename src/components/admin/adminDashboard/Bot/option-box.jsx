@@ -5,7 +5,9 @@ import Accordion from "./accordion";
 import uuid from "uuid/v1";
 import ConvoTree from "../../../front/conversation/convo.json";
 const identity = uuid();
+
 class OptionBox extends Component {
+
   state = {
     responses: [],
     response: "",
@@ -14,15 +16,19 @@ class OptionBox extends Component {
     prompt: "",
     validated: false,
     message: "",
-    noOption: false
+    noOption: false,
+    keyy: this.props.keyy,
+    amount: this.props.amount,
   };
+
   initialResponses = [];
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value, validated: false });
     const validated = this.checkDuplicate(e);
     this.setState({
       validated: validated.success,
-      message: validated.message
+      
+      message: validated.message,
     });
     if (
       e.target.name === "prompt" &&
@@ -35,18 +41,21 @@ class OptionBox extends Component {
     }
   };
 
+  getResponse = (tree)=>{
+   if (!tree.botId) {
+      this.initialResponses.push({
+        key: uuid(),
+        val: this.state.response,
+      });
+    }
+  }
   onClick = tree => {
-    console.log("it is..", tree);
+    console.log("tree of life", tree);
+    console.log("key", this.state.keyy, "amount", this.state.amount)
     if (tree.val) {
       this.initialResponses.push(tree);
     } else {
-      if (!tree.botId) {
-        console.log("pushing")
-        this.initialResponses.push({
-          key: uuid(),
-          val: this.state.response
-        });
-      }
+      this.getResponse(tree)
     }
 
     this.props.syncHeight(this.state.height + this.divElement.clientHeight);
@@ -76,6 +85,7 @@ class OptionBox extends Component {
       }
     }
   };
+
   checkDuplicate = event => {
     const isFound = this.initialResponses.filter(
       response =>
@@ -99,7 +109,7 @@ class OptionBox extends Component {
     };
   };
   modifyOption = (botId, action) => {
-    console.log("this is global", this.global);
+
     if (action.type === "delete") {
       const button = this.initialResponses.filter(
         button => button.key === botId
@@ -111,9 +121,15 @@ class OptionBox extends Component {
       const button = this.initialResponses.filter(
         button => button.key === botId
       );
-      button[0].val = action.text;
-      this.onClick({ botId, action });
-      this.global.findAndEdit(botId, action.text);
+      if(action.amount){
+        button[0].payment = {"paystack": action.key, "amount": action.amount}
+
+      }
+      if(!action.amount){
+        button[0].val = action.text;
+        this.onClick({ botId, action });
+        this.global.findAndEdit(botId, action.text);
+      }
     }
   };
 
@@ -125,13 +141,13 @@ class OptionBox extends Component {
             style={{
               marginLeft: "40px",
               marginRight: "100px",
-              marginTop: "15px"
+              marginTop: "15px",
             }}
             className="form-group"
           >
             <input
               className="form-control border-top-0 border-right-0 border-left-0"
-              placeholder="New prompt"
+              placeholder={"New prompt"}
               name="prompt"
               value={this.state.prompt}
               onChange={this.onChange}
@@ -148,6 +164,7 @@ class OptionBox extends Component {
                   prompt={this.state.prompt}
                   chatTree={this.props.chatTree}
                   modifyOption={this.modifyOption}
+
                 />
               );
             })}
@@ -192,7 +209,7 @@ class OptionBox extends Component {
   }
   componentDidMount() {
     const height = this.divElement.clientHeight;
-    this.setState({ height: height, identity: this.props.botKey });
+    this.setState({ height: height, identity: this.props.botKey , keyy: this.props.keyy, amount: this.props.amount});
     if (this.props.chatTree) {
       this.props.chatTree.forEach(tree => {
         if (tree.identity === this.props.botKey) {

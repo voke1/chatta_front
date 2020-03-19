@@ -20,7 +20,6 @@ const AdminCardSection1 = () => {
                   <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar bg-primary" role="progressbar"
                     style={{width: '25%'}}></div>
                 </div>
-                <MDBCardText>Better than last week (25%)</MDBCardText>
               </MDBCardBody>
             </MDBCard>
         </MDBCol>
@@ -40,7 +39,6 @@ const AdminCardSection1 = () => {
                   <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar bg grey" role="progressbar"
                     style={{width: '25%'}}></div>
                 </div>
-                <MDBCardText>Worse than last week (25%)</MDBCardText>
               </MDBCardBody>
             </MDBCard>
         </MDBCol>
@@ -60,7 +58,6 @@ const AdminCardSection1 = () => {
                   <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar grey darken-2" role="progressbar"
                     style={{width: '75%'}}></div>
                 </div>
-                <MDBCardText>Worse than last week (75%)</MDBCardText>
               </MDBCardBody>
             </MDBCard>
         </MDBCol>
@@ -80,7 +77,6 @@ const AdminCardSection1 = () => {
                   <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar bg-primary" role="progressbar"
                     style={{width: '25%'}}></div>
                 </div>
-                <MDBCardText>Better than last week (25%)</MDBCardText>
               </MDBCardBody>
             </MDBCard>
         </MDBCol>

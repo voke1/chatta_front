@@ -18,8 +18,8 @@ class DialogBox extends Component {
     });
     this.global.closeDialog();
   };
+  
   handleDelete = () => {
-    console.log("called");
     this.global.modify(this.global.key, this.global.options);
     this.global.closeDialog();
     setTimeout(() => {
@@ -28,6 +28,7 @@ class DialogBox extends Component {
       });
     }, 10);
   };
+
   render() {
     return this.state.openDialog ? (
       <div>
