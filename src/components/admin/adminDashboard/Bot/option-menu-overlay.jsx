@@ -32,6 +32,7 @@ class Example extends Component {
       });
     }
   };
+
   handleDelete = () => {
     this.global.openDialog();
     this.setGlobal({
@@ -42,6 +43,7 @@ class Example extends Component {
       }
     });
   };
+
   handleEdit = () => {
     this.global.openEditDialog();
     this.setGlobal({
@@ -50,10 +52,12 @@ class Example extends Component {
       key: this.props.botKey,
       options: {
         type: "edit",
-        text: this.props.res
+        text: this.props.res,
       }
+      
     });
   };
+
   render() {
     return (
       <OverlayTrigger
@@ -73,6 +77,15 @@ class Example extends Component {
                 <Popover.Content>
                   <i class="fas fa-trash"></i>{" "}
                   <span style={{ marginLeft: "5px" }}>Delete</span>
+                </Popover.Content>
+              </div>
+              <div
+                className="option"
+                onClick={() => this.props.toggleAccordion(true)}
+              >
+                <Popover.Content>
+                  <i class="fas fa-plus"></i>{" "}
+                  <span style={{ marginLeft: "5px" }}>Add payment</span>
                 </Popover.Content>
               </div>
               <div
@@ -128,9 +141,12 @@ class Example extends Component {
       </OverlayTrigger>
     );
   }
+
   setOptions(option) {
     const checkBox = option === "empty" ? "fallback" : "delayprompt";
+
     const { chatTree } = this.global;
+
     if (
       chatTree &&
       chatTree[chatTree.length - 1] &&

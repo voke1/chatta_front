@@ -1,4 +1,5 @@
 import React, { Component } from "reactn";
+
 import "../../css/intent.css";
 import Response from "./response";
 import OptionForm from "./option-form";
@@ -8,6 +9,8 @@ import ProgressBar from "../Authentication/progressbar";
 import DeletePrompt from "./delete-prompt-modal";
 import EditPrompt from "./response-dialog";
 import Options from "./options";
+import KeyForm from "./keyForm";
+
 class CreateIntent extends Component {
   state = {
     responses: [],
@@ -176,7 +179,7 @@ class CreateIntent extends Component {
   };
   render() {
     return (
-      <div className="container" style={{ background: "none", width: "90%" }}>
+      <div className="container" style={{ background: "none", width: "90%"}}>
         <div style={{ color: "#595855", fontSize: "15px" }}>
           <i class={this.state.fallbackClass}></i>{" "}
           <span>Fallback option set ({this.state.fallbackCount})</span>
@@ -194,6 +197,7 @@ class CreateIntent extends Component {
         ) : (
           ""
         )} */}
+        {console.log("openstate:", this.state.openEditDialog, "globalresponse:", this.global.response)}
         {this.state.openDialog ? <DeletePrompt /> : ""}
         {this.state.openEditDialog ? (
           <EditPrompt response={this.global.response} />
@@ -202,10 +206,11 @@ class CreateIntent extends Component {
         )}
 
         <form className="text-center" onSubmit={this.handleSubmit}>
-          <div className="row">
+          <div className="row" w0rd>
             <div className="md-col-8"></div>
           </div>
-          <div className="md-form mt-3">
+
+          <div className="md-form mt-3" >
             <input
               type="text"
               id="materialSubscriptionFormPasswords"
@@ -214,10 +219,13 @@ class CreateIntent extends Component {
               value={this.state.prompt}
               onChange={this.onChange}
               placeholder="Enter a prompt"
+              style={{width: "100%"}}
             />
+          {/* <KeyForm /> */}
           </div>
 
           <hr className="mt-3"></hr>
+          {/* {console.log("chattreeee",)} */}
           <OptionForm
             tree={this.getTree}
             prompt={this.state.prompt}

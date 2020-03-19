@@ -3,7 +3,7 @@
 GET http://localhost:9000/client
 
 
-
+http://localhost:3000/chatbot?setting_id=5e62789854fdb80017c646d8
 
 
 

@@ -7,6 +7,7 @@ import Triangle from "../../../components/admin/adminDashboard/Bot/triangle";
 import { AppService } from "../../../services/app.service";
 import * as apiService from "../../../services/apiservice";
 import thinker from "../../../thinker.gif";
+import Axios from 'axios'
 import "./convo.component.css";
 import {
   BrowserView,
@@ -20,6 +21,11 @@ import {
   isIE,
   isSafari,
 } from "react-device-detect";
+import PaystackButton from 'react-paystack';
+
+
+const BASE_URL = APP_ENVIRONMENT.base_url;
+
 export default class Convo extends Component {
   appService;
   static userName;
@@ -44,10 +50,12 @@ export default class Convo extends Component {
       userIsKnown: false,
       anything: "xx",
       username: "",
+      pay: false,
       email: "",
       fetchUserInfo: true,
       defaultStyle: defaultStyle,
       userDetails: {},
+      paymentDetails: {},
       empty: {
         identity: "empty",
         prompt:
@@ -82,6 +90,37 @@ export default class Convo extends Component {
     email: ""
   };
   appService = new AppService();
+
+  paystackCallback = (response) => {
+    console.log("myresponse", response); // card charged successfully, get reference here
+    const paymentObject = {
+      "name": this.state.userDetails.name,
+      "email": this.state.userDetails.email,
+      "amount": this.state.paymentDetails.amount,
+      "message": response.message,
+      "reference": response.reference,
+      "status": response.status
+      
+    }
+   
+    Axios.post(`http://localhost:9000/payment`, {
+      ...paymentObject
+    })
+      .then(res => {
+        console.log(res)
+        
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+
+
+
+
+
+    // this.refreshConvo()
+  }
 
   handleBotFormsubmit = async userDetails => {
     this.sendOnlineStatus(userDetails);
@@ -167,12 +206,15 @@ export default class Convo extends Component {
 
   async componentWillReceiveProps(newProps) {
     const userInput = newProps.userInput;
+    console.log("newuserinput:", userInput)
     if (userInput && userInput !== this.props.userInput) {
       const key = this.searchKeywordsFromUserInput(userInput);
-
+      
       const find_key = (await this.setUserDetails(userInput)) || key;
-
+      
+      console.log("comporecieveprops called, newProps is: ", newProps, "and find_key is:", find_key)
       this.updateConverstion(find_key, userInput);
+      console.log("called after updateconversation");
     }
     this.setState({
       defaultStyle: newProps.settings.templateSettings
@@ -205,6 +247,8 @@ export default class Convo extends Component {
       firstConvo
     });
     this.updateConverstion(convoTree[0].identity);
+    console.log("TREE:", convoTree[0].identity, )
+    
   };
 
   handleUserChoice = () => {};
@@ -242,7 +286,6 @@ export default class Convo extends Component {
       )
         .then(data => data.json())
         .then(visitor => {
-          console.log("hahahaha", visitor);
           this.setState({ fetchUserInfo: false });
           visitor.time = this.getDate();
           visitor.browser = this.state.browser;
@@ -255,7 +298,7 @@ export default class Convo extends Component {
         });
     }
   };
-  searchTree = (key, info = null) => {
+  searchTree = (key, info = null, payment) => {
     if (key === "empty") this.error += 1;
     const result = this.state.conversationTree.filter((node, index) => {
       if (info && index === 0) {
@@ -279,6 +322,7 @@ export default class Convo extends Component {
    */
   renderChatButtons = buttons => {
     return buttons.map(button => {
+      {console.log("searchbutton:", button)}
       return (
         <button
           style={{
@@ -291,7 +335,7 @@ export default class Convo extends Component {
           type="button"
           className="ith_chat-button"
           onClick={() => {
-            this.updateConverstion(button.key, button.val);
+            this.updateConverstion(button.key, button.val, button.payment);
             this.sendOnlineStatus();
             this.closeChatCount = 0;
           }}
@@ -313,12 +357,13 @@ export default class Convo extends Component {
    * This method updates the UI converstion
    */
 
-  updateConverstion = (key, val = null) => {
+  updateConverstion = (key, val = null, payment) => {
     const choices = this.deepCopy(this.state.responses);
     if (val) {
       const userChoice = {
         selection: val,
-        time: this.setTimeOfChat()
+        time: this.setTimeOfChat(),
+        
       };
       choices.push(userChoice);
 
@@ -332,15 +377,17 @@ export default class Convo extends Component {
 
     this.setState({
       thinking: true,
-      responses: choices
+      responses: choices,
     });
+
+    console.log("responder:", this.state.response)
     this.props.getResponder(true);
     //this set timeout forces the  update scrollbar function
     setTimeout(() => {
       this.updateScrollbar();
     }, 10);
 
-    this.refreshConvo(key, choices);
+    this.refreshConvo(key, choices, payment);
   };
   randomizeResponse = (key, type) => {
     const index = Math.floor(Math.random() * 4);
@@ -413,18 +460,29 @@ export default class Convo extends Component {
     return responses[key][type][index];
   };
   closeChatCount = 0;
-  refreshConvo = (key, choices) => {
+  refreshConvo = (key, choices, payment) => {
+    let searchResult;
     if (!this.state.closeChat) {
+      
       const responses = this.deepCopy(choices);
-
+      
       const times = this.deepCopy(this.state.times);
       times.push(this.setTimeOfChat());
       let info = null;
       if (this.state.username) {
         info = `Thanks ${this.state.username}`;
       }
-      const searchResult = this.searchTree(key, info);
+      
+      if(key && choices){
+
+        searchResult = this.searchTree(key, info, payment);
+      }
+      
+      console.log("refreshConvo called,"+"searchResult is:");
+      console.log("key is:", key, "choices", choices,"payment is:", payment)
+      
       const index = searchResult.length - 1;
+      
       if (searchResult.prompt && key === "delay_prompt") {
         if (this.count < 2) {
           if (this.count === 0) {
@@ -459,7 +517,37 @@ export default class Convo extends Component {
           }
         }
       }
+      if (searchResult.prompt && key !== "delay_prompt" && payment) {
+
+        if(key !== "empty"){
+          console.log("mypayment", payment, "userdetails:", this.state.userDetails)
+      this.setState({paymentDetails: payment})          
+
+          searchResult = {
+            identity: "payment",
+            prompt: "payment",
+            response: {
+              buttons: [],
+              text: ""
+            }
+          }
+        }
+
+      }
+      if(!key && !choices && !payment){
+        console.log("if statement reached")
+        searchResult = {
+          identity: "payment",
+          prompt: "Congratulations!! payment is successfull. A payment receipt has been sent to your email",
+          response: {
+            buttons: [],
+            text: ""
+          }
+        }
+
+      }
       responses.push(searchResult);
+      console.log("newresponse:", responses)
       console.log("refreshing result", searchResult);
       this.saveConversation({
         from: "bot",
@@ -469,7 +557,7 @@ export default class Convo extends Component {
         timeStamp: this.setTimeOfChat()
       });
       this.restartTimer();
-      const timeOutTime = this.delayChat(searchResult.prompt);
+      const timeOutTime = this.delayChat(searchResult.prompt, payment);
       setTimeout(() => {
         this.setState({
           responses: responses,
@@ -483,6 +571,7 @@ export default class Convo extends Component {
     }
   };
 
+  
   /**
    * This method restarts the delay timer
    */
@@ -514,10 +603,14 @@ export default class Convo extends Component {
    * This method sets delay for bot response
    */
 
-  delayChat = prompt => {
+  delayChat = (prompt, payment) => {
+    if(payment){
+      return 
+    }
     const noOfWords = prompt.split(" ").length;
     const time = noOfWords * 250;
     const delayTime = time > 10000 ? 10000 : time;
+    
 
     return delayTime;
   };
@@ -534,6 +627,7 @@ export default class Convo extends Component {
       };
       const type = this.count === 0 ? "name" : "email";
       const kyObject = this.getKYCDetails(type, value);
+      console.log('kycobject', kyObject)
       const conversationTree = [...this.state.conversationTree];
       conversationTree.push(kyObject);
       conversationTree.unshift(this.state.firstConvo);
@@ -562,8 +656,9 @@ export default class Convo extends Component {
   renderConversation = () => {
     let now = new Date();
     let time = now.getTime();
-
+console.log("consoleResponse:", this.state.responses)
     return this.state.responses.map((convo, index) => {
+      // {console.log("CONVOSEARCH", convo.response.buttons[index].payment)}
       return (
         <li key={this.setUniqueKey(convo.id)}>
           {!convo.selection ? (
@@ -610,13 +705,25 @@ export default class Convo extends Component {
                     <div>
                       {/* <div style={{ background: "green" }}>
                       </div> */}
-                      <span
+                      {console.log("email details: ", this.state.email)}
+                      {convo.prompt === "payment" ?<a>Please click {" "}<a style={{color: "blue"}}><PaystackButton
+                        text="here"
+                        class="payButton"
+                        callback={this.paystackCallback}
+                        // close={close}
+                        email={this.state.userDetails.email}
+                        amount={this.state.paymentDetails.amount || "500"}
+                        paystackkey={"pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975" || this.state.paymentDetails.paystackkey}
+                        tag="a"
+                      // embed={true}
+                      /></a> to make payment</a>: <span
                         style={{
                           color: this.state.defaultStyle.botMessageTextTextColor
                         }}
                       >
                         {convo.prompt}
-                      </span>
+                      </span>}
+                      
                     </div>
                   </div>
                   <div className="col-md-1 triangle-left" style={{}}>
@@ -701,6 +808,8 @@ export default class Convo extends Component {
     });
   };
 
+
+ 
   /**
    * This method set's time of  choice
    *
