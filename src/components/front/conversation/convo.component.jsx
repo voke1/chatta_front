@@ -100,7 +100,7 @@ export default class Convo extends Component {
       "amount": this.state.paymentDetails.amount,
       "message": response.message,
       "reference": response.reference,
-      "status": response.status,      
+      "status": response.status,
     }
    
     Axios.post(`http://localhost:9000/payment`, {

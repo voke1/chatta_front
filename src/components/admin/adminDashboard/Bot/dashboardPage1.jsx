@@ -62,7 +62,9 @@ export default class Bot extends Component {
                                     <div className="card-body">
 
                                         <div className="table-responsive">
+                                            <div style={{margin: "1%"}}>
                                             <DashboardPaymentPage />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
