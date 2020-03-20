@@ -94,14 +94,13 @@ export default class Convo extends Component {
   paystackCallback = (response) => {
     console.log("myresponse", response); // card charged successfully, get reference here
     const paymentObject = {
+      "botId": this.props.settings._id,
       "name": this.state.userDetails.name,
       "email": this.state.userDetails.email,
       "amount": this.state.paymentDetails.amount,
       "message": response.message,
       "reference": response.reference,
-      "status": response.status,
-      "created_at": Date.now
-      
+      "status": response.status,      
     }
    
     Axios.post(`http://localhost:9000/payment`, {

@@ -2,42 +2,54 @@ import React, { Component } from 'react';
 import { MDBCol, MDBCard, MDBCardBody, MDBCardHeader, MDBRow, MDBListGroup, MDBListGroupItem, MDBBadge, MDBIcon } from 'mdbreact';
 import { Bar, Pie } from 'react-chartjs-2';
 import { Line, Doughnut, Radar } from 'react-chartjs-2';
+import moment from 'moment'
 
 
 class ChartSection1 extends Component {
     state = {
         payments: [],
+        success: 0,
+        failed: 0,
     }
-
+    noOfFailed = 0;
+    noOfSuccess = 0;
     componentDidMount() {
         fetch(`http://localhost:9000/payment`)
             .then(res => res.json())
             .then(data => {
                 this.setState({ payments: data });
                 console.log("mypay,", this.state.payments)
+                this.getStatus()
             })
             .catch(e => {
                 console.log("error", e);
                 this.setState({ error: e.message });
             });
 
-
     }
 
-
+    getStatus = () => {
+        this.state.payments.map((payment, index)=>{
+            
+            if(payment.status === 'success'){
+                this.noOfSuccess++;
+                this.setState({success: this.noOfSuccess})
+            }else{
+                this.noOfFailed++;
+                this.setState({ failed: this.noOfFailed })
+            }
+        })
+    }
 
     render() {
-
-
         const dataDoughnut = {
-            labels: ["Failed", "Success", "Cancelled"],
+            labels: ["Failed", "Success"],
             datasets: [{
-                data: [300, 50, 100],
-                backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C"],
-                hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870"]
+                data: [this.state.failed, this.state.success],
+                backgroundColor: ["#F7464A", "#46BFBD"],
+                hoverBackgroundColor: ["#FF5A5E", "#5AD3D1"]
             }]
         };
-
         return (
             <MDBRow className="mb-4">
                 <MDBCol md="8" className="mb-4">
@@ -53,25 +65,25 @@ class ChartSection1 extends Component {
 
                             <div className="table-responsive">
                                 <table className="table m-t-20 mb-0 table-vertical">
-                                   {this.state.payments.map((payment, index) => {
+                                    {this.state.payments.map((payment, index) => {
                                         return <tbody>
                                             <tr>
                                                 <td>
                                                     {payment.name}
-                                            </td>
+                                                </td>
                                                 <td><i className="mdi mdi-checkbox-blank-circle text-success"></i> {payment.status}</td>
                                                 <td>
-                                                    `${payment.amount}`
-                                                <p className="m-0 text-muted font-14">Amount</p>
+                                                    {`₦ ${payment.amount}`}
+                                                    <p className="m-0 text-muted font-14">Amount</p>
                                                 </td>
                                                 <td>
-                                                    5/12/2016
-                                                <p className="m-0 text-muted font-14">Date</p>
+                                                    {moment(payment.created_at).format('Do-MMMM-YYYY, LT') || 'Date'}
+                                                    <p className="m-0 text-muted font-14">Date</p>
                                                 </td>
                                             </tr>
                                         </tbody>
 
-                                    })} 
+                                    })}
                                 </table>
                             </div>
                         </div>
@@ -79,9 +91,9 @@ class ChartSection1 extends Component {
                 </MDBCol>
                 <MDBCol md="4" className="mb-4">
                     <MDBCard className="mb-4">
-                        <MDBCardHeader>Transactions analytics</MDBCardHeader>
+                        <MDBCardHeader>Transactions chart</MDBCardHeader>
                         <MDBCardBody >
-                            <Doughnut data={dataDoughnut} height={300} options={{ responsive: true }} />
+                            <Doughnut data={dataDoughnut} height={200} options={{ responsive: true }} />
                         </MDBCardBody>
                     </MDBCard>
                 </MDBCol>
