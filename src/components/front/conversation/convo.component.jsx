@@ -7,6 +7,7 @@ import Triangle from "../../../components/admin/adminDashboard/Bot/triangle";
 import { AppService } from "../../../services/app.service";
 import * as apiService from "../../../services/apiservice";
 import thinker from "../../../thinker.gif";
+import Axios from 'axios'
 import "./convo.component.css";
 import {
   BrowserView,
@@ -93,13 +94,31 @@ export default class Convo extends Component {
   paystackCallback = (response) => {
     console.log("myresponse", response); // card charged successfully, get reference here
     const paymentObject = {
-      "name": this.state.username,
-      "email": this.state.email,
-      "amount": this.state.amount,
+      "botId": this.props.settings._id,
+      "name": this.state.userDetails.name,
+      "email": this.state.userDetails.email,
+      "amount": this.state.paymentDetails.amount,
       "message": response.message,
       "reference": response.reference,
-      
+      "status": response.status,
     }
+   
+    Axios.post(`http://localhost:9000/payment`, {
+      ...paymentObject
+    })
+      .then(res => {
+        console.log(res)
+        
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+
+
+
+
+
     // this.refreshConvo()
   }
 
@@ -359,7 +378,6 @@ export default class Convo extends Component {
     this.setState({
       thinking: true,
       responses: choices,
-      paymentDetails: payment
     });
 
     console.log("responder:", this.state.response)
@@ -502,6 +520,8 @@ export default class Convo extends Component {
       if (searchResult.prompt && key !== "delay_prompt" && payment) {
 
         if(key !== "empty"){
+          console.log("mypayment", payment, "userdetails:", this.state.userDetails)
+      this.setState({paymentDetails: payment})          
 
           searchResult = {
             identity: "payment",
@@ -691,9 +711,9 @@ console.log("consoleResponse:", this.state.responses)
                         class="payButton"
                         callback={this.paystackCallback}
                         // close={close}
-                        email={this.state.email|| "vokeolomu01@gmail.com"}
-                        amount={this.state.amount || "500"}
-                        paystackkey={this.state.paymentDetails.paystack ||"pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975"}
+                        email={this.state.userDetails.email}
+                        amount={this.state.paymentDetails.amount || "500"}
+                        paystackkey={"pk_test_5c136d07ea8e83e04f30445b866dbe50723c3975" || this.state.paymentDetails.paystackkey}
                         tag="a"
                       // embed={true}
                       /></a> to make payment</a>: <span
