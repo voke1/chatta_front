@@ -8,10 +8,11 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import React, { Component } from "reactn";
 
 class DialogBox extends Component {
+
   state = {
     openDialog: true,
     option: "",
-    response: ""
+    response: "",
   };
 
   handleClose = () => {
@@ -37,6 +38,7 @@ class DialogBox extends Component {
   render() {
     return this.state.openDialog ? (
       <div>
+        {console.log("dialogstate", this.state.openDialog)}
         <Dialog
           open={this.state.openDialog}
           onClose={this.handleClose}
@@ -71,11 +73,12 @@ class DialogBox extends Component {
     ) : null;
   }
 
-  componentWillReceiveProps(props) {
-    this.setState({
-      openDialog: props.open
-    });
-  }
+  // componentWillReceiveProps(props) {
+  //   this.setState({
+  //     openDialog: props.open
+  //   });
+  // }
+
   componentDidMount() {
     this.setState({
       response: this.props.response

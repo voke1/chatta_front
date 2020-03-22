@@ -240,6 +240,7 @@ const OptionBox = props => {
       }
     }
     newTreeArray = [initialTree, ...identities, fallbackTree, DelayPromptTree];
+    console.log("newTree:", newTreeArray)
     props.tree([newTreeArray]);
     if (fallbackTree && DelayPromptTree) {
       console.log(fallbackTree.response.buttons.length);
@@ -272,25 +273,40 @@ const OptionBox = props => {
       setResponses(initialResponses);
     }
     if (action.type === "edit") {
+      console.log("modifyedit is called")
+
       const convoButtons = newTreeArray[0].response.buttons;
       for (let index = 0; index < convoButtons.length; index++) {
+        console.log("convobuttons:", convoButtons)
         if (convoButtons[index].key === botId) {
-          convoButtons[index].val = action.text;
-          break;
+
+          if(action.key && action.amount){
+
+            convoButtons[index].payment ={"paystack": action.key, "amount":action.amount}
+            
+          }
+          else{
+            convoButtons[index].val = action.text;
+            break;
+          }
         }
       }
-      findAndEdit(botId, action.text);
-      // update UI
-      const responseArray = initialResponses.filter(
-        response => response.key === botId
-      );
-      responseArray[0].val = action.text;
+      if(!action.amount){
+
+        findAndEdit(botId, action.text);
+        // update UI
+        const responseArray = initialResponses.filter(
+          response => response.key === botId
+        );
+        responseArray[0].val = action.text;
+      }
       setResponses(initialResponses);
     }
     if (!props.chatTree) {
       props.getTab();
     }
     newTreeArray = [initialTree, ...identities, fallbackTree, DelayPromptTree];
+    console.log("newTree:", newTreeArray)
     setGlobal({ chatTree: newTreeArray });
     props.tree([newTreeArray]);
   };
@@ -323,6 +339,7 @@ const OptionBox = props => {
       };
     }
   };
+  
   const handleChange = e => {
     setResponse(e.target.value);
     setInputVal(e.target.value);
