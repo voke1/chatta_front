@@ -131,7 +131,7 @@ class OptionBox extends Component {
           >
             <input
               className="form-control border-top-0 border-right-0 border-left-0"
-              placeholder="New prompt"
+              placeholder="Message"
               name="prompt"
               value={this.state.prompt}
               onChange={this.onChange}

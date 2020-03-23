@@ -146,6 +146,39 @@ const OptionBox = props => {
       }
     }
   };
+  const returnTags = botId => {
+    let tags = [];
+    const convo = newTreeArray.filter(chat => {
+      if (chat) {
+        const button = chat.response.buttons.filter(
+          button => button.key === botId
+        );
+        if (button[0]) {
+          tags.push(button[0].val)
+          tags = button[0].tags ? button[0].tags : tags
+          console.log("buttons", button);
+        }
+
+        return button;
+      }
+    });
+    return tags;
+  };
+  const addTags = (tags, botId, action) => {
+    const convo = newTreeArray.filter(chat => {
+      if (chat) {
+        const button = chat.response.buttons.filter(
+          button => button.key === botId
+        );
+        if (button[0]) {
+          button[0].tags = tags;
+        }
+        return button;
+      }
+    });
+
+    console.log("tags", tags, botId, convo);
+  };
   /*
   syncTree function builds the chat tree including also the fallback and delay prompt body
   */
@@ -297,7 +330,9 @@ const OptionBox = props => {
   setGlobal({
     syncTree,
     modifyOption: modifyOption,
-    findAndEdit
+    findAndEdit,
+    addTags,
+    returnTags
   });
   const checkDuplicate = (event, target) => {
     if (!target) {

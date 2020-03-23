@@ -39,9 +39,12 @@ export default class AnalyticsHelper {
           label = visit[type];
         }
         labels.push(label);
-        regionName.push(
-          `${continent_name}/${region_name.split(" ").join("_")}`
-        );
+        if (regionName && continent_name) {
+          regionName.push(
+            `${continent_name}/${region_name.split(" ").join("_")}`
+          );
+        }
+
         if (!uniqueLabels.includes(label)) uniqueLabels.push(label);
       });
     }
@@ -131,6 +134,8 @@ export default class AnalyticsHelper {
         allLabels: labels,
         frequency,
         averageSession: this.getAverageTime(averageSession)
+          ? this.getAverageTime(averageSession)
+          : null
       };
     }
   }
@@ -161,7 +166,6 @@ export default class AnalyticsHelper {
       "visitors",
       `${new Date(dates[0])}*${new Date(dates[1])}/${botId}`
     );
-    console.log("data for paginate", dates)
     dataForPaginate.forEach(visit => visitsInRange.push(visit.visitors));
     return visitsInRange;
   };
@@ -242,22 +246,16 @@ export default class AnalyticsHelper {
     let timezone;
     try {
       const result = await axios.get("https://ipapi.co/json/");
-
       const visitor = result.data;
       const { region } = visitor;
       visitor.continent_name = continentCodes[visitor.continent_code];
       visitor.region_name = region;
-      this.setState({
-        regionName: region,
-        continentName: continentCodes[visitor.continent_code]
-      });
+
       const regionName = region
         .toString()
         .split(" ")
         .join("_");
-      console.log("visitorz", visitor);
-      timezone = `${this.state.continentName || visitor.continent_name}/${this
-        .state.regionName || regionName}`;
+      timezone = `${visitor.continent_name}/${regionName}`;
     } catch (error) {
       console.log("request error", error);
     }
@@ -283,6 +281,7 @@ export default class AnalyticsHelper {
           regionName[index]
         );
         const localizedTime = await visitorsTime.clone().tz(localtime);
+
         if (localizedTime._d) {
           converted.push(this.getDate(localizedTime._d));
         }
@@ -366,7 +365,6 @@ export default class AnalyticsHelper {
     }
     const sessionArray = await this.extractAndFormatData(allVisits, "ipv4");
     this.callbacks.setAverageSession(sessionArray.averageSession[0]);
-    console.log("all visits", allVisits)
     return allVisits;
   };
   getDaysInMonth = (month, year) => {
@@ -408,11 +406,81 @@ export default class AnalyticsHelper {
         if (error) errors += parseInt(error, 10);
       }
     });
-    console.log("total errors", errors);
     return {
       visits,
       messages,
       errors
+    };
+  };
+
+  /**
+   * Calcluates the average sentiment and order the keywords
+   * @param {Array} data - contains all the viditors data
+   * @returns {Object} contains the analyzed sentiments and ordered keywords
+   */
+
+  analyzeKeywords = data => {
+    const analyticsData = [];
+    let keywords = [];
+    let sentiments = [];
+    const uniqueSentimentLabels = [];
+    const uniqueSentimentFrequency = [];
+    const percentageSentiment = [];
+    const uniqueKeywordLabel = [];
+    const uniqueKeywordFrequency = [];
+    data.forEach(visit => {
+      if (visit.keywordAnalytics) analyticsData.push(visit.keywordAnalytics);
+    });
+    analyticsData.forEach(data => {
+      data.keywords.forEach(keyword =>
+        keyword.phrases.length
+          ? keyword.phrases.forEach(keyword => keywords.push(keyword))
+          : null
+      );
+      data.sentiments.forEach(sentiment => sentiments.push(sentiment));
+    });
+
+    sentiments.filter(sentiment =>
+      !uniqueSentimentLabels.includes(sentiment.documentSentiment)
+        ? uniqueSentimentLabels.push(sentiment.documentSentiment)
+        : null
+    );
+    uniqueSentimentLabels.forEach(label => {
+      let count = 0;
+      sentiments.forEach(sentiment => {
+        if (label === sentiment.documentSentiment) count += 1;
+      });
+      uniqueSentimentFrequency.push(count);
+    });
+    keywords.filter(keyword =>
+      !uniqueKeywordLabel.includes(keyword)
+        ? uniqueKeywordLabel.push(keyword)
+        : null
+    );
+    uniqueKeywordLabel.forEach(label => {
+      let count = 0;
+      keywords.forEach(keyword => {
+        if (label === keyword) count += 1;
+      });
+      uniqueKeywordFrequency.push(count);
+    });
+    let totalSentiments = 0;
+    uniqueSentimentFrequency.forEach(
+      frequency => (totalSentiments += frequency)
+    );
+    uniqueSentimentFrequency.forEach(frequency =>
+      percentageSentiment.push(((frequency / totalSentiments) * 100).toFixed(2))
+    );
+    return {
+      sentiments: {
+        uniqueSentimentLabels,
+        uniqueSentimentFrequency,
+        percentageSentiment
+      },
+      keywords: {
+        uniqueKeywordLabel,
+        uniqueKeywordFrequency
+      }
     };
   };
   /**

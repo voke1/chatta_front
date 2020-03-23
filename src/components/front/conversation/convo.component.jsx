@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { Component } from "reactn";
 import BotForm from "../../../components/admin/adminDashboard/Bot/botForm";
+import SearchEngine from "./search-engine";
 import { APP_ENVIRONMENT } from "../../../environments/environment";
 import { defaultStyle } from "../chat/defaultStyle";
 import Triangle from "../../../components/admin/adminDashboard/Bot/triangle";
@@ -190,15 +191,30 @@ export default class Convo extends Component {
         });
         this.getConversationTree();
       }
-      const key = this.searchKeywordsFromUserInput(userInput);
+      if (this.count < 2) {
+        const key = this.searchKeywordsFromUserInput(userInput);
 
-      const find_key = (await this.setUserDetails(userInput)) || key;
-
-      this.updateConverstion(find_key, userInput);
+        const find_key = (await this.setUserDetails(userInput)) || key;
+        console.log("counter", this.count);
+        this.updateConverstion(find_key, userInput);
+      } else {
+        const conversationTree = [...this.state.conversationTree];
+        const searchEngine = new SearchEngine(conversationTree);
+        const result = await searchEngine.search(userInput);
+        console.log("search result", result);
+        const key = result.identity;
+        conversationTree.push(result);
+        await this.setState({
+          conversationTree,
+          userIsKnown: true
+        });
+        this.updateConverstion(key, userInput);
+      }
     }
     this.setState({
       defaultStyle: newProps.settings.templateSettings
     });
+    this.restartTimer();
   }
 
   /**\
@@ -219,7 +235,7 @@ export default class Convo extends Component {
       convoTree[0].prompt = `Thanks ${this.state.username} ${convoTree[0].prompt}`;
 
       if (this.count === 0) {
-        conversationTree[0].prompt = `Hi my name is ${this.props.settings.chatbotName}. What's your name?`;
+        conversationTree[0].prompt = `Hi, I'm ${this.props.settings.chatbotName}. What's your name?`;
         conversationTree[0].response.buttons = [];
       }
     }
@@ -274,19 +290,19 @@ export default class Convo extends Component {
     };
     if (this.state.fetchUserInfo) {
       try {
-            const result = await axios.get("https://ipapi.co/json/");
+        const result = await axios.get("https://ipapi.co/json/");
 
-            const visitor = result.data;
-            visitor.continent_name = continentCodes[visitor.continent_code];
-            visitor.time = this.getDate();
-            visitor.browser = this.state.browser;
-            visitor.region_name=visitor.region
-            visitor.type="ipv4"
-            console.log("na result2", visitor);
+        const visitor = result.data;
+        visitor.continent_name = continentCodes[visitor.continent_code];
+        visitor.time = this.getDate();
+        visitor.browser = this.state.browser;
+        visitor.region_name = visitor.region;
+        visitor.type = "ipv4";
+        console.log("na result2", visitor);
 
-            await this.sendOnlineStatus({ name: "", email: "" }, visitor);
-            this.setState({ fetchUserInfo: false, visitor });
-          } catch (error) {
+        await this.sendOnlineStatus({ name: "", email: "" }, visitor);
+        this.setState({ fetchUserInfo: false, visitor });
+      } catch (error) {
         console.log("request error", error);
       }
       // fetch(

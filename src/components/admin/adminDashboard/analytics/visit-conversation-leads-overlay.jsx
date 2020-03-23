@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useGlobal } from "reactn";
 import InfiniteScroll from "react-infinite-scroll-component";
 import DatePicker from "./dates";
 import ProgressBar from "../Authentication/progressbar";
+import Doughnut from "./doughnut";
 import { FacebookProgress } from "../Authentication/progressbar";
 import LineChart from "./chart";
 import loader from "./statics/logo_animation_loop_blue_100x100.gif";
@@ -32,14 +33,18 @@ const BusyOverlay = props => {
   const [dateOptions, setDateOptions] = useState(false);
   const [pickedDate, setPickedDate] = useState("");
   const [dateType, setDateType] = useState("");
+  const [percentageSentiment, setPercentageSentiment] = useState([]);
+  const [uniqueSentimentLabels, setUniqueSentimentLabels] = useState([]);
+  const [uniqueSentimentFrequency, setUniqueSentimentFrequency] = useState([]);
+  const [keywords, setKeywords] = useState({});
 
-  const fetchMoreData = async (visits) => {
+  const fetchMoreData = async visits => {
     setTimeout(() => {
       const moreVisits = visits.slice(0, end);
       console.log("more visits", moreVisits);
       setVisitsForTable(moreVisits);
       setEnd(end + pageOffset);
-      setScrolled(false)
+      setScrolled(false);
     }, 1500);
   };
 
@@ -81,6 +86,7 @@ const BusyOverlay = props => {
       await setBotId(props.botId);
       await setVisitsForTable([]);
       await setVisits([]);
+      await setKeywords([]);
       await setScrolled(false);
       await setScrolled(false);
       await setMessage("");
@@ -99,9 +105,24 @@ const BusyOverlay = props => {
         );
         setAverageSession(sessionArray.averageSession[0]);
         await getVisits(conversationVisits);
+        const keywordPhraseAnalytics = props.analyticsHelper.analyzeKeywords(
+          data
+        );
+        await setUniqueSentimentLabels(
+          keywordPhraseAnalytics.sentiments.uniqueSentimentLabels
+        );
+        await setPercentageSentiment(
+          keywordPhraseAnalytics.sentiments.percentageSentiment
+        );
+        await setUniqueSentimentFrequency(
+          keywordPhraseAnalytics.sentiments.uniqueSentimentFrequency
+        );
+        console.log("keyy", keywordPhraseAnalytics);
+        await setKeywords(keywordPhraseAnalytics.keywords);
       } else {
         await setDaysAgo(null);
         await setVisitsForTable([]);
+        await setKeywords([]);
         await setVisits([]);
         await setScrolled(false);
         setTimeout(() => {
@@ -136,6 +157,7 @@ const BusyOverlay = props => {
       await setDaysAgo(parseInt(day, 10));
       await setBotId("");
       await setVisitsForTable([]);
+      await setKeywords([]);
       await setScrolled(false);
       await setDateType("");
 
@@ -153,7 +175,7 @@ const BusyOverlay = props => {
     </select>
   );
   return (
-    <div>
+    <div style={{ overflow: "scroll" }}>
       <div
         className="show-conversation-overlay "
         style={{ display: props.show ? "block" : "none" }}
@@ -249,6 +271,7 @@ const BusyOverlay = props => {
                       getRecords={getRecords}
                       setPickedDate={setPickedDate}
                       setVisitsForTable={setVisitsForTable}
+                      setKeywords={setKeywords}
                       setScrolled={setScrolled}
                     />
                   </div>
@@ -300,7 +323,7 @@ const BusyOverlay = props => {
                     <table class="table table-hover">
                       <thead>
                         <tr>
-                          <th scope="col">Time</th>
+                          <th scope="col">time</th>
                           <th scope="col">Continent</th>
                           <th scope="col">Country</th>
                           <th scope="col">Messages</th>
@@ -362,6 +385,26 @@ const BusyOverlay = props => {
                     </table>
                   </InfiniteScroll>
                 </div>
+              ) : null}
+              {keywords.uniqueKeywordLabel && visitsForTable.length ? (
+                <table class="table">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Keywords</th>
+                      <th scope="col">Search volume</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {keywords.uniqueKeywordLabel.map((label, index) => (
+                      <tr>
+                        <th scope="row">{index + 1}</th>
+                        <td>{label}</td>
+                        <td>{keywords.uniqueKeywordFrequency[index]}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               ) : null}
             </div>
 
@@ -562,7 +605,48 @@ const BusyOverlay = props => {
                       </div>
                     </div>
                   </div>
-                  <LineChart title="Conversations" />
+
+                  {percentageSentiment.length ? (
+                    <div>
+                      <div className="row-small-data">
+                        {percentageSentiment.map((value, index) => (
+                          <div
+                            className={`analysis-${percentageSentiment.length}`}
+                          >
+                            <div
+                              style={{
+                                fontSize: "20px",
+                                color: "grey",
+                                fontWeight: 500,
+                                marginLeft: "5px"
+                              }}
+                            >
+                              <span>{`${value}%`}</span>
+                            </div>
+                            <div style={{ marginLeft: "5px" }}>
+                              <span>
+                                {uniqueSentimentLabels[index]
+                                  .charAt(0)
+                                  .toUpperCase() +
+                                  uniqueSentimentLabels[index].slice(1)}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="card" style={{ marginTop: 10 }}>
+                        <Doughnut
+                          caption="Sentiments"
+                          data={{
+                            labels: uniqueSentimentLabels,
+                            frequency: uniqueSentimentFrequency
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ) : null}
+
+                  
                 </div>
               ) : null}
             </div>

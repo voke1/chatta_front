@@ -1,22 +1,28 @@
-import React, { useState, useEffect, useRef, useGlobal } from "reactn";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useGlobal,
+  setGlobal
+} from "reactn";
 import "./css/tag-overlay.css";
 
 const TagOverlay = props => {
-  const [tags, setTags] = useState([]);
+  const [returnTags] = useGlobal("returnTags");
+
+  const [tags, setTags] = useState(returnTags(props.botKey));
   const [inputTag, setInputTag] = useState("");
+  const [showTagOverlay] = useGlobal("showTagOverlay");
+  const [addTags] = useGlobal("addTags");
   const scrollBar = document.getElementById("chat_bottom");
 
+  console.log("return tags", returnTags(props.botKey));
   const handleSubmit = event => {
     event.preventDefault();
     const optionTags = [...tags];
 
-    if (
-      inputTag.length &&
-      !optionTags.filter(tag => tag.tag === inputTag).length
-    ) {
-      optionTags.push({
-        tag: inputTag
-      });
+    if (inputTag.length && !optionTags.includes(inputTag)) {
+      optionTags.push(inputTag.toLowerCase());
       setTags(optionTags);
       setInputTag("");
       scrollBar.scrollIntoView();
@@ -39,11 +45,16 @@ const TagOverlay = props => {
       setTags(optionTags);
     }
   };
+  const handleSave = () => {
+
+    addTags(tags, props.botKey);
+    showTagOverlay(false);
+  };
   return (
     <div>
-      <div className="show-conversation-overlay ">
+      <div className="show-conversation-overlay animated fadeIn">
         <div className="tag-overlay-content">
-          <div>
+          <div onClick={() => showTagOverlay(false)}>
             <i className="fas fa-close"></i>
           </div>
           <div className="tag-input">
@@ -78,7 +89,7 @@ const TagOverlay = props => {
           <div className="all-tags">
             {tags.map((oneTag, index) => (
               <div className="one-tag animated fadeIn">
-                <span>{oneTag.tag}</span>
+                <span>{oneTag}</span>
 
                 <i
                   className="fas fa-close"
@@ -91,7 +102,7 @@ const TagOverlay = props => {
             <div id="chat_bottom"></div>
           </div>
           <div className="option-buttons">
-            <div className="save-tag">
+            <div className="save-tag" onClick={handleSave}>
               <i className={tags.length ? "fa fa-check" : ""}></i>{" "}
               <span>{tags.length ? "Save" : "Close"}</span>
             </div>

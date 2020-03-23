@@ -16,6 +16,7 @@ import Footer from "../../layouts/layouts.footer";
 import { APP_ENVIRONMENT } from "../../../../environments/environment";
 import Notification from "../../../../utilities/notification/app-notification";
 import ExportOverlay from "../Bot/export-overlay";
+import TagOverlay from "./tag-overlay";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
@@ -37,17 +38,21 @@ export class Bot extends Component {
       delete: false,
       settingsId: null,
       notification: "no",
-      error: ""
+      error: "",
+      botKey: ""
     };
   }
   setNotification = (status, message) => {
     this.setState({ notification: status, message });
   };
   async componentDidMount() {
-    this.setState({ loading: true })
+    this.setState({ loading: true });
     const clientId = await JSON.parse(localStorage.getItem("userdetails")).id;
     console.log("client id", clientId);
-    this.setGlobal({ setNotification: this.setNotification });
+    this.setGlobal({
+      setNotification: this.setNotification,
+      showTagOverlay: this.setOverlay
+    });
     fetch(`${BASE_URL}/setting/all/${clientId}`)
       .then(res => res.json())
       .then(data => {
@@ -97,11 +102,17 @@ export class Bot extends Component {
         });
       });
   };
-
+  setOverlay = (open, key) => {
+    console.log("bot key", key);
+    this.setState({ showTagOverlay: open, botKey: key });
+  };
   render() {
     return (
       <div>
         <ExportOverlay />
+        {this.state.showTagOverlay ? (
+          <TagOverlay botKey={this.state.botKey} />
+        ) : null}
         <Notification
           show={this.state.notification}
           type={"success"}
