@@ -46,7 +46,7 @@ export class UserList extends Component {
    * @returns void
    * 
    */
-  
+
 
   /**
   * @description Function to open dialog window to delete user
@@ -62,23 +62,46 @@ export class UserList extends Component {
 
   componentDidMount() {
     const clientId = JSON.parse(localStorage.getItem("userdetails")).id;
+    const clientRole = JSON.parse(localStorage.getItem("userdetails")).role;
 
-    fetch(`${BASE_URL}/client/all/${clientId}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data) {
-          const result = data.map(item => ({
-            ...item,
-            switched: item.isEnabled
-          }));
-          this.setState({
-            clients: result,
-            loading: false
-          });
-        }
-        return null;
-      })
-      .catch(console.error());
+    if (clientRole === "superadmin") {
+      fetch(`${BASE_URL}/client/`)
+        .then(res => res.json())
+        .then(data => {
+          if (data) {
+            const result = data.map(item => ({
+              ...item,
+              switched: item.isEnabled
+            }));
+            this.setState({
+              clients: result,
+              loading: false
+            });
+          }
+          return null;
+        })
+        .catch(console.error());
+
+    }
+    else {
+
+      fetch(`${BASE_URL}/client/all/${clientId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data) {
+            const result = data.map(item => ({
+              ...item,
+              switched: item.isEnabled
+            }));
+            this.setState({
+              clients: result,
+              loading: false
+            });
+          }
+          return null;
+        })
+        .catch(console.error());
+    }
   }
 
   deleteClient = clientId => {
@@ -137,35 +160,36 @@ export class UserList extends Component {
       },
       buttonsStyling: false
     })
-    
+
     swalWithBootstrapButtons.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'No, cancel!',
-    reverseButtons: true
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
     }).then((result) => {
       if (result.value) {
         this.deleteClient(identity)
-    swalWithBootstrapButtons.fire(
-      'Deleted!',
-      'Your file has been deleted.',
-      'success'
-    )
-  } else {
-    swalWithBootstrapButtons.fire(
-      'Cancelled',
-      'Action is cancelled!',
-      'error'
-    )
+        swalWithBootstrapButtons.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      } else {
+        swalWithBootstrapButtons.fire(
+          'Cancelled',
+          'Action is cancelled!',
+          'error'
+        )
+      }
+    })
   }
-})}
 
   App = () => {
     const [modalShow, setModalShow] = useState(false);
-    
+
 
     return (
       <div>
@@ -205,7 +229,7 @@ export class UserList extends Component {
             <div className="row">
               <div className="col-sm-12">
                 <div className="page-title-box">
-                  
+
                   <ButtonToolbar>
                     <Button
                       className="btn btn-outline-light ml-1 waves-effect waves-light"
@@ -235,7 +259,7 @@ export class UserList extends Component {
                   <div className="card-body">
 
                     <h4 className="mt-0 header-title">Active Users</h4><br></br>
-                    
+
                     <Users users={this.state.clients} confirmDelete={this.deleteDialog} switched={this.state.switched} toggleSwitch={this.toggleSwitch} />
 
                   </div>
