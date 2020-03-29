@@ -31,12 +31,12 @@
 }
 /* Clear floats after the columns */
 
-.row:after {
+.row-visit:after {
   content: "";
   display: table;
   clear: both;
 }
-.row {
+.row-visit {
   box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.397);
 }
 .column1 span {
@@ -98,7 +98,7 @@
 .columns2 {
   width: 38%;
 }
-.data-row:after {
+.data-row-visit:after {
   content: "";
   display: table;
   clear: both;

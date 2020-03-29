@@ -294,7 +294,7 @@ const Visits = props => {
       ) : null}
 
       {!showProgress && isData ? (
-        <div className="data-row">
+        <div className="data-row data-row-visit">
           <div className="data-columns columns1" style={{ overflow: "hidden" }}>
             <Map />
             <TopLocation
