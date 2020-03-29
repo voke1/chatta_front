@@ -16,7 +16,6 @@ export default class LayoutHeader extends Component {
   }
 
   logout = () => {
-    console.log("logout is called");
     localStorage.clear();
     this.setState({ loggedStatus: true });
   };
@@ -24,7 +23,6 @@ export default class LayoutHeader extends Component {
   render() {
     const avatar1 = <MDBIcon far icon="user-circle" size="2x" />;
     const userDetails = JSON.parse(localStorage.getItem("userdetails"));
-    console.log("userDetails:", userDetails);
 
     return (
       <div>
@@ -171,16 +169,7 @@ export default class LayoutHeader extends Component {
                       ""
                     )}
 
-                    <li className="has-submenu">
-                      <a href="#">
-                        <i className="dripicons-to-do"></i>Integrations
-                      </a>
-                    </li>
-                    <li className="has-submenu">
-                      <a href="#">
-                        <i className="dripicons-to-do"></i>Archives
-                      </a>
-                    </li>
+                   
                       <li className="has-submenu">
                         <Link to="/dashboard/payment">
                           <a>
@@ -188,17 +177,7 @@ export default class LayoutHeader extends Component {
                         </a>
                         </Link>
                       </li>
-                    <li className="has-submenu">
-                      <a href="#">
-                        <i className="dripicons-trophy"></i>FAQ{" "}
-                      </a>
-                    </li>
-
-                    <li className="has-submenu">
-                      <a href="#">
-                        <i className="dripicons-copy"></i>DOCS
-                      </a>
-                    </li>
+                   
                   </ul>
                   {/* <!-- End navigation menu --> */}
                 </div>{" "}
