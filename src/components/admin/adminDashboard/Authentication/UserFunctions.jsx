@@ -10,10 +10,12 @@ export const register = (newUser, isChecked) => {
       email: newUser.email,
       password: newUser.password,
       isRegistered: true,
-      isChecked: isChecked
+      isChecked: isChecked,
+      isEnabled: true,
     })
     .then(res => {
-      console.log(res);
+      console.log( "register is called, posteduser:", res);
+
       return res;
     })
     .catch(err => {
