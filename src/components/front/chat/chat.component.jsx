@@ -13,10 +13,11 @@ import botpic from "../../../bot1.jpg";
 import DecodeToken from "../../../utilities/decodeToken";
 import { APP_ENVIRONMENT } from "../../../environments/environment";
 import { defaultStyle } from "./defaultStyle";
+import ChatButton from "./chat-button";
 import * as apiService from "../../../services/apiservice";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
-const io = socket(BASE_URL, {transports: ["websocket"]});
+const io = socket(BASE_URL, { transports: ["websocket"] });
 export default class Chat extends Component {
   appService;
   constructor(props) {
@@ -39,11 +40,16 @@ export default class Chat extends Component {
       chat_body: [],
       defaultStyle: defaultStyle,
       botId: "",
-      training: {}
+      training: {},
+      openWindow: false,
     };
     this.appService = new AppService();
   }
-  getResponder = response => {
+  setWindow = () => {
+    this.setState({ openWindow: true });
+    console.log("yes");
+  };
+  getResponder = (response) => {
     console.log(response);
     this.setState({ isResponding: response });
   };
@@ -59,7 +65,7 @@ export default class Chat extends Component {
             <div
               className="chat-header clearfix"
               style={{
-                backgroundColor: this.state.defaultStyle.headerFillColor
+                backgroundColor: this.state.defaultStyle.headerFillColor,
               }}
             >
               <img
@@ -68,7 +74,7 @@ export default class Chat extends Component {
                 height="50"
                 width="50"
                 style={{
-                  borderRadius: this.state.defaultStyle.botImageBorderRadius
+                  borderRadius: this.state.defaultStyle.botImageBorderRadius,
                 }}
                 className="img img-rounded"
               />
@@ -77,7 +83,7 @@ export default class Chat extends Component {
                   className="chat-with"
                   style={{
                     fontSize: this.state.defaultStyle.botNameFontSize,
-                    color: this.state.defaultStyle.botNameTextColor
+                    color: this.state.defaultStyle.botNameTextColor,
                   }}
                 >
                   {this.state.settings.chatbotName}
@@ -95,7 +101,7 @@ export default class Chat extends Component {
                 }}
                 style={{
                   color: this.state.defaultStyle.closeButtonTextColor,
-                  fontSize: this.state.defaultStyle.closeButtonFontSize
+                  fontSize: this.state.defaultStyle.closeButtonFontSize,
                 }}
               >
                 <i className="fa fa-times fa-2x"></i>
@@ -116,7 +122,7 @@ export default class Chat extends Component {
               id="input-container"
               className="chat-message clearfix"
               style={{
-                backgroundColor: this.state.defaultStyle.botBodyFillColor
+                backgroundColor: this.state.defaultStyle.botBodyFillColor,
               }}
             >
               <form onSubmit={this.handleSubmit}>
@@ -139,7 +145,7 @@ export default class Chat extends Component {
                         backgroundColor: this.state.defaultStyle.inputFillColor,
                         color: this.state.defaultStyle.inputTextColor,
                         borderRadius: this.state.defaultStyle.inputBorderRadius,
-                        border: `${this.state.defaultStyle.inputBorder} solid ${this.state.defaultStyle.inputBorderColor}`
+                        border: `${this.state.defaultStyle.inputBorder} solid ${this.state.defaultStyle.inputBorderColor}`,
                       }}
                     />
                     <i className="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
@@ -160,15 +166,25 @@ export default class Chat extends Component {
         </div>
       </div>
     ) : (
-      <button
-        id="chat-opener"
-        data-toggle="tooltip"
-        title="Chat with us"
-        style={this.state.btnStyle}
-        onClick={this.toggleChatDisplay}
-      >
-        <i className="far fa-comment-alt fa-2x"></i>
-      </button>
+      <div className="chat-opener-holder">
+        {this.state.openWindow ? (
+          <ChatButton
+            openWindow={this.state.openWindow}
+            style={this.state.btnStyle}
+            onClick={this.toggleChatDisplay}
+            settings={this.state.settings}
+            setWindow={this.setWindow}
+          />
+        ) : (
+          <ChatButton
+            openWindow={this.state.openWindow}
+            style={this.state.btnStyle}
+            onClick={this.toggleChatDisplay}
+            settings={this.state.settings}
+            setWindow={this.setWindow}
+          />
+        )}
+      </div>
     );
   }
 
@@ -176,6 +192,8 @@ export default class Chat extends Component {
     // this.deleteVisit()
   }
   async componentDidMount() {
+    const emeka = document.getElementById("emeka");
+    console.log("emeka", emeka);
     const params = query_string.parse(this.props.location.search);
     try {
       const result = await Axios.get(
@@ -187,23 +205,25 @@ export default class Chat extends Component {
         const settings = result.data.findTree.setting_id;
 
         settings.collectUserInfo = true;
+        settings.showPopUp = true;
 
         this.setState({
           btnStyle: {
             backgroundColor:
               settings.primaryColor === " "
                 ? this.state.btnStyle
-                : settings.primaryColor
+                : settings.primaryColor,
           },
           who: settings.chatbotName,
           botImage: settings.botImage,
           settings,
           chat_body: result.data.findTree.chat_body,
           botId: result.data.findTree._id,
-          defaultStyle: settings.templateSettings
+          defaultStyle: settings.templateSettings,
+          display: "in-line",
         });
       }
-      const data = await Axios.get(`${BASE_URL}/training/`).then(res => {
+      const data = await Axios.get(`${BASE_URL}/training/`).then((res) => {
         this.setState({ training: res.data });
       });
     } catch (e) {}
@@ -239,27 +259,28 @@ export default class Chat extends Component {
     this.state.showChatArea ? io.disconnect() : io.connect();
     this.setState({
       showChatArea: !this.state.showChatArea,
-      count: 0
+      count: 0,
+      openWindow: true,
     });
     // this.deleteVisit()
   };
 
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     event.preventDefault();
     this.setState({
-      userInput: this.state.textValue
+      userInput: this.state.textValue,
     });
     setTimeout(() => {
       this.setState({
-        textValue: ""
+        textValue: "",
       });
     }, 10);
     this.setState({ count: this.state.count + 1 });
   };
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({
-      textValue: event.target.value
+      textValue: event.target.value,
     });
   };
 }

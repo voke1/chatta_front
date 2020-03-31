@@ -272,8 +272,8 @@ TEMPLATE UI SECTION STARTS
 }
 
 .clearfix:after {
-  visibility: hidden;
-  display: block;
+  visibility: none;
+  display: none;
   font-size: 0;
   content: " ";
   clear: both;
@@ -295,12 +295,14 @@ TEMPLATE UI SECTION STARTS
   background: #a7a5a2;
   border-radius: 5px;
 }
-
-
-#chat-opener{
-  bottom: 34px;
+.chat-opener-holder {
+bottom: 34px;
    right: 34px;
    position: fixed;
+}
+
+#chat-opener{
+  display: inline;
    padding: 12px 14px 11px; 
    background-color: orange;
   

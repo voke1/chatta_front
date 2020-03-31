@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { Component } from "reactn";
-import BotForm from "../../../components/admin/adminDashboard/Bot/botForm";
+import { Validation } from "../../../utilities/validations";
 import SearchEngine from "./search-engine";
 import { APP_ENVIRONMENT } from "../../../environments/environment";
 import { defaultStyle } from "../chat/defaultStyle";
@@ -24,7 +24,7 @@ import {
   isEdge,
   isOpera,
   isIE,
-  isSafari
+  isSafari,
 } from "react-device-detect";
 const BASE_URL = APP_ENVIRONMENT.base_url;
 
@@ -69,34 +69,34 @@ export default class Convo extends Component {
           buttons: [
             {
               key: "final_expenses",
-              val: "Final Expenses"
+              val: "Final Expenses",
             },
             {
               key: "mortgage_protection",
-              val: "Mortgage Protection"
+              val: "Mortgage Protection",
             },
             {
               key: "college_funding",
-              val: "College Funding"
+              val: "College Funding",
             },
             {
               key: "income_replacement",
-              val: "Income Replacement"
-            }
+              val: "Income Replacement",
+            },
           ],
-          text: "We offer Solutions, applications, delivery.."
-        }
+          text: "We offer Solutions, applications, delivery..",
+        },
       },
-      responses: [] //user's choices
+      responses: [], //user's choices
     };
   }
   details = {
     name: "",
-    email: ""
+    email: "",
   };
   appService = new AppService();
 
-  handleBotFormsubmit = async userDetails => {
+  handleBotFormsubmit = async (userDetails) => {
     this.sendOnlineStatus(userDetails);
     this.details = userDetails;
     const userName = userDetails.name;
@@ -109,7 +109,7 @@ export default class Convo extends Component {
       anything: "yyy",
       collectUserInfo: false,
       userIsKnown: true,
-      canListen: true
+      canListen: true,
     });
     this.searchTree("start", `Thanks ${this.state.username}`);
     this.setDelayListener();
@@ -120,7 +120,7 @@ export default class Convo extends Component {
         <div
           className="chat-history"
           style={{
-            backgroundColor: this.state.defaultStyle.botBodyFillColor
+            backgroundColor: this.state.defaultStyle.botBodyFillColor,
           }}
         >
           {this.isThinking()}
@@ -171,7 +171,7 @@ export default class Convo extends Component {
     await this.setState({
       canListen: true,
       collectUserInfo: true,
-      chat_body: this.props.chat_body
+      chat_body: this.props.chat_body,
     });
     this.getConversationTree();
   };
@@ -187,7 +187,7 @@ export default class Convo extends Component {
           chat_body: trainingTree,
           currentKey: trainingTree[0].identity,
           trainingMode: true,
-          userIsKnown: true
+          userIsKnown: true,
         });
         this.getConversationTree();
       }
@@ -206,13 +206,13 @@ export default class Convo extends Component {
         conversationTree.push(result);
         await this.setState({
           conversationTree,
-          userIsKnown: true
+          userIsKnown: true,
         });
         this.updateConverstion(key, userInput);
       }
     }
     this.setState({
-      defaultStyle: newProps.settings.templateSettings
+      defaultStyle: newProps.settings.templateSettings,
     });
     this.restartTimer();
   }
@@ -242,7 +242,7 @@ export default class Convo extends Component {
 
     await this.setState({
       conversationTree: conversationTree,
-      firstConvo
+      firstConvo,
     });
     this.updateConverstion(convoTree[0].identity);
   };
@@ -262,21 +262,22 @@ export default class Convo extends Component {
         visitor,
         botId: this.props.botId,
         lead: leads,
-        conversations: this.state.conversations
+        conversations: this.state.conversations,
       });
       console.log("settingss", this.props.botId);
       // this.props.socketIo.on("msgToClient", message => {});
       this.setState({
         online: true,
-        showProgress: this.state.trainingMode ? true : false
+        showProgress: this.state.trainingMode ? true : false,
       });
     }
   };
 
   getDate = () => {
     const time = new Date();
-    return `${time.getMonth() +
-      1}/${time.getDate()}/${time.getFullYear()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+    return `${
+      time.getMonth() + 1
+    }/${time.getDate()}/${time.getFullYear()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
   };
   getUserData = async () => {
     const continentCodes = {
@@ -286,7 +287,7 @@ export default class Convo extends Component {
       NA: "North America",
       EU: "Europe",
       OC: "Ocenia",
-      SA: "South America"
+      SA: "South America",
     };
     if (this.state.fetchUserInfo) {
       try {
@@ -345,15 +346,15 @@ export default class Convo extends Component {
    * This method renders response buttons
    *
    */
-  renderChatButtons = buttons => {
-    return buttons.map(button => {
+  renderChatButtons = (buttons) => {
+    return buttons.map((button) => {
       return (
         <button
           style={{
             backgroundColor: this.state.defaultStyle.optionFillColor,
             borderRadius: this.state.defaultStyle.optionBorderRadius,
             border: `${this.state.defaultStyle.optionBorder} solid ${this.state.defaultStyle.optionBorderColor}`,
-            color: this.state.defaultStyle.optionTextColor
+            color: this.state.defaultStyle.optionTextColor,
           }}
           key={this.setUniqueKey(button.key, "b")}
           type="button"
@@ -371,7 +372,7 @@ export default class Convo extends Component {
   };
   conversations = [];
   error = 0;
-  saveConversation = content => {
+  saveConversation = (content) => {
     content.error = this.error;
     this.conversations.push(content);
     this.props.socketIo.emit("updateConversation", this.conversations);
@@ -387,7 +388,7 @@ export default class Convo extends Component {
     if (val) {
       const userChoice = {
         selection: val,
-        time: this.setTimeOfChat()
+        time: this.setTimeOfChat(),
       };
       choices.push(userChoice);
 
@@ -395,13 +396,13 @@ export default class Convo extends Component {
         from: "user",
         timeStamp: this.setTimeOfChat(),
         name: "You",
-        message: val
+        message: val,
       });
     }
 
     this.setState({
       thinking: true,
-      responses: choices
+      responses: choices,
     });
     this.props.getResponder(true);
     //this set timeout forces the  update scrollbar function
@@ -443,7 +444,7 @@ export default class Convo extends Component {
       const training = {
         trainingData: this.state.training.training.trainingData.concat(
           this.trainingData
-        )
+        ),
       };
       nerify.save(
         training,
@@ -460,7 +461,7 @@ export default class Convo extends Component {
         chat_body: convoTree,
         currentKey: convoTree[0].identity,
         resetConvo: true,
-        trainingMode: false
+        trainingMode: false,
       });
       setTimeout(() => {
         this.getConversationTree();
@@ -551,7 +552,7 @@ export default class Convo extends Component {
         name: this.props.settings.chatbotName,
         message: searchResult.prompt,
         buttons: searchResult.response.buttons,
-        timeStamp: this.setTimeOfChat()
+        timeStamp: this.setTimeOfChat(),
       });
       this.restartTimer();
       const timeOutTime = this.delayChat(searchResult.prompt);
@@ -559,7 +560,7 @@ export default class Convo extends Component {
         this.setState({
           responses: responses,
           times: times,
-          thinking: false
+          thinking: false,
         });
         this.props.getResponder(false);
 
@@ -573,7 +574,7 @@ export default class Convo extends Component {
    */
   restartTimer = () => {
     this.setState({
-      chatTimer: 1
+      chatTimer: 1,
     });
     clearInterval(this.state.typingTimer);
     this.setDelayListener();
@@ -591,7 +592,7 @@ export default class Convo extends Component {
    * This method creates a detached (deep) copy of a variable
    */
 
-  deepCopy = variable => {
+  deepCopy = (variable) => {
     return JSON.parse(JSON.stringify(variable));
   };
 
@@ -599,7 +600,7 @@ export default class Convo extends Component {
    * This method sets delay for bot response
    */
 
-  delayChat = prompt => {
+  delayChat = (prompt) => {
     const noOfWords = prompt.split(" ").length;
     const time = noOfWords * 250;
     const delayTime = time > 10000 ? 10000 : time;
@@ -611,7 +612,7 @@ export default class Convo extends Component {
    */
 
   count = 0;
-  setUserDetails = async value => {
+  setUserDetails = async (value) => {
     if (!this.state.trainingMode) {
       const nerify = new Nerify();
       const pattern = await nerify.process(
@@ -623,34 +624,52 @@ export default class Convo extends Component {
       if (this.count < 2) {
         const identity = this.state.conversationTree[0].identity;
         const userDetails = {
-          ...this.state.userDetails
+          ...this.state.userDetails,
         };
         const type = this.count === 0 ? "name" : "email";
         const output = await nerify.identify(learnedData, value, "name");
         const kyObject = this.getKYCDetails(type, output.result[type]);
         const conversationTree = [...this.state.conversationTree];
-        conversationTree.push(kyObject);
-        conversationTree.unshift(this.state.firstConvo);
-        const find_key = type === "name" ? `kyc_${type}` : identity;
-        console.log("kyc_object", find_key, kyObject, conversationTree);
+        const isEmailValidated = await Validation.validateEmail(value);
 
-        console.log("output", output);
-        userDetails[type] = output.result.name;
-        this.count += 1;
-        this.closeChatCount = 0;
-        await this.setState({
-          userDetails,
-          collectUserInfo: false,
-          conversationTree,
-          userIsKnown: true
-        });
+        if (!isEmailValidated.success && this.count === 1) {
+          const responseObject = this.getKYCDetails("invalidEmail");
 
-        if (this.count === 2) {
-          const leads = this.state.userDetails;
-          leads.location = this.state.visitor.city;
-          this.props.socketIo.emit("updateLeads", leads);
+          const tree = conversationTree.filter(
+            (convo) => convo.identity !== "invalid_email"
+          );
+          tree.push(responseObject);
+          console.log("tree", tree);
+          this.setState({
+            conversationTree: tree,
+            userIsKnown: true,
+          });
+          this.count = 1;
+          return "invalid_email";
+        } else {
+          conversationTree.push(kyObject);
+          conversationTree.unshift(this.state.firstConvo);
+          const find_key = type === "name" ? `kyc_${type}` : identity;
+
+          console.log("output", output);
+          userDetails[type] = output.result.name;
+          this.count += 1;
+          this.closeChatCount = 0;
+          console.log("user details", userDetails);
+          await this.setState({
+            userDetails,
+            collectUserInfo: false,
+            conversationTree,
+            userIsKnown: true,
+          });
+
+          if (this.count === 2) {
+            const leads = this.state.userDetails;
+            leads.location = this.state.visitor.city;
+            this.props.socketIo.emit("updateLeads", leads);
+          }
+          return find_key;
         }
-        return find_key;
       }
     }
 
@@ -662,21 +681,21 @@ export default class Convo extends Component {
 
     return this.state.responses.map((convo, index) => {
       return (
-        <li key={this.setUniqueKey(convo.id)}>
+        <div className="container" key={this.setUniqueKey(convo.id)}>
           {!convo.selection ? (
-            <React.Fragment>
+            <div className="container">
               <div className="bot-div">
                 <div className="message-data">
                   <span className="message-data-name">
                     <i
                       className="fa fa-circle"
                       style={{
-                        color: this.state.defaultStyle.botOnlineFillColor
+                        color: this.state.defaultStyle.botOnlineFillColor,
                       }}
                     ></i>{" "}
                     <span
                       style={{
-                        color: this.state.defaultStyle.botOnlineNameTextColor
+                        color: this.state.defaultStyle.botOnlineNameTextColor,
                       }}
                     >
                       {this.props.settings.chatbotName}
@@ -685,7 +704,7 @@ export default class Convo extends Component {
                   <span
                     className="message-data-time"
                     style={{
-                      color: this.state.defaultStyle.botOnlineTimeTextColor
+                      color: this.state.defaultStyle.botOnlineTimeTextColor,
                     }}
                   >
                     {this.state.times[index] || "Now"}
@@ -701,7 +720,7 @@ export default class Convo extends Component {
                       borderRadius: this.state.defaultStyle
                         .botMessageBorderRadius,
                       border: `${this.state.defaultStyle.botMessageBorder} solid ${this.state.defaultStyle.botMessageBorderColor}`,
-                      color: this.state.defaultStyle.botMessageTextTextColor
+                      color: this.state.defaultStyle.botMessageTextTextColor,
                     }}
                   >
                     <div>
@@ -709,14 +728,15 @@ export default class Convo extends Component {
                       </div> */}
                       <span
                         style={{
-                          color: this.state.defaultStyle.botMessageTextTextColor
+                          color: this.state.defaultStyle
+                            .botMessageTextTextColor,
                         }}
                       >
                         {convo.prompt}
                       </span>
                     </div>
                   </div>
-                  <div className="col-md-1 triangle-left" style={{}}>
+                  {/* <div className="col-md-1 triangle-left" style={{}}>
                     <div style={{ marginTop: "0px" }}>
                       <Triangle
                         color={this.state.defaultStyle.botMessageFillColor}
@@ -724,13 +744,13 @@ export default class Convo extends Component {
                         size="35px"
                       />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="button_container">
                   {this.renderChatButtons(convo.response.buttons)}
                 </div>
               </div>
-            </React.Fragment>
+            </div>
           ) : (
             <div className="response-div">
               <div className="message-data">
@@ -738,12 +758,12 @@ export default class Convo extends Component {
                   <i
                     className="fa fa-circle online"
                     style={{
-                      color: this.state.defaultStyle.userOnlineFillColor
+                      color: this.state.defaultStyle.userOnlineFillColor,
                     }}
                   ></i>{" "}
                   <span
                     style={{
-                      color: this.state.defaultStyle.userOnlineNameTextColor
+                      color: this.state.defaultStyle.userOnlineNameTextColor,
                     }}
                   >
                     You
@@ -752,14 +772,14 @@ export default class Convo extends Component {
                 <span
                   className="message-data-time"
                   style={{
-                    color: this.state.defaultStyle.userOnlineTimeTextColor
+                    color: this.state.defaultStyle.userOnlineTimeTextColor,
                   }}
                 >
                   {convo.time}
                 </span>
               </div>
               <div className="row content">
-                <div className="col-md-1 triangle-left" style={{}}>
+                {/* <div className="col-md-1 triangle-left" style={{}}>
                   <div
                     style={{
                       marginLeft: "10px",
@@ -772,7 +792,7 @@ export default class Convo extends Component {
                       size="15px"
                     />
                   </div>
-                </div>
+                </div> */}
                 <div
                   className="col-md-10 message  my-message"
                   id="chat_box"
@@ -782,7 +802,7 @@ export default class Convo extends Component {
                     borderRadius: this.state.defaultStyle
                       .userMessageBorderRadius,
                     border: `${this.state.defaultStyle.userMessageBorder} solid ${this.state.defaultStyle.userMessageBorderColor}`,
-                    color: this.state.defaultStyle.userMessageTextTextColor
+                    color: this.state.defaultStyle.userMessageTextTextColor,
                   }}
                 >
                   <div>
@@ -793,7 +813,7 @@ export default class Convo extends Component {
               </div>
             </div>
           )}
-        </li>
+        </div>
       );
     });
   };
@@ -847,15 +867,12 @@ export default class Convo extends Component {
    * Please search organization keywords
    */
 
-  searchKeywordsFromUserInput = input => {
+  searchKeywordsFromUserInput = (input) => {
     const userInput = input ? input.toLowerCase() : "";
     const conversationTree = this.deepCopy(this.state.conversationTree);
-    const treeNodes = conversationTree.map(node => {
+    const treeNodes = conversationTree.map((node) => {
       return node.identity
-        ? node.identity
-            .toLowerCase()
-            .split("_")
-            .join(" ")
+        ? node.identity.toLowerCase().split("_").join(" ")
         : "";
     });
     const userInputArray = userInput.split(" ");
@@ -900,7 +917,7 @@ export default class Convo extends Component {
       }, 1000);
 
       this.setState({
-        typingTimer: typingTimer
+        typingTimer: typingTimer,
       });
     }
   };
@@ -911,17 +928,29 @@ export default class Convo extends Component {
         prompt: "your mail is bal.balaj",
         response: {
           buttons: [],
-          text: ""
-        }
+          text: "",
+        },
       },
       name: {
         identity: "kyc_name",
         prompt: `Thanks ${value}. Can I get your email ?`,
         response: {
           buttons: [],
-          text: ""
-        }
-      }
+          text: "",
+        },
+      },
+      invalidEmail: {
+        identity: "invalid_email",
+        prompt:
+          key === "invalidEmail" && this.state.userDetails.name
+            ? randomizeResponse("invalidEmailResponse", null, {
+                name: this.state.userDetails.name,
+              })
+            : null,
+        response: {
+          buttons: [],
+        },
+      },
     };
     return kycDetails[key];
   };

@@ -1,4 +1,5 @@
 const randomizeResponse = (key, type, userDetails) => {
+  console.log("this is key", key)
   const index = Math.floor(Math.random() * 4);
   const name = userDetails.name;
   const responses = {
@@ -57,7 +58,20 @@ const randomizeResponse = (key, type, userDetails) => {
           }. I haven't gotten any response from you. Feel free to reach us at admin@ith.com if you have more enquiries. Thanks and enjoy the rest of your day`
         ]
       }
-    }
+    },
+    invalidEmailResponse: [
+      "Please cross-check your email address for errors and try again",
+      `Kindly check your email format for errors. A good example is ${name ? name
+        .toLowerCase().split(" ")
+        .slice(0, 2)
+        .join("_"):null}${index}@gmail.com`,
+      `Sorry ${name ||
+        ""}, it looks like you didn't quite provide a valid email. kindly cross-check`,
+      `We will need a valid email address... something like ${name ? name
+        .toLowerCase().split(" ")
+        .slice(0, 2)
+        .join("_"):null}${index}@gmail.com`
+    ]
   };
   if (type === "offline") {
     if (userDetails.email) {
@@ -65,6 +79,9 @@ const randomizeResponse = (key, type, userDetails) => {
     } else {
       return responses[key][type].withoutEmail[index];
     }
+  }
+  else if(!type) {
+    return responses[key][index]
   }
   return responses[key][type][index];
 };

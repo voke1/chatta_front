@@ -2,7 +2,7 @@ import React, { useState, useEffect, useGlobal } from "reactn";
 import EmbeddedCodeDialog from "./embed-code-dialog";
 const BotPreview = props => {
   const getEmbedScript = url => {
-    return `<iframe src="${props.orgUrl}" frameborder="0" style="background-color:transparent;
+    return `<iframe id="emeka" src="${props.orgUrl}" frameborder="0" style="background-color:transparent;
     position:fixed;
     z-index:1000000000000000000000000000050000;
     bottom:2%;

@@ -1,0 +1,112 @@
+.DateInput_input {
+  height: 28px;
+  width: 100%;
+  color: white !important;
+  background: #332758 !important;
+  border: 0px solid #332758 !important;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.column1 {
+  float: left;
+  width: 30%;
+  height: fit-content;
+  padding-left: 10px;
+}
+.column2 {
+  float: left;
+  width: 70%;
+  height: fit-content;
+}
+.dates {
+  height: fit-content;
+  width: fit-content;
+  background-color: rgb(255, 255, 255);
+  margin-bottom: 10px;
+  box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.397);
+  margin: auto;
+  border: 2px solid rgb(197, 197, 223);
+  background: transparent;
+}
+/* Clear floats after the columns */
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.row {
+  box-shadow: 2px 2px 2px rgba(255, 255, 255, 0.397);
+}
+.column1 span {
+  font-weight: 500;
+  font-size: 20px;
+}
+.dates span {
+  color: rgb(136, 135, 143);
+  font-weight: 400;
+}
+.user-info {
+  font-size: 0.8rem;
+  height: 1px;
+}
+
+.table-holder {
+  width: 90%;
+  display: block;
+  margin: auto;
+  margin-top: 20px;
+  box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.397);
+}
+
+/* Styles for wrapping the search box */
+
+.main {
+  width: 100%;
+}
+
+/* Bootstrap 4 text input with search icon */
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+  box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.397);
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}
+.data-columns {
+  float: left;
+  height: fit-content;
+  background-color: #f9f9f9;
+}
+.columns1 {
+  width: 31%;
+}
+.columns3 {
+  width: 31%;
+}
+.columns2 {
+  width: 38%;
+}
+.data-row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+tr {
+  line-height: 5px;
+  min-height: 5px;
+
+  height: 5px;
+  font-size: 5px;
+}

@@ -56,3 +56,13 @@ export const verifyEmail = token => {
       return err;
     });
 };
+export const resetPassword = (token, passwords) => {
+  return axios
+    .patch(`${BASE_URL}/auth/reset-password?token=${token}`, {passwords})
+    .then(res => {
+      return res.data;
+    })
+    .catch(err => {
+      return err;
+    });
+};

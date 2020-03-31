@@ -11,6 +11,7 @@ export class Validation {
     );
   }
   static async validatePassword(password) {
+    console.log("password", password)
     const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{8,20}$/;
     const success = passwordRegex.test(password);
     return await Validation.getResponse(

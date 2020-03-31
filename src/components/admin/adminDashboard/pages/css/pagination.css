@@ -1,0 +1,25 @@
+.columns {
+  float: left;
+  cursor: pointer;
+}
+.rows:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.disabled {
+  background-color: rgb(253, 252, 252);
+  color: rgb(233, 223, 223) !important;
+}
+
+.limits {
+  float: left;
+  width: fit-content;
+  height: 28px;
+  margin-right: 5px;
+  margin-left: 5px;
+  background-color: #ffffff !important;
+  border: 0.08px solid rgb(240, 238, 238);
+  cursor: pointer;
+  color: rgb(141, 133, 133);
+}

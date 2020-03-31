@@ -360,6 +360,7 @@ export default class AnalyticsHelper {
     let allVisits = [];
     try {
       allVisits = await this.findAllVisitsInRange(dates, botId);
+      console.log("all visits", allVisits, dates, botId);
     } catch (error) {
       console.log(error.message);
     }

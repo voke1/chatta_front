@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { login } from "./UserFunctions";
 import ProgressBar from "./progressbar";
-import { Redirect } from "react-router-dom";
+import { Redirect ,Link} from "react-router-dom";
 
 class Login extends Component {
   constructor() {
@@ -162,9 +162,11 @@ class Login extends Component {
 
                 <div className="form-group m-t-10 mb-0 row">
                   <div className="col-12 m-t-20">
-                    <a href="pages-recoverpw.html" className="text-muted">
-                      <i className="mdi mdi-lock"></i> Forgot your password?
-                    </a>
+                    <Link to="recover-password">
+                      <a href="auth/recover-password" className="text-muted">
+                        <i className="mdi mdi-lock"></i> Forgot your password?
+                      </a>
+                    </Link>
                   </div>
                 </div>
               </form>
@@ -173,15 +175,17 @@ class Login extends Component {
         </div>
 
         <div className="m-t-40 text-center">
-          <p>
-            Don't have an account ?{" "}
-            <a
-              href="register"
-              className="font-500 font-14 text-primary font-secondary"
-            >
-              Signup Now
-            </a>
-          </p>
+          <Link to="register">
+            <p>
+              Don't have an account ?{" "}
+              <a
+                href="register"
+                className="font-500 font-14 text-primary font-secondary"
+              >
+                Signup Now
+              </a>
+            </p>
+          </Link>
         </div>
       </div>
     );

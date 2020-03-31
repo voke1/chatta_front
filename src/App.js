@@ -10,6 +10,10 @@ import { Bot } from "./components/admin/adminDashboard/Bot/admin-bots";
 import { UserList } from "./pages/users";
 import Register from "./components/admin/adminDashboard/Authentication/Register";
 import Login from "./components/admin/adminDashboard/Authentication/Login";
+import ResetPassword from "./components/admin/adminDashboard/Authentication/reset-password";
+import VerifyNewPassword from "./components/admin/adminDashboard/Authentication/verify-new-password";
+
+
 import VerifyEmail from "./components/admin/adminDashboard/Authentication/emailVerification";
 import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 import BotUITemplate from "./components/admin/adminDashboard/Bot/bot-UI-template-design";
@@ -94,6 +98,17 @@ function App() {
         ></ProtectedRoute>
         <Route exact path="/auth/register" component={Register}></Route>
         <Route exact path="/auth/login" component={Login}></Route>
+        <Route
+          exact
+          path="/auth/password-reset"
+          component={VerifyNewPassword}
+        ></Route>
+        <Route
+          exact
+          path="/auth/recover-password"
+          component={ResetPassword}
+        ></Route>
+
         <Route exact path="/auth/verify_email" component={VerifyEmail}></Route>
         <Route exact path="/preview" component={BotUITemplate}></Route>
         <Route exact path="/date" component={DatePicker}></Route>
