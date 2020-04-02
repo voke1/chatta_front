@@ -8,7 +8,7 @@ const BASE_URL = APP_ENVIRONMENT.base_url;
 
 
 class FormsPage extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             company_name: "Microsoft",
@@ -21,9 +21,9 @@ class FormsPage extends React.Component {
             companyId: ""
         };
     }
-    
+
     userDetails = JSON.parse(localStorage.getItem('userdetails'))
-    
+
     handleChange = event => {
         this.setState({
             [event.target.name]: event.target.value
@@ -35,50 +35,55 @@ class FormsPage extends React.Component {
             // message: result.message,
             // disabled: result.disabled
         });
-    }   
+    }
 
     handleSubmit = event => {
-    event.preventDefault();
-    this.setState({ showProgress: true });
+        event.preventDefault();
+        this.setState({ showProgress: true });
 
-    const companies = {
-      company_name: this.state.company_name,
-      domain_name: this.state.domain_name,
-      contact_address: this.state.contact_address,
-      phone: this.state.industry,
-      clientId: this.userDetails.id,
+        const companies = {
+            company_name: this.state.company_name,
+            domain_name: this.state.domain_name,
+            contact_address: this.state.contact_address,
+            phone: this.state.industry,
+            clientId: this.userDetails.id,
+        };
+
+        Axios.post(`${BASE_URL}/companies`, {
+            ...companies
+        })
+            .then(res => {
+                if (res.data.message) {
+                    this.setState({ message: res.data.message, showProgress: false });
+                } else {
+                    this.setState({ companyId: res.data._id })
+                    console.log("companyResult:", res.data._id)
+
+                    Axios.put(`${BASE_URL}/client/${this.userDetails.id}?companyId=${this.state.companyId}`)
+                        .then(res => {
+                            //   this.setCompany()
+                            this.userDetails.companyId = this.state.companyId
+                            localStorage.setItem('userdetails', JSON.stringify(this.userDetails));
+                            console.log("props:", this.props)
+                            console.log("anotheres,", res)
+
+                        }).then(
+                            this.props.toggle(14)
+
+                        )
+                    this.props.onHide();
+                    this.props.updateList();
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                this.setState({ showProgress: false });
+            });
     };
-    
-    Axios.post(`${BASE_URL}/companies`, {
-      ...companies
-    })
-      .then(res => {
-          if (res.data.message) {
-              this.setState({ message: res.data.message, showProgress: false });
-            } else {
-                this.setState({companyId: res.data._id})
-                console.log("companyResult:", res.data._id)
-                
-              Axios.put(`${BASE_URL}/client/${this.userDetails.id}?companyId=${this.state.companyId}`)
-              .then(res =>{
-                  this.userDetails.companyId = this.state.companyId
-                  localStorage.setItem('userdetails', JSON.stringify(this.userDetails));
-
-                  console.log("anotheres,", res )
-              })
-
-          this.props.onHide();
-          this.props.updateList();
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({ showProgress: false });
-      });
-  };
 
 
     render() {
+        // console.log("props:", this.props)
 
         return (
             <div>
@@ -88,13 +93,13 @@ class FormsPage extends React.Component {
                     noValidate
                     style={{ margin: "2%" }}
                 >
-                    <p style={{color: 'green'}}>You are almost done, please take a momment to complete the form below</p>
+                    <p style={{ color: 'green' }}>You are almost done, please take a momment to complete the form below</p>
 
                     <p>{this.state.message}</p>
                     <label
                         htmlFor="defaultFormRegisterNameEx"
                         className="grey-text"
-                        style={{color: "green"}}
+                        style={{ color: "green" }}
                     >
                         Business name
               </label>
@@ -148,7 +153,7 @@ class FormsPage extends React.Component {
                         htmlFor="defaultFormRegisterPasswordEx4"
                         className="grey-text"
                     >
-                         Industry
+                        Industry
               </label>
                     <input
                         value={this.state.industry}
@@ -160,12 +165,12 @@ class FormsPage extends React.Component {
                         placeholder="Information communication technology"
                         required
                     />
-           
+
 
                     <br></br>
                     <MDBBtn style={{ marginLeft: "83%" }} type="submit" color="purple" outline onClick={this.handleSubmit}>
                         {this.state.showProgress ? <Loader /> : "Create"}
-          </MDBBtn>
+                    </MDBBtn>
                 </form>
             </div>
         );

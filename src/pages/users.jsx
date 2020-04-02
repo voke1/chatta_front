@@ -60,6 +60,8 @@ export class UserList extends Component {
     // }
   };
 
+
+
   componentDidMount() {
     const clientId = JSON.parse(localStorage.getItem("userdetails")).id;
     const clientRole = JSON.parse(localStorage.getItem("userdetails")).role;
@@ -189,6 +191,8 @@ export class UserList extends Component {
 
   App = () => {
     const [modalShow, setModalShow] = useState(false);
+    const onHide = () => setModalShow(false)
+
 
 
     return (
@@ -240,7 +244,7 @@ export class UserList extends Component {
                     </Button>
                     <CreateUser
                       show={modalShow}
-                      onHide={() => setModalShow(false)}
+                      onHide={onHide}
                       updateList={this.updateList}
                     />
                   </ButtonToolbar>

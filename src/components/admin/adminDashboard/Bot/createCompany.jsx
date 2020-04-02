@@ -11,12 +11,14 @@ class ModalPage extends Component {
         modal14: this.props.isRegistered === null ?true:false
     }
     toggle = nr => () => {
+        console.log("i am called toggle")
         let modalNumber = 'modal' + nr
         this.setState({
             [modalNumber]: !this.state[modalNumber]
         });
     }
     
+   
     render() {
         console.log("isRegistered", typeof(this.props.isRegistered))
         return (
@@ -27,7 +29,7 @@ class ModalPage extends Component {
                         <MDBModalHeader style={{ backgroundColor: "#F1F1F1", color: "purple" }} toggle={this.toggle(14)}>Business information</MDBModalHeader>
                         <MDBModalBody
                             style={{ color: "black" }}>
-                            <CompanyForm />
+                            <CompanyForm toggle={this.toggle(14)}/>
 
                         </MDBModalBody>
 

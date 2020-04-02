@@ -69,8 +69,9 @@ export class CreateUser extends Component {
         if (res.data.message) {
           this.setState({ message: res.data.message, showProgress: false });
         } else {
-          this.props.onHide();
           this.props.updateList();
+          this.props.onHide();
+          this.setState({ showProgress: false });
         }
       })
       .catch(err => {
@@ -123,7 +124,7 @@ export class CreateUser extends Component {
               Full Name
             </label>
             <input
-              value={this.state.fname}
+              value={this.state.fullName}
               name="fullName"
               onChange={this.handleChange}
               type="text"
