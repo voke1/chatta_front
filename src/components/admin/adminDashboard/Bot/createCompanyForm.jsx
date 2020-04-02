@@ -18,10 +18,12 @@ class FormsPage extends React.Component {
             address: "",
             zip: "",
             message: "",
+            companyId: ""
         };
     }
     
-
+    userDetails = JSON.parse(localStorage.getItem('userdetails'))
+    
     handleChange = event => {
         this.setState({
             [event.target.name]: event.target.value
@@ -38,22 +40,33 @@ class FormsPage extends React.Component {
     handleSubmit = event => {
     event.preventDefault();
     this.setState({ showProgress: true });
+
     const companies = {
       company_name: this.state.company_name,
       domain_name: this.state.domain_name,
       contact_address: this.state.contact_address,
       phone: this.state.industry,
+      clientId: this.userDetails.id,
     };
-
-    console.log(companies);
+    
     Axios.post(`${BASE_URL}/companies`, {
       ...companies
     })
       .then(res => {
-        console.log("RES.DATA", res);
-        if (res.data.message) {
-          this.setState({ message: res.data.message, showProgress: false });
-        } else {
+          if (res.data.message) {
+              this.setState({ message: res.data.message, showProgress: false });
+            } else {
+                this.setState({companyId: res.data._id})
+                console.log("companyResult:", res.data._id)
+                
+              Axios.put(`${BASE_URL}/client/${this.userDetails.id}?companyId=${this.state.companyId}`)
+              .then(res =>{
+                  this.userDetails.companyId = this.state.companyId
+                  localStorage.setItem('userdetails', JSON.stringify(this.userDetails));
+
+                  console.log("anotheres,", res )
+              })
+
           this.props.onHide();
           this.props.updateList();
         }

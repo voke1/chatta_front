@@ -73,7 +73,7 @@ export class Dashboard extends Component {
 
         <div className="wrapper">
           <div className="container-fluid">
-            {/* {userDetails.isRegistered ? <CompanyModal isRegistered={userDetails.isRegistered} /> : ""} */}
+            {/* {userDetails.isRegistered ? <CompanyModal isRegistered={userDetails.isRegistered} /> : ""}  */}
 
 
             <div className="row">

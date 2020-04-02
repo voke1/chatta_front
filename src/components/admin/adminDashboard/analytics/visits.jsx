@@ -25,6 +25,8 @@ import TableContainer from "./table-container";
 import TodayChart from "./today-bar-chart";
 import SmallSummary from "./small-summary";
 import ConversationOverlay from "./visit-conversation-leads-overlay";
+import Footer from "../../layouts/layouts.footer";
+import CreateCompany from "../Bot/createCompany";
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
 const io = socket(BASE_URL);
@@ -117,7 +119,8 @@ const Visits = props => {
     console.log("show overlay", show);
     setShowConvoOverlay(show);
   };
-
+  const userDetails = JSON.parse(localStorage.getItem('userdetails'))
+console.log("this is :", userDetails)
   return (
     <div style={bodyStyle}>
       {allRecord.length ? (
@@ -138,6 +141,8 @@ const Visits = props => {
         <Header />
         {/* <!-- End Navigation Bar--> */}
         <div className="container-fluid">
+
+          <CreateCompany isRegistered={userDetails.companyId}/>
           {/* <!-- Page-Title --> */}
           <div className="row">
             <div className="col-sm-12">
@@ -426,6 +431,9 @@ const Visits = props => {
           </div>
         </div>
       ) : null}
+      <div style={{marginTop: "2%"}}>
+      <Footer/>
+      </div>
     </div>
   );
 };

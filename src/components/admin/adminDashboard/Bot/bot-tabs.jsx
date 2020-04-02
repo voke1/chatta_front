@@ -77,7 +77,7 @@ class BotTabs extends Component {
       botImage: url,
       primaryColor: this.state.primaryColor,
       secondaryColor: this.state.secondaryColor,
-      delayTime: this.state.delayTime,
+      delayTime: this.state.delayTime * 1000 * 60,
       deployed: false
     };
 
@@ -209,10 +209,10 @@ class BotTabs extends Component {
           style={{ padding: 0 }}
           activeKey={this.state.tab}
           id="controlled-tab-example"
-          // onSelect={
-          //   async (tab) =>  {
-          //   await this.setState({ tab: this.getTab(tab) })
-          //   }}
+        // onSelect={
+        //   async (tab) =>  {
+        //   await this.setState({ tab: this.getTab(tab) })
+        //   }}
         >
           &nbsp;
           <Tab
@@ -269,7 +269,7 @@ class BotTabs extends Component {
                     <div className="md-form">
                       <Row>
                         <Col>
-                          <p className="text-left">Primary Colour</p>
+                          <p className="text-left">Bot icon colour</p>
                           <input
                             type="color"
                             value={this.state.primaryColor}
@@ -282,21 +282,7 @@ class BotTabs extends Component {
                             }}
                           />
                         </Col>
-                        <Col>
-                          <p className="text-left">Secondary Colour</p>
-                          <input
-                            type="color"
-                            id="materialSubscriptionFormEmail"
-                            onChange={this.handleChange}
-                            name="secondaryColor"
-                            value={this.state.secondaryColor}
-                            style={{
-                              width: "100%"
-                            }}
 
-                            // className="form-control"
-                          />
-                        </Col>
                       </Row>
                     </div>
                     <div className="md-form">
@@ -315,11 +301,12 @@ class BotTabs extends Component {
                         type="number"
                         id="materialSubscriptionFormEmail"
                         className="form-control"
-                        placeholder="Delay Time"
+                        placeholder="Delay Time (in minutes)"
                         name="delayTime"
                         value={this.state.delayTime}
                         onChange={this.handleChange}
                       />
+
                     </div>
                     <div class="custom-file">
                       <input
@@ -349,8 +336,8 @@ class BotTabs extends Component {
               <Options
                 getTab={this.getTab}
                 handleNext={this.handleSubmit}
-                saveTemplate={() => {}}
-                saveClass={() => {}}
+                saveTemplate={() => { }}
+                saveClass={() => { }}
                 disabledButtons={{
                   previous: true,
                   next: false,
@@ -420,8 +407,8 @@ class BotTabs extends Component {
                 this.global.showImportOverlay(false);
                 this.global.setTab("template");
               }}
-              saveTemplate={() => {}}
-              saveClass={() => {}}
+              saveTemplate={() => { }}
+              saveClass={() => { }}
               disabledButtons={{
                 previous: false,
                 next: false,
@@ -453,8 +440,8 @@ class BotTabs extends Component {
                     this.global.showImportOverlay(false);
                     this.global.setTab("intent");
                   }}
-                  saveTemplate={() => {}}
-                  saveClass={() => {}}
+                  saveTemplate={() => { }}
+                  saveClass={() => { }}
                   disabledButtons={{
                     previous: false,
                     next: true,
@@ -483,8 +470,7 @@ class BotTabs extends Component {
     ) : null;
   }
   componentDidMount() {
-    console.log("component mounted!");
-
+    
     this.setGlobal({ getTab: this.getTab, setTab: this.setTab });
   }
 }

@@ -38,7 +38,7 @@ export default class LayoutHeader extends Component {
                 <div className="logo">
                   {/* <!-- Text Logo --> */}
                   <a href="index.html" className="logo">
-                    <i className="dripicons-broadcast"></i>&nbsp; CHATTA
+                    &nbsp; CHATTA
                   </a>
                   {/* <a href="index.html" className="logo">
                               <img src="assets/images/logo-sm.png" alt="" height="22" className="logo-small"></img>

@@ -9,9 +9,9 @@ export const register = (newUser, isChecked) => {
       fullName: newUser.fullName,
       email: newUser.email,
       password: newUser.password,
-      isRegistered: true,
       isChecked: isChecked,
       isEnabled: true,
+      companyId: null,
     })
     .then(res => {
       console.log( "register is called, posteduser:", res);

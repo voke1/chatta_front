@@ -16,6 +16,7 @@ class Register extends Component {
     };
     this.onChange = this.onChange.bind(this);
   }
+
   async onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
     const result = await Validation.validateAll(e);
@@ -68,6 +69,7 @@ class Register extends Component {
       }
     });
   };
+  
   render() {
     const message = (
       <p
