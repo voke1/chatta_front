@@ -50,21 +50,7 @@ export default class LayoutHeader extends Component {
                 <div className="menu-extras topbar-custom">
                   <ul className="list-inline float-right mb-0">
                     {/* <!-- notification--> */}
-                    <li className="list-inline-item dropdown notification-list">
-                      <a
-                        className="nav-link dropdown-toggle arrow-none waves-effect"
-                        data-toggle="dropdown"
-                        href="#"
-                        role="button"
-                        aria-haspopup="false"
-                        aria-expanded="false"
-                      >
-                        <i className="ti-bell noti-icon"></i>
-                        <span className="badge badge-info badge-pill noti-icon-badge">
-                          3
-                        </span>
-                      </a>
-                    </li>
+                   
                     {/* <!-- User--> */}
                     <li className="list-inline-item dropdown notification-list">
                       <a
