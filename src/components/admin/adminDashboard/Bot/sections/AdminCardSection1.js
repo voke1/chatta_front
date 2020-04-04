@@ -48,11 +48,7 @@ export default class AdminCardSection1 extends Component {
               </div>
             </div>
             <MDBCardBody>
-              <div className="progress">
-                <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar bg-primary" role="progressbar"
-                  style={{ width: '25%' }}></div>
-              </div>
-              <MDBCardText>Successful Transactions</MDBCardText>
+            
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
@@ -61,18 +57,14 @@ export default class AdminCardSection1 extends Component {
             <div className="admin-up">
               <MDBIcon icon="chart-line" className="warning-color" />
               <div className="data">
-                <p>SUBSCRIPTIONS</p>
+                <p>PAYMENTS RECEIVED TODAY</p>
                 <h4>
-                  <strong>200</strong>
+                  <strong>NGN 200,000</strong>
                 </h4>
               </div>
             </div>
             <MDBCardBody>
-              <div className="progress">
-                <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar bg grey" role="progressbar"
-                  style={{ width: '25%' }}></div>
-              </div>
-              <MDBCardText>Successful Transactions</MDBCardText>
+              
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
@@ -81,18 +73,14 @@ export default class AdminCardSection1 extends Component {
             <div className="admin-up">
               <MDBIcon icon="chart-pie" className="light-blue lighten-1" />
               <div className="data">
-                <p>SUCCESS RATE</p>
+                <p>PAYMENTS SUCCESS RATE</p>
                 <h4>
                   <strong>100%</strong>
                 </h4>
               </div>
             </div>
             <MDBCardBody>
-              <div className="progress">
-                <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar grey darken-2" role="progressbar"
-                  style={{ width: '75%' }}></div>
-              </div>
-              <MDBCardText>Successful Transactions</MDBCardText>
+          
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
@@ -101,18 +89,14 @@ export default class AdminCardSection1 extends Component {
             <div className="admin-up">
               <MDBIcon icon="chart-bar" className="red accent-2" />
               <div className="data">
-                <p>USERS</p>
+                <p>UNIQUE USERS</p>
                 <h4>
                   <strong>2000</strong>
                 </h4>
               </div>
             </div>
             <MDBCardBody>
-              <div className="progress">
-                <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="25" className="progress-bar bg-primary" role="progressbar"
-                  style={{ width: '25%' }}></div>
-              </div>
-              <MDBCardText>Number of Users</MDBCardText>
+          
             </MDBCardBody>
           </MDBCard>
         </MDBCol>

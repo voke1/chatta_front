@@ -432,6 +432,7 @@ export default class AnalyticsHelper {
     apiService
       .get("tree/all", clientId)
       .then(async res => {
+        console.log("botres:", res)
         if (!res.length) {
           this.callbacks.setIsData(false);
           this.callbacks.setShowProgress(false);
