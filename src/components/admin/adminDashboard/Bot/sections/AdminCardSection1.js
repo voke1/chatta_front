@@ -2,38 +2,37 @@ import React, { Component } from 'react';
 import { MDBCard, MDBCardBody, MDBIcon, MDBRow, MDBCol, MDBCardText } from 'mdbreact';
 
 export default class AdminCardSection1 extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      payments: [],
+      successPayments: [],
+      propspayment: [],
 
-  state = {
-    payments: [],
-    successPayments: []
-
+    }
   }
 
-  componentDidMount() {
 
-    fetch(`http://localhost:9000/payment`)
-      .then(res => res.json())
-      .then(data => {
-        this.setState({
-          successPayments: [
-            ...data.filter(payment => payment.status === 'success')
-          ]
-        });
-      })
-      .then(() => {
-        let initialValue = 0;
-        let sum = this.state.successPayments.reduce(
-          (accumulator, currentValue) => accumulator + currentValue.amount
-          , initialValue
-        );
-        this.setState({ totalAmount: sum })
-      })
-      .catch(e => {
-        this.setState({ error: e.message });
-      });
+  async componentDidMount() {
+    await this.setState({ payments: this.props.botPayments })
+
+    this.setState({
+      successPayments: [
+        ...this.state.payments.filter(payment => payment.status === 'success')
+      ]
+    })
+
+
+    let initialValue = 0;
+    let sum = this.state.successPayments.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.amount
+      , initialValue
+    );
+    this.setState({ totalAmount: sum })
   }
 
   render() {
+    console.log("propspayment:", this.props.botPayments)
     return (
       <MDBRow className="mb-4" >
         <MDBCol xl="3" md="6" className="mb-r">
@@ -48,7 +47,7 @@ export default class AdminCardSection1 extends Component {
               </div>
             </div>
             <MDBCardBody>
-            
+
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
@@ -64,7 +63,7 @@ export default class AdminCardSection1 extends Component {
               </div>
             </div>
             <MDBCardBody>
-              
+
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
@@ -80,7 +79,7 @@ export default class AdminCardSection1 extends Component {
               </div>
             </div>
             <MDBCardBody>
-          
+
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
@@ -96,7 +95,7 @@ export default class AdminCardSection1 extends Component {
               </div>
             </div>
             <MDBCardBody>
-          
+
             </MDBCardBody>
           </MDBCard>
         </MDBCol>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useGlobal, setGlobal } from 'reactn';
 import { MDBCol, MDBCard, MDBCardBody, MDBCardHeader, MDBRow, MDBListGroup, MDBListGroupItem, MDBBadge, MDBIcon } from 'mdbreact';
 import { Bar, Pie } from 'react-chartjs-2';
 import { Line, Doughnut, Radar } from 'react-chartjs-2';
@@ -6,35 +6,30 @@ import moment from 'moment'
 
 
 class ChartSection1 extends Component {
-    state = {
-        payments: [],
-        success: 0,
-        failed: 0,
+    constructor(props) {
+        super(props);
+        this.state = {
+            payments: [],
+            success: 0,
+            failed: 0,
+        }
     }
     noOfFailed = 0;
     noOfSuccess = 0;
-    componentDidMount() {
-        fetch(`http://localhost:9000/payment`)
-            .then(res => res.json())
-            .then(data => {
-                this.setState({ payments: data });
-                console.log("mypay,", this.state.payments)
-                this.getStatus()
-            })
-            .catch(e => {
-                console.log("error", e);
-                this.setState({ error: e.message });
-            });
+    async componentDidMount() {
+        await this.setState({ payments: this.props.botPayments })
+        this.getStatus()
+
 
     }
 
     getStatus = () => {
-        this.state.payments.map((payment, index)=>{
-            
-            if(payment.status === 'success'){
+        this.state.payments.map((payment, index) => {
+
+            if (payment.status === 'success') {
                 this.noOfSuccess++;
-                this.setState({success: this.noOfSuccess})
-            }else{
+                this.setState({ success: this.noOfSuccess })
+            } else {
                 this.noOfFailed++;
                 this.setState({ failed: this.noOfFailed })
             }
@@ -42,6 +37,7 @@ class ChartSection1 extends Component {
     }
 
     render() {
+
         const dataDoughnut = {
             labels: ["Failed", "Success"],
             datasets: [{
@@ -50,6 +46,7 @@ class ChartSection1 extends Component {
                 hoverBackgroundColor: ["#FF5A5E", "#5AD3D1"]
             }]
         };
+        console.log("globalprops:", this.global)
         return (
             <MDBRow className="mb-4">
                 <MDBCol md="8" className="mb-4">
