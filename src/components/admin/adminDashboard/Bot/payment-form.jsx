@@ -4,6 +4,7 @@ import "./css/card.css";
 import Accordion from "./accordion";
 import uuid from "uuid/v1";
 import ConvoTree from "../../../front/conversation/convo.json";
+import {MDBIcon} from 'mdbreact'
 const identity = uuid();
 
 class PaymentForm extends Component {
@@ -32,11 +33,11 @@ class PaymentForm extends Component {
                         style={{
                             marginLeft: "40px",
                             marginRight: "100px",
-                            marginTop: "-5px"
+                            marginTop: "-5px",
                         }}
                         className="form-group"
                     >
-                        <p style={{ color: "green", marginTop: "0px",marginRight: "-100px" }}>add payment option to intent</p>
+                        <p style={{ color: "green", textAlign: "left", marginLeft: "10px", marginTop: "7px", marginBottom: "1px" }}><MDBIcon icon="info-circle" />{" "} add payment details to intent</p>
                         <input
                             className="form-control border-top-0 border-right-0 border-left-0"
                             placeholder="paystackkey"
@@ -66,7 +67,7 @@ class PaymentForm extends Component {
                                 onClick={() =>
                                     this.props.getData(this.state.paystackkey, this.state.price)
                                 }
-                                style={{ backgroundColor: "#ededed", color: "#5b616b" }}
+                                style={{ backgroundColor: "#ededed", color: "#5b616b", width: "8rem"}}
 
                                
                             >

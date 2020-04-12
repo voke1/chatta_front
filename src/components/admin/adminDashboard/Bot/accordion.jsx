@@ -6,7 +6,7 @@ import PaymentForm from "./payment-form"
 
 class Accordion extends Component {
   state = {
-    height: "0px",
+    height: "25px",
     active: "",
     init: "0px",
     newHeight: "0px",
@@ -18,14 +18,15 @@ class Accordion extends Component {
 
   getData = (key, price)=>{
 
-    this.setState({keyy: key, amount: price})
-    console.log("get Data is called, key is ", key, "price is", price);
-    let action ={"type": "edit", "key": key, "amount": price}
-    console.log("action", action, "key", this.props.botKey)
-     this.props.modifyOption(this.props.botKey, action );
+    if(key && price){
+
+      this.setState({keyy: key, amount: price})
+      let action ={"type": "edit", "key": key, "amount": price}
+       this.props.modifyOption(this.props.botKey, action );
+       this.toggleAccordion()
+    }
 
   }
-  
   
   syncHeight = height => {
     const number = parseInt(this.state.height.match(/(\d+)/)[0], 10);
@@ -39,6 +40,13 @@ class Accordion extends Component {
   
 
   toggleAccordion = (payment) => {
+    if(payment){
+      this.setState({pay: !this.state.pay});
+      console.log("payment is true");
+      if(this.state.active === 'active'){
+        this.setState({pay: !this.state.pay});
+      }
+    }
     this.setState({
       active: this.state.active === "" ? "active" : "",
       height:
@@ -47,13 +55,6 @@ class Accordion extends Component {
           : this.state.init + this.divElement.clientHeight + "px",
 
     });
-    if(payment){
-      this.setState({pay: true});
-      console.log("payment is true");
-      if(this.state.active === 'active'){
-        this.setState({pay: false});
-      }
-    }
     console.log("checking active and init", this.state.active, "and", this.state.init)
     
   };

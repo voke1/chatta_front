@@ -20,6 +20,7 @@ import ExportOverlay from "../Bot/export-overlay";
 import ChartSection1 from "../Bot/sections/ChartSection1";
 import AdminCardSection1 from "../Bot/sections/AdminCardSection1";
 import Axios from 'axios';
+import PTImage from './images/pt9.png'
 import { MDBCard, MDBCardBody, MDBIcon, MDBBreadcrumb, MDBBreadcrumbItem, MDBFormInline, MDBBtn } from 'mdbreact';
 
 const BASE_URL = APP_ENVIRONMENT.base_url;
@@ -120,7 +121,6 @@ export default class Bot extends Component {
                                                                 <div style={{ width: "20rem" }}>
                                                                     <select name="botId" value={this.state.botId} className="browser-default custom-select" onChange={this.handleChange} >
                                                                         <option value="string">select a chatbot</option>
-                                                                        {console.log("unik:", this.state.uniqueBots)}
                                                                         {this.state.uniqueBots.map((bot, index) => {
                                                                             if (bot.setting_id) {
                                                                                 return <option value={null}>{bot.setting_id.chatbotName || "no name"}</option>
@@ -134,7 +134,23 @@ export default class Bot extends Component {
                                                         </MDBCard>
 
                                                         {this.state.botId ? (<div><AdminCardSection1 botPayments={this.state.botPayments} />
-                                                            <ChartSection1 botPayments={this.state.botPayments} /></div>) : <div><p style={{ color: "black", margin: "10%" }}>NO BOT SELECTED</p></div>
+                                                            <ChartSection1 botPayments={this.state.botPayments} /></div>) : <div><div>
+                                                                <div className="card-body" style={{ marginTop: "7rem" }}>
+
+                                                                    <h3 className="text-center m-0" >
+                                                                        <a href="index.html" className="logo logo-admin"><img src={PTImage} height="30" alt="logo"></img></a>
+                                                                    </h3>
+
+                                                                    <div className="p-3">
+                                                                        <h4 className="text-muted font-18 mb-3 text-center" >No chatbot selected</h4>
+                                                                        <h5 className="text-muted font-18 mb-3 text-center">please select a chatbot to view payment analytics</h5>
+
+
+
+                                                                    </div>
+
+                                                                </div>
+                                                            </div></div>
                                                         }
 
                                                     </div>

@@ -117,7 +117,7 @@ export default class LayoutHeader extends Component {
                   <ul className="navigation-menu">
                     <li className="has-submenu">
                       <Link to="/dashboard/admin">
-                        <a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{" "} <a>
                           <i className="dripicons-device-desktop"></i>Dashboard
                         </a>
                       </Link>

@@ -1,6 +1,6 @@
 import React from 'react'
 import '../landing-page/css/bootstrap.css';
-import '../landing-page/css/style.css';
+import '../landing-page/css/style.scss';
 import '../landing-page/css/themify-icons.css';
 import "../landing-page/vendors/animate-css/animate.css";
 import "../landing-page/vendors/owl-carousel/owl.carousel.min.css";
@@ -11,14 +11,14 @@ import "../landing-page/css/landingPage.css";
 import background from './img/banner/home-banner.jpg';
 import imageLogo from './img/logo.png';
 import { Link } from 'react-router-dom';
-import { MDBNavbar} from 'mdbreact';
+import { MDBNavbar } from 'mdbreact';
 
 
 
- const FrontPage = () => {
+const FrontPage = () => {
 
     return (
-        <div style={{height: "50rem"}}>
+        <div style={{ height: "50rem", }}>
             {/* <ChatComponent /> */}
             {/* <!--================Header Menu Area =================--> */}
             <header className>
@@ -69,19 +69,29 @@ import { MDBNavbar} from 'mdbreact';
             {/* <!--================Header Menu Area =================--> */}
 
             {/* <!--================Home Banner Area =================--> */}
-            <section className="home_banner_area" style={{ backgroundImage: "url(" + background + ")" }}>
-                <div className="banner_inner d-flex align-items-center">
+            <section className="home_banner_area" style={{ maxWidth: '100%', overflowX: "hidden"}}>
+                <div className="banner_inner d-flex align-items-center" style={{
+                    backgroundImage: `url(${background})`, position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    height: "100%",
+                    bottom: 0,
+                    zIndex: 999999,
+                    marginLeft: "-12rem",
+                    width: "120%",
+                    overflowX: "hidden",
+                }}>
                     <div className="overlay"></div>
                     <div className="containerFront">
                         <div className="row">
-                            <div className="col-lg-6 offset-lg-6 col-xl-5 offset-xl-7">
+                            <div className="col-lg-6 offset-lg-6 col-xl-5 offset-xl-7" >
                                 <div className="banner_content">
                                     <h3>Build a better<br />business & faster with Chatta</h3>
                                     <p>Subdue creature does face signs evening good sixth foreign gaered one. Fruit. Third every fruitful multiply subdue creature doesn't face signs evening good sixth tyou're.</p>
                                     <Link to={'/auth/register'}><button className="banner_btn">Begin Free Trial<i className="ti-arrow-right"></i></button > </Link>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -223,7 +233,6 @@ import { MDBNavbar} from 'mdbreact';
             </section>
             {/* <!--================Feature Area End =================--> */}
 
-
             {/* <!--================About  Area =================--> */}
             <section className="statics-area area-padding">
                 <div className="containerFront">
@@ -261,10 +270,6 @@ import { MDBNavbar} from 'mdbreact';
             </section>
             {/* <!--================About Area End =================--> */}
 
-
-
-
-
             {/* <!--================ Start Portfolio Area =================--> */}
             <section className="pricing_area area-padding-top">
                 <div className="containerFront">
@@ -291,7 +296,7 @@ import { MDBNavbar} from 'mdbreact';
                                         <li>3 Host Domain</li>
                                         <li>24/7 Support</li>
                                     </ul>
-                                    <Link to={{pathname: "/payment", state: {price: 0, plan: "Free Trial"}}}><a>Purchase Now</a></Link>
+                                    <Link to={{ pathname: "/payment", state: { price: 0, plan: "Free Trial" } }}><a>Purchase Now</a></Link>
                                 </div>
                             </div>
                         </div>
@@ -472,7 +477,7 @@ Gbagada Phase 2, Lagos State.</p>
                         </div>
                     </div>
                     <div className="footer-bottom row align-items-center text-center text-lg-left no-gutters">
-                        
+
                         {/* <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p> */}
                         <div className="col-lg-4 col-md-12 text-center text-lg-right footer-social">
                             <a href="#"><i className="ti-facebook"></i></a>

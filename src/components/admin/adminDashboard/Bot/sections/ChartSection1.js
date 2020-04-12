@@ -19,8 +19,6 @@ class ChartSection1 extends Component {
     async componentDidMount() {
         await this.setState({ payments: this.props.botPayments })
         this.getStatus()
-
-
     }
 
     getStatus = () => {
@@ -46,7 +44,6 @@ class ChartSection1 extends Component {
                 hoverBackgroundColor: ["#FF5A5E", "#5AD3D1"]
             }]
         };
-        console.log("globalprops:", this.global)
         return (
             <MDBRow className="mb-4">
                 <MDBCol md="8" className="mb-4">
