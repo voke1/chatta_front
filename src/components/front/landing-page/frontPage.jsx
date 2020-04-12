@@ -1,32 +1,29 @@
-import React from 'react'
-import '../landing-page/css/bootstrap.css';
-import '../landing-page/css/style.scss';
-import '../landing-page/css/themify-icons.css';
-import "../landing-page/vendors/animate-css/animate.css";
-import "../landing-page/vendors/owl-carousel/owl.carousel.min.css";
-import '../landing-page/vendors/fontawesome/css/all.min.css';
-import "../landing-page/css/responsive.css";
-import "../landing-page/css/landingPage.css";
-// import ChatComponent from '../chat/chat.component';
-import background from './img/banner/home-banner.jpg';
-import imageLogo from './img/logo.png';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { MDBNavbar } from 'mdbreact';
+import '../landing-page/css/bootstrap.css';
+import "../landing-page/css/landingPage.css";
+import "../landing-page/css/responsive.css";
+import '../landing-page/css/style.scss';
+import "../landing-page/vendors/animate-css/animate.css";
+import '../landing-page/vendors/fontawesome/css/all.min.css';
+import "../landing-page/vendors/owl-carousel/owl.carousel.min.css";
+import background from './img/banner/home-banner.jpg';
+import aboutImage from './img/banner/about3.png'
 
 
 
 const FrontPage = () => {
 
     return (
-        <div style={{ height: "50rem", }}>
+        <body style={{ height: "50rem", }}>
             {/* <ChatComponent /> */}
             {/* <!--================Header Menu Area =================--> */}
-            <header className>
+            <header className="header_area">
                 <div className="main_menu">
-                    <MDBNavbar color="grey" fixed="top" dark expand="md" scrolling transparent  >
-                        <div className="containerFront">
+                    <nav  className="navbar navbar-expand-lg" >
+                        <div className="container">
                             {/* <!-- Brand and toggle get grouped for better mobile display --> */}
-                            <a className="navbar-brand logo_h" href="index.html"><h3><b> Chatta</b></h3></a>
+                            <a className="navbar-brand logo_h" href="index.html"><h3 style={{ marginTop: "1rem", textTransform: "capitalize"}}><b> Chatta</b></h3></a>
                             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
@@ -37,33 +34,18 @@ const FrontPage = () => {
                                 <ul className="nav navbar-nav menu_nav ml-auto">
                                     <li className="nav-item"><a className="nav-link" href="#">Home</a></li>
                                     <li className="nav-item"><a className="nav-link" href="#">Features</a></li>
-                                    {/* <li className="nav-item submenu dropdown">
-                                        <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages</a>
-                                        <ul className="dropdown-menu">
-                                            <li className="nav-item"><a className="nav-link" href="feature.html">Features</a></li>
-                                            <li className="nav-item"><a className="nav-link" href="price.html">Price</a></li>
-                                            <li className="nav-item"><a className="nav-link" href="element.html">Element</a></li>
-                                        </ul>
-                                    </li>
-                                    <li className="nav-item submenu dropdown">
-                                        <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Blog</a>
-                                        <ul className="dropdown-menu">
-                                            <li className="nav-item"><a className="nav-link" href="blog.html">Blog</a></li>
-                                            <li className="nav-item"><a className="nav-link" href="single-blog.html">Blog Details</a></li>
-                                        </ul>
-                                    </li> */}
+                                   
                                     <li className="nav-item"><a className="nav-link" href="#">Contact</a></li>
                                     <Link to={'/ithadmin'}> <li className="nav-item"><a className="nav-link" href="#">Admin</a></li></Link>
                                 </ul>
                             </div>
                             <div className="right-button">
                                 <ul className="ul">
-                                    <li className="shop-icon"><a href="#"><i className="ti-shopping-cart-full"></i><span>0</span></a></li>
                                     <Link to={'/auth/login'}><li><a className="sign_up" > Sign In</a></li> </Link>
                                 </ul>
                             </div>
                         </div>
-                    </MDBNavbar>
+                    </nav>
                 </div>
             </header>
             {/* <!--================Header Menu Area =================--> */}
@@ -111,7 +93,6 @@ const FrontPage = () => {
                                 <div className="service-content">
                                     <h5>Unique Design</h5>
                                     <p>Third don't lights wherein was. bring to build them, seas. Thing gathering answ gaered beast third that heaven after all that living one bank limit</p>
-                                    <a href="#">Read More</a>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +106,6 @@ const FrontPage = () => {
                                 <div className="service-content">
                                     <h5>Business Solution</h5>
                                     <p>Third don't lights wherein was. bring to build them, seas. Thing gathering answ gaered beast third that heaven after all that living one bank limit</p>
-                                    <a href="#">Read More</a>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +120,6 @@ const FrontPage = () => {
                                 <div className="service-content">
                                     <h5>Real time analytics</h5>
                                     <p>Third don't lights wherein was. bring to build them, seas. Thing gathering answ gaered beast third that heaven after all that living one bank limit</p>
-                                    <a href="#">Read More</a>
                                 </div>
                             </div>
                         </div>
@@ -240,7 +219,7 @@ const FrontPage = () => {
 
                         <div className="col-lg-5">
                             <div className="image-box">
-                                <img src="img/banner/about3.png" alt="" className="image"></img>
+                                <img src={aboutImage} alt="" className="image"></img>
                             </div>
                         </div>
 
@@ -490,7 +469,7 @@ Gbagada Phase 2, Lagos State.</p>
             </footer>
             {/* <!-- ================ End footer Area ================= --> */}
 
-        </div>
+        </body>
     )
 }
 
