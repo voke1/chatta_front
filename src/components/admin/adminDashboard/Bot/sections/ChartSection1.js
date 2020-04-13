@@ -2,7 +2,8 @@ import React, { Component, useGlobal, setGlobal } from 'reactn';
 import { MDBCol, MDBCard, MDBCardBody, MDBCardHeader, MDBRow, MDBListGroup, MDBListGroupItem, MDBBadge, MDBIcon } from 'mdbreact';
 import { Bar, Pie } from 'react-chartjs-2';
 import { Line, Doughnut, Radar } from 'react-chartjs-2';
-import moment from 'moment'
+import moment from 'moment';
+import Payments from '../../Bot/paymentDatatable';
 
 
 class ChartSection1 extends Component {
@@ -33,51 +34,27 @@ class ChartSection1 extends Component {
             }
         })
     }
-
+   
     render() {
 
         const dataDoughnut = {
             labels: ["Failed", "Success"],
             datasets: [{
                 data: [this.state.failed, this.state.success],
-                backgroundColor: ["#F7464A", "#46BFBD"],
-                hoverBackgroundColor: ["#FF5A5E", "#5AD3D1"]
+                backgroundColor: ["#F7464A", "purple"],
+                hoverBackgroundColor: ["#FF5A5E", "#302656"]
             }]
         };
         return (
             <MDBRow className="mb-4">
                 <MDBCol md="8" className="mb-4">
-                    {/* <MDBCard className="mb-4">
-                        <MDBCardBody>
-                            <Bar data={dataBar} height={500} options={barChartOptions} />
-                        </MDBCardBody>
-                    </MDBCard> */}
-                    {/* <div className="col-xl-8"> */}
                     <div className="card m-b-30">
                         <div className="card-body">
                             <h4 className="mt-0 m-b-30 header-title">Transactions</h4>
 
                             <div className="table-responsive">
                                 <table className="table m-t-20 mb-0 table-vertical">
-                                    {this.state.payments.map((payment, index) => {
-                                        return <tbody>
-                                            <tr>
-                                                <td>
-                                                    {payment.name}
-                                                </td>
-                                                <td><i className="mdi mdi-checkbox-blank-circle text-success"></i> {payment.status}</td>
-                                                <td>
-                                                    {`₦ ${payment.amount}`}
-                                                    <p className="m-0 text-muted font-14">Amount</p>
-                                                </td>
-                                                <td>
-                                                    {moment(payment.created_at).format('Do-MMMM-YYYY, LT') || 'Date'}
-                                                    <p className="m-0 text-muted font-14">Date</p>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-
-                                    })}
+                                    <Payments payments={this.state.payments} />
                                 </table>
                             </div>
                         </div>

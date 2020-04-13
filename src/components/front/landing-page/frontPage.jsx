@@ -20,10 +20,10 @@ const FrontPage = () => {
             {/* <!--================Header Menu Area =================--> */}
             <header className="header_area">
                 <div className="main_menu">
-                    <nav  className="navbar navbar-expand-lg" >
+                    <nav className="navbar navbar-expand-lg" >
                         <div className="container">
                             {/* <!-- Brand and toggle get grouped for better mobile display --> */}
-                            <a className="navbar-brand logo_h" href="index.html"><h3 style={{ marginTop: "1rem", textTransform: "capitalize"}}><b> Chatta</b></h3></a>
+                            <a className="navbar-brand logo_h" href="index.html"><h3 style={{ marginTop: "1rem", textTransform: "capitalize" }}><b> Chatta</b></h3></a>
                             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                 <span className="icon-bar"></span>
                                 <span className="icon-bar"></span>
@@ -34,7 +34,7 @@ const FrontPage = () => {
                                 <ul className="nav navbar-nav menu_nav ml-auto">
                                     <li className="nav-item"><a className="nav-link" href="#">Home</a></li>
                                     <li className="nav-item"><a className="nav-link" href="#">Features</a></li>
-                                   
+
                                     <li className="nav-item"><a className="nav-link" href="#">Contact</a></li>
                                     <Link to={'/ithadmin'}> <li className="nav-item"><a className="nav-link" href="#">Admin</a></li></Link>
                                 </ul>
@@ -51,7 +51,7 @@ const FrontPage = () => {
             {/* <!--================Header Menu Area =================--> */}
 
             {/* <!--================Home Banner Area =================--> */}
-            <section className="home_banner_area" style={{ maxWidth: '100%', overflowX: "hidden"}}>
+            <section className="home_banner_area" style={{ maxWidth: '100%', overflowX: "hidden" }}>
                 <div className="banner_inner d-flex align-items-center" style={{
                     backgroundImage: `url(${background})`, position: 'absolute',
                     left: 0,
@@ -242,7 +242,6 @@ const FrontPage = () => {
                                 <i className="ti-ruler-pencil"></i>
                                 <p>Sea forth fill have divide be dominion from life</p>
                             </div>
-
                         </div>
                     </div>
                 </div>

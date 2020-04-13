@@ -69,6 +69,18 @@ export default class Bot extends Component {
                     status: "success",
 
 
+                },
+                {
+                    _id: "5e74a6a38b053a1f2bcbd35b",
+                    botId: "5e69fe8f145c2f001756a177",
+                    name: "Jim Kane",
+                    email: "Kane@ulm.ng",
+                    amount: 20000,
+                    message: "Approved",
+                    reference: "T620652734031597",
+                    status: "success",
+
+
                 }
             ]
 
@@ -125,7 +137,6 @@ export default class Bot extends Component {
                                                                             if (bot.setting_id) {
                                                                                 return <option value={null}>{bot.setting_id.chatbotName || "no name"}</option>
                                                                             }
-
                                                                         })}
                                                                     </select>
 
@@ -138,7 +149,7 @@ export default class Bot extends Component {
                                                                 <div className="card-body" style={{ marginTop: "7rem" }}>
 
                                                                     <h3 className="text-center m-0" >
-                                                                        <a href="index.html" className="logo logo-admin"><img src={PTImage} height="30" alt="logo"></img></a>
+                                                                        <a href="index.html" className="logo logo-admin"><img src={PTImage} style={{height: "8rem"}} alt="logo"></img></a>
                                                                     </h3>
 
                                                                     <div className="p-3">

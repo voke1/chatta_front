@@ -68,8 +68,7 @@ class PaymentForm extends Component {
                                     this.props.getData(this.state.paystackkey, this.state.price)
                                 }
                                 style={{ backgroundColor: "#ededed", color: "#5b616b", width: "8rem"}}
-
-                               
+ 
                             >
                                 Add payment
                 </button>
