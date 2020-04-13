@@ -7,6 +7,7 @@ import "./layouts.style.css";
 import { MDBIcon } from "mdbreact";
 import { Redirect } from "react-router-dom";
 
+const userDetails = JSON.parse(localStorage.getItem("userdetails"));
 export default class LayoutHeader extends Component {
   constructor(props) {
     super(props);
@@ -20,191 +21,171 @@ export default class LayoutHeader extends Component {
     this.setState({ loggedStatus: true });
   };
 
+  getResultBasedOnRole = (feature) => {
+
+    if (feature === 'dashboard') {
+      return <Link to="/dashboard/admin">
+        &nbsp;&nbsp;&nbsp;&nbsp;{" "} <a>
+          <i className="dripicons-device-desktop"></i>Dashboard
+                        </a>
+      </Link>
+    } else if (feature === 'chatbot') {
+      return <Link to="/dashboard/admin/bot">
+        <a>
+          <i className="dripicons-device-desktop"></i>Chatbots
+                        </a>
+      </Link>
+
+    } else if (feature === 'payment') {
+
+      return <Link to="/dashboard/payment">
+        <a>
+          <i className="dripicons-suitcase"></i>Payments
+                        </a>
+      </Link>
+
+    } else if (feature === 'company') {
+      if (userDetails.role === 'admin' || userDetails.role === 'superadmin') {
+
+        return <Link to="/dashboard/admin/company">
+          <a>
+            <i className="dripicons-home"></i>Companies
+                          </a>
+        </Link>
+      }
+    }
+    else if (feature === 'user') {
+      if (userDetails.role === 'admin' || userDetails.role === 'superadmin') {
+        return <Link to="/dashboard/admin/user">
+          <a>
+            <i className="dripicons-suitcase"></i>Users
+                          </a>
+        </Link>
+
+      }
+
+    } else {
+      return ""
+    }
+  }
+
   render() {
     const avatar1 = <MDBIcon far icon="user-circle" size="2x" />;
-    const userDetails = JSON.parse(localStorage.getItem("userdetails"));
+    let feature;
 
     return (
       <div>
         {/* <!-- Navigation Bar--> */}
-
+        {console.log("myuserDetails: ", userDetails.role)}
         {this.state.loggedStatus ? (
           <Redirect to={"/auth/login"} />
         ) : (
-          <header id="topnav">
-            <div className="topbar-main">
-              <div className="container-fluid">
-                {/* <!-- Logo container--> */}
-                <div className="logo">
-                  {/* <!-- Text Logo --> */}
-                  <a href="index.html" className="logo">
-                    &nbsp; CHATTA
+            <header id="topnav">
+              <div className="topbar-main">
+                <div className="container-fluid">
+                  {/* <!-- Logo container--> */}
+                  <div className="logo">
+                    {/* <!-- Text Logo --> */}
+                    <a href="index.html" className="logo">
+                      &nbsp; CHATTA
                   </a>
-                  {/* <a href="index.html" className="logo">
-                              <img src="assets/images/logo-sm.png" alt="" height="22" className="logo-small"></img>
-                              <img src="assets/images/logo.png" alt="" height="24" className="logo-large"></img>
-                          </a>  */}
-                </div>
-                {/* <!-- End Logo container--> */}
+                  </div>
+                  {/* <!-- End Logo container--> */}
 
-                <div className="menu-extras topbar-custom">
-                  <ul className="list-inline float-right mb-0">
-                    {/* <!-- notification--> */}
-                   
-                    {/* <!-- User--> */}
-                    <li className="list-inline-item dropdown notification-list">
-                      <a
-                        className="nav-link dropdown-toggle arrow-none waves-effect nav-user"
-                        data-toggle="dropdown"
-                        href="#"
-                        role="button"
-                        aria-haspopup="false"
-                        aria-expanded="false"
-                      >
-                        <span
-                          src={avatar1}
-                          alt="user"
-                          className="rounded-circle"
-                        >
-                          {avatar1}
-                        </span>
-                        <span className="ml-1 dropdown">
-                          {userDetails.fullName}{" "}
-                          <i className="mdi mdi-chevron-down"></i>{" "}
-                        </span>
-                      </a>
-                      <div className="dropdown-content dropdown-menu dropdown-menu-right profile-dropdown ">
-                        <Link to={`/dashboard/admin/user/${userDetails.id}`}>
-                          <a className="dropdown-item">
-                            <i className="dripicons-user text-muted"></i>{" "}
-                            Profile
-                          </a>
-                        </Link>
-                        <div className="dropdown-divider"></div>
+                  <div className="menu-extras topbar-custom">
+                    <ul className="list-inline float-right mb-0">
+                      {/* <!-- notification--> */}
+
+                      {/* <!-- User--> */}
+                      <li className="list-inline-item dropdown notification-list">
                         <a
-                          className="dropdown-item"
-                          onClick={() => this.logout()}
+                          className="nav-link dropdown-toggle arrow-none waves-effect nav-user"
+                          data-toggle="dropdown"
+                          href="#"
+                          role="button"
+                          aria-haspopup="false"
+                          aria-expanded="false"
                         >
-                          <i className="dripicons-exit text-muted"></i> Logout
+                          <span
+                            src={avatar1}
+                            alt="user"
+                            className="rounded-circle"
+                          >
+                            {avatar1}
+                          </span>
+                          <span className="ml-1 dropdown">
+                            {userDetails.fullName}{" "}
+                            <i className="mdi mdi-chevron-down"></i>{" "}
+                          </span>
                         </a>
-                      </div>
-                    </li>
-                    <li className="menu-item list-inline-item">
-                      {/* <!-- Mobile menu toggle--> */}
-                      <a className="navbar-toggle nav-link">
-                        <div className="lines">
-                          <span></span>
-                          <span></span>
-                          <span></span>
+                        <div className="dropdown-content dropdown-menu dropdown-menu-right profile-dropdown ">
+                          <Link to={`/dashboard/admin/user/${userDetails.id}`}>
+                            <a className="dropdown-item">
+                              <i className="dripicons-user text-muted"></i>{" "}
+                              Profile
+                          </a>
+                          </Link>
+                          <div className="dropdown-divider"></div>
+                          <a
+                            className="dropdown-item"
+                            onClick={() => this.logout()}
+                          >
+                            <i className="dripicons-exit text-muted"></i> Logout
+                        </a>
                         </div>
-                      </a>
-                      {/* <!-- End mobile menu toggle--> */}
-                    </li>
-                  </ul>
+                      </li>
+                      <li className="menu-item list-inline-item">
+                        {/* <!-- Mobile menu toggle--> */}
+                        <a className="navbar-toggle nav-link">
+                          <div className="lines">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                          </div>
+                        </a>
+                        {/* <!-- End mobile menu toggle--> */}
+                      </li>
+                    </ul>
+                  </div>
+                  {/* <!-- end menu-extras --> */}
+
+                  <div className="clearfix"></div>
                 </div>
-                {/* <!-- end menu-extras --> */}
-
-                <div className="clearfix"></div>
+                {/*<!-- end container --> */}
               </div>
-              {/*<!-- end container --> */}
-            </div>
-            {/* <!-- end topbar-main --> */}
-            {/* <!-- MENU Start --> */}
-            <div className="navbar-custom">
-              <div className="container-fluid">
-                <div id="navigation">
-                  {/* <!-- Navigation Menu--> */}
-                  <ul className="navigation-menu">
-                    <li className="has-submenu">
-                      <Link to="/dashboard/admin">
-                        &nbsp;&nbsp;&nbsp;&nbsp;{" "} <a>
-                          <i className="dripicons-device-desktop"></i>Dashboard
-                        </a>
-                      </Link>
-                    </li>
-
-                    <li className="has-submenu">
-                      <Link to="/dashboard/admin/bot">
-                        <a>
-                          <i className="dripicons-device-desktop"></i>Chatbots
-                        </a>
-                      </Link>
-                    </li>
-                    {userDetails.role === "superadmin" ? (
+              {/* <!-- end topbar-main --> */}
+              {/* <!-- MENU Start --> */}
+              <div className="navbar-custom">
+                <div className="container-fluid">
+                  <div id="navigation">
+                    {/* <!-- Navigation Menu--> */}
+                    <ul className="navigation-menu">
                       <li className="has-submenu">
-                        <Link to="/dashboard/admin/company">
-                          <a>
-                            <i className="dripicons-home"></i>Companies
-                          </a>
-                        </Link>
+                        {this.getResultBasedOnRole(feature = 'dashboard')}
                       </li>
-                    ) : (
-                      " "
-                    )}
 
-                    {userDetails.role === `admin` || `superadmin` ? (
                       <li className="has-submenu">
-                        {" "}
-                        <Link to="/dashboard/admin/user">
-                          <a>
-                            <i className="dripicons-suitcase"></i>Users
-                          </a>
-                        </Link>
+                        {this.getResultBasedOnRole(feature = 'chatbot')}
                       </li>
-                    ) : (
-                      ""
-                    )}
+                      <li className="has-submenu">
 
-                   
-                      <li className="has-submenu">
-                        <Link to="/dashboard/payment">
-                          <a>
-                            <i className="dripicons-suitcase"></i>Payments
-                        </a>
-                        </Link>
+                        {this.getResultBasedOnRole(feature = 'user')}
                       </li>
-                   
-                  </ul>
-                  {/* <!-- End navigation menu --> */}
+
+                      <li className="has-submenu">
+                        {this.getResultBasedOnRole(feature = 'company')}
+                      </li>
+
+                      <li className="has-submenu">
+                        {this.getResultBasedOnRole(feature = 'payment')}
+                      </li>
+                    </ul>
+                  </div>{" "}
                 </div>{" "}
-                {/* /*</div><!-- end #navigation -->*/}
               </div>{" "}
-              {/* <!-- end container --> */}
-            </div>{" "}
-            {/* <!-- end navbar-custom --> */}
-          </header>
-        )}
-        {/* <!-- End Navigation Bar--> */}
+            </header>
+          )}
 
-        {/* <div className="container-fluid"> */}
-        {/* <!-- Page-Title --> */}
-        {/* <div>
-                        <AppNotification msg={this.props.notification.msg}
-                            type={this.props.notification.type} />
-                    </div> */}
-
-        {/* <div className="row"> */}
-        {/* <div className="col-sm-12"> */}
-        {/* <div className="page-title-box"> */}
-
-        {/* <h3 className="float-left">{this.props.pageTitle || "Current Page"}</h3> */}
-
-        {/* <form className="float-right app-search">
-                                    <input
-                                        type="text"
-                                        placeholder="Search..."
-                                        className="form-control"
-                                    ></input>
-                                    <button type="submit">
-                                        <i className="fa fa-search"></i>
-                                    </button>
-                                </form> */}
-
-        {/* </div> */}
-        {/* </div> */}
-        {/* </div> */}
-        {/* <!-- end page title end breadcrumb --> */}
-        {/* </div> */}
       </div>
     );
   }
